@@ -28,7 +28,9 @@
       "Bash(git init:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(node -e \"const p = require\\(''/Users/Apple/projects/aksha/package.json''\\); console.log\\(''name:'', p.name\\); console.log\\(''expo:'', p.dependencies.expo\\); console.log\\(''expo-router:'', p.dependencies[''expo-router'']\\); console.log\\(''react-native:'', p.dependencies[''react-native'']\\); console.log\\(''nativewind:'', p.dependencies.nativewind\\); console.log\\(''@shopify/react-native-skia:'', p.dependencies[''@shopify/react-native-skia'']\\)\")"
+      "Bash(node -e \"const p = require\\(''/Users/Apple/projects/aksha/package.json''\\); console.log\\(''name:'', p.name\\); console.log\\(''expo:'', p.dependencies.expo\\); console.log\\(''expo-router:'', p.dependencies[''expo-router'']\\); console.log\\(''react-native:'', p.dependencies[''react-native'']\\); console.log\\(''nativewind:'', p.dependencies.nativewind\\); console.log\\(''@shopify/react-native-skia:'', p.dependencies[''@shopify/react-native-skia'']\\)\")",
+      "Bash(node -c babel.config.js)",
+      "Bash(node -c tailwind.config.js)"
     ]
   }
 }

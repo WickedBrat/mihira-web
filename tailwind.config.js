@@ -4,6 +4,7 @@ module.exports = {
     './app/**/*.{js,jsx,ts,tsx}',
     './features/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
+    './lib/**/*.{js,jsx,ts,tsx}',
   ],
   presets: [require('nativewind/preset')],
   theme: {
@@ -40,6 +41,7 @@ module.exports = {
         'outline-variant': '#484848',
         error: '#ee7d77',
         'error-container': '#7f2927',
+        'surface-bright-glass': 'rgba(43,44,44,0.6)',
       },
       fontFamily: {
         headline: ['Lexend_700Bold'],
