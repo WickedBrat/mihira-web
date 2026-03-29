@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Arth - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-on-surface": "#565555",
+              "primary-fixed-dim": "#e3ccf3",
+              "on-tertiary": "#5f5f5f",
+              "on-surface": "#e7e5e5",
+              "primary": "#d4bee4",
+              "on-secondary": "#2f1c07",
+              "surface-container": "#191a1a",
+              "surface-container-lowest": "#000000",
+              "surface-variant": "#252626",
+              "surface-tint": "#d4bee4",
+              "secondary-fixed-dim": "#f2cead",
+              "surface": "#0e0e0e",
+              "on-secondary-fixed": "#523b23",
+              "on-secondary-fixed-variant": "#71563d",
+              "tertiary-fixed": "#f6f3f2",
+              "primary-fixed": "#f0dbff",
+              "on-primary-fixed-variant": "#665575",
+              "surface-container-highest": "#252626",
+              "on-primary": "#4a3a58",
+              "on-primary-container": "#dfc8ef",
+              "error-container": "#7f2927",
+              "surface-dim": "#0e0e0e",
+              "error": "#ee7d77",
+              "surface-container-high": "#1f2020",
+              "on-primary-fixed": "#493957",
+              "error-dim": "#bb5551",
+              "on-surface-variant": "#acabaa",
+              "tertiary-fixed-dim": "#e7e5e4",
+              "outline-variant": "#484848",
+              "outline": "#767575",
+              "on-error": "#490106",
+              "background": "#0e0e0e",
+              "secondary": "#b8987a",
+              "on-tertiary-container": "#575756",
+              "inverse-primary": "#6a5879",
+              "tertiary-container": "#edeaea",
+              "tertiary": "#fbf9f8",
+              "surface-container-low": "#131313",
+              "secondary-dim": "#b8987a",
+              "secondary-fixed": "#ffdcbe",
+              "on-tertiary-fixed": "#4a4949",
+              "tertiary-dim": "#edeaea",
+              "primary-dim": "#c6b1d6",
+              "on-secondary-container": "#dcb99a",
+              "primary-container": "#51405f",
+              "on-background": "#e7e5e5",
+              "on-error-container": "#ff9993",
+              "on-tertiary-fixed-variant": "#676666",
+              "inverse-surface": "#fcf9f8",
+              "surface-bright": "#2b2c2c",
+              "secondary-container": "#4e371f"
+            },
+            fontFamily: {
+              "headline": ["Lexend"],
+              "body": ["Lexend"],
+              "label": ["Lexend"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(37, 38, 38, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .ghost-border {
+            box-shadow: inset 0 0 0 1px rgba(118, 117, 117, 0.15);
+        }
+        .peace-glow {
+            background: radial-gradient(circle at center, rgba(212, 190, 228, 0.08) 0%, rgba(184, 152, 122, 0.05) 50%, transparent 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen overflow-x-hidden">
+<!-- Subtle Peace Background Blobs -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+<div class="absolute -top-[10%] -left-[10%] w-[60%] h-[60%] peace-glow rounded-full"></div>
+<div class="absolute bottom-[5%] right-[-5%] w-[40%] h-[40%] peace-glow rounded-full"></div>
+</div>
+<!-- Main Canvas -->
+<main class="relative z-10 min-h-screen flex flex-col px-6 md:px-20 lg:px-40 py-12 md:py-20">
+<!-- Header / Logo Area -->
+<header class="mb-20">
+<h1 class="font-headline text-xl font-semibold tracking-tighter text-primary">Arth</h1>
+</header>
+<!-- Onboarding Question -->
+<section class="max-w-2xl">
+<span class="font-label text-xs uppercase tracking-[0.2em] text-secondary mb-4 block">Onboarding (Neutral)</span>
+<h2 class="font-headline text-4xl md:text-6xl font-extrabold tracking-tight text-on-surface leading-tight mb-8">
+                What's weighing on your mind?
+            </h2>
+<p class="text-on-surface-variant text-lg md:text-xl font-light mb-12 max-w-lg">
+                Choose a focus area for today. Your path to clarity is a quiet, intentional journey.
+            </p>
+</section>
+<!-- Bento Grid Choice Cards -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+<!-- Decisions Card -->
+<button class="glass-panel ghost-border rounded-xl p-8 flex flex-col items-start text-left group transition-all duration-300 hover:bg-surface-bright active:scale-95">
+<div class="mb-10 p-3 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors duration-500">
+<span class="material-symbols-outlined text-3xl" data-icon="balance">balance</span>
+</div>
+<h3 class="font-headline text-2xl font-medium mb-2">Decisions</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Finding clarity amidst complex choices.</p>
+</button>
+<!-- Relationships Card -->
+<button class="glass-panel ghost-border rounded-xl p-8 flex flex-col items-start text-left group transition-all duration-300 hover:bg-surface-bright active:scale-95">
+<div class="mb-10 p-3 rounded-full bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-on-secondary transition-colors duration-500">
+<span class="material-symbols-outlined text-3xl" data-icon="favorite">favorite</span>
+</div>
+<h3 class="font-headline text-2xl font-medium mb-2">Relationships</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Nurturing connections with yourself and others.</p>
+</button>
+<!-- Anxiety Card -->
+<button class="glass-panel ghost-border rounded-xl p-8 flex flex-col items-start text-left group transition-all duration-300 hover:bg-surface-bright active:scale-95">
+<div class="mb-10 p-3 rounded-full bg-primary-fixed-dim/10 text-primary-fixed-dim group-hover:bg-primary-fixed-dim group-hover:text-on-primary-fixed transition-colors duration-500">
+<span class="material-symbols-outlined text-3xl" data-icon="air">air</span>
+</div>
+<h3 class="font-headline text-2xl font-medium mb-2">Anxiety</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Finding your center in the storm of noise.</p>
+</button>
+<!-- Purpose Card -->
+<button class="glass-panel ghost-border rounded-xl p-8 flex flex-col items-start text-left group transition-all duration-300 hover:bg-surface-bright active:scale-95">
+<div class="mb-10 p-3 rounded-full bg-tertiary-fixed-dim/10 text-tertiary-fixed-dim group-hover:bg-tertiary-fixed-dim group-hover:text-on-tertiary-fixed transition-colors duration-500">
+<span class="material-symbols-outlined text-3xl" data-icon="self_improvement">self_improvement</span>
+</div>
+<h3 class="font-headline text-2xl font-medium mb-2">Purpose</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Aligning your daily actions with deeper intent.</p>
+</button>
+</section>
+<!-- CTA & Action Footer -->
+<footer class="mt-auto flex flex-col md:flex-row items-center justify-between gap-8 pt-10 border-t border-outline-variant/10">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+<p class="text-xs tracking-wide">Select one to continue your personalized onboarding.</p>
+</div>
+<button class="relative group px-12 py-5 rounded-full font-headline font-semibold text-on-primary overflow-hidden transition-all duration-300 active:scale-95 shadow-[0_0_40px_rgba(212,190,228,0.15)] hover:shadow-[0_0_60px_rgba(212,190,228,0.25)]">
+<div class="absolute inset-0 bg-gradient-to-br from-primary to-primary-container transition-transform duration-500 group-hover:scale-110"></div>
+<span class="relative z-10 flex items-center gap-2">
+                    Let's Start
+                    <span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</button>
+</footer>
+</main>
+<!-- Visual Decor: Monolith Shape -->
+<div class="fixed top-0 right-0 w-[40vw] h-screen pointer-events-none z-0 opacity-20 hidden md:block">
+<div class="w-full h-full bg-surface-container-low transform skew-x-[-12deg] translate-x-1/2 overflow-hidden border-l border-outline-variant/10">
+<img class="w-full h-full object-cover grayscale mix-blend-lighten opacity-40" data-alt="Abstract macro shot of smoke swirling in water with soft lavender and peach colored lighting, high quality editorial aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1VPKGm3eVEDzx80yLScee0v5xjblHPjPbEDn0-7BYumKtRvttiQvtmp6b0tCuQ-sPmVus_LjbYZTcuYdffSWVZk9HMh6MyHk_EYj0Aibex0XqJ-_AzA5pA0IwYuTtHSRJpYbaRtw9VsFJICcCcNyKxJBktnPlk5ypqoz9zdVxw7ZByzgKB9ni0UKSRbZnFmYonk6tH47bxsU3RTPgpT0VcoES8hEB7osr9nqHCyBC5awU5Gu6h3hx0v3EnmwHA2b_vhoGDpWmdw"/>
+</div>
+</div>
+</body></html>

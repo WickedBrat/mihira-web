@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #05070A; color: #e7e5e5; font-family: system-ui, sans-serif; padding: 32px; }
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+  .subtitle { color: #acabaa; font-size: 13px; margin-bottom: 28px; }
+  section { margin-bottom: 40px; }
+  h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: #767575; margin-bottom: 14px; }
+
+  /* Color swatches */
+  .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+  .swatch { border-radius: 10px; padding: 12px 16px; min-width: 140px; }
+  .swatch-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .swatch-hex { font-size: 10px; font-family: monospace; opacity: 0.7; }
+
+  /* Typography */
+  .type-row { margin-bottom: 16px; border-left: 2px solid #1f2020; padding-left: 14px; }
+  .type-sample { margin-bottom: 3px; }
+  .type-meta { font-size: 10px; color: #767575; letter-spacing: 0.05em; }
+
+  /* Folder tree */
+  .tree { background: #0F172A; border-radius: 12px; padding: 20px 24px; font-family: monospace; font-size: 12px; line-height: 1.9; border: 1px solid #1f2020; }
+  .tree-dir { color: #D9A06F; }
+  .tree-file { color: #acabaa; }
+  .tree-comment { color: #484848; }
+
+  /* Component tokens */
+  .tokens { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .token { background: #0F172A; border-radius: 10px; padding: 12px 14px; border: 1px solid #1f2020; }
+  .token-name { font-size: 10px; color: #D9A06F; font-family: monospace; margin-bottom: 4px; }
+  .token-val { font-size: 12px; color: #e7e5e5; }
+
+  /* Glassmorphism demo */
+  .glass-demo { background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); }
+  .glow-pill { display: inline-block; padding: 6px 16px; border-radius: 999px; background: linear-gradient(135deg, #E07A5F, #D9A06F); color: #05070A; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<h2>Aksha — Design System</h2>
+<p class="subtitle">Color tokens, typography, folder structure & component primitives</p>
+
+<section>
+  <h3>Color Palette</h3>
+  <div class="swatches">
+    <div class="swatch" style="background:#05070A; border: 1px solid #1f2020;">
+      <div class="swatch-label">Background</div>
+      <div class="swatch-hex">#05070A · Obsidian</div>
+    </div>
+    <div class="swatch" style="background:#0F172A; border: 1px solid #1f2020;">
+      <div class="swatch-label">Surface</div>
+      <div class="swatch-hex">#0F172A · Midnight Slate</div>
+    </div>
+    <div class="swatch" style="background:#1E293B; border: 1px solid #1f2020;">
+      <div class="swatch-label">Surface High</div>
+      <div class="swatch-hex">#1E293B · Elevated</div>
+    </div>
+    <div class="swatch" style="background:#E07A5F;">
+      <div class="swatch-label" style="color:#05070A;">Primary</div>
+      <div class="swatch-hex" style="color:#05070A;">#E07A5F · Sattva Saffron</div>
+    </div>
+    <div class="swatch" style="background:#D9A06F;">
+      <div class="swatch-label" style="color:#05070A;">Secondary</div>
+      <div class="swatch-hex" style="color:#05070A;">#D9A06F · Antique Gold</div>
+    </div>
+    <div class="swatch" style="background:#00FFC2;">
+      <div class="swatch-label" style="color:#05070A;">Auspicious</div>
+      <div class="swatch-hex" style="color:#05070A;">#00FFC2 · Carbon Mint</div>
+    </div>
+    <div class="swatch" style="background:#e7e5e5;">
+      <div class="swatch-label" style="color:#05070A;">on-surface</div>
+      <div class="swatch-hex" style="color:#05070A;">#E7E5E5</div>
+    </div>
+    <div class="swatch" style="background:#767575; border: 1px solid #484848;">
+      <div class="swatch-label">Muted</div>
+      <div class="swatch-hex">#767575 · outline</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Typography</h3>
+  <div class="type-row">
+    <div class="type-sample" style="font-family:Georgia,serif; font-size:28px; font-weight:700; color:#D9A06F; letter-spacing:-0.02em;">Hari Om, Arjun</div>
+    <div class="type-meta">Playfair Display · 28px · Bold · Headings / Hero · Gold</div>
+  </div>
+  <div class="type-row">
+    <div class="type-sample" style="font-family:Georgia,serif; font-size:20px; font-weight:600; color:#e7e5e5; letter-spacing:-0.01em;">Daily Lesson · The Art of Detachment</div>
+    <div class="type-meta">Playfair Display · 20px · SemiBold · Card titles</div>
+  </div>
+  <div class="type-row">
+    <div class="type-sample" style="font-size:15px; color:#acabaa; line-height:1.6;">A guide to releasing expectations and finding peace in the present moment.</div>
+    <div class="type-meta">Inter · 15px · Regular · Body text</div>
+  </div>
+  <div class="type-row">
+    <div class="type-sample" style="font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#E07A5F;">Celestial Alignment · Morning</div>
+    <div class="type-meta">Inter · 10px · Uppercase · 0.2em spacing · Metadata labels</div>
+  </div>
+</section>
+
+<section>
+  <h3>Component Primitives</h3>
+  <div class="tokens">
+    <div class="token">
+      <div class="token-name">GlowCard (Skia)</div>
+      <div class="token-val">Hero card with radial gold glow. Used on Daily Lesson only.</div>
+    </div>
+    <div class="token">
+      <div class="token-name">GlassCard</div>
+      <div class="token-val">surface 60% + expo-blur. Used on all other cards.</div>
+    </div>
+    <div class="token">
+      <div class="token-name">ChatBubble</div>
+      <div class="token-val">Fade-in via Reanimated. AI = peach glass, User = gold glass.</div>
+    </div>
+    <div class="token">
+      <div class="token-name">SacredButton</div>
+      <div class="token-val">Saffron→Gold gradient, pill shape, haptic on press.</div>
+    </div>
+    <div class="token">
+      <div class="token-name">TabBar</div>
+      <div class="token-val">Custom floating pill nav. 4 tabs: Home, Chat, Gurukul, Profile.</div>
+    </div>
+    <div class="token">
+      <div class="token-name">AmbientBlob</div>
+      <div class="token-val">Radial gradient blobs, fixed behind content. Zero interaction.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3>Folder Structure (Approach B)</h3>
+  <div class="tree">
+    <div><span class="tree-dir">aksha/</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-dir">app/</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">_layout.tsx</span> <span class="tree-comment">← fonts, theme, gesture handler</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-dir">(tabs)/</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">_layout.tsx</span> <span class="tree-comment">← custom tab bar</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">index.tsx</span> <span class="tree-comment">← Home / Daily Alignment</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">horoscope.tsx</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">gurukul.tsx</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-dir">ask-krishna/</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">_layout.tsx</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">index.tsx</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-dir">onboarding/</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">index.tsx</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-dir">features/</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-dir">daily/</span> &nbsp;<span class="tree-comment">DailyArthCard, LessonCard, types</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-dir">horoscope/</span> <span class="tree-comment">HoroscopeCard, MuhuratCard, TimelineItem</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-dir">chat/</span> &nbsp;&nbsp;&nbsp;<span class="tree-comment">ChatBubble, ChatInput, useChatState</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-dir">gurukul/</span> &nbsp;<span class="tree-comment">LessonRow, CategoryCard, FeaturedCard</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-dir">onboarding/</span> <span class="tree-comment">ChoiceCard, OnboardingSlide</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-dir">components/ui/</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">GlowCard.tsx</span> <span class="tree-comment">← Skia</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">GlassCard.tsx</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">SacredButton.tsx</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">AmbientBlob.tsx</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-dir">lib/</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">theme.ts</span> <span class="tree-comment">← all color/font tokens</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tree-file">haptics.ts</span> <span class="tree-comment">← Expo Haptics wrappers</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">tailwind.config.js</span></div>
+    <div>&nbsp;&nbsp;<span class="tree-file">app.json</span></div>
+  </div>
+</section>
+
+<section>
+  <h3>Navigation Structure</h3>
+  <div class="glass-demo" style="display:flex; gap:20px; flex-wrap:wrap; align-items:center;">
+    <div style="text-align:center;">
+      <div style="font-size:10px; color:#767575; margin-bottom:6px; letter-spacing:0.1em; text-transform:uppercase;">Onboarding</div>
+      <div style="background:#0F172A; border-radius:10px; padding:10px 14px; font-size:12px; border:1px solid #1f2020;">onboarding/index</div>
+      <div style="color:#484848; font-size:18px; margin:6px 0;">↓</div>
+    </div>
+    <div style="flex:1; min-width:280px;">
+      <div style="font-size:10px; color:#767575; margin-bottom:6px; letter-spacing:0.1em; text-transform:uppercase;">Main App (Tabs)</div>
+      <div style="display:flex; gap:8px;">
+        <div style="background:#0F172A; border-radius:10px; padding:10px 12px; font-size:11px; border:1px solid #E07A5F; flex:1; text-align:center;">
+          <div style="color:#E07A5F; margin-bottom:4px;">⌂</div>Home
+        </div>
+        <div style="background:#0F172A; border-radius:10px; padding:10px 12px; font-size:11px; border:1px solid #1f2020; flex:1; text-align:center;">
+          <div style="color:#D9A06F; margin-bottom:4px;">✦</div>Horoscope
+        </div>
+        <div style="background:#0F172A; border-radius:10px; padding:10px 12px; font-size:11px; border:1px solid #1f2020; flex:1; text-align:center;">
+          <div style="color:#D9A06F; margin-bottom:4px;">⋈</div>Gurukul
+        </div>
+        <div style="background:#0F172A; border-radius:10px; padding:10px 12px; font-size:11px; border:1px solid #1f2020; flex:1; text-align:center;">
+          <div style="color:#767575; margin-bottom:4px;">◯</div>Profile
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; min-width:100px;">
+      <div style="font-size:10px; color:#767575; margin-bottom:6px; letter-spacing:0.1em; text-transform:uppercase;">Modal Stack</div>
+      <div style="background:#0F172A; border-radius:10px; padding:10px 14px; font-size:11px; border: 1px solid #1f2020; text-align:center;">
+        <div style="color:#E07A5F; margin-bottom:4px;">✿</div>Ask Krishna
+      </div>
+    </div>
+  </div>
+  <div style="font-size:11px; color:#767575; margin-top:10px;">Ask Krishna opens as a modal from any tab (FAB in tab bar). Profile tab is a placeholder stub in Phase 1.</div>
+</section>
+
+</body>
+</html>

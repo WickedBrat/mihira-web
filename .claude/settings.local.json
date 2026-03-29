@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for dir:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/Apple/projects/aksha/stitch_arth_product_design_strategy/$dir/**)",
+      "Bash(done)",
+      "Bash(wc -l /Users/Apple/projects/aksha/stitch_arth_product_design_strategy/*/code.html)",
+      "Bash(bash /Users/Apple/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6/skills/brainstorming/scripts/start-server.sh --project-dir /Users/Apple/projects/aksha)",
+      "Bash(npx create-expo-app@latest . --template blank-typescript)",
+      "Bash(npx create-expo-app@latest . --template blank-typescript --no-install)",
+      "Bash(npx create-expo-app@latest --version)",
+      "Bash(npx create-expo-app@latest --help)",
+      "Read(//private/tmp/**)",
+      "Bash(npx create-expo-app@latest aksha-temp --template blank-typescript)",
+      "Bash(cp /tmp/aksha-temp/App.tsx /Users/Apple/projects/aksha/)",
+      "Bash(cp /tmp/aksha-temp/app.json /Users/Apple/projects/aksha/)",
+      "Bash(cp /tmp/aksha-temp/tsconfig.json /Users/Apple/projects/aksha/)",
+      "Bash(cp /tmp/aksha-temp/package.json /Users/Apple/projects/aksha/)",
+      "Bash(cp /tmp/aksha-temp/package-lock.json /Users/Apple/projects/aksha/)",
+      "Bash(npx expo:*)",
+      "Bash(npm install:*)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''''dependencies'''',{}\\), indent=2\\)\\)\")",
+      "Bash(node node_modules/expo/node_modules/@expo/cli/build/src/bin/cli.js install expo-router react-native-safe-area-context react-native-screens react-native-gesture-handler react-native-reanimated)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\(''''bin'''', {}\\)\\)\")",
+      "Bash(node /Users/Apple/projects/aksha/node_modules/expo/node_modules/@expo/cli/build/bin/cli install expo-router react-native-safe-area-context react-native-screens react-native-gesture-handler react-native-reanimated)",
+      "Bash(node /Users/Apple/projects/aksha/node_modules/expo/node_modules/@expo/cli/build/bin/cli install expo-blur expo-linear-gradient expo-haptics expo-font)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(node -e \"const p = require\\(''/Users/Apple/projects/aksha/package.json''\\); console.log\\(''name:'', p.name\\); console.log\\(''expo:'', p.dependencies.expo\\); console.log\\(''expo-router:'', p.dependencies[''expo-router'']\\); console.log\\(''react-native:'', p.dependencies[''react-native'']\\); console.log\\(''nativewind:'', p.dependencies.nativewind\\); console.log\\(''@shopify/react-native-skia:'', p.dependencies[''@shopify/react-native-skia'']\\)\")"
+    ]
+  }
+}

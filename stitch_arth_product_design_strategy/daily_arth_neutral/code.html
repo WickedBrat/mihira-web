@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "tertiary-container": "#edeaea",
+                "surface-variant": "#252626",
+                "error-container": "#7f2927",
+                "on-primary-container": "#dfc8ef",
+                "secondary": "#b8987a",
+                "inverse-surface": "#fcf9f8",
+                "on-error-container": "#ff9993",
+                "on-tertiary": "#5f5f5f",
+                "on-background": "#e7e5e5",
+                "outline": "#767575",
+                "on-error": "#490106",
+                "secondary-fixed": "#ffdcbe",
+                "on-secondary-fixed": "#523b23",
+                "surface-container": "#191a1a",
+                "surface-tint": "#d4bee4",
+                "primary-fixed": "#f0dbff",
+                "surface-container-highest": "#252626",
+                "on-primary": "#4a3a58",
+                "on-primary-fixed-variant": "#665575",
+                "error-dim": "#bb5551",
+                "tertiary-fixed-dim": "#e7e5e4",
+                "on-secondary-fixed-variant": "#71563d",
+                "on-secondary-container": "#dcb99a",
+                "surface-container-high": "#1f2020",
+                "inverse-primary": "#6a5879",
+                "error": "#ee7d77",
+                "on-surface-variant": "#acabaa",
+                "primary": "#d4bee4",
+                "tertiary-fixed": "#f6f3f2",
+                "on-tertiary-container": "#575756",
+                "primary-dim": "#c6b1d6",
+                "primary-fixed-dim": "#e3ccf3",
+                "inverse-on-surface": "#565555",
+                "surface-container-lowest": "#000000",
+                "on-tertiary-fixed": "#4a4949",
+                "on-secondary": "#2f1c07",
+                "surface": "#0e0e0e",
+                "tertiary-dim": "#edeaea",
+                "on-surface": "#e7e5e5",
+                "background": "#0e0e0e",
+                "secondary-container": "#4e371f",
+                "on-tertiary-fixed-variant": "#676666",
+                "surface-container-low": "#131313",
+                "on-primary-fixed": "#493957",
+                "surface-bright": "#2b2c2c",
+                "secondary-fixed-dim": "#f2cead",
+                "primary-container": "#51405f",
+                "outline-variant": "#484848",
+                "tertiary": "#fbf9f8",
+                "secondary-dim": "#b8987a",
+                "surface-dim": "#0e0e0e"
+              },
+              fontFamily: {
+                "headline": ["Lexend"],
+                "body": ["Lexend"],
+                "label": ["Lexend"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(37, 38, 38, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .ethereal-bg {
+            background: radial-gradient(circle at 50% -20%, #2a2230 0%, #0e0e0e 70%);
+        }
+        .soft-glow-btn {
+            box-shadow: 0 0 20px rgba(212, 190, 228, 0.15);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface min-h-screen ethereal-bg overflow-x-hidden">
+<!-- Top Navigation (Brand Anchor) -->
+<div class="flex items-center bg-transparent p-6 pb-2 justify-between sticky top-0 z-50">
+<div class="text-on-surface flex size-12 shrink-0 items-center" data-icon="List" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">list</span>
+</div>
+<h2 class="text-on-surface text-xl font-headline font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Arth</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 bg-transparent text-on-surface gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<div class="text-on-surface" data-icon="UserCircle" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+</button>
+</div>
+</div>
+<main class="relative px-6 flex flex-col items-center">
+<!-- Ethereal Decorative Blob -->
+<div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
+<!-- Peace Header -->
+<div class="pt-12 pb-8 text-center">
+<span class="text-on-surface-variant font-label text-[0.75rem] uppercase tracking-[0.2em]">Mindful Morning</span>
+<h1 class="text-on-surface tracking-tight text-[42px] font-headline font-bold leading-[1.1] mt-4">Daily Arth</h1>
+<p class="text-on-surface-variant mt-2 text-lg">Finding stillness in the noise.</p>
+</div>
+<!-- High-Translucency Glass Quote Container -->
+<div class="w-full max-w-md mt-10 relative group">
+<div class="absolute inset-0 bg-primary/5 blur-3xl rounded-3xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="glass-panel relative rounded-[2rem] p-10 border border-outline-variant/10 flex flex-col items-center text-center">
+<div class="text-primary mb-8" data-icon="format_quote" data-size="40px" data-weight="fill">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1; font-size: 40px;">format_quote</span>
+</div>
+<h2 class="text-on-surface text-[26px] font-headline font-medium leading-[1.4] tracking-tight">
+                    "You have a right to your actions, but never to their fruits."
+                </h2>
+<div class="mt-8 flex items-center gap-3">
+<div class="h-[1px] w-8 bg-outline-variant/30"></div>
+<span class="text-on-surface-variant font-label text-[0.7rem] uppercase tracking-widest italic">The Bhagavad Gita</span>
+<div class="h-[1px] w-8 bg-outline-variant/30"></div>
+</div>
+</div>
+</div>
+<!-- Reflect Action -->
+<div class="mt-16 flex flex-col items-center gap-6">
+<button class="flex min-w-[180px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-16 px-8 bg-gradient-to-br from-primary to-primary-container text-on-primary gap-3 text-lg font-bold leading-normal tracking-[0.015em] soft-glow-btn hover:scale-[1.02] active:scale-[0.98] transition-all">
+<div class="text-on-primary" data-icon="Sparkle" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">star_shine</span>
+</div>
+<span class="truncate">Reflect</span>
+</button>
+<p class="text-on-surface-variant text-sm font-label opacity-60">4.2k others are reflecting today</p>
+</div>
+<!-- Secondary Section: Journal Entries -->
+<div class="w-full max-w-md mt-24 mb-32">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-on-surface text-xl font-headline font-semibold">Past Insights</h3>
+<span class="text-primary text-sm font-label cursor-pointer">View All</span>
+</div>
+<div class="space-y-4">
+<div class="surface-container-low p-5 rounded-2xl flex items-center gap-4 hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">history_edu</span>
+</div>
+<div class="flex-1">
+<p class="text-on-surface font-medium">The Power of Stillness</p>
+<p class="text-on-surface-variant text-sm">Yesterday • 4 min read</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="surface-container-low p-5 rounded-2xl flex items-center gap-4 hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">self_improvement</span>
+</div>
+<div class="flex-1">
+<p class="text-on-surface font-medium">Detached Observation</p>
+<p class="text-on-surface-variant text-sm">Oct 24 • 6 min read</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Glass Bottom Navigation (Brand Anchor) -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md z-50">
+<div class="glass-panel flex gap-2 border border-outline-variant/10 rounded-full px-6 py-3 shadow-2xl">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="House" data-size="24px" data-weight="fill">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M224,115.55V208a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V168a8,8,0,0,0-8-8H112a8,8,0,0,0-8,8v40a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V115.55a16,16,0,0,1,5.17-11.78l80-75.48.11-.11a16,16,0,0,1,21.53,0,1.14,1.14,0,0,0,.11.11l80,75.48A16,16,0,0,1,224,115.55Z"></path>
+</svg>
+</div>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-on-surface-variant/60 hover:text-on-surface transition-colors" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="BookOpen" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M224,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h64a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z"></path>
+</svg>
+</div>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-on-surface-variant/60 hover:text-on-surface transition-colors" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="Compass" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM172.42,72.84l-64,32a8.05,8.05,0,0,0-3.58,3.58l-32,64A8,8,0,0,0,80,184a8.1,8.1,0,0,0,3.58-.84l64-32a8.05,8.05,0,0,0,3.58-3.58l32-64a8,8,0,0,0-10.74-10.74ZM138,138,97.89,158.11,118,118l40.15-20.07Z"></path>
+</svg>
+</div>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-on-surface-variant/60 hover:text-on-surface transition-colors" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="Gear" data-size="24px" data-weight="regular">
+<svg fill="currentColor" height="24px" viewbox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"></path>
+</svg>
+</div>
+</a>
+</div>
+</div>
+</body></html>

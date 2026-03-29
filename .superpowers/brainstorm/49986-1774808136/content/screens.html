@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #05070A; color: #e7e5e5; font-family: system-ui, sans-serif; padding: 28px; }
+h2 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.subtitle { color: #767575; font-size: 12px; margin-bottom: 28px; }
+.screens { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
+/* Phone shell */
+.phone { width: 200px; flex-shrink: 0; }
+.phone-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #E07A5F; margin-bottom: 8px; font-weight: 600; }
+.phone-screen { background: #05070A; border-radius: 28px; border: 1.5px solid #1E293B; overflow: hidden; height: 380px; display: flex; flex-direction: column; position: relative; }
+
+/* Shared */
+.nav { padding: 10px 12px 6px; display: flex; justify-content: space-between; align-items: center; background: rgba(15,23,42,0.8); }
+.nav-brand { font-size: 13px; font-weight: 800; color: #D9A06F; letter-spacing: -0.03em; }
+.nav-icon { width: 22px; height: 22px; border-radius: 50%; background: #1E293B; }
+.label-tag { font-size: 8px; text-transform: uppercase; letter-spacing: 0.18em; color: #E07A5F; font-weight: 600; margin-bottom: 4px; }
+.tab-bar { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(15,23,42,0.9); backdrop-filter: blur(10px); padding: 8px 16px 10px; display: flex; justify-content: space-around; border-top: 1px solid #1E293B; }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.tab-icon { font-size: 14px; }
+.tab-txt { font-size: 7px; color: #484848; letter-spacing: 0.08em; }
+.tab-active .tab-txt { color: #E07A5F; }
+.tab-active .tab-icon { filter: drop-shadow(0 0 4px #E07A5F66); }
+.scroll { flex: 1; overflow: hidden; padding: 10px 12px 50px; display: flex; flex-direction: column; gap: 8px; }
+
+/* Glass card */
+.glass { background: rgba(15,23,42,0.7); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); padding: 12px; }
+.glass-sm { background: rgba(15,23,42,0.7); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); padding: 10px; }
+
+/* Glow hero card */
+.glow-card { background: rgba(15,23,42,0.8); border-radius: 18px; border: 1px solid rgba(224,122,95,0.2); padding: 14px; position: relative; overflow: hidden; }
+.glow-card::before { content:''; position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:100px; height:60px; background:radial-gradient(ellipse, rgba(217,160,111,0.25) 0%, transparent 70%); pointer-events:none; }
+
+/* Chat bubbles */
+.bubble-ai { background: rgba(224,122,95,0.1); border-radius: 14px 14px 14px 4px; border: 1px solid rgba(224,122,95,0.15); padding: 8px 10px; max-width: 80%; font-size: 9px; line-height: 1.5; color: #e7e5e5; }
+.bubble-user { background: rgba(217,160,111,0.12); border-radius: 14px 14px 4px 14px; border: 1px solid rgba(217,160,111,0.15); padding: 8px 10px; max-width: 75%; font-size: 9px; line-height: 1.5; color: #e7e5e5; align-self: flex-end; }
+.chat-scroll { flex:1; overflow:hidden; padding: 10px 12px 55px; display:flex; flex-direction:column; gap:8px; }
+.chat-input-bar { position:absolute; bottom:0; left:0; right:0; padding: 8px 12px 10px; background:rgba(5,7,10,0.95); border-top: 1px solid rgba(224,122,95,0.2); display:flex; gap:6px; align-items:center; }
+.chat-input { flex:1; background:rgba(15,23,42,0.8); border-radius:20px; border:1px solid rgba(224,122,95,0.3); padding: 5px 10px; font-size:8px; color:#acabaa; }
+.chat-send { width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg,#E07A5F,#D9A06F); display:flex; align-items:center; justify-content:center; font-size:10px; }
+
+/* Timeline */
+.timeline-item { display:flex; gap:8px; align-items:flex-start; }
+.timeline-dot { width:24px; height:24px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:10px; }
+.timeline-card { flex:1; background:rgba(15,23,42,0.7); border-radius:12px; border:1px solid rgba(255,255,255,0.04); padding:8px 10px; }
+
+/* Gurukul bento */
+.bento { display:grid; grid-template-columns:1.4fr 1fr; gap:6px; }
+.bento-featured { background:rgba(15,23,42,0.8); border-radius:14px; border:1px solid rgba(224,122,95,0.15); padding:10px; grid-column:1/3; position:relative; overflow:hidden; height:90px; }
+.bento-feat-img { position:absolute; inset:0; background:linear-gradient(135deg,#1E293B,#05070A); opacity:0.6; }
+.bento-feat-txt { position:relative; z-index:1; }
+.bento-sm { background:rgba(15,23,42,0.7); border-radius:12px; border:1px solid rgba(255,255,255,0.04); padding:8px; }
+
+/* Onboarding */
+.choice-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.choice-card { background:rgba(15,23,42,0.7); border-radius:12px; border:1px solid rgba(255,255,255,0.05); padding:10px; display:flex; flex-direction:column; gap:4px; }
+.choice-icon { font-size:16px; margin-bottom:4px; }
+.choice-title { font-size:10px; font-weight:700; color:#e7e5e5; }
+.choice-sub { font-size:8px; color:#767575; line-height:1.4; }
+.cta-btn { background:linear-gradient(135deg,#E07A5F,#D9A06F); border-radius:20px; padding:9px; text-align:center; font-size:9px; font-weight:700; color:#05070A; letter-spacing:0.05em; }
+</style>
+</head>
+<body>
+
+<h2>Aksha — Screen Designs</h2>
+<p class="subtitle">All 5 screens · Epilogue font · Saffron/Gold palette · Dark Obsidian base</p>
+
+<div class="screens">
+
+  <!-- 1. HOME -->
+  <div class="phone">
+    <div class="phone-label">1 · Home / Daily Alignment</div>
+    <div class="phone-screen">
+      <div class="nav">
+        <div class="nav-brand">Aksha</div>
+        <div class="nav-icon"></div>
+      </div>
+      <div class="scroll">
+        <div style="margin-bottom:2px;">
+          <div style="font-size:8px;color:#767575;letter-spacing:0.1em;text-transform:uppercase;">Sunday, 30 March</div>
+          <div style="font-size:15px;font-weight:800;color:#D9A06F;letter-spacing:-0.02em;margin-top:2px;">Hari Om, Arjun</div>
+        </div>
+
+        <!-- Hero Glow Card (Skia) -->
+        <div class="glow-card">
+          <div class="label-tag">Daily Lesson · Skia Glow</div>
+          <div style="font-size:11px;font-weight:700;color:#e7e5e5;margin-bottom:4px;line-height:1.3;">The Art of Detachment</div>
+          <div style="font-size:8px;color:#acabaa;line-height:1.5;">Release expectations. Find peace in this moment.</div>
+          <div style="margin-top:8px;display:flex;gap:6px;align-items:center;">
+            <div style="background:linear-gradient(135deg,#E07A5F,#D9A06F);border-radius:20px;padding:4px 10px;font-size:7px;font-weight:700;color:#05070A;">Begin →</div>
+            <div style="font-size:7px;color:#484848;">12 min · Moti fade-in</div>
+          </div>
+        </div>
+
+        <!-- Daily Arth Quote -->
+        <div class="glass">
+          <div class="label-tag">Daily Arth</div>
+          <div style="font-size:9px;font-style:italic;color:#e7e5e5;line-height:1.5;">"You have a right to your actions, but never to their fruits."</div>
+          <div style="font-size:7px;color:#484848;margin-top:4px;letter-spacing:0.1em;">— Bhagavad Gita</div>
+        </div>
+
+        <!-- Horoscope row -->
+        <div style="display:flex;gap:6px;">
+          <div class="glass-sm" style="flex:1;">
+            <div style="font-size:7px;color:#E07A5F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">Zodiac</div>
+            <div style="font-size:9px;font-weight:700;">♋ Karkataka</div>
+            <div style="font-size:7px;color:#767575;margin-top:2px;">Favourable day</div>
+          </div>
+          <div class="glass-sm" style="flex:1;">
+            <div style="font-size:7px;color:#D9A06F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">Muhurat</div>
+            <div style="font-size:9px;font-weight:700;">06:42 AM</div>
+            <div style="font-size:7px;color:#767575;margin-top:2px;">Brahma muhurta</div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab tab-active"><div class="tab-icon">⌂</div><div class="tab-txt">HOME</div></div>
+        <div class="tab"><div class="tab-icon" style="color:#484848;">✦</div><div class="tab-txt">COSMOS</div></div>
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#E07A5F,#D9A06F);display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:-10px;">✿</div>
+        <div class="tab"><div class="tab-icon" style="color:#484848;">⋈</div><div class="tab-txt">GURUKUL</div></div>
+        <div class="tab"><div class="tab-icon" style="color:#484848;">◯</div><div class="tab-txt">PROFILE</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. HOROSCOPE -->
+  <div class="phone">
+    <div class="phone-label">2 · Cosmic Rhythm / Horoscope</div>
+    <div class="phone-screen">
+      <div class="nav">
+        <div class="nav-brand" style="color:#e7e5e5;font-size:11px;font-weight:700;">Your Cosmic Rhythm</div>
+        <div class="nav-icon"></div>
+      </div>
+      <div class="scroll" style="gap:10px;">
+        <div class="label-tag">Celestial Alignment</div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:linear-gradient(135deg,#E07A5F,#D9A06F);">🌅</div>
+          <div class="timeline-card">
+            <div style="font-size:9px;font-weight:700;color:#e7e5e5;">Morning · Dharma</div>
+            <div style="font-size:7px;color:#484848;margin-bottom:4px;">06:00 – 11:00</div>
+            <div style="font-size:8px;color:#acabaa;line-height:1.4;font-style:italic;">"Awaken with intention…"</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:linear-gradient(135deg,#D9A06F,#b8987a);">☀️</div>
+          <div class="timeline-card">
+            <div style="font-size:9px;font-weight:700;color:#e7e5e5;">Afternoon · Karma</div>
+            <div style="font-size:7px;color:#484848;margin-bottom:4px;">12:00 – 16:00</div>
+            <div style="font-size:8px;color:#acabaa;line-height:1.4;font-style:italic;">"In the heat of labor, remain cool…"</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#1E293B; border:1px solid #E07A5F44;">🌆</div>
+          <div class="timeline-card">
+            <div style="font-size:9px;font-weight:700;color:#e7e5e5;">Evening · Reflection</div>
+            <div style="font-size:7px;color:#484848;margin-bottom:4px;">17:00 – 20:00</div>
+            <div style="font-size:8px;color:#acabaa;line-height:1.4;font-style:italic;">"Shed the day's burdens…"</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:linear-gradient(135deg,#05070A,#1E293B); border:1px solid #D9A06F44;">✨</div>
+          <div class="timeline-card">
+            <div style="font-size:9px;font-weight:700;color:#e7e5e5;">Night · Yoga</div>
+            <div style="font-size:7px;color:#484848;margin-bottom:4px;">21:00 – 05:00</div>
+            <div style="font-size:8px;color:#acabaa;line-height:1.4;font-style:italic;">"In the silence, the soul speaks…"</div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab"><div class="tab-icon" style="color:#484848;">⌂</div><div class="tab-txt">HOME</div></div>
+        <div class="tab tab-active"><div class="tab-icon">✦</div><div class="tab-txt">COSMOS</div></div>
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#E07A5F,#D9A06F);display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:-10px;">✿</div>
+        <div class="tab"><div class="tab-icon" style="color:#484848;">⋈</div><div class="tab-txt">GURUKUL</div></div>
+        <div class="tab"><div class="tab-icon" style="color:#484848;">◯</div><div class="tab-txt">PROFILE</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ASK KRISHNA -->
+  <div class="phone">
+    <div class="phone-label">3 · Ask Krishna · Modal</div>
+    <div class="phone-screen">
+      <div class="nav" style="flex-direction:column;align-items:center;padding:12px 12px 8px;gap:2px;">
+        <div style="font-size:8px;text-transform:uppercase;letter-spacing:0.18em;color:#E07A5F;">Krishna · AI Mentor</div>
+        <div style="font-size:12px;font-weight:800;color:#e7e5e5;letter-spacing:-0.02em;">Sacred Consultation</div>
+      </div>
+      <div class="chat-scroll">
+        <div style="font-size:7px;color:#484848;text-align:center;letter-spacing:0.08em;">• Session begins •</div>
+        <div class="bubble-ai">
+          <div style="font-size:7px;color:#E07A5F;font-weight:700;margin-bottom:3px;letter-spacing:0.08em;">KRISHNA</div>
+          Welcome back to your sanctuary. How is your mind feeling in this moment?
+        </div>
+        <div class="bubble-user">
+          It's been quite noisy lately. I need guidance on regaining internal quiet.
+        </div>
+        <div class="bubble-ai">
+          <div style="font-size:7px;color:#E07A5F;font-weight:700;margin-bottom:3px;letter-spacing:0.08em;">KRISHNA</div>
+          The noise is the world's rhythm. The quiet you seek is the presence of your own centered awareness…
+        </div>
+        <!-- typing indicator -->
+        <div style="display:flex;gap:3px;padding:4px 8px;background:rgba(224,122,95,0.08);border-radius:10px;width:fit-content;align-items:center;">
+          <div style="width:4px;height:4px;border-radius:50%;background:#E07A5F;opacity:0.6;"></div>
+          <div style="width:4px;height:4px;border-radius:50%;background:#E07A5F;opacity:0.4;"></div>
+          <div style="width:4px;height:4px;border-radius:50%;background:#E07A5F;opacity:0.2;"></div>
+          <div style="font-size:7px;color:#484848;margin-left:4px;font-style:italic;">Reflecting…</div>
+        </div>
+      </div>
+      <div class="chat-input-bar">
+        <div class="chat-input">Ask for guidance…</div>
+        <div style="width:22px;height:22px;border-radius:50%;background:#1E293B;display:flex;align-items:center;justify-content:center;font-size:9px;color:#767575;">🎙</div>
+        <div class="chat-send">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. GURUKUL -->
+  <div class="phone">
+    <div class="phone-label">4 · Gurukul · Library</div>
+    <div class="phone-screen">
+      <div class="nav">
+        <div class="nav-brand" style="font-size:12px;color:#e7e5e5;">Sacred Library</div>
+        <div class="nav-icon"></div>
+      </div>
+      <div class="scroll">
+        <div class="label-tag">Gurukul</div>
+        <div class="bento">
+          <!-- Featured -->
+          <div class="bento-featured">
+            <div class="bento-feat-img"></div>
+            <div class="bento-feat-txt">
+              <div style="font-size:7px;color:#E07A5F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">✦ Featured Wisdom</div>
+              <div style="font-size:10px;font-weight:700;color:#e7e5e5;line-height:1.3;">The Art of Detachment</div>
+              <div style="font-size:7px;color:#acabaa;margin-top:2px;">12 min · Ancient Philosophy</div>
+            </div>
+          </div>
+          <!-- Small cards -->
+          <div class="bento-sm">
+            <div style="font-size:14px;margin-bottom:4px;">🌬</div>
+            <div style="font-size:9px;font-weight:700;">Breathwork</div>
+            <div style="font-size:7px;color:#767575;margin-top:2px;">4 sessions</div>
+            <div style="height:2px;background:#1E293B;border-radius:1px;margin-top:6px;"><div style="width:66%;height:100%;background:#E07A5F;border-radius:1px;"></div></div>
+          </div>
+          <div class="bento-sm">
+            <div style="font-size:14px;margin-bottom:4px;">∞</div>
+            <div style="font-size:9px;font-weight:700;">Philosophy</div>
+            <div style="font-size:7px;color:#767575;margin-top:2px;">12 classes</div>
+            <div style="height:2px;background:#1E293B;border-radius:1px;margin-top:6px;"><div style="width:33%;height:100%;background:#D9A06F;border-radius:1px;"></div></div>
+          </div>
+        </div>
+
+        <!-- Lesson rows -->
+        <div style="font-size:9px;font-weight:700;color:#e7e5e5;margin-top:4px;">Recent Insights</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="display:flex;gap:8px;align-items:center;padding:6px 8px;background:rgba(15,23,42,0.6);border-radius:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:#1E293B;flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="font-size:8px;font-weight:700;">Mindful Relationships</div>
+              <div style="font-size:7px;color:#484848;">6 min · Emotional IQ</div>
+            </div>
+            <div style="font-size:10px;color:#767575;">▶</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;padding:6px 8px;background:rgba(15,23,42,0.6);border-radius:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:#1E293B;flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="font-size:8px;font-weight:700;">The Silent Observer</div>
+              <div style="font-size:7px;color:#484848;">4 min · Meditation</div>
+            </div>
+            <div style="font-size:10px;color:#767575;">▶</div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab"><div class="tab-icon" style="color:#484848;">⌂</div><div class="tab-txt">HOME</div></div>
+        <div class="tab"><div class="tab-icon" style="color:#484848;">✦</div><div class="tab-txt">COSMOS</div></div>
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#E07A5F,#D9A06F);display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:-10px;">✿</div>
+        <div class="tab tab-active"><div class="tab-icon">⋈</div><div class="tab-txt">GURUKUL</div></div>
+        <div class="tab"><div class="tab-icon" style="color:#484848;">◯</div><div class="tab-txt">PROFILE</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ONBOARDING -->
+  <div class="phone">
+    <div class="phone-label">5 · Onboarding</div>
+    <div class="phone-screen">
+      <div style="padding:16px 14px 0;">
+        <div style="font-size:13px;font-weight:800;color:#D9A06F;letter-spacing:-0.02em;margin-bottom:14px;">Aksha</div>
+        <div style="font-size:8px;text-transform:uppercase;letter-spacing:0.18em;color:#E07A5F;margin-bottom:6px;">Begin Your Path</div>
+        <div style="font-size:16px;font-weight:800;color:#e7e5e5;line-height:1.2;letter-spacing:-0.02em;margin-bottom:6px;">What's weighing on your mind?</div>
+        <div style="font-size:8px;color:#767575;line-height:1.5;margin-bottom:14px;">Choose a focus for today. Your path is a quiet, intentional journey.</div>
+      </div>
+      <div style="padding:0 14px;flex:1;">
+        <div class="choice-grid">
+          <div class="choice-card" style="border-color:rgba(224,122,95,0.2);">
+            <div class="choice-icon">⚖️</div>
+            <div class="choice-title">Decisions</div>
+            <div class="choice-sub">Clarity amid complex choices</div>
+          </div>
+          <div class="choice-card">
+            <div class="choice-icon">❤️</div>
+            <div class="choice-title">Relationships</div>
+            <div class="choice-sub">Nurture connections with self</div>
+          </div>
+          <div class="choice-card">
+            <div class="choice-icon">🌬</div>
+            <div class="choice-title">Anxiety</div>
+            <div class="choice-sub">Find center in the noise</div>
+          </div>
+          <div class="choice-card">
+            <div class="choice-icon">🧘</div>
+            <div class="choice-title">Purpose</div>
+            <div class="choice-sub">Align actions with intent</div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:12px 14px 16px;">
+        <div class="cta-btn">Let's Start →</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:24px;padding:14px 18px;background:#0F172A;border-radius:12px;border:1px solid #1E293B;font-size:11px;color:#767575;line-height:1.8;">
+  <strong style="color:#e7e5e5;">Animation notes:</strong>
+  Home hero card — Moti <code style="color:#E07A5F;">useAnimationState</code> scale+opacity entry ·
+  Chat bubbles — Reanimated <code style="color:#E07A5F;">FadeIn</code> entering prop, divine reveal feel ·
+  Horoscope timeline — Moti staggered slide-up ·
+  Onboarding cards — Reanimated stagger with <code style="color:#E07A5F;">SlideInRight</code>
+</div>
+</body>
+</html>

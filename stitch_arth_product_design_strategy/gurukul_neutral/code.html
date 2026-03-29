@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Arth - Gurukul (Neutral)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-on-surface": "#565555",
+              "primary-fixed-dim": "#e3ccf3",
+              "on-tertiary": "#5f5f5f",
+              "on-surface": "#e7e5e5",
+              "primary": "#d4bee4",
+              "on-secondary": "#2f1c07",
+              "surface-container": "#191a1a",
+              "surface-container-lowest": "#000000",
+              "surface-variant": "#252626",
+              "surface-tint": "#d4bee4",
+              "secondary-fixed-dim": "#f2cead",
+              "surface": "#0e0e0e",
+              "on-secondary-fixed": "#523b23",
+              "on-secondary-fixed-variant": "#71563d",
+              "tertiary-fixed": "#f6f3f2",
+              "primary-fixed": "#f0dbff",
+              "on-primary-fixed-variant": "#665575",
+              "surface-container-highest": "#252626",
+              "on-primary": "#4a3a58",
+              "on-primary-container": "#dfc8ef",
+              "error-container": "#7f2927",
+              "surface-dim": "#0e0e0e",
+              "error": "#ee7d77",
+              "surface-container-high": "#1f2020",
+              "on-primary-fixed": "#493957",
+              "error-dim": "#bb5551",
+              "on-surface-variant": "#acabaa",
+              "tertiary-fixed-dim": "#e7e5e4",
+              "outline-variant": "#484848",
+              "outline": "#767575",
+              "on-error": "#490106",
+              "background": "#0e0e0e",
+              "secondary": "#b8987a",
+              "on-tertiary-container": "#575756",
+              "inverse-primary": "#6a5879",
+              "tertiary-container": "#edeaea",
+              "tertiary": "#fbf9f8",
+              "surface-container-low": "#131313",
+              "secondary-dim": "#b8987a",
+              "secondary-fixed": "#ffdcbe",
+              "on-tertiary-fixed": "#4a4949",
+              "tertiary-dim": "#edeaea",
+              "primary-dim": "#c6b1d6",
+              "on-secondary-container": "#dcb99a",
+              "primary-container": "#51405f",
+              "on-background": "#e7e5e5",
+              "on-error-container": "#ff9993",
+              "on-tertiary-fixed-variant": "#676666",
+              "inverse-surface": "#fcf9f8",
+              "surface-bright": "#2b2c2c",
+              "secondary-container": "#4e371f"
+            },
+            fontFamily: {
+              "headline": ["Lexend"],
+              "body": ["Lexend"],
+              "label": ["Lexend"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0e0e0e;
+            color: #e7e5e5;
+            font-family: 'Lexend', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(37, 38, 38, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(72, 72, 72, 0.15);
+        }
+        .ambient-glow {
+            position: fixed;
+            width: 60vw;
+            height: 60vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 190, 228, 0.08) 0%, rgba(184, 152, 122, 0.05) 50%, rgba(14, 14, 14, 0) 100%);
+            filter: blur(80px);
+            z-index: -1;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="dark selection:bg-primary/30">
+<!-- Ambient Background Lighting -->
+<div class="ambient-glow -top-[20%] -left-[10%]"></div>
+<div class="ambient-glow top-[40%] -right-[20%]"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 w-full bg-stone-900/60 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(231,229,229,0.04)] no-border tonal-shift bg-stone-900/40">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden ring-1 ring-outline-variant/20">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="Portrait of a serene woman with natural lighting, soft focus background, editorial style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWEjFrzTjIWWGyh64tHAi5Yn_lonT4LPmnsQStL76V_nYBC_V3t6k6J9FnbKxNNKmX5IIJuLJusJa8BxAWbaV_r9prFdKxaIUkK2ZDme_UY9kHq0Ifwbjc2aM8U4lTmB6EqThHpWLXlcgwxWmvlANBHsvKTu2FRrPDBbxCFdTMvR3UWdBvtqn_qz3b81ff9yp38TgFIsspeCffH5bg6MKF00XwPHoLUjEUQvS98C_cGqYQMNvDBK2VO_hLWUkIGxQa4c-UF0squQ"/>
+</div>
+<span class="text-xl font-semibold tracking-tighter text-purple-200 font-['Lexend'] tracking-tight text-on-surface">Arth</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors active:scale-95 duration-200 text-purple-200 dark:text-purple-100">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="pt-32 pb-40 px-6 max-w-7xl mx-auto min-h-screen">
+<!-- Peace Header / Hero Section -->
+<section class="mb-20 space-y-4">
+<div class="inline-block px-4 py-1 rounded-full bg-secondary-container/30 border border-secondary/10 mb-2">
+<span class="text-[10px] uppercase tracking-[0.2em] font-medium text-secondary-dim">Gurukul (Neutral)</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-bold tracking-tight text-on-surface leading-[1.1]">
+                Your Sacred <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary-fixed-dim to-secondary">Digital Library</span>
+</h1>
+<p class="text-on-surface-variant max-w-xl text-lg leading-relaxed pt-4">
+                Explore bite-sized wisdom designed to settle the mind and nourish the soul. Stillness is the ultimate luxury.
+            </p>
+</section>
+<!-- Bento Grid for Categories and Featured Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-24">
+<!-- Featured Card -->
+<div class="md:col-span-8 group relative overflow-hidden rounded-[2rem] h-[400px] glass-card flex flex-col justify-end p-10">
+<div class="absolute inset-0 z-0">
+<img alt="Featured Lesson" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" data-alt="Abstract macro photo of soft sand ripples and gentle morning shadows, ethereal lighting, minimalist composition" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpOxXR6CECi1Aaiq22rMhxz1vb63b0DUToZysWp2xc31Z5AbwkUlXltWQ88tqqmL0q5H7SpqHogz2d3GCHXcy2dDmsWw4fGA5E7gm0YO_klP0rU-cZPd7yZIldlOBKPdQEGQ-sMX4zkccj0X6bQGtCKsdtsGBQDO9s1ZLS62RG_00eIp23xrnlvCGeDFx-Xa9iB78Ls7WRAoMO_wBJ7CADWnoFAqa65Cj_BAXee94rA1oPdtIGXrVGItAhaadAsXiMrrNowPJ9Rg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+</div>
+<div class="relative z-10 space-y-4">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-[10px] uppercase tracking-widest font-bold">Featured Wisdom</span>
+</div>
+<h2 class="text-3xl md:text-4xl font-semibold tracking-tight">The Art of Detachment</h2>
+<p class="text-on-surface-variant max-w-md text-sm leading-relaxed">
+                        A guide to releasing expectations and finding peace in the present moment. A 12-minute deep dive into ancient stoic and yogic philosophies.
+                    </p>
+<button class="mt-4 px-8 py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-medium active:scale-95 transition-all w-fit">
+                        Begin Session
+                    </button>
+</div>
+</div>
+<!-- Side Category Card 1 -->
+<div class="md:col-span-4 rounded-[2rem] glass-card p-8 flex flex-col justify-between items-start border-primary/5">
+<div class="p-4 rounded-2xl bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="tempest">storm</span>
+</div>
+<div>
+<h3 class="text-xl font-medium mb-2">Breathwork</h3>
+<p class="text-on-surface-variant text-sm mb-6">4 Active Sessions</p>
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-2/3 h-full bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Side Category Card 2 -->
+<div class="md:col-span-4 rounded-[2rem] glass-card p-8 flex flex-col justify-between items-start border-secondary/5">
+<div class="p-4 rounded-2xl bg-secondary/10 text-secondary">
+<span class="material-symbols-outlined text-3xl" data-icon="all_inclusive">all_inclusive</span>
+</div>
+<div>
+<h3 class="text-xl font-medium mb-2">Philosophy</h3>
+<p class="text-on-surface-variant text-sm mb-6">12 Masterclasses</p>
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-1/3 h-full bg-secondary rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Recent Bite-Sized Lessons -->
+<div class="md:col-span-8 rounded-[2rem] surface-container-low p-8 border border-outline-variant/5">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-2xl font-semibold tracking-tight">Recent Insights</h3>
+<span class="text-xs uppercase tracking-widest text-on-surface-variant cursor-pointer hover:text-primary transition-colors">View All</span>
+</div>
+<div class="space-y-4">
+<!-- Lesson Item -->
+<div class="flex items-center gap-6 p-4 rounded-2xl hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+<img alt="Lesson" class="w-full h-full object-cover" data-alt="Still life of a single white flower in a ceramic vase against a dark slate wall, moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEzRH28qaCsLiyDxHwXlU1URlWoYblAe1UPx_2vmiPTBYl0XFR0CTGS1NdWA-8mjLK_YNE77ST3Qw6O97O9bs62kHQyIalPpMrE0-MUl4M6XiybRQfE23g-TlPFzi4S0WLPusWU_MLqIyljC-SUpZVW3lqnyDOGZGioZzhr7MIcataHbdFqakkoK-Yr98sVD21zb0TVE6gmuh9_HjHxgWIpgaymd8-aYLTjlDqZ_l9eIRd_yk1oVvgtZ0c8z0nEuZ7l1MvceMyrQ"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-medium text-lg">Mindful Relationships</h4>
+<p class="text-on-surface-variant text-sm">6 mins • Emotional Intelligence</p>
+</div>
+<div class="w-10 h-10 rounded-full border border-outline-variant/20 flex items-center justify-center text-on-surface-variant group-hover:text-primary group-hover:border-primary transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<!-- Lesson Item -->
+<div class="flex items-center gap-6 p-4 rounded-2xl hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+<img alt="Lesson" class="w-full h-full object-cover" data-alt="Soft morning light hitting a calm lake surface with gentle ripples, muted tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9D1UkzOHP9kfNXosI3iG6x1hisMDPHVO5jR_vGJcByAxxnYU2mvNYE1JV3XE2yhqLcNNp3IOU-so4zCdm9A4Klt375wt-HyQ4NMOIxDhMOIPvRauGWlj0XkIfV-fzuSDa4H_MktztJqIRu2Jc4_n45n4l1enzBu8TR2Nfa4NwxtwURrdaHQoXpd-q3Wvi_-SM3LV2IY5IVMlhKLKX-eT8FhRvZSkCwfzbNQWgmLQl04MaJ-VI-3rlZvak0IAa8M1PyTYbnpHS9Q"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-medium text-lg">The Silent Observer</h4>
+<p class="text-on-surface-variant text-sm">4 mins • Meditation Basics</p>
+</div>
+<div class="w-10 h-10 rounded-full border border-outline-variant/20 flex items-center justify-center text-on-surface-variant group-hover:text-primary group-hover:border-primary transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quote Section -->
+<section class="mb-24 py-16 text-center border-y border-outline-variant/10">
+<span class="material-symbols-outlined text-secondary text-4xl mb-6 opacity-40" data-icon="format_quote">format_quote</span>
+<blockquote class="text-3xl md:text-4xl font-light italic text-on-surface/80 max-w-4xl mx-auto leading-relaxed">
+                "The quieter you become, the more you are able to hear."
+            </blockquote>
+<cite class="block mt-6 text-on-surface-variant uppercase tracking-[0.3em] text-[10px] font-bold">Rumi</cite>
+</section>
+<!-- Collections / Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="rounded-3xl glass-card aspect-square p-6 flex flex-col justify-end gap-3 group cursor-pointer border-0">
+<span class="material-symbols-outlined text-secondary opacity-60 text-3xl group-hover:scale-110 transition-transform" data-icon="self_improvement">self_improvement</span>
+<h4 class="text-lg font-medium">Inner Peace</h4>
+<p class="text-xs text-on-surface-variant">24 curated lessons</p>
+</div>
+<div class="rounded-3xl glass-card aspect-square p-6 flex flex-col justify-end gap-3 group cursor-pointer border-0">
+<span class="material-symbols-outlined text-secondary opacity-60 text-3xl group-hover:scale-110 transition-transform" data-icon="diamond">diamond</span>
+<h4 class="text-lg font-medium">Modern Ethics</h4>
+<p class="text-xs text-on-surface-variant">12 curated lessons</p>
+</div>
+<div class="rounded-3xl glass-card aspect-square p-6 flex flex-col justify-end gap-3 group cursor-pointer border-0">
+<span class="material-symbols-outlined text-secondary opacity-60 text-3xl group-hover:scale-110 transition-transform" data-icon="potted_plant">potted_plant</span>
+<h4 class="text-lg font-medium">Eco-Spirituality</h4>
+<p class="text-xs text-on-surface-variant">8 curated lessons</p>
+</div>
+<div class="rounded-3xl glass-card aspect-square p-6 flex flex-col justify-end gap-3 group cursor-pointer border-0">
+<span class="material-symbols-outlined text-secondary opacity-60 text-3xl group-hover:scale-110 transition-transform" data-icon="history_edu">history_edu</span>
+<h4 class="text-lg font-medium">Ancient Scrolls</h4>
+<p class="text-xs text-on-surface-variant">42 curated lessons</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-8 left-0 right-0 flex justify-around items-center z-50">
+<div class="bg-stone-800/70 backdrop-blur-2xl w-[90%] max-w-md rounded-full px-6 py-3 flex justify-around items-center shadow-[0_20px_50px_rgba(0,0,0,0.3)] no-border bg-stone-800/60">
+<!-- Explore -->
+<button class="flex items-center justify-center text-stone-500 p-3 hover:text-stone-300 transition-all active:scale-90 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</button>
+<!-- Chat -->
+<button class="flex items-center justify-center text-stone-500 p-3 hover:text-stone-300 transition-all active:scale-90 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+<!-- Library (Active) -->
+<button class="flex items-center justify-center bg-gradient-to-br from-purple-200/20 to-orange-200/10 text-purple-200 rounded-full p-3 active:scale-90 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="school" style="font-variation-settings: 'FILL' 1;">school</span>
+</button>
+<!-- Profile -->
+<button class="flex items-center justify-center text-stone-500 p-3 hover:text-stone-300 transition-all active:scale-90 duration-300 ease-out">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</nav>
+</body></html>

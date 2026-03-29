@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Arth - Daily Guidance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface": "#e7e5e5",
+              "tertiary": "#fbf9f8",
+              "on-primary": "#4a3a58",
+              "on-error": "#490106",
+              "primary-fixed-dim": "#e3ccf3",
+              "secondary-fixed-dim": "#f2cead",
+              "inverse-surface": "#fcf9f8",
+              "outline-variant": "#484848",
+              "error-dim": "#bb5551",
+              "surface-variant": "#252626",
+              "error-container": "#7f2927",
+              "error": "#ee7d77",
+              "surface-container-low": "#131313",
+              "on-primary-container": "#dfc8ef",
+              "surface-tint": "#d4bee4",
+              "surface-container-lowest": "#000000",
+              "on-tertiary-fixed": "#4a4949",
+              "on-primary-fixed": "#493957",
+              "on-primary-fixed-variant": "#665575",
+              "primary-fixed": "#f0dbff",
+              "on-background": "#e7e5e5",
+              "tertiary-container": "#edeaea",
+              "on-secondary-fixed": "#523b23",
+              "on-secondary-container": "#dcb99a",
+              "on-tertiary": "#5f5f5f",
+              "inverse-on-surface": "#565555",
+              "surface": "#0e0e0e",
+              "surface-bright": "#2b2c2c",
+              "secondary-dim": "#b8987a",
+              "on-surface-variant": "#acabaa",
+              "tertiary-fixed": "#f6f3f2",
+              "on-secondary-fixed-variant": "#71563d",
+              "secondary": "#b8987a",
+              "on-error-container": "#ff9993",
+              "on-tertiary-container": "#575756",
+              "inverse-primary": "#6a5879",
+              "tertiary-dim": "#edeaea",
+              "surface-container-highest": "#252626",
+              "secondary-fixed": "#ffdcbe",
+              "primary-container": "#51405f",
+              "primary-dim": "#c6b1d6",
+              "primary": "#d4bee4",
+              "on-tertiary-fixed-variant": "#676666",
+              "background": "#0e0e0e",
+              "surface-dim": "#0e0e0e",
+              "secondary-container": "#4e371f",
+              "on-secondary": "#2f1c07",
+              "surface-container-high": "#1f2020",
+              "outline": "#767575",
+              "tertiary-fixed-dim": "#e7e5e4",
+              "surface-container": "#191a1a"
+            },
+            fontFamily: {
+              "headline": ["Lexend"],
+              "body": ["Lexend"],
+              "label": ["Lexend"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Lexend', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(37, 38, 38, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .peace-gradient {
+            background: radial-gradient(circle at top right, rgba(149, 0, 255, 0.15), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(184, 152, 122, 0.1), transparent 40%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface selection:bg-primary/30 min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#252626]/70 backdrop-blur-xl border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.1)] flex justify-between items-center px-6 py-4">
+<div class="text-2xl font-bold tracking-tighter text-[#e7e5e5]">Arth</div>
+<div class="flex items-center gap-4">
+<nav class="hidden md:flex gap-8">
+<a class="text-[#e7e5e5]/60 hover:opacity-80 transition-opacity font-['Lexend'] font-medium text-lg tracking-tight" href="#">Daily</a>
+<a class="text-[#9500ff] hover:opacity-80 transition-opacity font-['Lexend'] font-medium text-lg tracking-tight" href="#">Guidance</a>
+<a class="text-[#e7e5e5]/60 hover:opacity-80 transition-opacity font-['Lexend'] font-medium text-lg tracking-tight" href="#">Rituals</a>
+</nav>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-white/10 active:scale-95 duration-200">
+<img alt="User Profile Avatar" data-alt="close-up portrait of a serene person with calm expression in soft moody indoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3FWGGFdCfue-6zuYy3fbdFwJk0N3pL9MVrmeCoTSL-ofCnag9HT6ADrPn4snaQN1_ybC1_C6A_-iW6QcsfgNnz890UCuiKuqXNg7XGlW3ohO0pxsBGrt2mXtyEp_qgKzwmRvVEPmLhyfQl7_nYuKT-m1gLD-7j1VXheD2v7Oq04OujwT6BlNrpgdILpLL_N2K9zJELdy_HdflOv3M25WoU25R05MZAqykuxD7IoDxXpWs4kojd-jPM34EsvKU1m_tKb1MzkdMfA"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 peace-gradient min-h-screen">
+<!-- Peace Header Section -->
+<section class="mb-12 max-w-2xl mx-auto">
+<span class="label-md uppercase tracking-[0.2em] text-primary mb-3 block opacity-80">Celestial Alignment</span>
+<h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-on-surface leading-tight">Your Cosmic Rhythm</h1>
+<p class="text-on-surface-variant text-lg leading-relaxed">Wisdom from the stars, grounded in eternal truths. Follow the sun's journey through your spirit today.</p>
+</section>
+<!-- Timeline Container -->
+<div class="max-w-4xl mx-auto space-y-10 relative">
+<!-- Vertical Line Connector (Decorative) -->
+<div class="absolute left-8 top-10 bottom-10 w-px bg-gradient-to-b from-primary/40 via-secondary/20 to-transparent hidden md:block"></div>
+<!-- Morning: Sunrise -->
+<div class="relative group">
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<div class="w-16 h-16 flex-shrink-0 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-[0_0_20px_rgba(149,0,255,0.2)] z-10">
+<span class="material-symbols-outlined text-white text-3xl">wb_twilight</span>
+</div>
+<div class="glass-card rounded-[32px] p-8 flex-grow border border-white/5 group-hover:bg-surface-bright/40 transition-colors duration-500">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-2xl font-semibold tracking-tight text-on-surface">Morning (Sunrise)</h2>
+<p class="text-sm font-medium text-primary-dim tracking-wider uppercase mt-1">Dharma &amp; Intent</p>
+</div>
+<span class="text-on-surface/30 text-xs font-mono">06:00 - 11:00</span>
+</div>
+<p class="text-lg leading-relaxed text-on-surface-variant italic mb-6">"Awaken with intention. Today's path is paved with clarity. Focus on the effort, not the fruit."</p>
+<div class="aspect-video w-full rounded-2xl overflow-hidden grayscale-[0.2] opacity-60">
+<img class="w-full h-full object-cover" data-alt="misty sunrise over a calm forest valley with soft ethereal golden light filtering through trees" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp0VKwHU0ncEg3HNSI20q5vQCeLrQGAQyFn-vn86Vg4Xiz-RHu-UmeCIknD3Fu5VZBRijJgHfRmsPX_QhBzlGUq8MyYPbSx23-ya4R09Xj6EOPA3381E3b2ET_oRk9ON9x0mz8QsBT8b27gRQhZPHqLNKLAb5dYpzKWt4zpw4sIZd2Bp4yCWEiyxv6TdrjCjyMHFlPS1qmeTBRJBGNXnQBmB-YhzwyZTPA_s_JZ2jndzxzKAxSOChhgM8b36k5J1vQgWCMc-sr5A"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Afternoon: Peak Sun -->
+<div class="relative group">
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<div class="w-16 h-16 flex-shrink-0 rounded-full bg-gradient-to-br from-secondary to-secondary-container flex items-center justify-center shadow-[0_0_20px_rgba(184,152,122,0.2)] z-10">
+<span class="material-symbols-outlined text-white text-3xl">light_mode</span>
+</div>
+<div class="glass-card rounded-[32px] p-8 flex-grow border border-white/5 group-hover:bg-surface-bright/40 transition-colors duration-500">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-2xl font-semibold tracking-tight text-on-surface">Afternoon (Peak Sun)</h2>
+<p class="text-sm font-medium text-secondary-dim tracking-wider uppercase mt-1">Karma &amp; Action</p>
+</div>
+<span class="text-on-surface/30 text-xs font-mono">12:00 - 16:00</span>
+</div>
+<p class="text-lg leading-relaxed text-on-surface-variant italic mb-6">"In the heat of your labor, remain cool within. Equanimity is the greatest strength of a focused mind."</p>
+<div class="grid grid-cols-2 gap-4">
+<div class="aspect-square rounded-2xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover opacity-50" data-alt="close-up of ancient stone texture under harsh direct sunlight with dramatic deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqGo13sNwX8MnivPkl_UI0_grVo-ZvMfMDhrVLasaHAsoG6h3_p12CvLj4BGu1tAM6T9WXuKDhHHgLSCGRe2W9kAOqjA5HY67l-ZYVbu7YY6WnEAAg2FUg7GaNyxXb1fi0nmEy0v2CPm2e0j8xJUtyTxVq6-T0l_7nEHr5srCqd_ElPWVZ47b1lsJRA9GqUtSKZqSuNSVqfBW-PkcznZYYbtVav1kD1PR5GajXhbvShCdAU4e1eSS2i2nB6c2jUuhxg-4e0o8sRw"/>
+</div>
+<div class="aspect-square rounded-2xl overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover opacity-50" data-alt="vast mountain peak under clear blue sky with intense midday sun illumination" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR-vQmKVUEF5ZtrPe6cNIiCes2TdYp1UqqQ8bnZbjPn9zoyeCgu1UMA3xiGLRDLDNQjIGaLALzVi0iN3T11RNOe6DL1_I239nI717fbXV72gvhwIv5YW1J1iL48-pMEL3bGyEkDFPmqlKSJgM9WJkKJQgH1Jo8JxnGyhS_i6yyaTt3cnYO5CwmWu8JEVY6ONCs_aisQZGm-70PBKbiL1wsjltJDMagnyxCFqkNO_S3hV5fCwsdOpiLEAmPhlmQf6XDCUl8i292Fg"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Evening: Twilight -->
+<div class="relative group">
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<div class="w-16 h-16 flex-shrink-0 rounded-full bg-gradient-to-br from-primary-container to-surface-container-highest flex items-center justify-center shadow-[0_0_20px_rgba(81,64,95,0.2)] z-10">
+<span class="material-symbols-outlined text-white text-3xl">wb_sunny</span>
+</div>
+<div class="glass-card rounded-[32px] p-8 flex-grow border border-white/5 group-hover:bg-surface-bright/40 transition-colors duration-500">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-2xl font-semibold tracking-tight text-on-surface">Evening (Twilight)</h2>
+<p class="text-sm font-medium text-primary tracking-wider uppercase mt-1">Reflection &amp; Release</p>
+</div>
+<span class="text-on-surface/30 text-xs font-mono">17:00 - 20:00</span>
+</div>
+<p class="text-lg leading-relaxed text-on-surface-variant italic mb-6">"As the light fades, shed the day's burdens. Let go of what was, and prepare for what is to be."</p>
+<div class="h-32 w-full rounded-2xl overflow-hidden relative">
+<img class="w-full h-full object-cover grayscale opacity-40" data-alt="silhouette of a person sitting in meditation during a deep purple and orange sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdeCK_J5DEjizv1ZVIZY8N1ECQfXS50qH4CNB_yUIb4TM2n4sv-pPeQQ6v46xZUl8xTTDfpMiPiLDnwa0egkja_pWBpDyRslDGh_QjSkRd7XIGng79g9ae9djkVFOrxWQS_i9rsc7Fc6laj1bwV93qg2L3sCPLzntaXoqTAi7m8nREAoBMZTuATCEkDiFdlJshIz-IU-nZNnoCj9ZoJU01dvteF0n-gPP5BFxcGuyoD0JF75_A5unvRB8r37j1rwAaflrgtRM1Bg"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-highest/60 to-transparent"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Night: Starry -->
+<div class="relative group">
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<div class="w-16 h-16 flex-shrink-0 rounded-full bg-gradient-to-br from-[#000] to-primary-container flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] z-10">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="glass-card rounded-[32px] p-8 flex-grow border border-white/5 group-hover:bg-surface-bright/40 transition-colors duration-500">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-2xl font-semibold tracking-tight text-on-surface">Night (Starry)</h2>
+<p class="text-sm font-medium text-primary-dim tracking-wider uppercase mt-1">Yoga &amp; Silence</p>
+</div>
+<span class="text-on-surface/30 text-xs font-mono">21:00 - 05:00</span>
+</div>
+<p class="text-lg leading-relaxed text-on-surface-variant italic mb-6">"In the silence of the night, the soul speaks. Connect with the eternal spark that never sleeps."</p>
+<div class="p-6 rounded-2xl bg-surface-container-lowest/50 border border-white/5">
+<div class="flex items-center gap-4 mb-3">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs uppercase tracking-widest text-on-surface/40">Tonight's Constellation</span>
+</div>
+<div class="text-3xl font-light tracking-widest text-on-surface/90">Kritika</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 bg-[#252626]/80 backdrop-blur-2xl z-50 rounded-t-[32px] shadow-[0_-8px_32px_rgba(0,0,0,0.3)]">
+<a class="flex flex-col items-center justify-center text-[#e7e5e5]/50 p-3 hover:text-[#e7e5e5] transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1">auto_awesome</span>
+<span class="font-['Lexend'] text-[10px] uppercase tracking-[0.1em] font-semibold">Daily</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-br from-[#9500ff] to-[#51405f] text-white rounded-full p-3 shadow-[0_0_15px_rgba(149,0,255,0.3)] active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1">explore</span>
+<span class="font-['Lexend'] text-[10px] uppercase tracking-[0.1em] font-semibold">Guidance</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#e7e5e5]/50 p-3 hover:text-[#e7e5e5] transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1">self_improvement</span>
+<span class="font-['Lexend'] text-[10px] uppercase tracking-[0.1em] font-semibold">Rituals</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#e7e5e5]/50 p-3 hover:text-[#e7e5e5] transition-colors active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-['Lexend'] text-[10px] uppercase tracking-[0.1em] font-semibold">Profile</span>
+</a>
+</nav>
+</body></html>

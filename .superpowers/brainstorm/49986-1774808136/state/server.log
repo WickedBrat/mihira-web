@@ -1,0 +1,4 @@
+{"type":"server-started","port":51652,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:51652","screen_dir":"/Users/Apple/projects/aksha/.superpowers/brainstorm/49986-1774808136/content","state_dir":"/Users/Apple/projects/aksha/.superpowers/brainstorm/49986-1774808136/state"}
+{"type":"screen-added","file":"/Users/Apple/projects/aksha/.superpowers/brainstorm/49986-1774808136/content/design-system.html"}
+{"type":"screen-added","file":"/Users/Apple/projects/aksha/.superpowers/brainstorm/49986-1774808136/content/screens.html"}
+{"type":"server-stopped","reason":"idle timeout"}
