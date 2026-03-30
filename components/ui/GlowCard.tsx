@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, Dimensions } from 'react-native';
 import { Canvas, RadialGradient, Rect, vec } from '@shopify/react-native-skia';
 import { colors } from '@/lib/theme';
 
@@ -10,13 +10,15 @@ interface GlowCardProps {
   glowIntensity?: number;
 }
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
 export function GlowCard({
   children,
   style,
   glowColor = colors.primaryFixedDim,
   glowIntensity = 0.2,
 }: GlowCardProps) {
-  const canvasWidth = 340;
+  const canvasWidth = SCREEN_WIDTH - 48; // 24px padding each side
   const canvasHeight = 80;
 
   // Convert glowIntensity (0-1) to hex opacity
@@ -24,6 +26,7 @@ export function GlowCard({
     .toString(16)
     .padStart(2, '0');
   const glowColorWithAlpha = `${glowColor}${hexOpacity}`;
+  const glowColorTransparent = `${glowColor}00`;
 
   return (
     <View style={[styles.container, style]}>
@@ -34,7 +37,7 @@ export function GlowCard({
             <RadialGradient
               c={vec(canvasWidth / 2, 0)}
               r={canvasWidth * 0.6}
-              colors={[glowColorWithAlpha, 'transparent']}
+              colors={[glowColorWithAlpha, glowColorTransparent]}
             />
           </Rect>
         </Canvas>
