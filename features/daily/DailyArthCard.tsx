@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 32,
     borderWidth: 1,
-    borderColor: 'rgba(72, 72, 72, 0.15)',
+    borderColor: 'rgba(72, 72, 72, 0.1)',
     alignItems: 'center',
   },
   quoteIcon: {
