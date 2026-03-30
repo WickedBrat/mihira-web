@@ -1,6 +1,9 @@
 import { renderHook, act } from '@testing-library/react-native';
 import { useChatState } from '@/features/chat/useChatState';
 
+beforeEach(() => jest.useFakeTimers());
+afterEach(() => jest.useRealTimers());
+
 describe('useChatState', () => {
   it('starts with initial AI greeting', () => {
     const { result } = renderHook(() => useChatState());

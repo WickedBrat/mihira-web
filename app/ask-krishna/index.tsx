@@ -54,7 +54,7 @@ export default function AskKrishnaScreen() {
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={0}
+        keyboardVerticalOffset={130}
       >
         <FlatList
           ref={flatListRef}

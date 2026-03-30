@@ -34,7 +34,7 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
         <Pressable style={styles.micBtn} onPress={() => {}}>
           <Mic size={20} color={colors.outline} />
         </Pressable>
-        <Pressable onPress={handleSend} style={({ pressed }) => pressed ? styles.pressed : undefined}>
+        <Pressable onPress={handleSend} style={({ pressed }) => [styles.sendBtnWrapper, pressed && styles.pressed]}>
           <LinearGradient
             colors={gradients.primaryToContainer}
             start={{ x: 0, y: 0 }}
@@ -92,4 +92,5 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.8,
   },
+  sendBtnWrapper: {},
 });

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 export interface Message {
   id: string;
@@ -20,12 +20,19 @@ export function useChatState() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [isTyping, setIsTyping] = useState(false);
   const [inputText, setInputText] = useState('');
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const sendMessage = useCallback((text: string) => {
     if (!text.trim()) return;
 
     const userMsg: Message = {
-      id: Date.now().toString(),
+      id: `user-${Date.now()}`,
       role: 'user',
       text: text.trim(),
       timestamp: new Date(),
@@ -35,9 +42,9 @@ export function useChatState() {
     setIsTyping(true);
     setInputText('');
 
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       const aiMsg: Message = {
-        id: (Date.now() + 1).toString(),
+        id: `ai-${Date.now()}`,
         role: 'ai',
         text: 'The noise is simply the world\'s natural rhythm; the quiet you seek is not the absence of sound, but the presence of your own centered awareness.',
         timestamp: new Date(),
