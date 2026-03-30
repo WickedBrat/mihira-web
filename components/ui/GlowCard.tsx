@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle, Dimensions } from 'react-native';
-import { Canvas, RadialGradient, Rect, vec } from '@shopify/react-native-skia';
+import { View, StyleSheet, ViewStyle } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/lib/theme';
 
 interface GlowCardProps {
@@ -10,18 +10,12 @@ interface GlowCardProps {
   glowIntensity?: number;
 }
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
-
 export function GlowCard({
   children,
   style,
   glowColor = colors.primaryFixedDim,
   glowIntensity = 0.2,
 }: GlowCardProps) {
-  const canvasWidth = SCREEN_WIDTH - 48; // 24px padding each side
-  const canvasHeight = 80;
-
-  // Convert glowIntensity (0-1) to hex opacity
   const hexOpacity = Math.round(glowIntensity * 255)
     .toString(16)
     .padStart(2, '0');
@@ -30,24 +24,14 @@ export function GlowCard({
 
   return (
     <View style={[styles.container, style]}>
-      {/* Skia radial glow — decorative, sits behind content */}
-      <View style={[styles.glowCanvas, { pointerEvents: 'none' }]}>
-        <Canvas style={{ width: canvasWidth, height: canvasHeight }}>
-          <Rect x={0} y={0} width={canvasWidth} height={canvasHeight}>
-            <RadialGradient
-              c={vec(canvasWidth / 2, 0)}
-              r={canvasWidth * 0.6}
-              colors={[glowColorWithAlpha, glowColorTransparent]}
-            />
-          </Rect>
-        </Canvas>
-      </View>
-      <View
-        style={[
-          styles.card,
-          { borderColor: `${glowColor}33` },
-        ]}
-      >
+      {/* Decorative glow behind card — LinearGradient approximation */}
+      <LinearGradient
+        colors={[glowColorWithAlpha, glowColorTransparent]}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={[styles.glowCanvas, { pointerEvents: 'none' }]}
+      />
+      <View style={[styles.card, { borderColor: `${glowColor}33` }]}>
         {children}
       </View>
     </View>
