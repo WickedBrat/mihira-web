@@ -40,7 +40,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
         <View style={styles.overlay} />
 
         {tabs.map((route, index) => {
-          const isFocused = state.index === index;
+          const isFocused = state.routes[state.index].key === route.key;
           const tabName = route.name as TabName;
           const Icon = TAB_ICONS[tabName];
           const label = TAB_LABELS[tabName];
