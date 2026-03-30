@@ -20,27 +20,31 @@ export function LessonRow({ lesson, onPress }: LessonRowProps) {
   return (
     <Pressable
       onPress={() => { hapticLight(); onPress?.(); }}
-      style={({ pressed }) => [styles.row, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
     >
-      <View style={styles.thumbnail} />
-      <View style={styles.text}>
-        <Text style={styles.title}>{lesson.title}</Text>
-        <Text style={styles.meta}>{lesson.duration} · {lesson.category}</Text>
-      </View>
-      <View style={styles.playBtn}>
-        <Play size={14} color={colors.onSurfaceVariant} fill={colors.onSurfaceVariant} />
+      <View style={styles.row}>
+        <View style={styles.thumbnail} />
+        <View style={styles.text}>
+          <Text style={styles.title}>{lesson.title}</Text>
+          <Text style={styles.meta}>{lesson.duration} · {lesson.category}</Text>
+        </View>
+        <View style={styles.playBtn}>
+          <Play size={14} color={colors.onSurfaceVariant} fill={colors.onSurfaceVariant} />
+        </View>
       </View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
+  pressable: {
+    borderRadius: 16,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
     padding: 12,
-    borderRadius: 16,
   },
   pressed: {
     backgroundColor: colors.surfaceContainerHighest,

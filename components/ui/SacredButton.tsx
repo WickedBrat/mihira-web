@@ -49,8 +49,6 @@ export function SacredButton({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 9999,
-    overflow: 'hidden',
     shadowColor: colors.primary,
     shadowOpacity: 0.2,
     shadowRadius: 20,
@@ -64,6 +62,8 @@ const styles = StyleSheet.create({
   gradient: {
     paddingHorizontal: 32,
     paddingVertical: 16,
+    borderRadius: 9999,
+    overflow: 'hidden',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
