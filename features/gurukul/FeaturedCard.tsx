@@ -34,6 +34,7 @@ export function FeaturedCard({ title, description, duration, onBegin }: Featured
         </View>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
+        <Text style={styles.duration}>{duration}</Text>
         <SacredButton label="Begin Session" onPress={onBegin} style={styles.btn} />
       </View>
     </View>
@@ -85,6 +86,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.onSurfaceVariant,
     lineHeight: 18,
+  },
+  duration: {
+    fontFamily: fonts.label,
+    fontSize: 9,
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+    color: colors.onSurfaceVariant,
+    opacity: 0.6,
   },
   btn: { alignSelf: 'flex-start', marginTop: 8 },
 });
