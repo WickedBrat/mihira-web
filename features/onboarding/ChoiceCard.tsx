@@ -45,16 +45,18 @@ export function ChoiceCard({
   return (
     <Animated.View
       entering={SlideInRight.delay(enterDelay).springify()}
-      style={animStyle}
+      style={style}
     >
-      <Pressable
-        onPress={handlePress}
-        style={[styles.card, isSelected && styles.cardSelected, style]}
-      >
-        <Text style={styles.icon}>{icon}</Text>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
-      </Pressable>
+      <Animated.View style={animStyle}>
+        <Pressable
+          onPress={handlePress}
+          style={[styles.card, isSelected && styles.cardSelected]}
+        >
+          <Text style={styles.icon}>{icon}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{subtitle}</Text>
+        </Pressable>
+      </Animated.View>
     </Animated.View>
   );
 }

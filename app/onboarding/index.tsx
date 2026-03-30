@@ -4,7 +4,7 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -46,6 +46,7 @@ type ChoiceId = (typeof CHOICES)[number]['id'];
 
 export default function OnboardingScreen() {
   const [selected, setSelected] = useState<ChoiceId | null>(null);
+  const { width } = useWindowDimensions();
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -129,13 +130,22 @@ export default function OnboardingScreen() {
         <View style={styles.footerDivider} />
         <SacredButton
           label="Let's Start →"
-          onPress={() => router.replace('/(tabs)')}
+          onPress={() => { if (selected) router.replace('/(tabs)'); }}
           style={{ opacity: selected ? 1 : 0.4 }}
         />
       </Animated.View>
 
       {/* Decorative monolith shape */}
-      <View style={styles.monolith} pointerEvents="none">
+      <View
+        style={[
+          styles.monolith,
+          {
+            width: width * 0.4,
+            transform: [{ skewX: '-12deg' }, { translateX: width * 0.2 }],
+            pointerEvents: 'none',
+          },
+        ]}
+      >
         <LinearGradient
           colors={['rgba(25, 26, 26, 0.2)', 'transparent']}
           style={StyleSheet.absoluteFill}
@@ -144,8 +154,6 @@ export default function OnboardingScreen() {
     </SafeAreaView>
   );
 }
-
-const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   safe: {
@@ -221,9 +229,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    width: width * 0.4,
     height: '100%',
-    transform: [{ skewX: '-12deg' }, { translateX: width * 0.2 }],
     backgroundColor: colors.surfaceContainerLow,
     opacity: 0.2,
   },
