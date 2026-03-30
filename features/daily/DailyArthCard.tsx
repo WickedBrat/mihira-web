@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MotiView } from 'moti';
 import { Quote } from 'lucide-react-native';
+import Svg, { Defs, Pattern, Rect, Circle } from 'react-native-svg';
 import { colors, fonts } from '@/lib/theme';
 
 interface DailyArthCardProps {
@@ -21,6 +22,16 @@ export function DailyArthCard({ quote, source }: DailyArthCardProps) {
       <View style={[styles.glowBehind, { pointerEvents: 'none' }]} />
 
       <View style={styles.card}>
+        {/* Subtle dot-grid texture */}
+        <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
+          <Defs>
+            <Pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+              <Circle cx="1.5" cy="1.5" r="1" fill="rgba(255,255,255,0.06)" />
+            </Pattern>
+          </Defs>
+          <Rect width="100%" height="100%" fill="url(#dots)" />
+        </Svg>
+
         <Quote size={32} color={colors.primary} style={styles.quoteIcon} />
         <Text style={styles.quote}>{quote}</Text>
         <View style={styles.dividerRow}>
@@ -53,9 +64,10 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: 'rgba(37, 38, 38, 0.6)',
     borderRadius: 32,
+    overflow: 'hidden',
     padding: 32,
     borderWidth: 1,
-    borderColor: 'rgba(72, 72, 72, 0.1)',
+    borderColor: 'rgba(72, 72, 72, 0.15)',
     alignItems: 'center',
   },
   quoteIcon: {
