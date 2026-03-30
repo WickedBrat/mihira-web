@@ -31,7 +31,7 @@ export function GlowCard({
   return (
     <View style={[styles.container, style]}>
       {/* Skia radial glow — decorative, sits behind content */}
-      <View style={styles.glowCanvas} pointerEvents="none">
+      <View style={[styles.glowCanvas, { pointerEvents: 'none' }]}>
         <Canvas style={{ width: canvasWidth, height: canvasHeight }}>
           <Rect x={0} y={0} width={canvasWidth} height={canvasHeight}>
             <RadialGradient
