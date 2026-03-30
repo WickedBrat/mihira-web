@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -12,7 +12,6 @@ import {
   Lexend_700Bold,
   Lexend_800ExtraBold,
 } from '@expo-google-fonts/lexend';
-import * as SplashScreen from 'expo-splash-screen';
 import '../global.css';
 
 SplashScreen.preventAutoHideAsync();

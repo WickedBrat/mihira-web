@@ -7,6 +7,7 @@ export const colors = {
   surfaceContainerHigh: '#1f2020',
   surfaceContainerHighest: '#252626',
   surfaceBright: '#2b2c2c',
+  surfaceBrightGlass: 'rgba(43, 44, 44, 0.6)',
   surfaceVariant: '#252626',
 
   primary: '#d4bee4',
@@ -47,8 +48,8 @@ export const fonts = {
 } as const;
 
 export const glassMorphism = {
-  background: 'rgba(37, 38, 38, 0.6)',
-  backgroundLight: 'rgba(37, 38, 38, 0.4)',
+  background: 'rgba(43, 44, 44, 0.6)',
+  backgroundLight: 'rgba(43, 44, 44, 0.4)',
   backgroundInput: 'rgba(37, 38, 38, 0.7)',
 } as const;
 
