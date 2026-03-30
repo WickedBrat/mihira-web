@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MotiView } from 'moti';
 import { Quote } from 'lucide-react-native';
-import Svg, { Defs, Pattern, Rect, Circle } from 'react-native-svg';
+import Svg, { Defs, Pattern, Rect, Circle, Line, RadialGradient, Stop } from 'react-native-svg';
 import { colors, fonts } from '@/lib/theme';
 
 interface DailyArthCardProps {
@@ -22,14 +22,26 @@ export function DailyArthCard({ quote, source }: DailyArthCardProps) {
       <View style={[styles.glowBehind, { pointerEvents: 'none' }]} />
 
       <View style={styles.card}>
-        {/* Subtle dot-grid texture */}
+        {/* Premium texture: diagonal hairlines + dot grid + radial centre glow */}
         <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
           <Defs>
-            <Pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
-              <Circle cx="1.5" cy="1.5" r="1" fill="rgba(255,255,255,0.06)" />
+            {/* Diagonal hairlines — linen feel */}
+            <Pattern id="lines" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <Line x1="0" y1="0" x2="0" y2="12" stroke="rgba(255,255,255,0.055)" strokeWidth="0.6" />
             </Pattern>
+            {/* Dot grid overlaid for depth */}
+            <Pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+              <Circle cx="2" cy="2" r="0.8" fill="rgba(255,255,255,0.07)" />
+            </Pattern>
+            {/* Radial glow at centre — lifts the card */}
+            <RadialGradient id="glow" cx="50%" cy="42%" rx="55%" ry="50%">
+              <Stop offset="0%" stopColor="rgba(255,255,255,0.06)" />
+              <Stop offset="100%" stopColor="rgba(0,0,0,0)" />
+            </RadialGradient>
           </Defs>
+          <Rect width="100%" height="100%" fill="url(#lines)" />
           <Rect width="100%" height="100%" fill="url(#dots)" />
+          <Rect width="100%" height="100%" fill="url(#glow)" />
         </Svg>
 
         <Quote size={32} color={colors.primary} style={styles.quoteIcon} />
