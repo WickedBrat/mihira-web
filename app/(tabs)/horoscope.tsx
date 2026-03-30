@@ -58,7 +58,7 @@ export default function HoroscopeScreen() {
         <BlurView intensity={40} tint="dark" style={StyleSheet.absoluteFill} />
         <SafeAreaView edges={['top']}>
           <View style={styles.header}>
-            <Text style={styles.headerBrand}>Arth</Text>
+            <Text style={styles.headerBrand}>Aksha</Text>
             <View style={styles.headerRight}>
               <View style={styles.avatar}>
                 <UserCircle size={20} color={colors.onSurface} />

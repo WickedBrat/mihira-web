@@ -30,7 +30,7 @@ export default function HomeScreen() {
         <SafeAreaView edges={['top']}>
           <View style={styles.nav}>
             <View style={styles.navLeft}>
-              <Text style={styles.navBrand}>Arth</Text>
+              <Text style={styles.navBrand}>Aksha</Text>
             </View>
             <View style={styles.navRight}>
               <Bell size={20} color={colors.onSurfaceVariant} />
@@ -48,7 +48,7 @@ export default function HomeScreen() {
         {/* Peace Header */}
         <View style={styles.header}>
           <Text style={styles.headerMeta}>Mindful Morning</Text>
-          <Text style={styles.headerTitle}>Daily Arth</Text>
+          <Text style={styles.headerTitle}>Daily Aksha</Text>
           <Text style={styles.headerSub}>Finding stillness in the noise.</Text>
         </View>
 

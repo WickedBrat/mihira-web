@@ -7,5 +7,5 @@ export interface TimelineEntry {
   timeRange: string;
   quote: string;
   emoji: string;
-  gradientColors: [string, string];
+  gradientColors: readonly [string, string];
 }
