@@ -30,4 +30,14 @@ describe('tokenCache', () => {
     await tokenCache.clearToken!('clerk-session');
     expect(mockSecureStore.deleteItemAsync).toHaveBeenCalledWith('clerk-session');
   });
+
+  it('clearToken swallows deleteItemAsync rejection (void return)', () => {
+    mockSecureStore.deleteItemAsync.mockImplementation(
+      () => Promise.reject(new Error('storage error')).catch(() => {})
+    );
+    // Should not throw — return type is void
+    const result = tokenCache.clearToken!('clerk-session');
+    expect(result).toBeUndefined();
+    expect(mockSecureStore.deleteItemAsync).toHaveBeenCalledWith('clerk-session');
+  });
 });
