@@ -15,7 +15,7 @@ import { SacredButton } from '@/components/ui/SacredButton';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { colors, fonts } from '@/lib/theme';
 import { useAuth } from '@clerk/clerk-expo';
-import { useProfile } from '@/features/profile/useProfile';
+import { getSupabaseClient } from '@/lib/supabase';
 
 const CHOICES = [
   {
@@ -48,8 +48,7 @@ type ChoiceId = (typeof CHOICES)[number]['id'];
 
 export default function OnboardingScreen() {
   const [selected, setSelected] = useState<ChoiceId | null>(null);
-  const { isSignedIn } = useAuth();
-  const { updateField } = useProfile();
+  const { isSignedIn, userId, getToken } = useAuth();
   const { width } = useWindowDimensions();
 
   return (
@@ -134,9 +133,16 @@ export default function OnboardingScreen() {
         <View style={styles.footerDivider} />
         <SacredButton
           label="Let's Start →"
-          onPress={() => {
+          onPress={async () => {
             if (!selected) return;
-            if (isSignedIn) updateField('focus_area', selected);
+            if (isSignedIn) {
+              try {
+                const client = getSupabaseClient(() => getToken({ template: 'supabase' }));
+                await client.from('profiles').update({ focus_area: selected }).eq('id', userId ?? '');
+              } catch (err) {
+                console.error('[onboarding] focus_area save error', err);
+              }
+            }
             router.replace('/(tabs)');
           }}
           style={{ opacity: selected ? 1 : 0.4 }}

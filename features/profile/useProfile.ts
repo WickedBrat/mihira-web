@@ -87,10 +87,11 @@ export function useProfile() {
       setIsSaving(true);
       try {
         const client = getClient();
-        await client
+        const { error: saveError } = await client
           .from('profiles')
           .update({ ...profile, updated_at: new Date().toISOString() })
           .eq('id', userId);
+        if (saveError) console.error('[useProfile] save error', saveError);
       } catch (err) {
         console.error('[useProfile] save error', err);
       } finally {

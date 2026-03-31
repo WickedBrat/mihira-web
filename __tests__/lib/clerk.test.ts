@@ -31,13 +31,11 @@ describe('tokenCache', () => {
     expect(mockSecureStore.deleteItemAsync).toHaveBeenCalledWith('clerk-session');
   });
 
-  it('clearToken swallows deleteItemAsync rejection (void return)', () => {
-    mockSecureStore.deleteItemAsync.mockImplementation(
-      () => Promise.reject(new Error('storage error')).catch(() => {})
-    );
-    // Should not throw — return type is void
+  it('clearToken returns the promise from SecureStore.deleteItemAsync', async () => {
+    mockSecureStore.deleteItemAsync.mockResolvedValue(undefined);
     const result = tokenCache.clearToken!('clerk-session');
-    expect(result).toBeUndefined();
+    expect(result).toBeInstanceOf(Promise);
+    await expect(result).resolves.toBeUndefined();
     expect(mockSecureStore.deleteItemAsync).toHaveBeenCalledWith('clerk-session');
   });
 });
