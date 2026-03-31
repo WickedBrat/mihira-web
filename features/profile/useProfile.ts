@@ -26,6 +26,7 @@ export function useProfile() {
   const [isSaving, setIsSaving] = useState(false);
   const isLoadedFromDB = useRef(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipNextSave = useRef(false);
 
   const getClient = useCallback(
     () => getSupabaseClient(() => getToken({ template: 'supabase' })),
@@ -44,9 +45,13 @@ export function useProfile() {
     client
       .from('profiles')
       .upsert({ id: userId }, { onConflict: 'id', ignoreDuplicates: true })
-      .then(() => client.from('profiles').select('*').eq('id', userId).single())
+      .then(({ error: upsertError }) => {
+        if (upsertError) throw new Error(upsertError.message);
+        return client.from('profiles').select('*').eq('id', userId).single();
+      })
       .then(({ data }: { data: Record<string, string> | null }) => {
         if (data) {
+          skipNextSave.current = true;
           setProfile({
             name: data.name ?? '',
             birth_dt: data.birth_dt ?? '',
@@ -71,6 +76,11 @@ export function useProfile() {
   // Debounced auto-save
   useEffect(() => {
     if (!isSignedIn || !userId || !isLoadedFromDB.current) return;
+
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      return;
+    }
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {

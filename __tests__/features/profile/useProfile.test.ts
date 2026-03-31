@@ -26,6 +26,9 @@ jest.mock('@/lib/supabase', () => ({
 
 const { useAuth } = require('@clerk/clerk-expo') as { useAuth: jest.Mock };
 
+beforeEach(() => jest.useFakeTimers());
+afterEach(() => jest.useRealTimers());
+
 describe('useProfile (signed out)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
