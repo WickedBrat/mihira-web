@@ -3,6 +3,7 @@ import { Stack, SplashScreen } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ClerkProvider } from '@clerk/clerk-expo';
 import {
   useFonts,
   Lexend_300Light,
@@ -12,9 +13,13 @@ import {
   Lexend_700Bold,
   Lexend_800ExtraBold,
 } from '@expo-google-fonts/lexend';
+import { tokenCache } from '@/lib/clerk';
 import '../global.css';
 
 SplashScreen.preventAutoHideAsync();
+
+const CLERK_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+if (!CLERK_KEY) throw new Error('Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY');
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -35,22 +40,24 @@ export default function RootLayout() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <StatusBar style="light" backgroundColor="#0e0e0e" />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0e0e0e' } }}>
-          <Stack.Screen name="onboarding/index" options={{ gestureEnabled: false }} />
-          <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
-          <Stack.Screen
-            name="ask-krishna"
-            options={{
-              presentation: 'modal',
-              animation: 'slide_from_bottom',
-              gestureEnabled: true,
-            }}
-          />
-        </Stack>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <ClerkProvider publishableKey={CLERK_KEY} tokenCache={tokenCache}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <StatusBar style="light" backgroundColor="#0e0e0e" />
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0e0e0e' } }}>
+            <Stack.Screen name="onboarding/index" options={{ gestureEnabled: false }} />
+            <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
+            <Stack.Screen
+              name="ask-krishna"
+              options={{
+                presentation: 'modal',
+                animation: 'slide_from_bottom',
+                gestureEnabled: true,
+              }}
+            />
+          </Stack>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </ClerkProvider>
   );
 }
