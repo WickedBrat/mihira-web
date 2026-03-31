@@ -14,6 +14,8 @@ import { ChoiceCard } from '@/features/onboarding/ChoiceCard';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { colors, fonts } from '@/lib/theme';
+import { useAuth } from '@clerk/clerk-expo';
+import { useProfile } from '@/features/profile/useProfile';
 
 const CHOICES = [
   {
@@ -46,6 +48,8 @@ type ChoiceId = (typeof CHOICES)[number]['id'];
 
 export default function OnboardingScreen() {
   const [selected, setSelected] = useState<ChoiceId | null>(null);
+  const { isSignedIn } = useAuth();
+  const { updateField } = useProfile();
   const { width } = useWindowDimensions();
 
   return (
@@ -130,7 +134,11 @@ export default function OnboardingScreen() {
         <View style={styles.footerDivider} />
         <SacredButton
           label="Let's Start →"
-          onPress={() => { if (selected) router.replace('/(tabs)'); }}
+          onPress={() => {
+            if (!selected) return;
+            if (isSignedIn) updateField('focus_area', selected);
+            router.replace('/(tabs)');
+          }}
           style={{ opacity: selected ? 1 : 0.4 }}
         />
       </Animated.View>
