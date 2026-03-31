@@ -9,14 +9,7 @@ export function getSupabaseClient(getToken: () => Promise<string | null>) {
   }
 
   return createClient(url, key, {
-    global: {
-      fetch: async (input, init = {}) => {
-        const token = await getToken();
-        const headers = new Headers((init.headers as HeadersInit) ?? {});
-        if (token) headers.set('Authorization', `Bearer ${token}`);
-        return fetch(input, { ...init, headers });
-      },
-    },
+    accessToken: getToken,
     auth: {
       persistSession: false,
       autoRefreshToken: false,
