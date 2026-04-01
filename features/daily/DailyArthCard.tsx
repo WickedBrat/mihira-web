@@ -1,14 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { MotiView } from 'moti';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { View as MotiView } from 'moti/build/components/view';
 import { Quote } from 'lucide-react-native';
-import Svg, { Defs, Pattern, Rect, Circle, Line, RadialGradient, Stop } from 'react-native-svg';
+import { SvgUri } from 'react-native-svg';
 import { colors, fonts } from '@/lib/theme';
 
 interface DailyArthCardProps {
   quote: string;
   source: string;
 }
+
+const dailyArthBackground = Image.resolveAssetSource(require('../../assets/daily-arth-bg.svg'));
 
 export function DailyArthCard({ quote, source }: DailyArthCardProps) {
   return (
@@ -22,34 +24,20 @@ export function DailyArthCard({ quote, source }: DailyArthCardProps) {
       <View style={[styles.glowBehind, { pointerEvents: 'none' }]} />
 
       <View style={styles.card}>
-        {/* Premium texture: diagonal hairlines + dot grid + radial centre glow */}
-        <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
-          <Defs>
-            {/* Diagonal hairlines — linen feel */}
-            <Pattern id="lines" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-              <Line x1="0" y1="0" x2="0" y2="12" stroke="rgba(255,255,255,0.055)" strokeWidth="0.6" />
-            </Pattern>
-            {/* Dot grid overlaid for depth */}
-            <Pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
-              <Circle cx="2" cy="2" r="0.8" fill="rgba(255,255,255,0.07)" />
-            </Pattern>
-            {/* Radial glow at centre — lifts the card */}
-            <RadialGradient id="glow" cx="50%" cy="42%" rx="55%" ry="50%">
-              <Stop offset="0%" stopColor="rgba(255,255,255,0.06)" />
-              <Stop offset="100%" stopColor="rgba(0,0,0,0)" />
-            </RadialGradient>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#lines)" />
-          <Rect width="100%" height="100%" fill="url(#dots)" />
-          <Rect width="100%" height="100%" fill="url(#glow)" />
-        </Svg>
+        <View pointerEvents="none" style={styles.backgroundArt}>
+          {dailyArthBackground?.uri ? (
+            <SvgUri uri={dailyArthBackground.uri} width="100%" height="100%" />
+          ) : null}
+        </View>
 
-        <Quote size={32} color={colors.primary} style={styles.quoteIcon} />
-        <Text style={styles.quote}>{quote}</Text>
-        <View style={styles.dividerRow}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.source}>{source}</Text>
-          <View style={styles.dividerLine} />
+        <View style={styles.content}>
+          <Quote size={32} color={colors.primary} style={styles.quoteIcon} />
+          <Text style={styles.quote}>{quote}</Text>
+          <View style={styles.dividerRow}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.source}>{source}</Text>
+            <View style={styles.dividerLine} />
+          </View>
         </View>
       </View>
     </MotiView>
@@ -74,6 +62,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
   },
   card: {
+    position: 'relative',
     backgroundColor: 'rgba(37, 38, 38, 0.6)',
     borderRadius: 32,
     overflow: 'hidden',
@@ -81,6 +70,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(72, 72, 72, 0.1)',
     alignItems: 'center',
+  },
+  backgroundArt: {
+    position: 'absolute',
+    top: '50%',
+    right: -132,
+    width: 264,
+    height: 264,
+    opacity: 0.2,
+    transform: [{ translateY: -132 }],
+  },
+  content: {
+    width: '100%',
+    alignItems: 'center',
+    zIndex: 1,
   },
   quoteIcon: {
     marginBottom: 24,

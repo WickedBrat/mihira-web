@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { MotiView } from 'moti';
+import { View as MotiView } from 'moti/build/components/view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors, fonts } from '@/lib/theme';
 import type { TimelineEntry } from './types';
@@ -19,14 +19,14 @@ export function TimelineItem({ entry, index }: TimelineItemProps) {
       style={styles.container}
     >
       {/* Dot */}
-      <LinearGradient
+      {/* <LinearGradient
         colors={entry.gradientColors}
         style={styles.dot}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
         <Text style={styles.dotEmoji}>{entry.emoji}</Text>
-      </LinearGradient>
+      </LinearGradient> */}
 
       {/* Card */}
       <View style={styles.card}>

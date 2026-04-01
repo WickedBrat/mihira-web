@@ -107,3 +107,25 @@ export function getMuhuratWindows(
 
   return windows;
 }
+
+export function getMuhuratWindowsForRange(
+  startDate: Date,
+  endDate: Date,
+  lat: number,
+  lng: number,
+  eventDescription: string
+): MuhuratWindow[] {
+  const windows: MuhuratWindow[] = [];
+  const current = new Date(startDate);
+  current.setUTCHours(12, 0, 0, 0);
+
+  const finalDate = new Date(endDate);
+  finalDate.setUTCHours(12, 0, 0, 0);
+
+  while (current.getTime() <= finalDate.getTime()) {
+    windows.push(...getMuhuratWindows(new Date(current), lat, lng, eventDescription));
+    current.setUTCDate(current.getUTCDate() + 1);
+  }
+
+  return windows.sort((left, right) => left.start.localeCompare(right.start));
+}

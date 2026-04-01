@@ -1,8 +1,10 @@
 // app/api/wisdom/daily+api.ts
 import { geocode } from '@/lib/vedic/geocode';
 import { buildBirthChart } from '@/lib/vedic/chart';
+import { parseModelJson } from '@/lib/ai/parseModelJson';
 import { perplexityChat } from '@/lib/ai/perplexity';
 import { DAILY_SYSTEM, buildDailyPrompt } from '@/lib/ai/prompts';
+import type { DailyAlignmentHighlight } from '@/lib/dailyAlignmentStorage';
 
 export async function POST(request: Request): Promise<Response> {
   try {
@@ -23,14 +25,23 @@ export async function POST(request: Request): Promise<Response> {
       { role: 'user',   content: buildDailyPrompt(chart) },
     ]);
 
-    let parsed: { guidance: string; reasoning: string };
+    let parsed: {
+      summary: string;
+      highlights: DailyAlignmentHighlight[];
+      reasoning: string;
+    };
     try {
-      parsed = JSON.parse(raw);
+      parsed = parseModelJson(raw, ['summary', 'highlights', 'reasoning']);
     } catch {
       return Response.json({ error: 'AI response parse error', raw }, { status: 502 });
     }
 
-    return Response.json({ chart, guidance: parsed.guidance, reasoning: parsed.reasoning });
+    return Response.json({
+      chart,
+      summary: parsed.summary,
+      highlights: Array.isArray(parsed.highlights) ? parsed.highlights : [],
+      reasoning: parsed.reasoning,
+    });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     console.error('[daily+api]', message);

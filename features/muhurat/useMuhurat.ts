@@ -3,6 +3,12 @@ import { useState, useEffect } from 'react';
 import { useProfile } from '@/features/profile/useProfile';
 import type { MuhuratWindow } from '@/lib/vedic/types';
 
+export interface MuhuratRequest {
+  eventDescription: string;
+  startDate: string;
+  endDate: string;
+}
+
 interface MuhuratState {
   windows: MuhuratWindow[];
   recommendation: string | null;
@@ -12,7 +18,7 @@ interface MuhuratState {
   error: string | null;
 }
 
-export function useMuhurat(eventType: string): MuhuratState {
+export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
   const { profile } = useProfile();
   const [state, setState] = useState<MuhuratState>({
     windows: [], recommendation: null, suggestion: null,
@@ -20,7 +26,7 @@ export function useMuhurat(eventType: string): MuhuratState {
   });
 
   useEffect(() => {
-    if (!profile.birth_dt || !profile.birth_place || !eventType) return;
+    if (!profile.birth_dt || !profile.birth_place || !request) return;
 
     setState(s => ({ ...s, isLoading: true, error: null }));
 
@@ -30,10 +36,29 @@ export function useMuhurat(eventType: string): MuhuratState {
       body: JSON.stringify({
         birthDt: profile.birth_dt,
         birthPlace: profile.birth_place,
-        eventType,
+        eventDescription: request.eventDescription,
+        startDate: request.startDate,
+        endDate: request.endDate,
       }),
     })
-      .then(r => r.json())
+      .then(async (response) => {
+        const contentType = response.headers.get('content-type') ?? '';
+
+        if (!contentType.includes('application/json')) {
+          const raw = await response.text();
+          throw new Error(
+            `Muhurat API returned ${contentType || 'non-JSON content'} (${response.status}). ` +
+            `Check Expo API routes config; response started with: ${raw.slice(0, 80)}`
+          );
+        }
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error ?? `Muhurat API failed with status ${response.status}`);
+        }
+
+        return data;
+      })
       .then(data => {
         if (data.error) {
           setState(s => ({ ...s, isLoading: false, error: data.error }));
@@ -49,7 +74,7 @@ export function useMuhurat(eventType: string): MuhuratState {
         }
       })
       .catch((err: Error) => setState(s => ({ ...s, isLoading: false, error: err.message })));
-  }, [profile.birth_dt, profile.birth_place, eventType]);
+  }, [profile.birth_dt, profile.birth_place, request]);
 
   return state;
 }

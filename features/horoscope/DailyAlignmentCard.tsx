@@ -7,9 +7,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { VedicReasoningAccordion } from './VedicReasoningAccordion';
 import { colors, fonts } from '@/lib/theme';
 import type { BirthChart } from '@/lib/vedic/types';
+import type { DailyAlignmentHighlight } from '@/lib/dailyAlignmentStorage';
 
 interface Props {
-  guidance: string | null;
+  summary: string | null;
+  highlights: DailyAlignmentHighlight[];
   reasoning: string | null;
   chart: BirthChart | null;
   isLoading: boolean;
@@ -38,7 +40,14 @@ function WordReveal({ text }: { text: string }) {
   );
 }
 
-export function DailyAlignmentCard({ guidance, reasoning, chart, isLoading, error }: Props) {
+export function DailyAlignmentCard({
+  summary,
+  highlights,
+  reasoning,
+  chart,
+  isLoading,
+  error,
+}: Props) {
   const glowOpacity = useSharedValue(0.4);
 
   useEffect(() => {
@@ -66,7 +75,7 @@ export function DailyAlignmentCard({ guidance, reasoning, chart, isLoading, erro
     );
   }
 
-  if (!guidance) {
+  if (!summary || highlights.length === 0) {
     return (
       <View style={styles.card}>
         <Text style={styles.emptyText}>
@@ -93,7 +102,17 @@ export function DailyAlignmentCard({ guidance, reasoning, chart, isLoading, erro
         </Text>
       )}
 
-      <WordReveal text={guidance} />
+      <WordReveal text={summary} />
+
+      <View style={styles.highlightList}>
+        {highlights.map((highlight, index) => (
+          <View key={`${highlight.timeRange}-${highlight.activity}-${index}`} style={styles.highlightCard}>
+            <Text style={styles.highlightTime}>{highlight.timeRange}</Text>
+            <Text style={styles.highlightActivity}>{highlight.activity}</Text>
+            <Text style={styles.highlightNote}>{highlight.note}</Text>
+          </View>
+        ))}
+      </View>
 
       {reasoning && <VedicReasoningAccordion reasoning={reasoning} />}
     </View>
@@ -122,6 +141,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.onSurface,
     lineHeight: 26,
+  },
+  highlightList: {
+    marginTop: 18,
+    gap: 12,
+  },
+  highlightCard: {
+    borderRadius: 18,
+    padding: 16,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.05)',
+  },
+  highlightTime: {
+    fontFamily: fonts.label,
+    fontSize: 10,
+    letterSpacing: 1.8,
+    textTransform: 'uppercase',
+    color: colors.secondaryFixed,
+    marginBottom: 8,
+  },
+  highlightActivity: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: 15,
+    color: colors.onSurface,
+    lineHeight: 22,
+    marginBottom: 6,
+  },
+  highlightNote: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: colors.onSurfaceVariant,
+    lineHeight: 20,
   },
   loadingText: {
     fontFamily: fonts.body,

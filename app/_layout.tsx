@@ -14,6 +14,7 @@ import {
   Lexend_800ExtraBold,
 } from '@expo-google-fonts/lexend';
 import { tokenCache } from '@/lib/clerk';
+import { ToastProvider } from '@/components/ui/ToastProvider';
 import '../global.css';
 
 SplashScreen.preventAutoHideAsync();
@@ -43,19 +44,13 @@ export default function RootLayout() {
     <ClerkProvider publishableKey={CLERK_KEY} tokenCache={tokenCache}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider>
-          <StatusBar style="light" backgroundColor="#0e0e0e" />
-          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0e0e0e' } }}>
-            <Stack.Screen name="onboarding/index" options={{ gestureEnabled: false }} />
-            <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
-            <Stack.Screen
-              name="ask-krishna"
-              options={{
-                presentation: 'modal',
-                animation: 'slide_from_bottom',
-                gestureEnabled: true,
-              }}
-            />
-          </Stack>
+          <ToastProvider>
+            <StatusBar style="light" backgroundColor="#0e0e0e" />
+            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0e0e0e' } }}>
+              <Stack.Screen name="onboarding/index" options={{ gestureEnabled: false }} />
+              <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
+            </Stack>
+          </ToastProvider>
         </SafeAreaProvider>
       </GestureHandlerRootView>
     </ClerkProvider>

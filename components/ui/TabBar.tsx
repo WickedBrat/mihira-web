@@ -8,15 +8,13 @@ import {
 } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
-import { Home, Telescope, BookOpen, User, Clock } from 'lucide-react-native';
+import { Home, MessageCircle, BookOpen, User, Clock } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
-import { colors, fonts, gradients } from '@/lib/theme';
+import { colors, fonts } from '@/lib/theme';
 
 const TAB_ICONS = {
   index: Home,
-  horoscope: Telescope,
+  'ask-krishna': MessageCircle,
   gurukul: BookOpen,
   muhurat: Clock,
   profile: User,
@@ -24,7 +22,7 @@ const TAB_ICONS = {
 
 const TAB_LABELS = {
   index: 'HOME',
-  horoscope: 'COSMOS',
+  'ask-krishna': 'ASK',
   gurukul: 'GURUKUL',
   muhurat: 'MUHURAT',
   profile: 'PROFILE',
@@ -41,42 +39,22 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
         <BlurView intensity={40} tint="dark" style={StyleSheet.absoluteFill} />
         <View style={styles.overlay} />
 
-        {tabs.map((route, index) => {
+        {tabs.map((route) => {
           const isFocused = state.routes[state.index].key === route.key;
           const tabName = route.name as TabName;
           const Icon = TAB_ICONS[tabName];
           const label = TAB_LABELS[tabName];
 
-          const showFab = tabName === 'muhurat';
-
           return (
-            <React.Fragment key={route.key}>
-              {showFab && (
-                <Pressable
-                  key="ask-krishna-fab"
-                  onPress={() => {
-                    hapticLight();
-                    router.push('/ask-krishna');
-                  }}
-                  style={styles.fabWrapper}
-                >
-                  <LinearGradient
-                    colors={gradients.primaryToContainer}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.fab}
-                  >
-                    <Text style={styles.fabIcon}>✿</Text>
-                  </LinearGradient>
-                </Pressable>
-              )}
-              <Pressable
-                onPress={() => {
-                  hapticLight();
-                  navigation.navigate(route.name);
-                }}
-                style={styles.tab}
-              >
+            <Pressable
+              key={route.key}
+              onPress={() => {
+                hapticLight();
+                navigation.navigate(route.name);
+              }}
+              style={styles.tab}
+            >
+              <View style={styles.tabInner}>
                 <Icon
                   size={20}
                   color={isFocused ? colors.primary : colors.outlineVariant}
@@ -85,8 +63,8 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                 <Text style={[styles.tabLabel, isFocused && styles.tabLabelActive]}>
                   {label}
                 </Text>
-              </Pressable>
-            </React.Fragment>
+              </View>
+            </Pressable>
           );
         })}
       </View>
@@ -125,6 +103,9 @@ const styles = StyleSheet.create({
   },
   tab: {
     flex: 1,
+    minWidth: 0,
+  },
+  tabInner: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 10,
@@ -139,25 +120,5 @@ const styles = StyleSheet.create({
   },
   tabLabelActive: {
     color: colors.primary,
-  },
-  fabWrapper: {
-    marginTop: -14,
-    borderRadius: 9999,
-    shadowColor: colors.primary,
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 8,
-  },
-  fab: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fabIcon: {
-    fontSize: 20,
-    color: colors.onPrimary,
   },
 });

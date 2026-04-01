@@ -15,7 +15,7 @@ import { SacredButton } from '@/components/ui/SacredButton';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { colors, fonts } from '@/lib/theme';
 import { useAuth } from '@clerk/clerk-expo';
-import { getSupabaseClient } from '@/lib/supabase';
+import { useProfile } from '@/features/profile/useProfile';
 
 const CHOICES = [
   {
@@ -48,7 +48,8 @@ type ChoiceId = (typeof CHOICES)[number]['id'];
 
 export default function OnboardingScreen() {
   const [selected, setSelected] = useState<ChoiceId | null>(null);
-  const { isSignedIn, userId, getToken } = useAuth();
+  const { isSignedIn } = useAuth();
+  const { saveField } = useProfile();
   const { width } = useWindowDimensions();
 
   return (
@@ -137,8 +138,7 @@ export default function OnboardingScreen() {
             if (!selected) return;
             if (isSignedIn) {
               try {
-                const client = getSupabaseClient(() => getToken({ template: 'supabase' }));
-                await client.from('profiles').update({ focus_area: selected }).eq('id', userId ?? '');
+                await saveField('focus_area', selected);
               } catch (err) {
                 console.error('[onboarding] focus_area save error', err);
               }

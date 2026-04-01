@@ -1,8 +1,20 @@
 import * as SecureStore from 'expo-secure-store';
 import type { TokenCache } from '@clerk/clerk-expo';
 
+const secureStoreOptions: SecureStore.SecureStoreOptions = {
+  keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK,
+};
+
 export const tokenCache: TokenCache = {
-  getToken: (key: string) => SecureStore.getItemAsync(key),
-  saveToken: (key: string, value: string) => SecureStore.setItemAsync(key, value),
-  clearToken: (key: string) => SecureStore.deleteItemAsync(key),
+  getToken: async (key: string) => {
+    try {
+      return await SecureStore.getItemAsync(key, secureStoreOptions);
+    } catch {
+      await SecureStore.deleteItemAsync(key, secureStoreOptions);
+      return null;
+    }
+  },
+  saveToken: (key: string, value: string) =>
+    SecureStore.setItemAsync(key, value, secureStoreOptions),
+  clearToken: (key: string) => SecureStore.deleteItemAsync(key, secureStoreOptions),
 };

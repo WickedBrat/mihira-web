@@ -15,20 +15,36 @@ describe('tokenCache', () => {
   it('getToken delegates to SecureStore.getItemAsync', async () => {
     mockSecureStore.getItemAsync.mockResolvedValue('tok-123');
     const result = await tokenCache.getToken('clerk-session');
-    expect(mockSecureStore.getItemAsync).toHaveBeenCalledWith('clerk-session');
+    expect(mockSecureStore.getItemAsync).toHaveBeenCalledWith(
+      'clerk-session',
+      expect.objectContaining({
+        keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK,
+      })
+    );
     expect(result).toBe('tok-123');
   });
 
   it('saveToken delegates to SecureStore.setItemAsync', async () => {
     mockSecureStore.setItemAsync.mockResolvedValue(undefined);
     await tokenCache.saveToken('clerk-session', 'tok-abc');
-    expect(mockSecureStore.setItemAsync).toHaveBeenCalledWith('clerk-session', 'tok-abc');
+    expect(mockSecureStore.setItemAsync).toHaveBeenCalledWith(
+      'clerk-session',
+      'tok-abc',
+      expect.objectContaining({
+        keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK,
+      })
+    );
   });
 
   it('clearToken delegates to SecureStore.deleteItemAsync', async () => {
     mockSecureStore.deleteItemAsync.mockResolvedValue(undefined);
     await tokenCache.clearToken!('clerk-session');
-    expect(mockSecureStore.deleteItemAsync).toHaveBeenCalledWith('clerk-session');
+    expect(mockSecureStore.deleteItemAsync).toHaveBeenCalledWith(
+      'clerk-session',
+      expect.objectContaining({
+        keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK,
+      })
+    );
   });
 
   it('clearToken returns the promise from SecureStore.deleteItemAsync', async () => {
@@ -36,6 +52,11 @@ describe('tokenCache', () => {
     const result = tokenCache.clearToken!('clerk-session');
     expect(result).toBeInstanceOf(Promise);
     await expect(result).resolves.toBeUndefined();
-    expect(mockSecureStore.deleteItemAsync).toHaveBeenCalledWith('clerk-session');
+    expect(mockSecureStore.deleteItemAsync).toHaveBeenCalledWith(
+      'clerk-session',
+      expect.objectContaining({
+        keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK,
+      })
+    );
   });
 });

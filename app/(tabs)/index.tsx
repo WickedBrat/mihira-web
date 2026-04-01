@@ -1,44 +1,23 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { BlurView } from 'expo-blur';
-import { Bell, UserCircle } from 'lucide-react-native';
 import { GlowCard } from '@/components/ui/GlowCard';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { DailyArthCard } from '@/features/daily/DailyArthCard';
-import { LessonCard } from '@/features/daily/LessonCard';
+import { DailyAlignmentCard } from '@/features/horoscope/DailyAlignmentCard';
+import { useDailyAlignment } from '@/features/horoscope/useDailyAlignment';
 import { colors, fonts } from '@/lib/theme';
-import type { PastInsight } from '@/features/daily/types';
 
 const QUOTE = '"You have a right to your actions, but never to their fruits."';
 const SOURCE = 'The Bhagavad Gita';
 
-const PAST_INSIGHTS: PastInsight[] = [
-  { id: '1', title: 'The Power of Stillness', date: 'Yesterday', readTime: '4 min read', iconName: 'history_edu' },
-  { id: '2', title: 'Detached Observation', date: 'Oct 24', readTime: '6 min read', iconName: 'self_improvement' },
-];
-
 export default function HomeScreen() {
+  const { chart, summary, highlights, reasoning, isLoading, error } = useDailyAlignment();
+
   return (
     <View style={styles.root}>
       <AmbientBlob color="rgba(212, 190, 228, 0.1)" top={-100} left={-60} size={380} />
-
-      {/* Top Navigation */}
-      <View style={styles.navWrap}>
-        <BlurView intensity={40} tint="dark" style={StyleSheet.absoluteFill} />
-        <SafeAreaView edges={['top']}>
-          <View style={styles.nav}>
-            <View style={styles.navLeft}>
-              <Text style={styles.navBrand}>Aksha</Text>
-            </View>
-            <View style={styles.navRight}>
-              <Bell size={20} color={colors.onSurfaceVariant} />
-              <UserCircle size={24} color={colors.onSurfaceVariant} />
-            </View>
-          </View>
-        </SafeAreaView>
-      </View>
+      <AmbientBlob color="rgba(149, 0, 255, 0.08)" top={480} left={220} size={280} />
 
       <ScrollView
         style={styles.scroll}
@@ -59,21 +38,27 @@ export default function HomeScreen() {
 
         {/* Reflect CTA */}
         <View style={styles.ctaSection}>
-          <SacredButton label="✦  Reflect" onPress={() => {}} />
+          <SacredButton label="✦  Reflect" onPress={() => { }} />
           <Text style={styles.ctaMeta}>4.2k others are reflecting today</Text>
         </View>
 
-        {/* Past Insights */}
-        <View style={styles.insightsSection}>
-          <View style={styles.insightsHeader}>
-            <Text style={styles.insightsTitle}>Past Insights</Text>
-            <Text style={styles.insightsViewAll}>View All</Text>
+        <View style={styles.alignmentSection}>
+          <View style={styles.alignmentHeader}>
+            <Text style={styles.alignmentMeta}>Celestial Alignment</Text>
+            <Text style={styles.alignmentTitle}>Cosmos Today</Text>
+            <Text style={styles.alignmentSub}>
+              Ground truth from the stars, folded into your daily home ritual.
+            </Text>
           </View>
-          <View style={styles.insightsList}>
-            {PAST_INSIGHTS.map((insight) => (
-              <LessonCard key={insight.id} insight={insight} />
-            ))}
-          </View>
+
+          <DailyAlignmentCard
+            summary={summary}
+            highlights={highlights}
+            reasoning={reasoning}
+            chart={chart}
+            isLoading={isLoading}
+            error={error}
+          />
         </View>
       </ScrollView>
     </View>
@@ -85,36 +70,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.surface,
   },
-  navWrap: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 50,
-    borderBottomWidth: 0,
-  },
-  nav: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
-  navLeft: {},
-  navBrand: {
-    fontFamily: fonts.headline,
-    fontSize: 20,
-    color: colors.onSurface,
-    letterSpacing: -0.5,
-  },
-  navRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
   scroll: { flex: 1 },
   scrollContent: {
-    paddingTop: 120,
+    paddingTop: 72,
     paddingHorizontal: 24,
     paddingBottom: 160,
     alignItems: 'center',
@@ -130,7 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textTransform: 'uppercase',
     letterSpacing: 3,
-    color: colors.onSurfaceVariant,
+    color: colors.secondaryFixed,
     marginBottom: 12,
   },
   headerTitle: {
@@ -161,29 +119,34 @@ const styles = StyleSheet.create({
     color: colors.onSurfaceVariant,
     opacity: 0.6,
   },
-  insightsSection: {
+  alignmentSection: {
     marginTop: 72,
     alignSelf: 'stretch',
     maxWidth: 480,
     marginBottom: 32,
   },
-  insightsHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  alignmentHeader: {
     marginBottom: 16,
-  },
-  insightsTitle: {
-    fontFamily: fonts.headline,
-    fontSize: 20,
-    color: colors.onSurface,
-  },
-  insightsViewAll: {
-    fontFamily: fonts.label,
-    fontSize: 12,
-    color: colors.primary,
-  },
-  insightsList: {
     gap: 8,
+  },
+  alignmentMeta: {
+    fontFamily: fonts.label,
+    fontSize: 10,
+    textTransform: 'uppercase',
+    letterSpacing: 3,
+    color: colors.secondaryFixed,
+  },
+  alignmentTitle: {
+    fontFamily: fonts.headlineExtra,
+    fontSize: 32,
+    color: colors.onSurface,
+    letterSpacing: -0.8,
+    lineHeight: 38,
+  },
+  alignmentSub: {
+    fontFamily: fonts.body,
+    fontSize: 15,
+    color: colors.onSurfaceVariant,
+    lineHeight: 22,
   },
 });

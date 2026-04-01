@@ -38,7 +38,6 @@ export default function AskKrishnaScreen() {
     <View style={styles.root}>
       <AmbientBlob color="rgba(212, 190, 228, 0.05)" top={-60} left={-40} size={300} />
 
-      {/* Header */}
       <View style={styles.headerWrap}>
         <BlurView intensity={60} tint="dark" style={StyleSheet.absoluteFill} />
         <SafeAreaView edges={['top']}>
@@ -50,7 +49,6 @@ export default function AskKrishnaScreen() {
         </SafeAreaView>
       </View>
 
-      {/* Chat List */}
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

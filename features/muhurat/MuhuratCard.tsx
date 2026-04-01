@@ -6,6 +6,7 @@ import { colors, fonts } from '@/lib/theme';
 import type { MuhuratWindow } from '@/lib/vedic/types';
 
 interface Props {
+  hasRequested: boolean;
   recommendation: string | null;
   suggestion: string | null;
   reasoning: string | null;
@@ -20,7 +21,15 @@ const REC_COLORS: Record<string, string> = {
   Wait: '#fbbf24',
 };
 
-export function MuhuratCard({ recommendation, suggestion, reasoning, windows, isLoading, error }: Props) {
+export function MuhuratCard({
+  hasRequested,
+  recommendation,
+  suggestion,
+  reasoning,
+  windows,
+  isLoading,
+  error,
+}: Props) {
   if (isLoading) {
     return (
       <View style={styles.card}>
@@ -34,9 +43,20 @@ export function MuhuratCard({ recommendation, suggestion, reasoning, windows, is
     return <View style={styles.card}><Text style={styles.errorText}>{error}</Text></View>;
   }
 
+  if (!hasRequested) {
+    return (
+      <View style={styles.card}>
+        <Text style={styles.emptyText}>
+          Describe your situation and select a date range to see the strongest auspicious windows.
+        </Text>
+      </View>
+    );
+  }
+
   if (!recommendation) return null;
 
   const recColor = REC_COLORS[recommendation] ?? colors.onSurface;
+  const auspiciousWindows = windows.filter(w => w.isAuspicious);
 
   return (
     <View style={styles.card}>
@@ -46,17 +66,26 @@ export function MuhuratCard({ recommendation, suggestion, reasoning, windows, is
 
       {suggestion && <Text style={styles.suggestion}>{suggestion}</Text>}
 
-      <Text style={styles.windowsLabel}>Today's Auspicious Windows</Text>
-      {windows.filter(w => w.isAuspicious).map((w, i) => (
+      <Text style={styles.windowsLabel}>Auspicious Windows In Your Range</Text>
+      {auspiciousWindows.map((w, i) => (
         <View
           key={i}
           style={[styles.window, w.type === 'abhijit' && styles.windowAbhijit]}
         >
-          <Text style={styles.windowTime}>
-            {new Date(w.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            {' – '}
-            {new Date(w.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </Text>
+          <View style={styles.windowCopy}>
+            <Text style={styles.windowDate}>
+              {new Date(w.start).toLocaleDateString([], {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+              })}
+            </Text>
+            <Text style={styles.windowTime}>
+              {new Date(w.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {' – '}
+              {new Date(w.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </Text>
+          </View>
           <Text style={styles.windowQuality}>{w.quality}</Text>
         </View>
       ))}
@@ -86,6 +115,13 @@ const styles = StyleSheet.create({
   suggestion: {
     fontFamily: fonts.body, fontSize: 15, color: colors.onSurface, lineHeight: 24,
   },
+  emptyText: {
+    fontFamily: fonts.body,
+    fontSize: 14,
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
   windowsLabel: {
     fontFamily: fonts.label, fontSize: 9, letterSpacing: 2,
     textTransform: 'uppercase', color: colors.secondaryFixed,
@@ -94,10 +130,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
     paddingVertical: 8, paddingHorizontal: 12,
     backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: 8,
+    gap: 12,
   },
   windowAbhijit: { borderWidth: 1, borderColor: 'rgba(255,159,75,0.4)' },
+  windowCopy: {
+    flex: 1,
+    gap: 4,
+  },
+  windowDate: {
+    fontFamily: fonts.label,
+    fontSize: 9,
+    color: colors.secondaryFixed,
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
+  },
   windowTime: { fontFamily: fonts.body, fontSize: 13, color: colors.onSurface },
-  windowQuality: { fontFamily: fonts.label, fontSize: 9, color: colors.secondaryFixed, letterSpacing: 1 },
+  windowQuality: {
+    fontFamily: fonts.label,
+    fontSize: 9,
+    color: colors.secondaryFixed,
+    letterSpacing: 1,
+    textAlign: 'right',
+    maxWidth: 92,
+  },
   loadingText: {
     fontFamily: fonts.body, fontSize: 14, color: colors.onSurfaceVariant,
     textAlign: 'center', marginTop: 12,

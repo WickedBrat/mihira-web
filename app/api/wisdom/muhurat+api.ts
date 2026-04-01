@@ -1,36 +1,58 @@
 // app/api/wisdom/muhurat+api.ts
 import { geocode } from '@/lib/vedic/geocode';
 import { buildBirthChart } from '@/lib/vedic/chart';
-import { getMuhuratWindows } from '@/lib/vedic/muhurat';
+import { getMuhuratWindowsForRange } from '@/lib/vedic/muhurat';
+import { parseModelJson } from '@/lib/ai/parseModelJson';
 import { perplexityChat } from '@/lib/ai/perplexity';
 import { MUHURAT_SYSTEM, buildMuhuratPrompt } from '@/lib/ai/prompts';
 
 export async function POST(request: Request): Promise<Response> {
   try {
-    const { birthDt, birthPlace, eventType, date } = await request.json() as {
+    const { birthDt, birthPlace, eventDescription, startDate, endDate } = await request.json() as {
       birthDt: string;
       birthPlace: string;
-      eventType: string;
-      date?: string;
+      eventDescription: string;
+      startDate: string;
+      endDate: string;
     };
 
-    if (!birthDt || !birthPlace || !eventType) {
-      return Response.json({ error: 'birthDt, birthPlace, and eventType are required' }, { status: 400 });
+    if (!birthDt || !birthPlace || !eventDescription || !startDate || !endDate) {
+      return Response.json(
+        { error: 'birthDt, birthPlace, eventDescription, startDate, and endDate are required' },
+        { status: 400 }
+      );
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return Response.json({ error: 'Invalid date range' }, { status: 400 });
+    }
+
+    if (start.getTime() > end.getTime()) {
+      return Response.json({ error: 'Start date must be before end date' }, { status: 400 });
+    }
+
+    const days = Math.floor((end.getTime() - start.getTime()) / 86400000) + 1;
+    if (days > 14) {
+      return Response.json({ error: 'Please choose a date range of 14 days or fewer' }, { status: 400 });
     }
 
     const { lat, lng } = await geocode(birthPlace);
     const chart = await buildBirthChart(birthDt, lat, lng);
-    const targetDate = date ? new Date(date) : new Date();
-    const windows = getMuhuratWindows(targetDate, lat, lng, eventType);
+    const windows = getMuhuratWindowsForRange(start, end, lat, lng, eventDescription);
 
     const raw = await perplexityChat('sonar-pro', [
       { role: 'system', content: MUHURAT_SYSTEM },
-      { role: 'user',   content: buildMuhuratPrompt(eventType, chart, windows) },
+      {
+        role: 'user',
+        content: buildMuhuratPrompt(eventDescription, chart, windows, startDate, endDate),
+      },
     ]);
 
     let parsed: { recommendation: string; suggestion: string; reasoning: string };
     try {
-      parsed = JSON.parse(raw);
+      parsed = parseModelJson(raw, ['recommendation', 'suggestion', 'reasoning']);
     } catch {
       return Response.json({ error: 'AI response parse error', raw }, { status: 502 });
     }
