@@ -10,7 +10,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { Home, Telescope, BookOpen, User } from 'lucide-react-native';
+import { Home, Telescope, BookOpen, User, Clock } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
 import { colors, fonts, gradients } from '@/lib/theme';
 
@@ -18,6 +18,7 @@ const TAB_ICONS = {
   index: Home,
   horoscope: Telescope,
   gurukul: BookOpen,
+  muhurat: Clock,
   profile: User,
 } as const;
 
@@ -25,6 +26,7 @@ const TAB_LABELS = {
   index: 'HOME',
   horoscope: 'COSMOS',
   gurukul: 'GURUKUL',
+  muhurat: 'MUHURAT',
   profile: 'PROFILE',
 } as const;
 
@@ -45,7 +47,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
           const Icon = TAB_ICONS[tabName];
           const label = TAB_LABELS[tabName];
 
-          const showFab = tabName === 'gurukul';
+          const showFab = tabName === 'muhurat';
 
           return (
             <React.Fragment key={route.key}>
