@@ -1,31 +1,46 @@
-import { renderHook, act } from '@testing-library/react-native';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useChatState } from '@/features/chat/useChatState';
 
-beforeEach(() => jest.useFakeTimers());
-afterEach(() => jest.useRealTimers());
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('@/lib/chatStorage', () => ({
+  getHistory: jest.fn(() => Promise.resolve([])),
+  saveHistory: jest.fn(() => Promise.resolve()),
+}));
+
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    body: null,
+  })
+) as jest.Mock;
 
 describe('useChatState', () => {
-  it('starts with initial AI greeting', () => {
+  it('starts with initial AI greeting', async () => {
     const { result } = renderHook(() => useChatState());
-    expect(result.current.messages.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(result.current.messages.length).toBeGreaterThan(0);
+    });
     expect(result.current.messages[0].role).toBe('ai');
   });
 
-  it('adds a user message when sendMessage is called', () => {
+  it('adds a user message when sendMessage is called', async () => {
     const { result } = renderHook(() => useChatState());
-    act(() => {
-      result.current.sendMessage('Hello');
+    await act(async () => {
+      await result.current.sendMessage('Hello');
     });
     const userMessages = result.current.messages.filter((m) => m.role === 'user');
     expect(userMessages.length).toBe(1);
     expect(userMessages[0].text).toBe('Hello');
   });
 
-  it('sets isTyping true immediately after sendMessage', () => {
+  it('sets isTyping false after sendMessage completes (no response body)', async () => {
     const { result } = renderHook(() => useChatState());
-    act(() => {
-      result.current.sendMessage('Hello');
+    await act(async () => {
+      await result.current.sendMessage('Hello');
     });
-    expect(result.current.isTyping).toBe(true);
+    expect(result.current.isTyping).toBe(false);
   });
 });
