@@ -8,9 +8,10 @@ import type { TimelineEntry } from './types';
 interface TimelineItemProps {
   entry: TimelineEntry;
   index: number;
+  isLast?: boolean;
 }
 
-export function TimelineItem({ entry, index }: TimelineItemProps) {
+export function TimelineItem({ entry, index, isLast = false }: TimelineItemProps) {
   return (
     <MotiView
       from={{ opacity: 0, translateX: -20 }}
@@ -18,20 +19,23 @@ export function TimelineItem({ entry, index }: TimelineItemProps) {
       transition={{ type: 'spring', delay: index * 120, damping: 18 }}
       style={styles.container}
     >
-      {/* Dot */}
-      {/* <LinearGradient
-        colors={entry.gradientColors}
-        style={styles.dot}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <Text style={styles.dotEmoji}>{entry.emoji}</Text>
-      </LinearGradient> */}
+      {/* Timeline Left: Dot and Line */}
+      <View style={styles.leftColumn}>
+        <LinearGradient
+          colors={entry.gradientColors}
+          style={styles.dot}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <Text style={styles.dotEmoji}>{entry.emoji}</Text>
+        </LinearGradient>
+        {!isLast && <View style={styles.line} />}
+      </View>
 
       {/* Card */}
       <View style={styles.card}>
         <View style={styles.cardHeader}>
-          <View>
+          <View style={styles.cardHeaderLeft}>
             <Text style={styles.cardTitle}>{entry.label}</Text>
             <Text style={styles.cardSubtitle}>{entry.subtitle}</Text>
           </View>
@@ -47,19 +51,32 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     gap: 16,
-    alignItems: 'flex-start',
+    alignItems: 'stretch',
+    marginBottom: 0,
+  },
+  leftColumn: {
+    alignItems: 'center',
+    width: 48,
   },
   dot: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    flexShrink: 0,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 4,
+    zIndex: 2,
   },
   dotEmoji: {
     fontSize: 20,
+  },
+  line: {
+    flex: 1,
+    width: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    marginTop: 4,
+    marginBottom: -4, // overlap with the next item
+    zIndex: 1,
   },
   card: {
     flex: 1,
@@ -68,12 +85,17 @@ const styles = StyleSheet.create({
     padding: 20,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.05)',
+    marginBottom: 16,
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: 12,
+  },
+  cardHeaderLeft: {
+    flex: 1,
+    paddingRight: 12,
   },
   cardTitle: {
     fontFamily: fonts.headline,
@@ -93,6 +115,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: 10,
     color: `${colors.onSurface}4D`,
+    textAlign: 'right',
   },
   quote: {
     fontFamily: fonts.body,

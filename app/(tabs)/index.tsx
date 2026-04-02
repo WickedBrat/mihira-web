@@ -2,11 +2,13 @@ import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { GlowCard } from '@/components/ui/GlowCard';
 import { SacredButton } from '@/components/ui/SacredButton';
-import { AmbientBlob } from '@/components/ui/AmbientBlob';
+import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
+import { PageHero } from '@/components/ui/PageHero';
 import { DailyArthCard } from '@/features/daily/DailyArthCard';
 import { DailyAlignmentCard } from '@/features/horoscope/DailyAlignmentCard';
 import { useDailyAlignment } from '@/features/horoscope/useDailyAlignment';
-import { colors, fonts } from '@/lib/theme';
+import { colors, fonts, layout } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 
 const QUOTE = '"You have a right to your actions, but never to their fruits."';
 const SOURCE = 'The Bhagavad Gita';
@@ -16,20 +18,19 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.root}>
-      <AmbientBlob color="rgba(212, 190, 228, 0.1)" top={-100} left={-60} size={380} />
-      <AmbientBlob color="rgba(149, 0, 255, 0.08)" top={480} left={220} size={280} />
+      <PageAmbientBlobs />
 
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Peace Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerMeta}>Mindful Morning</Text>
-          <Text style={styles.headerTitle}>Daily Aksha</Text>
-          <Text style={styles.headerSub}>Finding stillness in the noise.</Text>
-        </View>
+        <PageHero
+          meta="Mindful Morning"
+          title="Daily Aksha"
+          subtitle="Finding stillness in the noise."
+          style={styles.header}
+        />
 
         {/* Glow Hero Quote Card */}
         <GlowCard style={styles.section}>
@@ -72,58 +73,34 @@ const styles = StyleSheet.create({
   },
   scroll: { flex: 1 },
   scrollContent: {
-    paddingTop: 72,
-    paddingHorizontal: 24,
-    paddingBottom: 160,
+    paddingTop: 84,
+    paddingHorizontal: layout.screenPaddingX,
+    paddingBottom: 176,
     alignItems: 'center',
   },
   header: {
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    paddingTop: 24,
-    paddingBottom: 32,
-  },
-  headerMeta: {
-    fontFamily: fonts.label,
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 3,
-    color: colors.secondaryFixed,
-    marginBottom: 12,
-  },
-  headerTitle: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: 42,
-    color: colors.onSurface,
-    letterSpacing: -1,
-    lineHeight: 46,
-    marginBottom: 8,
-  },
-  headerSub: {
-    fontFamily: fonts.body,
-    fontSize: 16,
-    color: colors.onSurfaceVariant,
+    paddingBottom: 40,
   },
   section: {
     alignSelf: 'stretch',
     maxWidth: 480,
   },
   ctaSection: {
-    marginTop: 48,
+    marginTop: 56,
     alignItems: 'center',
     gap: 16,
   },
   ctaMeta: {
     fontFamily: fonts.label,
-    fontSize: 12,
+    fontSize: scaleFont(12),
     color: colors.onSurfaceVariant,
     opacity: 0.6,
   },
   alignmentSection: {
-    marginTop: 72,
+    marginTop: 84,
     alignSelf: 'stretch',
     maxWidth: 480,
-    marginBottom: 32,
+    marginBottom: 40,
   },
   alignmentHeader: {
     marginBottom: 16,
@@ -131,22 +108,22 @@ const styles = StyleSheet.create({
   },
   alignmentMeta: {
     fontFamily: fonts.label,
-    fontSize: 10,
+    fontSize: scaleFont(10),
     textTransform: 'uppercase',
     letterSpacing: 3,
     color: colors.secondaryFixed,
   },
   alignmentTitle: {
     fontFamily: fonts.headlineExtra,
-    fontSize: 32,
+    fontSize: scaleFont(32),
     color: colors.onSurface,
     letterSpacing: -0.8,
-    lineHeight: 38,
+    lineHeight: scaleFont(38),
   },
   alignmentSub: {
     fontFamily: fonts.body,
-    fontSize: 15,
+    fontSize: scaleFont(15),
     color: colors.onSurfaceVariant,
-    lineHeight: 22,
+    lineHeight: scaleFont(22),
   },
 });

@@ -3,7 +3,8 @@ import { View, TextInput, Pressable, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Send, Mic } from 'lucide-react-native';
 import { hapticMedium } from '@/lib/haptics';
-import { colors, fonts, gradients } from '@/lib/theme';
+import { colors, fonts, gradients, layout } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 
 interface ChatInputProps {
   value: string;
@@ -26,6 +27,7 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
           onChangeText={onChangeText}
           placeholder="Ask for guidance…"
           placeholderTextColor={colors.outline}
+          selectionColor={colors.primary}
           multiline
           maxLength={500}
           returnKeyType="send"
@@ -51,9 +53,8 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    backgroundColor: 'rgba(5, 7, 10, 0.95)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   inputRow: {
     flexDirection: 'row',
@@ -62,10 +63,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(37, 38, 38, 0.7)',
     borderRadius: 9999,
     borderWidth: 1,
-    borderColor: `${colors.primaryFixedDim}22`,
-    paddingLeft: 20,
-    paddingRight: 6,
-    paddingVertical: 6,
+    borderColor: `${colors.primaryFixedDim}02`,
+    paddingLeft: 26,
+    paddingRight: 10,
+    paddingVertical: 5,
     shadowColor: colors.primary,
     shadowOpacity: 0.12,
     shadowRadius: 16,
@@ -74,14 +75,14 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontFamily: fonts.body,
-    fontSize: 15,
+    fontSize: scaleFont(15),
+    lineHeight: scaleFont(20),
     color: colors.onSurface,
-    paddingVertical: 8,
+    paddingVertical: 12,
+    textAlignVertical: 'center',
     maxHeight: 100,
   },
-  micBtn: {
-    padding: 10,
-  },
+  micBtn: { padding: 10 },
   sendBtn: {
     width: 40,
     height: 40,

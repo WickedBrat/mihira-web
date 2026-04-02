@@ -12,13 +12,15 @@ import {
 } from 'react-native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { CalendarDays, Sparkles } from 'lucide-react-native';
-import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { MuhuratCard } from '@/features/muhurat/MuhuratCard';
 import { MuhuratDateSheet } from '@/features/muhurat/components/MuhuratDateSheet';
 import { useMuhurat, type MuhuratRequest } from '@/features/muhurat/useMuhurat';
 import { SacredButton } from '@/components/ui/SacredButton';
+import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { useToast } from '@/components/ui/ToastProvider';
-import { colors, fonts } from '@/lib/theme';
+import { PageHero } from '@/components/ui/PageHero';
+import { colors, fonts, layout } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 
 type DateField = 'start' | 'end';
 
@@ -105,16 +107,6 @@ export default function MuhuratScreen() {
       return;
     }
 
-    const rangeDays = Math.floor((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
-    if (rangeDays > 14) {
-      showToast({
-        type: 'error',
-        title: 'Date range too large',
-        message: 'Choose a span of 14 days or fewer.',
-      });
-      return;
-    }
-
     setRequest({
       eventDescription: trimmedEvent,
       startDate: toApiDate(startDate),
@@ -124,20 +116,22 @@ export default function MuhuratScreen() {
 
   return (
     <View style={styles.root}>
-      <AmbientBlob color="rgba(255,159,75,0.06)" top={-40} left={180} size={280} />
+      <PageAmbientBlobs />
 
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.banner}>
-          <Text style={styles.meta}>Auspicious Timing</Text>
-          <Text style={styles.title}>Muhurat Finder</Text>
-          <Text style={styles.sub}>
-            Describe your situation and scan a chosen date range for auspicious windows.
-          </Text>
-        </View>
+        <PageHero
+          meta="Auspicious Timing"
+          title="Muhurat Finder"
+          subtitle="Describe your situation and scan a chosen date range for auspicious windows."
+          style={styles.banner}
+          titleStyle={styles.title}
+          subtitleStyle={styles.sub}
+          subtitleMaxWidth={360}
+        />
 
         <View style={styles.formCard}>
           <View style={styles.inputHeader}>
@@ -213,24 +207,20 @@ export default function MuhuratScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   scroll: { flex: 1 },
-  content: { paddingTop: 100, paddingHorizontal: 24, paddingBottom: 160, gap: 20 },
-  banner: { gap: 8 },
-  meta: {
-    fontFamily: fonts.label, fontSize: 10, textTransform: 'uppercase',
-    letterSpacing: 3, color: colors.secondaryFixed,
-  },
+  content: { paddingTop: 84, paddingHorizontal: layout.screenPaddingX, paddingBottom: 176, gap: 24 },
+  banner: { paddingBottom: 24 },
   title: {
-    fontFamily: fonts.headlineExtra, fontSize: 36,
-    color: colors.onSurface, letterSpacing: -0.5, lineHeight: 42,
+    fontSize: scaleFont(38),
+    lineHeight: scaleFont(44),
   },
-  sub: { fontFamily: fonts.body, fontSize: 15, color: colors.onSurfaceVariant, lineHeight: 22 },
+  sub: { lineHeight: scaleFont(22) },
   formCard: {
-    padding: 18,
+    padding: 24,
     borderRadius: 24,
     backgroundColor: 'rgba(37, 38, 38, 0.62)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.05)',
-    gap: 14,
+    gap: 16,
   },
   inputHeader: {
     flexDirection: 'row',
@@ -239,45 +229,45 @@ const styles = StyleSheet.create({
   },
   inputMeta: {
     fontFamily: fonts.label,
-    fontSize: 10,
+    fontSize: scaleFont(10),
     textTransform: 'uppercase',
     letterSpacing: 2,
     color: colors.secondaryFixed,
   },
   textArea: {
-    minHeight: 118,
+    minHeight: 126,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: `${colors.outlineVariant}40`,
     backgroundColor: 'rgba(14, 14, 14, 0.45)',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
     fontFamily: fonts.body,
-    fontSize: 15,
+    fontSize: scaleFont(15),
     color: colors.onSurface,
-    lineHeight: 22,
+    lineHeight: scaleFont(22),
   },
   rangeLabel: {
     fontFamily: fonts.label,
-    fontSize: 10,
+    fontSize: scaleFont(10),
     textTransform: 'uppercase',
     letterSpacing: 2,
     color: colors.onSurfaceVariant,
   },
   dateRow: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 14,
   },
   dateField: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 10,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: `${colors.outlineVariant}40`,
     backgroundColor: 'rgba(14, 14, 14, 0.45)',
-    paddingHorizontal: 14,
+    paddingHorizontal: 10,
     paddingVertical: 14,
   },
   dateCopy: {
@@ -286,14 +276,14 @@ const styles = StyleSheet.create({
   },
   dateCaption: {
     fontFamily: fonts.label,
-    fontSize: 9,
+    fontSize: scaleFont(9),
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     color: colors.onSurfaceVariant,
   },
   dateValue: {
     fontFamily: fonts.bodyMedium,
-    fontSize: 14,
+    fontSize: scaleFont(14),
     color: colors.onSurface,
   },
   cta: {

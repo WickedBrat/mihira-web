@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { ChevronRight, BookMarked, Brain } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 import type { PastInsight } from './types';
 
 interface LessonCardProps {
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    padding: 16,
+    padding: 18,
   },
   pressed: {
     backgroundColor: colors.surfaceBright,
@@ -59,13 +60,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: fonts.bodyMedium,
-    fontSize: 15,
+    fontSize: scaleFont(15),
     color: colors.onSurface,
     marginBottom: 2,
   },
   meta: {
     fontFamily: fonts.body,
-    fontSize: 12,
+    fontSize: scaleFont(12),
     color: colors.onSurfaceVariant,
   },
 });

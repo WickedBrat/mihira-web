@@ -5,9 +5,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { VedicReasoningAccordion } from './VedicReasoningAccordion';
+import { TimelineItem } from './TimelineItem';
 import { colors, fonts } from '@/lib/theme';
 import type { BirthChart } from '@/lib/vedic/types';
 import type { DailyAlignmentHighlight } from '@/lib/dailyAlignmentStorage';
+import type { TimelineEntry, TimeOfDay } from './types';
 
 interface Props {
   summary: string | null;
@@ -85,6 +87,53 @@ export function DailyAlignmentCard({
     );
   }
 
+  function mapHighlightToTimelineEntry(highlight: DailyAlignmentHighlight, index: number, total: number): TimelineEntry {
+    const lower = highlight.timeRange.toLowerCase();
+    
+    let id: TimeOfDay = 'morning';
+    let emoji = '🌅';
+    let gradientColors: readonly [string, string] = ['#FFD180', '#FF9E80'];
+    let subtitle = 'Morning';
+    if (lower.includes('afternoon') || lower.includes('noon')) {
+      id = 'afternoon';
+      emoji = '☀️';
+      gradientColors = ['#FFB74D', '#F57C00'];
+      subtitle = 'Afternoon';
+    } else if (lower.includes('evening')) {
+      id = 'evening';
+      emoji = '🌇';
+      gradientColors = ['#FF8A65', '#D84315'];
+      subtitle = 'Evening';
+    } else if (lower.includes('night')) {
+      id = 'night';
+      emoji = '🌌';
+      gradientColors = ['#5E35B1', '#283593'];
+      subtitle = 'Night';
+    } else if (lower.includes('pm')) {
+      if (index >= total - 1) {
+        id = 'night';
+        emoji = '🌌';
+        gradientColors = ['#5E35B1', '#283593'];
+        subtitle = 'Night';
+      } else {
+        id = 'afternoon';
+        emoji = '☀️';
+        gradientColors = ['#FFB74D', '#F57C00'];
+        subtitle = 'Afternoon';
+      }
+    }
+    return {
+      id,
+      label: highlight.activity,
+      subtitle,
+      timeRange: highlight.timeRange,
+      quote: highlight.note,
+      emoji,
+      gradientColors,
+    };
+  }
+
+
   return (
     <View style={styles.card}>
       <Animated.View style={[StyleSheet.absoluteFill, glowStyle]}>
@@ -106,11 +155,12 @@ export function DailyAlignmentCard({
 
       <View style={styles.highlightList}>
         {highlights.map((highlight, index) => (
-          <View key={`${highlight.timeRange}-${highlight.activity}-${index}`} style={styles.highlightCard}>
-            <Text style={styles.highlightTime}>{highlight.timeRange}</Text>
-            <Text style={styles.highlightActivity}>{highlight.activity}</Text>
-            <Text style={styles.highlightNote}>{highlight.note}</Text>
-          </View>
+          <TimelineItem
+            entry={mapHighlightToTimelineEntry(highlight, index, highlights.length)}
+            key={`${highlight.timeRange}-${highlight.activity}-${index}`}
+            index={index}
+            isLast={index === highlights.length - 1}
+          />
         ))}
       </View>
 
@@ -121,12 +171,12 @@ export function DailyAlignmentCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surfaceContainerLow,
-    borderRadius: 20,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(181,100,252,0.12)',
-    overflow: 'hidden',
+    // backgroundColor: colors.surfaceContainerLow,
+    // borderRadius: 20,
+    // padding: 20,
+    // borderWidth: 1,
+    // borderColor: 'rgba(181,100,252,0.12)',
+    // overflow: 'hidden',
   },
   lagnaLabel: {
     fontFamily: fonts.label,
@@ -143,36 +193,7 @@ const styles = StyleSheet.create({
     lineHeight: 26,
   },
   highlightList: {
-    marginTop: 18,
-    gap: 12,
-  },
-  highlightCard: {
-    borderRadius: 18,
-    padding: 16,
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-  },
-  highlightTime: {
-    fontFamily: fonts.label,
-    fontSize: 10,
-    letterSpacing: 1.8,
-    textTransform: 'uppercase',
-    color: colors.secondaryFixed,
-    marginBottom: 8,
-  },
-  highlightActivity: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.onSurface,
-    lineHeight: 22,
-    marginBottom: 6,
-  },
-  highlightNote: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.onSurfaceVariant,
-    lineHeight: 20,
+    marginTop: 24,
   },
   loadingText: {
     fontFamily: fonts.body,

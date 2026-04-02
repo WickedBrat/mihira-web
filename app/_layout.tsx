@@ -47,7 +47,18 @@ export default function RootLayout() {
           <ToastProvider>
             <StatusBar style="light" backgroundColor="#0e0e0e" />
             <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0e0e0e' } }}>
-              <Stack.Screen name="onboarding/index" options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/index"   options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-2"  options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-3"  options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-4"  options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-5"  options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-6"  options={{ gestureEnabled: false, animation: 'fade' }} />
+              <Stack.Screen name="onboarding/step-7"  options={{ gestureEnabled: false, animation: 'fade' }} />
+              <Stack.Screen name="onboarding/step-8"  options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-9"  options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-10" options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-11" options={{ gestureEnabled: false }} />
+              <Stack.Screen name="onboarding/step-12" options={{ gestureEnabled: false, animation: 'fade' }} />
               <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
             </Stack>
           </ToastProvider>

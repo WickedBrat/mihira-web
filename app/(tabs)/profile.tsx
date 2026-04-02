@@ -25,7 +25,9 @@ import {
   mergeDateAndTime,
 } from '@/features/profile/utils';
 import { useSignIn } from '@/features/auth/useSignIn';
-import { colors } from '@/lib/theme';
+import { colors, layout } from '@/lib/theme';
+import { clearCachedProfile } from '@/lib/profileStorage';
+import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 
 export default function ProfileScreen() {
   const { isSignedIn, userId, signOut } = useAuth();
@@ -122,8 +124,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <AmbientBlob color="rgba(212, 190, 228, 0.08)" top={-90} left={-80} size={340} />
-      <AmbientBlob color="rgba(184, 152, 122, 0.06)" top={280} left={190} size={280} />
+      <PageAmbientBlobs />
 
       <ScrollView
         style={styles.scroll}
@@ -137,7 +138,12 @@ export default function ProfileScreen() {
         automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
       >
         <ProfileHeader onOpenSettings={openSettingsSheet} />
-        <ProfileHero displayName={displayName} initials={initials} isSignedIn={signedIn} />
+        <ProfileHero
+          displayName={displayName}
+          initials={initials}
+          avatarUrl={user?.imageUrl ?? null}
+          isSignedIn={signedIn}
+        />
         <ProfileFields
           profile={profile}
           onChangeField={(field, value) => updateField(field, value)}
@@ -160,6 +166,7 @@ export default function ProfileScreen() {
         onSignOut={async () => {
           try {
             await signOut();
+            await clearCachedProfile();
             closeSettingsSheet();
             showToast({
               type: 'success',
@@ -208,11 +215,11 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.surface },
   scroll: { flex: 1 },
   scrollContent: {
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 160,
+    paddingHorizontal: layout.screenPaddingX,
+    paddingTop: 28,
+    paddingBottom: 176,
   },
   scrollContentKeyboardVisible: {
-    paddingBottom: 28,
+    paddingBottom: 36,
   },
 });

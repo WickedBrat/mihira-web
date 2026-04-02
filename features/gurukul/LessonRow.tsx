@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Play } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 
 export interface Lesson {
   id: string;
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    padding: 12,
+    padding: 16,
   },
   pressed: {
     backgroundColor: colors.surfaceContainerHighest,
@@ -59,13 +60,13 @@ const styles = StyleSheet.create({
   text: { flex: 1 },
   title: {
     fontFamily: fonts.bodyMedium,
-    fontSize: 15,
+    fontSize: scaleFont(15),
     color: colors.onSurface,
     marginBottom: 3,
   },
   meta: {
     fontFamily: fonts.body,
-    fontSize: 12,
+    fontSize: scaleFont(12),
     color: colors.onSurfaceVariant,
   },
   playBtn: {

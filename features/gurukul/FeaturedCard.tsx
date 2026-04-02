@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Sparkles } from 'lucide-react-native';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { colors, fonts } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 
 interface FeaturedCardProps {
   title: string;
@@ -58,42 +59,42 @@ const styles = StyleSheet.create({
     height: '70%',
   },
   content: {
-    padding: 24,
-    gap: 8,
+    padding: 32,
+    gap: 10,
   },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 4,
+    marginBottom: 6,
   },
   badgeText: {
     fontFamily: fonts.label,
-    fontSize: 9,
+    fontSize: scaleFont(9),
     textTransform: 'uppercase',
     letterSpacing: 2,
     color: colors.primary,
   },
   title: {
     fontFamily: fonts.headline,
-    fontSize: 26,
+    fontSize: scaleFont(26),
     color: colors.onSurface,
     letterSpacing: -0.4,
-    lineHeight: 32,
+    lineHeight: scaleFont(32),
   },
   description: {
     fontFamily: fonts.body,
-    fontSize: 13,
+    fontSize: scaleFont(13),
     color: colors.onSurfaceVariant,
-    lineHeight: 18,
+    lineHeight: scaleFont(18),
   },
   duration: {
     fontFamily: fonts.label,
-    fontSize: 9,
+    fontSize: scaleFont(9),
     textTransform: 'uppercase',
     letterSpacing: 2,
     color: colors.onSurfaceVariant,
     opacity: 0.6,
   },
-  btn: { alignSelf: 'flex-start', marginTop: 8 },
+  btn: { alignSelf: 'flex-start', marginTop: 10 },
 });

@@ -27,7 +27,7 @@ export const colors = {
   onSecondaryContainer: '#dcb99a',
 
   onSurface: '#fff',
-  onSurfaceVariant: '#fff',
+  onSurfaceVariant: '#d3cec9',
   onBackground: '#fff',
   background: '#0e0e0e',
 
@@ -62,6 +62,10 @@ export const gradients = {
     'rgba(184, 152, 122, 0.1)',
     'transparent',
   ] as const,
+} as const;
+
+export const layout = {
+  screenPaddingX: 32,
 } as const;
 
 export type ColorKey = keyof typeof colors;

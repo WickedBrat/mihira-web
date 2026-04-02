@@ -3,6 +3,7 @@ import { Pressable, Text, StyleSheet, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { hapticMedium } from '@/lib/haptics';
 import { colors, fonts, gradients } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 
 interface SacredButtonProps {
   label: string;
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: fonts.label,
-    fontSize: 16,
+    fontSize: scaleFont(16),
     color: colors.onPrimary,
     letterSpacing: 0.5,
   },

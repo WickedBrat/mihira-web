@@ -4,8 +4,11 @@ import { Wind, Infinity as InfinityIcon } from 'lucide-react-native';
 import { FeaturedCard } from '@/features/gurukul/FeaturedCard';
 import { CategoryCard } from '@/features/gurukul/CategoryCard';
 import { LessonRow } from '@/features/gurukul/LessonRow';
-import { AmbientBlob } from '@/components/ui/AmbientBlob';
-import { colors, fonts } from '@/lib/theme';
+import { GurukulYogiBackdrop } from '@/components/ui/GurukulYogiBackdrop';
+import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
+import { PageHero } from '@/components/ui/PageHero';
+import { colors, fonts, layout } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 import type { Lesson } from '@/features/gurukul/LessonRow';
 
 const LESSONS: Lesson[] = [
@@ -18,26 +21,27 @@ const LESSONS: Lesson[] = [
 export default function GurukulScreen() {
   return (
     <View style={styles.root}>
-      <AmbientBlob color="rgba(212, 190, 228, 0.06)" top={-60} left={-40} size={350} />
-      <AmbientBlob color="rgba(184, 152, 122, 0.05)" top={300} left={200} size={300} />
+      <PageAmbientBlobs />
+      {/* <GurukulYogiBackdrop /> */}
 
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.hero}>
-          <View style={styles.heroBadge}>
-            <Text style={styles.heroBadgeText}>Gurukul</Text>
-          </View>
-          <Text style={styles.heroTitle}>
-            Your Sacred{'\n'}
-            <Text style={styles.heroTitleAccent}>Digital Library</Text>
-          </Text>
-          <Text style={styles.heroSub}>
-            Explore bite-sized wisdom designed to settle the mind and nourish the soul.
-          </Text>
-        </View>
+        <PageHero
+          meta="Gurukul"
+          title={(
+            <>
+              Your Sacred{'\n'}
+              <Text style={styles.heroTitleAccent}>Digital Library</Text>
+            </>
+          )}
+          subtitle="Explore bite-sized wisdom designed to settle the mind and nourish the soul."
+          style={styles.hero}
+          titleStyle={styles.heroTitle}
+          subtitleMaxWidth={340}
+        />
 
         <FeaturedCard
           title="The Art of Detachment"
@@ -90,90 +94,67 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   scroll: { flex: 1 },
   scrollContent: {
-    paddingTop: 100,
-    paddingHorizontal: 24,
-    paddingBottom: 160,
-    gap: 20,
+    paddingTop: 84,
+    paddingHorizontal: layout.screenPaddingX,
+    paddingBottom: 176,
+    gap: 24,
   },
-  hero: { gap: 12, marginBottom: 8 },
-  heroBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 14,
-    paddingVertical: 5,
-    borderRadius: 9999,
-    backgroundColor: `${colors.secondary}1A`,
-    borderWidth: 1,
-    borderColor: `${colors.secondary}1A`,
-  },
-  heroBadgeText: {
-    fontFamily: fonts.label,
-    fontSize: 9,
-    textTransform: 'uppercase',
-    letterSpacing: 2,
-    color: colors.secondary,
-  },
+  hero: { paddingBottom: 24 },
   heroTitle: {
     fontFamily: fonts.headlineExtra,
-    fontSize: 40,
+    fontSize: scaleFont(40),
     color: colors.onSurface,
     letterSpacing: -0.8,
-    lineHeight: 46,
+    lineHeight: scaleFont(46),
   },
   heroTitleAccent: {
     color: colors.secondaryFixedDim,
   },
-  heroSub: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-    color: colors.onSurfaceVariant,
-    lineHeight: 22,
-    maxWidth: 320,
-  },
   categoryRow: {
     flexDirection: 'row',
-    gap: 12,
-    height: 160,
+    gap: 14,
+    height: 168,
   },
-  recentSection: { gap: 4 },
+  recentSection: { gap: 6 },
   recentHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   recentTitle: {
     fontFamily: fonts.headline,
-    fontSize: 20,
+    fontSize: scaleFont(20),
     color: colors.onSurface,
     letterSpacing: -0.3,
   },
   recentViewAll: {
     fontFamily: fonts.label,
-    fontSize: 11,
+    fontSize: scaleFont(11),
     textTransform: 'uppercase',
     letterSpacing: 1,
     color: colors.onSurfaceVariant,
   },
   lessonList: { gap: 2 },
   quoteSection: {
-    paddingVertical: 40,
+    paddingVertical: 48,
     borderTopWidth: 1,
     borderTopColor: `${colors.outlineVariant}1A`,
     alignItems: 'center',
-    gap: 16,
+    gap: 20,
   },
   quoteText: {
     fontFamily: fonts.label,
-    fontSize: 20,
+    fontSize: scaleFont(20),
     fontStyle: 'italic',
     color: `${colors.onSurface}CC`,
     textAlign: 'center',
-    lineHeight: 30,
+    lineHeight: scaleFont(30),
     maxWidth: 320,
   },
   quoteCite: {
     fontFamily: fonts.label,
-    fontSize: 9,
+    fontSize: scaleFont(9),
     textTransform: 'uppercase',
     letterSpacing: 4,
     color: colors.onSurfaceVariant,

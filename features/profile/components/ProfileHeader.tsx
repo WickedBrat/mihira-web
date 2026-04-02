@@ -2,6 +2,8 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { BadgeCheck, Settings2 } from 'lucide-react-native';
 import { colors, fonts } from '@/lib/theme';
+import { PageHero } from '@/components/ui/PageHero';
+import { scaleFont } from '@/lib/typography';
 
 interface ProfileHeaderProps {
   onOpenSettings: () => void;
@@ -10,56 +12,45 @@ interface ProfileHeaderProps {
 export function ProfileHeader({ onOpenSettings }: ProfileHeaderProps) {
   return (
     <View style={styles.headerRow}>
-      <Text style={styles.title}>You</Text>
-      <View style={styles.headerActions}>
-        <View style={styles.planBadge}>
-          <BadgeCheck size={13} color={colors.secondaryFixed} />
-          <Text style={styles.planBadgeText}>Aksha FREE</Text>
-        </View>
-        <Pressable style={styles.settingsButton} onPress={onOpenSettings}>
-          <Settings2 size={18} color={colors.onSurfaceVariant} />
-        </Pressable>
-      </View>
+      <PageHero
+        meta="Profile"
+        title="You"
+        subtitle=""
+        style={styles.banner}
+        titleStyle={styles.title}
+        subtitleStyle={styles.sub}
+        subtitleMaxWidth={360}
+      />
+      <Pressable style={styles.settingsButton} onPress={onOpenSettings}>
+        <Settings2 size={18} color={colors.onSurfaceVariant} />
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 36,
+    justifyContent: 'center',
+    position: 'relative',
+    paddingBottom: 8,
   },
+  banner: {
+    paddingBottom: 0,
+    alignItems: 'center',
+  },
+  sub: { lineHeight: scaleFont(22) },
   title: {
     fontFamily: fonts.headlineExtra,
     fontSize: 34,
     color: colors.onSurface,
     letterSpacing: -0.8,
-  },
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  planBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 9999,
-    backgroundColor: `${colors.secondary}22`,
-    borderWidth: 1,
-    borderColor: `${colors.secondary}26`,
-  },
-  planBadgeText: {
-    fontFamily: fonts.label,
-    fontSize: 10,
-    color: colors.secondaryFixed,
-    letterSpacing: 1.2,
+    textAlign: 'center',
   },
   settingsButton: {
+    position: 'absolute',
+    right: 0,
+    top: 16,
     width: 40,
     height: 40,
     borderRadius: 20,

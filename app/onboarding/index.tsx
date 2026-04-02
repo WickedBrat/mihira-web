@@ -1,250 +1,145 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  useWindowDimensions,
-} from 'react-native';
+// Screen 1: The Initial Spark
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { FadeInDown } from 'react-native-reanimated';
-import { ChoiceCard } from '@/features/onboarding/ChoiceCard';
-import { SacredButton } from '@/components/ui/SacredButton';
-import { AmbientBlob } from '@/components/ui/AmbientBlob';
-import { colors, fonts } from '@/lib/theme';
-import { useAuth } from '@clerk/clerk-expo';
-import { useProfile } from '@/features/profile/useProfile';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  FadeIn,
+  Easing,
+} from 'react-native-reanimated';
+import * as Haptics from 'expo-haptics';
+import { OB } from '@/lib/onboardingStore';
+import { scaleFont } from '@/lib/typography';
 
-const CHOICES = [
-  {
-    id: 'decisions',
-    icon: '⚖️',
-    title: 'Decisions',
-    subtitle: 'Finding clarity amidst complex choices.',
-  },
-  {
-    id: 'relationships',
-    icon: '❤️',
-    title: 'Relationships',
-    subtitle: 'Nurturing connections with yourself and others.',
-  },
-  {
-    id: 'anxiety',
-    icon: '🌬️',
-    title: 'Anxiety',
-    subtitle: 'Finding your center in the storm of noise.',
-  },
-  {
-    id: 'purpose',
-    icon: '🧘',
-    title: 'Purpose',
-    subtitle: 'Aligning your daily actions with deeper intent.',
-  },
-] as const;
+export default function Screen1() {
+  const breathe = useSharedValue(1);
+  const glow    = useSharedValue(0.6);
 
-type ChoiceId = (typeof CHOICES)[number]['id'];
+  useEffect(() => {
+    breathe.value = withRepeat(
+      withTiming(1.10, { duration: 2600, easing: Easing.inOut(Easing.sin) }),
+      -1,
+      true
+    );
+    glow.value = withRepeat(
+      withTiming(1, { duration: 2600, easing: Easing.inOut(Easing.sin) }),
+      -1,
+      true
+    );
+  }, []);
 
-export default function OnboardingScreen() {
-  const [selected, setSelected] = useState<ChoiceId | null>(null);
-  const { isSignedIn } = useAuth();
-  const { saveField } = useProfile();
-  const { width } = useWindowDimensions();
+  const logoStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: breathe.value }],
+    opacity: glow.value,
+  }));
 
   return (
     <SafeAreaView style={styles.safe}>
-      <AmbientBlob
-        color="rgba(212, 190, 228, 0.08)"
-        top={-80}
-        left={-80}
-        size={350}
-      />
-      <AmbientBlob
-        color="rgba(184, 152, 122, 0.05)"
-        top={400}
-        left={200}
-        size={300}
-      />
+      {/* Ambient star field */}
+      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+        {STARS.map((s, i) => (
+          <View key={i} style={[styles.star, { top: s.y, left: s.x, opacity: s.o }]} />
+        ))}
+      </View>
 
-      <ScrollView
-        contentContainerStyle={styles.scroll}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Logo */}
-        <Animated.View entering={FadeInDown.duration(600)}>
+      <View style={styles.center}>
+        <Animated.View style={logoStyle}>
+          <Text style={styles.crescent}>☽</Text>
+        </Animated.View>
+
+        <Animated.View entering={FadeIn.delay(400).duration(900)}>
           <Text style={styles.logo}>Aksha</Text>
         </Animated.View>
 
-        {/* Heading */}
-        <Animated.View
-          entering={FadeInDown.delay(100).duration(600)}
-          style={styles.headerSection}
-        >
-          <Text style={styles.meta}>Onboarding</Text>
-          <Text style={styles.headline}>What's weighing on your mind?</Text>
-          <Text style={styles.subheadline}>
-            Choose a focus area for today. Your path to clarity is a quiet,
-            intentional journey.
-          </Text>
+        <Animated.View entering={FadeIn.delay(900).duration(800)} style={styles.copy}>
+          <Text style={styles.headline}>The universe is in motion.</Text>
+          <Text style={styles.sub}>Are you in sync?</Text>
         </Animated.View>
-
-        {/* Choice grid */}
-        <View style={styles.grid}>
-          <View style={styles.row}>
-            <ChoiceCard
-              {...CHOICES[0]}
-              isSelected={selected === CHOICES[0].id}
-              onPress={() => setSelected(CHOICES[0].id)}
-              enterDelay={150}
-              style={styles.halfCard}
-            />
-            <ChoiceCard
-              {...CHOICES[1]}
-              isSelected={selected === CHOICES[1].id}
-              onPress={() => setSelected(CHOICES[1].id)}
-              enterDelay={200}
-              style={styles.halfCard}
-            />
-          </View>
-          <View style={styles.row}>
-            <ChoiceCard
-              {...CHOICES[2]}
-              isSelected={selected === CHOICES[2].id}
-              onPress={() => setSelected(CHOICES[2].id)}
-              enterDelay={250}
-              style={styles.halfCard}
-            />
-            <ChoiceCard
-              {...CHOICES[3]}
-              isSelected={selected === CHOICES[3].id}
-              onPress={() => setSelected(CHOICES[3].id)}
-              enterDelay={300}
-              style={styles.halfCard}
-            />
-          </View>
-        </View>
-      </ScrollView>
-
-      {/* Footer CTA */}
-      <Animated.View
-        entering={FadeInDown.delay(400).duration(600)}
-        style={styles.footer}
-      >
-        <View style={styles.footerDivider} />
-        <SacredButton
-          label="Let's Start →"
-          onPress={async () => {
-            if (!selected) return;
-            if (isSignedIn) {
-              try {
-                await saveField('focus_area', selected);
-              } catch (err) {
-                console.error('[onboarding] focus_area save error', err);
-              }
-            }
-            router.replace('/(tabs)');
-          }}
-          style={{ opacity: selected ? 1 : 0.4 }}
-        />
-      </Animated.View>
-
-      {/* Decorative monolith shape */}
-      <View
-        style={[
-          styles.monolith,
-          {
-            width: width * 0.4,
-            transform: [{ skewX: '-12deg' }, { translateX: width * 0.2 }],
-            pointerEvents: 'none',
-          },
-        ]}
-      >
-        <LinearGradient
-          colors={['rgba(25, 26, 26, 0.2)', 'transparent']}
-          style={StyleSheet.absoluteFill}
-        />
       </View>
+
+      <Animated.View entering={FadeIn.delay(2200).duration(800)} style={styles.footer}>
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            router.push('/onboarding/step-2');
+          }}
+          style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}
+        >
+          <Text style={styles.btnText}>Begin My Alignment</Text>
+        </Pressable>
+        <Text style={styles.footNote}>12 questions · 3 minutes</Text>
+      </Animated.View>
     </SafeAreaView>
   );
 }
 
+// Fixed decorative stars
+const STARS = [
+  { x: '12%', y: '8%', o: 0.5 }, { x: '78%', y: '6%', o: 0.3 },
+  { x: '91%', y: '18%', o: 0.4 }, { x: '5%', y: '35%', o: 0.25 },
+  { x: '88%', y: '42%', o: 0.4 }, { x: '22%', y: '72%', o: 0.2 },
+  { x: '67%', y: '78%', o: 0.35 }, { x: '44%', y: '15%', o: 0.3 },
+  { x: '56%', y: '88%', o: 0.2 }, { x: '3%', y: '62%', o: 0.3 },
+] as const;
+
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: colors.surface,
-  },
-  scroll: {
-    padding: 24,
-    paddingBottom: 120,
-  },
+  safe:   { flex: 1, backgroundColor: OB.bg },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16, paddingHorizontal: 32 },
+  crescent: { fontSize: scaleFont(52), color: OB.gold, textAlign: 'center', marginBottom: -8 },
   logo: {
-    fontFamily: fonts.headline,
-    fontSize: 18,
-    color: colors.primary,
-    letterSpacing: -0.5,
-    marginBottom: 48,
+    fontFamily: 'Lexend_800ExtraBold',
+    fontSize: scaleFont(48),
+    color: OB.gold,
+    letterSpacing: -2,
+    textAlign: 'center',
   },
-  headerSection: {
-    marginBottom: 32,
-  },
-  meta: {
-    fontFamily: fonts.label,
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 3,
-    color: colors.secondary,
-    marginBottom: 12,
-  },
+  copy:     { alignItems: 'center', gap: 10, marginTop: 12 },
   headline: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: 36,
-    color: colors.onSurface,
-    lineHeight: 42,
-    letterSpacing: -0.5,
-    marginBottom: 12,
+    fontFamily: 'Lexend_700Bold',
+    fontSize: scaleFont(22),
+    color: OB.text,
+    letterSpacing: -0.4,
+    textAlign: 'center',
   },
-  subheadline: {
-    fontFamily: fonts.body,
-    fontSize: 16,
-    color: colors.onSurfaceVariant,
-    lineHeight: 24,
+  sub: {
+    fontFamily: 'Lexend_400Regular',
+    fontSize: scaleFont(16),
+    color: OB.muted,
+    textAlign: 'center',
   },
-  grid: {
-    gap: 12,
+  footer: { padding: 32, paddingBottom: 44, alignItems: 'center', gap: 14 },
+  btn: {
+    backgroundColor: OB.saffron,
+    paddingHorizontal: 44,
+    paddingVertical: 18,
+    borderRadius: 9999,
+    shadowColor: OB.saffron,
+    shadowOpacity: 0.35,
+    shadowRadius: 22,
+    shadowOffset: { width: 0, height: 4 },
   },
-  row: {
-    flexDirection: 'row',
-    gap: 12,
+  btnPressed: { opacity: 0.82, transform: [{ scale: 0.97 }] },
+  btnText: {
+    fontFamily: 'Lexend_600SemiBold',
+    fontSize: scaleFont(16),
+    color: '#fff',
+    letterSpacing: 0.3,
   },
-  halfCard: {
-    flex: 1,
+  footNote: {
+    fontFamily: 'Lexend_400Regular',
+    fontSize: scaleFont(12),
+    color: OB.muted,
+    letterSpacing: 0.5,
   },
-  footer: {
+  star: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 24,
-    paddingBottom: 40,
-    backgroundColor: 'rgba(14, 14, 14, 0.95)',
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 16,
-  },
-  footerDivider: {
-    flex: 1,
-    height: 1,
-    backgroundColor: 'rgba(72, 72, 72, 0.1)',
-    alignSelf: 'center',
-  },
-  monolith: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    height: '100%',
-    backgroundColor: colors.surfaceContainerLow,
-    opacity: 0.2,
+    width: 2,
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: OB.gold,
   },
 });

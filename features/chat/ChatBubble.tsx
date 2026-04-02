@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { FadeIn, SlideInRight } from 'react-native-reanimated';
 import { colors, fonts } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 import type { Message } from './useChatState';
 
 interface ChatBubbleProps {
@@ -18,7 +19,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
     >
       {isAI && (
         <View style={styles.senderRow}>
-          <Text style={styles.senderLabel}>Krishna · AI Mentor</Text>
+          <Text style={styles.senderLabel}>Aksha</Text>
         </View>
       )}
       <View style={[styles.bubble, isAI ? styles.bubbleAI : styles.bubbleUser]}>
@@ -47,18 +48,18 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   senderRow: {
-    paddingHorizontal: 4,
+    paddingHorizontal: 6,
     marginBottom: 2,
   },
   senderLabel: {
     fontFamily: fonts.label,
-    fontSize: 9,
+    fontSize: scaleFont(9),
     textTransform: 'uppercase',
     letterSpacing: 2,
     color: colors.secondaryDim,
   },
   bubble: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 22,
     paddingVertical: 14,
     borderRadius: 28,
   },
@@ -76,16 +77,16 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: fonts.body,
-    fontSize: 15,
+    fontSize: scaleFont(15),
     color: colors.onSurface,
-    lineHeight: 22,
+    lineHeight: scaleFont(22),
   },
   timestamp: {
     fontFamily: fonts.label,
-    fontSize: 9,
+    fontSize: scaleFont(9),
     textTransform: 'uppercase',
     letterSpacing: 1,
     color: colors.outline,
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
   },
 });

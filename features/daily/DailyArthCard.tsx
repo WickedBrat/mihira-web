@@ -4,6 +4,7 @@ import { View as MotiView } from 'moti/build/components/view';
 import { Quote } from 'lucide-react-native';
 import { SvgUri } from 'react-native-svg';
 import { colors, fonts } from '@/lib/theme';
+import { scaleFont } from '@/lib/typography';
 
 interface DailyArthCardProps {
   quote: string;
@@ -50,10 +51,10 @@ const styles = StyleSheet.create({
   },
   glowBehind: {
     position: 'absolute',
-    top: -24,
+    top: -28,
     left: '10%',
     right: '10%',
-    height: 60,
+    height: 68,
     backgroundColor: `${colors.primary}0D`,
     borderRadius: 9999,
     shadowColor: colors.primary,
@@ -64,9 +65,8 @@ const styles = StyleSheet.create({
   card: {
     position: 'relative',
     backgroundColor: 'rgba(37, 38, 38, 0.6)',
-    borderRadius: 32,
     overflow: 'hidden',
-    padding: 32,
+    padding: 25,
     borderWidth: 1,
     borderColor: 'rgba(72, 72, 72, 0.1)',
     alignItems: 'center',
@@ -86,21 +86,21 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   quoteIcon: {
-    marginBottom: 24,
+    marginBottom: 28,
   },
   quote: {
     fontFamily: fonts.headline,
-    fontSize: 22,
+    fontSize: scaleFont(22),
     color: colors.onSurface,
-    lineHeight: 32,
+    lineHeight: scaleFont(32),
     letterSpacing: -0.3,
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 28,
   },
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 12,
   },
   dividerLine: {
     width: 28,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   source: {
     fontFamily: fonts.label,
-    fontSize: 9,
+    fontSize: scaleFont(9),
     textTransform: 'uppercase',
     letterSpacing: 3,
     color: colors.onSurfaceVariant,
