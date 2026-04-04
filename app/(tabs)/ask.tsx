@@ -1,3 +1,4 @@
+// app/(tabs)/ask.tsx
 import React, { useRef } from 'react';
 import {
   View,
@@ -13,9 +14,12 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { SvgUri } from 'react-native-svg';
 import { ChatBubble } from '@/features/chat/ChatBubble';
 import { ChatInput } from '@/features/chat/ChatInput';
-import { PageHero } from '@/components/ui/PageHero';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
+import { PageHero } from '@/components/ui/PageHero';
 import { useChatState } from '@/features/chat/useChatState';
+import { GuideSelector } from '@/features/ask/GuideSelector';
+import { GuideLoader } from '@/features/ask/GuideLoader';
+import { useGuide } from '@/lib/guideStore';
 import { colors, fonts, layout } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 import type { Message } from '@/features/chat/useChatState';
@@ -23,6 +27,8 @@ import type { Message } from '@/features/chat/useChatState';
 const askBackgroundArt = Image.resolveAssetSource(
   require('../../assets/daily-arth-bg.svg')
 );
+
+type Phase = 'selector' | 'loading' | 'chat';
 
 function AskBackdrop() {
   return (
@@ -38,23 +44,65 @@ function AskBackdrop() {
   );
 }
 
-function TypingIndicator() {
+function TypingIndicator({ guideName }: { guideName: string | null }) {
   return (
     <Animated.View entering={FadeIn.duration(300)} style={styles.typingRow}>
       <View style={styles.typingBubble}>
         <View style={[styles.typingDot, { opacity: 0.6 }]} />
         <View style={[styles.typingDot, { opacity: 0.4 }]} />
         <View style={[styles.typingDot, { opacity: 0.2 }]} />
-        <Text style={styles.typingText}>Aksha is reflecting…</Text>
+        <Text style={styles.typingText}>
+          {guideName ? `${guideName} is reflecting…` : 'Aksha is reflecting…'}
+        </Text>
       </View>
     </Animated.View>
   );
 }
 
-export default function AskKrishnaScreen() {
-  const { messages, isTyping, inputText, setInputText, sendMessage } = useChatState();
+export default function AskScreen() {
+  const { guide, isLoading, commitToGuide } = useGuide();
+  const [phase, setPhase] = React.useState<Phase>(() =>
+    guide ? 'chat' : 'selector'
+  );
+  const [pendingGuide, setPendingGuide] = React.useState<string | null>(null);
+
+  // Resolve phase once guide store finishes loading
+  React.useEffect(() => {
+    if (!isLoading) {
+      setPhase(guide ? 'chat' : 'selector');
+    }
+  }, [isLoading, guide]);
+
+  const activeGuide = guide ?? pendingGuide;
+  const { messages, isTyping, inputText, setInputText, sendMessage } =
+    useChatState(activeGuide);
   const flatListRef = useRef<FlatList<Message>>(null);
   const insets = useSafeAreaInsets();
+
+  const handleCommit = async (guideName: string) => {
+    setPendingGuide(guideName);
+    await commitToGuide(guideName);
+    setPhase('loading');
+  };
+
+  const handleLoaderComplete = () => {
+    setPhase('chat');
+  };
+
+  if (isLoading) return <View style={styles.root} />;
+
+  if (phase === 'selector') {
+    return <GuideSelector onCommit={handleCommit} />;
+  }
+
+  if (phase === 'loading' && pendingGuide) {
+    return (
+      <GuideLoader
+        guideName={pendingGuide}
+        onComplete={handleLoaderComplete}
+      />
+    );
+  }
 
   return (
     <View style={styles.root}>
@@ -72,13 +120,15 @@ export default function AskKrishnaScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-          renderItem={({ item }) => <ChatBubble message={item} />}
+          renderItem={({ item }) => (
+            <ChatBubble message={item} senderName={activeGuide ?? 'Aksha'} />
+          )}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListHeaderComponent={(
             <SafeAreaView edges={['top']} style={styles.headerSafeArea}>
               <PageHero
                 meta="Sacred Guidance"
-                title="Ask Aksha"
+                title={`Ask ${activeGuide ?? 'Aksha'}`}
                 subtitle="Bring your doubt, conflict, or question into one clear sacred space."
                 style={styles.header}
                 titleStyle={styles.headerTitle}
@@ -86,7 +136,7 @@ export default function AskKrishnaScreen() {
               />
             </SafeAreaView>
           )}
-          ListFooterComponent={isTyping ? <TypingIndicator /> : null}
+          ListFooterComponent={isTyping ? <TypingIndicator guideName={activeGuide} /> : null}
         />
 
         <ChatInput
@@ -166,6 +216,5 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: 96,
-    // backgroundColor: 'rgba(5, 7, 10, 0.95)',
   },
 });
