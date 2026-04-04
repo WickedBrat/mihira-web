@@ -25,24 +25,25 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticLight } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
+import { useGuide } from '@/lib/guideStore';
 
 const TAB_ICONS = {
   index: Home,
-  'ask-krishna': MessageCircle,
+  ask: MessageCircle,
   gurukul: BookOpen,
   muhurat: Clock,
   profile: User,
 } as const;
 
-const TAB_LABELS = {
+type TabName = keyof typeof TAB_ICONS;
+
+const STATIC_LABELS: Record<TabName, string> = {
   index: 'Home',
-  'ask-krishna': 'Ask',
+  ask: 'Ask',
   gurukul: 'Gurukul',
   muhurat: 'Muhurat',
   profile: 'You',
-} as const;
-
-type TabName = keyof typeof TAB_ICONS;
+};
 
 const BAR_PADDING = 4;
 const BAR_HEIGHT = 74;
@@ -57,6 +58,7 @@ const SPRING = {
 export function TabBar({ state, navigation }: BottomTabBarProps) {
   const [barWidth, setBarWidth] = useState(0);
   const selectorX = useSharedValue(0);
+  const { guide } = useGuide();
 
   const tabs = state.routes.filter((route) => route.name in TAB_ICONS);
   const activeRouteKey = state.routes[state.index]?.key;
@@ -66,7 +68,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
   );
   const slotWidth = barWidth > 0 ? (barWidth - BAR_PADDING * 2) / tabs.length : 0;
   const selectorWidth =
-    slotWidth > 0 ? Math.max(0, slotWidth-4) : 0;
+    slotWidth > 0 ? Math.max(0, slotWidth - 4) : 0;
 
   useEffect(() => {
     if (!slotWidth) return;
@@ -79,6 +81,11 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
 
   const handleLayout = (event: LayoutChangeEvent) => {
     setBarWidth(event.nativeEvent.layout.width);
+  };
+
+  const getLabel = (tabName: TabName): string => {
+    if (tabName === 'ask' && guide) return `Ask ${guide}`;
+    return STATIC_LABELS[tabName];
   };
 
   return (
@@ -111,7 +118,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             const isFocused = route.key === activeRouteKey;
             const tabName = route.name as TabName;
             const Icon = TAB_ICONS[tabName];
-            const label = TAB_LABELS[tabName];
+            const label = getLabel(tabName);
 
             return (
               <Pressable
@@ -140,7 +147,11 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                     fill={isFocused ? colors.secondaryFixed : 'rgba(255,255,255,0.40)'}
                     strokeWidth={isFocused ? 2.15 : 1.7}
                   />
-                  <Text style={[styles.tabLabel, isFocused && styles.tabLabelActive]}>
+                  <Text
+                    style={[styles.tabLabel, isFocused && styles.tabLabelActive]}
+                    numberOfLines={1}
+                    adjustsFontSizeToFit
+                  >
                     {label}
                   </Text>
                 </View>
