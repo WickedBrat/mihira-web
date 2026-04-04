@@ -7,9 +7,10 @@ import type { Message } from './useChatState';
 
 interface ChatBubbleProps {
   message: Message;
+  senderName?: string;
 }
 
-export function ChatBubble({ message }: ChatBubbleProps) {
+export function ChatBubble({ message, senderName = 'Aksha' }: ChatBubbleProps) {
   const isAI = message.role === 'ai';
 
   return (
@@ -19,7 +20,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
     >
       {isAI && (
         <View style={styles.senderRow}>
-          <Text style={styles.senderLabel}>Aksha</Text>
+          <Text style={styles.senderLabel}>{senderName}</Text>
         </View>
       )}
       <View style={[styles.bubble, isAI ? styles.bubbleAI : styles.bubbleUser]}>
