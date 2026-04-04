@@ -1,6 +1,7 @@
 // features/chat/useChatState.ts
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { getHistory, saveHistory } from '@/lib/chatStorage';
+import { getGuide } from '@/features/ask/guidePersonas';
 
 export interface Message {
   id: string;
@@ -9,15 +10,20 @@ export interface Message {
   timestamp: Date;
 }
 
-const INITIAL_MESSAGE: Message = {
-  id: 'welcome',
-  role: 'ai',
-  text: "Welcome back to your sanctuary. I've been reflecting on our previous discussion about finding stillness. How is your mind feeling in this moment?",
-  timestamp: new Date(),
-};
+function buildInitialMessage(guide: string | null): Message {
+  const persona = guide ? getGuide(guide) : null;
+  return {
+    id: 'welcome',
+    role: 'ai',
+    text: persona
+      ? persona.initialMessage
+      : "Welcome back to your sanctuary. I've been reflecting on our previous discussion about finding stillness. How is your mind feeling in this moment?",
+    timestamp: new Date(),
+  };
+}
 
-export function useChatState() {
-  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
+export function useChatState(guide: string | null) {
+  const [messages, setMessages] = useState<Message[]>(() => [buildInitialMessage(guide)]);
   const [isTyping, setIsTyping] = useState(false);
   const [inputText, setInputText] = useState('');
   const abortRef = useRef<AbortController | null>(null);
@@ -58,7 +64,7 @@ export function useChatState() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text.trim(), history: historyForApi }),
+        body: JSON.stringify({ message: text.trim(), history: historyForApi, persona: guide }),
         signal: controller.signal,
       });
 
@@ -110,7 +116,7 @@ export function useChatState() {
       setIsTyping(false);
       abortRef.current = null;
     }
-  }, [messages, isTyping]);
+  }, [messages, isTyping, guide]);
 
   return { messages, isTyping, inputText, setInputText, sendMessage };
 }
