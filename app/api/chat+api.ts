@@ -1,17 +1,22 @@
 // app/api/chat+api.ts
 import { perplexityStream } from '@/lib/ai/perplexity';
-import { CHAT_SYSTEM } from '@/lib/ai/prompts';
+import { CHAT_SYSTEM, GUIDE_SYSTEM_PROMPTS } from '@/lib/ai/prompts';
 
 interface HistoryMessage { role: string; content: string }
 
 export async function POST(request: Request): Promise<Response> {
-  const { message, history = [] } = await request.json() as {
+  const { message, history = [], persona } = await request.json() as {
     message: string;
     history: HistoryMessage[];
+    persona?: string;
   };
 
+  const systemPrompt = (persona && GUIDE_SYSTEM_PROMPTS[persona])
+    ? GUIDE_SYSTEM_PROMPTS[persona]
+    : CHAT_SYSTEM;
+
   const messages = [
-    { role: 'system', content: CHAT_SYSTEM },
+    { role: 'system', content: systemPrompt },
     ...history.slice(-10),
     { role: 'user', content: message },
   ];
