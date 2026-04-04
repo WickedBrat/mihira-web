@@ -49,19 +49,12 @@ export default function Screen11() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.progress}>
-        {Array.from({ length: 11 }).map((_, i) => (
-          <View key={i} style={[styles.dot, i <= 9 && styles.dotActive]} />
-        ))}
-      </View>
-
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
         <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.label}>STEP 11 OF 12</Text>
           <Text style={styles.headline}>Choose your{'\n'}daily commitment.</Text>
           <Text style={styles.sub}>
             Meaningful change requires rhythm. You can always change this later.
@@ -143,15 +136,8 @@ export default function Screen11() {
 const styles = StyleSheet.create({
   safe:     { flex: 1, backgroundColor: OB.bg },
   scroll:   { flex: 1 },
-  progress: { flexDirection: 'row', gap: 4, paddingHorizontal: 32, paddingTop: 16, paddingBottom: 4 },
-  dot:      { flex: 1, height: 2, backgroundColor: OB.cardBorder, borderRadius: 1 },
-  dotActive:{ backgroundColor: OB.saffron },
   body:     { padding: 32, paddingTop: 32, gap: 28 },
   header:   { gap: 10 },
-  label: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(10),
-    letterSpacing: 2.5, color: OB.saffron, textTransform: 'uppercase',
-  },
   headline: {
     fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(34),
     color: OB.text, letterSpacing: -0.8, lineHeight: scaleFont(40),
@@ -219,11 +205,19 @@ const styles = StyleSheet.create({
     position: 'absolute', bottom: 0, left: 0, right: 0,
     padding: 32, paddingBottom: 44,
     backgroundColor: 'rgba(7,9,12,0.96)',
+    alignItems: 'flex-end',
   },
   btn: {
-    backgroundColor: OB.saffron, paddingVertical: 18, borderRadius: 9999,
-    alignItems: 'center', shadowColor: OB.saffron,
-    shadowOpacity: 0.25, shadowRadius: 18, shadowOffset: { width: 0, height: 4 },
+    backgroundColor: OB.saffron,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 9999,
+    alignItems: 'center',
+    shadowColor: OB.saffron,
+    shadowOpacity: 0.45,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
   },
   btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {

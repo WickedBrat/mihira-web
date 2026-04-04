@@ -35,18 +35,12 @@ export default function Screen5() {
     d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
   const fmtTime = (d: Date) =>
-    d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
   const canProceed = birthPlace.trim().length > 0;
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.progress}>
-        {Array.from({ length: 11 }).map((_, i) => (
-          <View key={i} style={[styles.dot, i <= 3 && styles.dotActive]} />
-        ))}
-      </View>
-
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.body}
@@ -54,7 +48,6 @@ export default function Screen5() {
         keyboardShouldPersistTaps="handled"
       >
         <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.label}>STEP 5 OF 12</Text>
           <Text style={styles.headline}>Your celestial{'\n'}coordinates</Text>
           <Text style={styles.sub}>
             These details let Aksha calculate your exact cosmic signature, {name.split(' ')[0]}.
@@ -116,6 +109,7 @@ export default function Screen5() {
               mode="time"
               display={Platform.OS === 'ios' ? 'spinner' : 'default'}
               value={birthTime}
+              locale="en-US"
               onChange={(_, v) => {
                 if (v) setBirthTime(v);
                 if (Platform.OS === 'android') setShowTimePicker(false);
@@ -184,15 +178,8 @@ export default function Screen5() {
 const styles = StyleSheet.create({
   safe:       { flex: 1, backgroundColor: OB.bg },
   scroll:     { flex: 1 },
-  progress:   { flexDirection: 'row', gap: 4, paddingHorizontal: 32, paddingTop: 16, paddingBottom: 4 },
-  dot:        { flex: 1, height: 2, backgroundColor: OB.cardBorder, borderRadius: 1 },
-  dotActive:  { backgroundColor: OB.saffron },
   body:       { padding: 32, paddingTop: 32, gap: 28 },
   header:     { gap: 10, marginBottom: 4 },
-  label: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(10),
-    letterSpacing: 2.5, color: OB.saffron, textTransform: 'uppercase',
-  },
   headline: {
     fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(36),
     color: OB.text, letterSpacing: -1, lineHeight: scaleFont(42),
@@ -244,11 +231,18 @@ const styles = StyleSheet.create({
     flex: 1, fontFamily: 'Lexend_400Regular',
     fontSize: scaleFont(12), color: OB.muted, lineHeight: scaleFont(18),
   },
-  footer:     { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 32, paddingBottom: 44, backgroundColor: 'rgba(7,9,12,0.95)' },
+  footer:     { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 32, paddingBottom: 44, backgroundColor: 'rgba(7,9,12,0.95)', alignItems: 'flex-end' },
   btn: {
-    backgroundColor: OB.saffron, paddingVertical: 18, borderRadius: 9999,
-    alignItems: 'center', shadowColor: OB.saffron,
-    shadowOpacity: 0.25, shadowRadius: 18, shadowOffset: { width: 0, height: 4 },
+    backgroundColor: OB.saffron,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 9999,
+    alignItems: 'center',
+    shadowColor: OB.saffron,
+    shadowOpacity: 0.45,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
   },
   btnDisabled: { opacity: 0.35 },
   btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },

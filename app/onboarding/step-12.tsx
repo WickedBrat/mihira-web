@@ -152,9 +152,6 @@ export default function Screen12() {
 
       <SafeAreaView style={styles.inner}>
         <View style={styles.top}>
-          <Animated.Text entering={FadeIn.delay(200).duration(700)} style={styles.label}>
-            STEP 12 OF 12  ·  THE THRESHOLD
-          </Animated.Text>
           <Animated.Text entering={FadeIn.delay(500).duration(700)} style={styles.headline}>
             Your axis is aligned,{'\n'}
             <Text style={styles.headlineName}>{name0}.</Text>
@@ -234,10 +231,6 @@ const styles = StyleSheet.create({
   },
   star: { position: 'absolute', backgroundColor: OB.gold },
   top:  { paddingTop: 60, gap: 16 },
-  label: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(10),
-    letterSpacing: 2.5, color: OB.saffron, textTransform: 'uppercase',
-  },
   headline: {
     fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(40),
     color: OB.text, letterSpacing: -1.2, lineHeight: scaleFont(46),

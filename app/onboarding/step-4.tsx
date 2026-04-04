@@ -25,19 +25,12 @@ export default function Screen4() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.progress}>
-        {Array.from({ length: 11 }).map((_, i) => (
-          <View key={i} style={[styles.dot, i <= 2 && styles.dotActive]} />
-        ))}
-      </View>
-
       <KeyboardAvoidingView
         style={styles.kav}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <View style={styles.body}>
           <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-            <Text style={styles.label}>STEP 4 OF 12</Text>
             <Text style={styles.headline}>What shall we call{'\n'}you in this space?</Text>
             <Text style={styles.sub}>
               A name given to a space becomes sacred.{'\n'}
@@ -90,18 +83,8 @@ export default function Screen4() {
 const styles = StyleSheet.create({
   safe:      { flex: 1, backgroundColor: OB.bg },
   kav:       { flex: 1 },
-  progress:  { flexDirection: 'row', gap: 4, paddingHorizontal: 32, paddingTop: 16, paddingBottom: 4 },
-  dot:       { flex: 1, height: 2, backgroundColor: OB.cardBorder, borderRadius: 1 },
-  dotActive: { backgroundColor: OB.saffron },
   body:      { flex: 1, paddingHorizontal: 32, paddingTop: 40, gap: 48 },
   header:    { gap: 14 },
-  label: {
-    fontFamily: 'Lexend_600SemiBold',
-    fontSize: scaleFont(10),
-    letterSpacing: 2.5,
-    color: OB.saffron,
-    textTransform: 'uppercase',
-  },
   headline: {
     fontFamily: 'Lexend_800ExtraBold',
     fontSize: scaleFont(36),
@@ -134,16 +117,18 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     marginTop: 4,
   },
-  footer:     { padding: 32, paddingBottom: 44 },
+  footer:     { padding: 32, paddingBottom: 44, alignItems: 'flex-end' },
   btn: {
     backgroundColor: OB.saffron,
-    paddingVertical: 18,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
     borderRadius: 9999,
     alignItems: 'center',
     shadowColor: OB.saffron,
-    shadowOpacity: 0.25,
-    shadowRadius: 18,
+    shadowOpacity: 0.45,
+    shadowRadius: 24,
     shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
   },
   btnDisabled: { opacity: 0.35 },
   btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },

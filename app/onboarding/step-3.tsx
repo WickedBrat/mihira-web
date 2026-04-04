@@ -53,19 +53,12 @@ export default function Screen3() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.progress}>
-        {Array.from({ length: 11 }).map((_, i) => (
-          <View key={i} style={[styles.dot, i <= 1 && styles.dotActive]} />
-        ))}
-      </View>
-
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.body}
         showsVerticalScrollIndicator={false}
       >
         <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.label}>STEP 3 OF 12</Text>
           <Text style={styles.headline}>How would you describe{'\n'}your current chapter?</Text>
         </Animated.View>
 
@@ -125,18 +118,8 @@ export default function Screen3() {
 const styles = StyleSheet.create({
   safe:     { flex: 1, backgroundColor: OB.bg },
   scroll:   { flex: 1 },
-  progress: { flexDirection: 'row', gap: 4, paddingHorizontal: 32, paddingTop: 16, paddingBottom: 4 },
-  dot:      { flex: 1, height: 2, backgroundColor: OB.cardBorder, borderRadius: 1 },
-  dotActive:{ backgroundColor: OB.saffron },
   body:     { padding: 32, paddingTop: 32, gap: 32 },
   header:   { gap: 10 },
-  label: {
-    fontFamily: 'Lexend_600SemiBold',
-    fontSize: scaleFont(10),
-    letterSpacing: 2.5,
-    color: OB.saffron,
-    textTransform: 'uppercase',
-  },
   headline: {
     fontFamily: 'Lexend_800ExtraBold',
     fontSize: scaleFont(34),
@@ -193,16 +176,19 @@ const styles = StyleSheet.create({
     padding: 32,
     paddingBottom: 44,
     backgroundColor: 'rgba(7,9,12,0.95)',
+    alignItems: 'flex-end',
   },
   btn: {
     backgroundColor: OB.saffron,
-    paddingVertical: 18,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
     borderRadius: 9999,
     alignItems: 'center',
     shadowColor: OB.saffron,
-    shadowOpacity: 0.25,
-    shadowRadius: 18,
+    shadowOpacity: 0.45,
+    shadowRadius: 24,
     shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
   },
   btnDisabled: { opacity: 0.35 },
   btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },

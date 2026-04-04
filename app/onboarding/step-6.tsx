@@ -94,15 +94,8 @@ export default function Screen6() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.progress}>
-        {Array.from({ length: 11 }).map((_, i) => (
-          <View key={i} style={[styles.dot, i <= 4 && styles.dotActive]} />
-        ))}
-      </View>
-
       <View style={styles.body}>
         <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.label}>STEP 6 OF 12</Text>
           <Text style={styles.headline}>
             {name ? `Mapping ${name}'s universe` : 'Mapping your universe'}
           </Text>
@@ -211,15 +204,8 @@ export default function Screen6() {
 
 const styles = StyleSheet.create({
   safe:     { flex: 1, backgroundColor: OB.bg },
-  progress: { flexDirection: 'row', gap: 4, paddingHorizontal: 32, paddingTop: 16, paddingBottom: 4 },
-  dot:      { flex: 1, height: 2, backgroundColor: OB.cardBorder, borderRadius: 1 },
-  dotActive:{ backgroundColor: OB.saffron },
   body:     { flex: 1, paddingHorizontal: 32, paddingTop: 28, gap: 16, alignItems: 'center' },
   header:   { alignSelf: 'stretch', gap: 8 },
-  label: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(10),
-    letterSpacing: 2.5, color: OB.saffron, textTransform: 'uppercase',
-  },
   headline: {
     fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(28),
     color: OB.text, letterSpacing: -0.6,
