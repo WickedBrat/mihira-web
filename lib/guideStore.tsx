@@ -12,7 +12,11 @@ export async function readGuide(): Promise<string | null> {
 }
 
 export async function saveGuide(name: string): Promise<void> {
-  await AsyncStorage.setItem(GUIDE_STORAGE_KEY, name);
+  try {
+    await AsyncStorage.setItem(GUIDE_STORAGE_KEY, name);
+  } catch (err) {
+    console.error('[guideStore] save error', err);
+  }
 }
 
 interface GuideContextValue {

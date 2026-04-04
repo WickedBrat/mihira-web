@@ -20,6 +20,11 @@ describe('guideStore', () => {
       mockGet.mockResolvedValueOnce('Krishna');
       expect(await readGuide()).toBe('Krishna');
     });
+
+    it('returns null when AsyncStorage throws', async () => {
+      mockGet.mockRejectedValueOnce(new Error('disk full'));
+      expect(await readGuide()).toBeNull();
+    });
   });
 
   describe('saveGuide', () => {
