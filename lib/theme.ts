@@ -65,7 +65,7 @@ export const gradients = {
 } as const;
 
 export const layout = {
-  screenPaddingX: 32,
+  screenPaddingX: 24,
 } as const;
 
 export type ColorKey = keyof typeof colors;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, TextInput, Pressable, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Send, Mic } from 'lucide-react-native';
+import { Send } from 'lucide-react-native';
 import { hapticMedium } from '@/lib/haptics';
-import { colors, fonts, gradients, layout } from '@/lib/theme';
+import { colors, fonts, gradients } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 
 interface ChatInputProps {
@@ -33,10 +33,10 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
           returnKeyType="send"
           onSubmitEditing={handleSend}
         />
-        <Pressable style={styles.micBtn} onPress={() => {}}>
-          <Mic size={20} color={colors.outline} />
-        </Pressable>
-        <Pressable onPress={handleSend} style={({ pressed }) => [styles.sendBtnWrapper, pressed && styles.pressed]}>
+        <Pressable
+          onPress={handleSend}
+          style={({ pressed }) => [styles.sendBtnWrapper, pressed && styles.pressed]}
+        >
           <LinearGradient
             colors={gradients.primaryToContainer}
             start={{ x: 0, y: 0 }}
@@ -54,7 +54,7 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 8,
   },
   inputRow: {
     flexDirection: 'row',
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     maxHeight: 100,
   },
-  micBtn: { padding: 10 },
   sendBtn: {
     width: 40,
     height: 40,
@@ -90,8 +89,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pressed: {
-    opacity: 0.8,
-  },
+  pressed: { opacity: 0.8 },
   sendBtnWrapper: {},
 });

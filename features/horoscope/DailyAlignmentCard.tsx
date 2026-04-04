@@ -62,7 +62,7 @@ export function DailyAlignmentCard({
 
   if (isLoading) {
     return (
-      <View style={styles.card}>
+      <View>
         <ActivityIndicator color={colors.primary} />
         <Text style={styles.loadingText}>Reading the cosmos…</Text>
       </View>
@@ -71,7 +71,7 @@ export function DailyAlignmentCard({
 
   if (error) {
     return (
-      <View style={styles.card}>
+      <View>
         <Text style={styles.errorText}>{error}</Text>
       </View>
     );
@@ -79,7 +79,7 @@ export function DailyAlignmentCard({
 
   if (!summary || highlights.length === 0) {
     return (
-      <View style={styles.card}>
+      <View>
         <Text style={styles.emptyText}>
           Add your birth details in Profile to unlock cosmic guidance.
         </Text>
@@ -135,15 +135,7 @@ export function DailyAlignmentCard({
 
 
   return (
-    <View style={styles.card}>
-      <Animated.View style={[StyleSheet.absoluteFill, glowStyle]}>
-        <LinearGradient
-          colors={['rgba(181, 100, 252, 0.08)', 'transparent']}
-          style={StyleSheet.absoluteFill}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        />
-      </Animated.View>
+    <View>
 
       {chart && (
         <Text style={styles.lagnaLabel}>
@@ -170,14 +162,6 @@ export function DailyAlignmentCard({
 }
 
 const styles = StyleSheet.create({
-  card: {
-    // backgroundColor: colors.surfaceContainerLow,
-    // borderRadius: 20,
-    // padding: 20,
-    // borderWidth: 1,
-    // borderColor: 'rgba(181,100,252,0.12)',
-    // overflow: 'hidden',
-  },
   lagnaLabel: {
     fontFamily: fonts.label,
     fontSize: 9,

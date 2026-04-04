@@ -6,14 +6,18 @@ import { SvgUri } from 'react-native-svg';
 import { colors, fonts } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 
-interface DailyArthCardProps {
-  quote: string;
-  source: string;
-}
+import { ActivityIndicator } from 'react-native';
+import { useDailyArth } from './useDailyArth';
 
 const dailyArthBackground = Image.resolveAssetSource(require('../../assets/daily-arth-bg.svg'));
 
-export function DailyArthCard({ quote, source }: DailyArthCardProps) {
+export function DailyArthCard() {
+  const { arth, isLoading } = useDailyArth();
+
+  // Fallback if loading or error to prevent layout jump while loading inside GlowCard
+  const displayQuote = arth?.quote ?? '';
+  const displaySource = arth?.source ?? '';
+
   return (
     <MotiView
       from={{ opacity: 0, scale: 0.96, translateY: 12 }}
@@ -24,22 +28,26 @@ export function DailyArthCard({ quote, source }: DailyArthCardProps) {
       {/* Ambient glow behind card */}
       <View style={[styles.glowBehind, { pointerEvents: 'none' }]} />
 
-      <View style={styles.card}>
+      <View style={[styles.card, isLoading && styles.cardLoading]}>
         <View pointerEvents="none" style={styles.backgroundArt}>
           {dailyArthBackground?.uri ? (
             <SvgUri uri={dailyArthBackground.uri} width="100%" height="100%" />
           ) : null}
         </View>
 
-        <View style={styles.content}>
-          <Quote size={32} color={colors.primary} style={styles.quoteIcon} />
-          <Text style={styles.quote}>{quote}</Text>
-          <View style={styles.dividerRow}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.source}>{source}</Text>
-            <View style={styles.dividerLine} />
+        {isLoading ? (
+          <ActivityIndicator size="small" color={colors.primary} style={styles.loader} />
+        ) : (
+          <View style={styles.content}>
+            <Quote size={32} color={colors.primary} style={styles.quoteIcon} />
+            <Text style={styles.quote}>{displayQuote}</Text>
+            <View style={styles.dividerRow}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.source}>The {displaySource}</Text>
+              <View style={styles.dividerLine} />
+            </View>
           </View>
-        </View>
+        )}
       </View>
     </MotiView>
   );
@@ -114,5 +122,12 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
     color: colors.onSurfaceVariant,
     fontStyle: 'italic',
+  },
+  cardLoading: {
+    minHeight: 220,
+    justifyContent: 'center',
+  },
+  loader: {
+    marginVertical: 'auto',
   },
 });

@@ -22,7 +22,23 @@ export default function GurukulScreen() {
   return (
     <View style={styles.root}>
       <PageAmbientBlobs />
-      {/* <GurukulYogiBackdrop /> */}
+      <View style={styles.comingSoonContainer}>
+        <Text style={styles.comingSoonLabel}>Gurukul</Text>
+        <Text style={styles.comingSoonTitle}>Coming Soon</Text>
+        <Text style={styles.comingSoonSubtitle}>
+          Your sacred digital library of wisdom, breathwork & philosophy is being prepared.
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+/*
+function GurukulScreenFull() {
+  return (
+    <View style={styles.root}>
+      <PageAmbientBlobs />
+      {/* <GurukulYogiBackdrop /> * /}
 
       <ScrollView
         style={styles.scroll}
@@ -89,9 +105,41 @@ export default function GurukulScreen() {
     </View>
   );
 }
+*/
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
+  comingSoonContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: layout.screenPaddingX,
+    gap: 12,
+  },
+  comingSoonLabel: {
+    fontFamily: fonts.label,
+    fontSize: scaleFont(11),
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+    color: colors.secondaryFixedDim,
+    marginBottom: 4,
+  },
+  comingSoonTitle: {
+    fontFamily: fonts.headlineExtra,
+    fontSize: scaleFont(40),
+    color: colors.onSurface,
+    letterSpacing: -0.8,
+    textAlign: 'center',
+  },
+  comingSoonSubtitle: {
+    fontFamily: fonts.label,
+    fontSize: scaleFont(15),
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: scaleFont(22),
+    maxWidth: 280,
+    marginTop: 4,
+  },
   scroll: { flex: 1 },
   scrollContent: {
     paddingTop: 84,

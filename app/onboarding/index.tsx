@@ -71,7 +71,6 @@ export default function Screen1() {
         >
           <Text style={styles.btnText}>Begin My Alignment</Text>
         </Pressable>
-        <Text style={styles.footNote}>12 questions · 3 minutes</Text>
       </Animated.View>
     </SafeAreaView>
   );
@@ -127,6 +126,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Lexend_600SemiBold',
     fontSize: scaleFont(16),
     color: '#fff',
+    textAlign: 'right',
     letterSpacing: 0.3,
   },
   footNote: {

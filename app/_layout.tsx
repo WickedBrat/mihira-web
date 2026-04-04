@@ -60,6 +60,7 @@ export default function RootLayout() {
               <Stack.Screen name="onboarding/step-11" options={{ gestureEnabled: false }} />
               <Stack.Screen name="onboarding/step-12" options={{ gestureEnabled: false, animation: 'fade' }} />
               <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
+              <Stack.Screen name="sacred-day/[id]" options={{ animation: 'slide_from_right' }} />
             </Stack>
           </ToastProvider>
         </SafeAreaProvider>

@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { GlowCard } from '@/components/ui/GlowCard';
-import { SacredButton } from '@/components/ui/SacredButton';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { PageHero } from '@/components/ui/PageHero';
 import { DailyArthCard } from '@/features/daily/DailyArthCard';
+import { SacredDayCard } from '@/features/daily/SacredDayCard';
 import { DailyAlignmentCard } from '@/features/horoscope/DailyAlignmentCard';
 import { useDailyAlignment } from '@/features/horoscope/useDailyAlignment';
+import { getTodaySacredDays } from '@/lib/sacredDays';
 import { colors, fonts, layout } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 
@@ -15,6 +16,7 @@ const SOURCE = 'The Bhagavad Gita';
 
 export default function HomeScreen() {
   const { chart, summary, highlights, reasoning, isLoading, error } = useDailyAlignment();
+  const todayEvents = getTodaySacredDays();
 
   return (
     <View style={styles.root}>
@@ -34,22 +36,29 @@ export default function HomeScreen() {
 
         {/* Glow Hero Quote Card */}
         <GlowCard style={styles.section}>
-          <DailyArthCard quote={QUOTE} source={SOURCE} />
+          <DailyArthCard />
         </GlowCard>
 
-        {/* Reflect CTA */}
-        <View style={styles.ctaSection}>
-          <SacredButton label="✦  Reflect" onPress={() => { }} />
-          <Text style={styles.ctaMeta}>4.2k others are reflecting today</Text>
-        </View>
+        {/* What's Special Today */}
+        {todayEvents.length > 0 && (
+          <View style={styles.sacredSection}>
+            <View style={styles.sacredHeader}>
+              <Text style={styles.sacredMeta}>✦  Special Today</Text>
+            </View>
 
+            <View style={styles.cardList}>
+              {todayEvents.map((day) => (
+                <SacredDayCard key={day.id} day={day} />
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Celestial Alignment */}
         <View style={styles.alignmentSection}>
           <View style={styles.alignmentHeader}>
             <Text style={styles.alignmentMeta}>Celestial Alignment</Text>
             <Text style={styles.alignmentTitle}>Cosmos Today</Text>
-            <Text style={styles.alignmentSub}>
-              Ground truth from the stars, folded into your daily home ritual.
-            </Text>
           </View>
 
           <DailyAlignmentCard
@@ -73,34 +82,62 @@ const styles = StyleSheet.create({
   },
   scroll: { flex: 1 },
   scrollContent: {
-    paddingTop: 84,
-    paddingHorizontal: layout.screenPaddingX,
+    paddingTop: 64,
     paddingBottom: 176,
     alignItems: 'center',
   },
   header: {
     paddingBottom: 40,
+    paddingHorizontal: layout.screenPaddingX,
   },
   section: {
     alignSelf: 'stretch',
     maxWidth: 480,
+    marginHorizontal: layout.screenPaddingX,
   },
-  ctaSection: {
-    marginTop: 56,
-    alignItems: 'center',
-    gap: 16,
+
+  // Sacred section
+  sacredSection: {
+    marginTop: 52,
+    alignSelf: 'stretch',
+    gap: 20,
   },
-  ctaMeta: {
+  sacredHeader: {
+    paddingHorizontal: layout.screenPaddingX,
+    gap: 6,
+  },
+  sacredMeta: {
     fontFamily: fonts.label,
-    fontSize: scaleFont(12),
-    color: colors.onSurfaceVariant,
-    opacity: 0.6,
+    fontSize: scaleFont(10),
+    textTransform: 'uppercase',
+    letterSpacing: 3,
+    color: colors.secondaryFixed,
   },
+  sacredTitle: {
+    fontFamily: fonts.headlineExtra,
+    fontSize: scaleFont(32),
+    color: colors.onSurface,
+    letterSpacing: -0.8,
+    lineHeight: scaleFont(38),
+  },
+  sacredSub: {
+    fontFamily: fonts.body,
+    fontSize: scaleFont(14),
+    color: colors.onSurfaceVariant,
+    lineHeight: scaleFont(21),
+  },
+  cardList: {
+    paddingHorizontal: layout.screenPaddingX,
+    gap: 10,
+  },
+
+  // Alignment
   alignmentSection: {
-    marginTop: 84,
+    marginTop: 64,
     alignSelf: 'stretch',
     maxWidth: 480,
     marginBottom: 40,
+    paddingHorizontal: layout.screenPaddingX,
   },
   alignmentHeader: {
     marginBottom: 16,

@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Lexend_600SemiBold',
     fontSize: scaleFont(16),
     color: '#fff',
+    textAlign: 'right',
     letterSpacing: 0.3,
   },
 });

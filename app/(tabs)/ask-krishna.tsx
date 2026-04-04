@@ -96,7 +96,6 @@ export default function AskKrishnaScreen() {
         />
       </KeyboardAvoidingView>
 
-      {/* Sits outside KAV — keeps input above the floating tab bar without being lifted by keyboard */}
       <View style={styles.bottomSpacer} />
     </View>
   );

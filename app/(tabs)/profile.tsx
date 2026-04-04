@@ -28,6 +28,9 @@ import { useSignIn } from '@/features/auth/useSignIn';
 import { colors, layout } from '@/lib/theme';
 import { clearCachedProfile } from '@/lib/profileStorage';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
+import { Pressable } from 'react-native-gesture-handler';
+import { Text } from 'lucide-react-native';
+import { router } from 'expo-router';
 
 export default function ProfileScreen() {
   const { isSignedIn, userId, signOut } = useAuth();
@@ -144,6 +147,9 @@ export default function ProfileScreen() {
           avatarUrl={user?.imageUrl ?? null}
           isSignedIn={signedIn}
         />
+        {/* <Pressable onPress={() =>router.push('/onboarding')}>
+          <Text>Profile</Text>
+        </Pressable> */}
         <ProfileFields
           profile={profile}
           onChangeField={(field, value) => updateField(field, value)}

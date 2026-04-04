@@ -46,8 +46,8 @@ type TabName = keyof typeof TAB_ICONS;
 
 const BAR_PADDING = 4;
 const BAR_HEIGHT = 74;
-const SELECTOR_HORIZONTAL_INSET = 8;
-const SELECTOR_VERTICAL_INSET = 8;
+const SELECTOR_HORIZONTAL_INSET = 0;
+const SELECTOR_VERTICAL_INSET = 5;
 const SPRING = {
   damping: 22,
   stiffness: 240,
@@ -55,7 +55,6 @@ const SPRING = {
 };
 
 export function TabBar({ state, navigation }: BottomTabBarProps) {
-  const insets = useSafeAreaInsets();
   const [barWidth, setBarWidth] = useState(0);
   const selectorX = useSharedValue(0);
 
@@ -67,7 +66,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
   );
   const slotWidth = barWidth > 0 ? (barWidth - BAR_PADDING * 2) / tabs.length : 0;
   const selectorWidth =
-    slotWidth > 0 ? Math.max(0, slotWidth - SELECTOR_HORIZONTAL_INSET * 2) : 0;
+    slotWidth > 0 ? Math.max(0, slotWidth-4) : 0;
 
   useEffect(() => {
     if (!slotWidth) return;
@@ -83,7 +82,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
   };
 
   return (
-    <View pointerEvents="box-none" style={[styles.wrapper, { bottom: 20 }]}>
+    <View pointerEvents="box-none" style={[styles.wrapper, { bottom: 10 }]}>
       <View style={styles.container} onLayout={handleLayout}>
         <BlurView intensity={36} tint="dark" style={StyleSheet.absoluteFill} />
         <View style={styles.containerTint} />
@@ -96,6 +95,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
               {
                 width: selectorWidth,
                 left: BAR_PADDING,
+                right: BAR_PADDING,
                 top: SELECTOR_VERTICAL_INSET,
                 bottom: SELECTOR_VERTICAL_INSET,
               },
@@ -199,11 +199,8 @@ const styles = StyleSheet.create({
   },
   row: {
     flex: 1,
-    display: 'flex',
     flexDirection: 'row',
-    alignItems: 'stretch',
     justifyContent: 'space-around',
-    width: '100%',
   },
   tab: {
     flex: 1,

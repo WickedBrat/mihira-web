@@ -207,7 +207,7 @@ export default function MuhuratScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   scroll: { flex: 1 },
-  content: { paddingTop: 84, paddingHorizontal: layout.screenPaddingX, paddingBottom: 176, gap: 24 },
+  content: { paddingTop: 64, paddingHorizontal: layout.screenPaddingX, paddingBottom: 176, gap: 24 },
   banner: { paddingBottom: 24 },
   title: {
     fontSize: scaleFont(38),
