@@ -40,7 +40,7 @@ export function DailyArthCard() {
         ) : (
           <View style={styles.content}>
             <Quote size={32} color={colors.primary} style={styles.quoteIcon} />
-            <Text style={styles.quote}>{displayQuote}</Text>
+            <Text style={[styles.quote, displayQuote.length > 50 && styles.quoteLong]}>{displayQuote}</Text>
             <View style={styles.dividerRow}>
               <View style={styles.dividerLine} />
               <Text style={styles.source}>The {displaySource}</Text>
@@ -122,6 +122,10 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
     color: colors.onSurfaceVariant,
     fontStyle: 'italic',
+  },
+  quoteLong: {
+    fontSize: scaleFont(17),
+    lineHeight: scaleFont(26),
   },
   cardLoading: {
     minHeight: 220,

@@ -55,7 +55,7 @@ export default function MuhuratScreen() {
   const [activeDateField, setActiveDateField] = useState<DateField>('start');
   const [isIosDateSheetOpen, setIsIosDateSheetOpen] = useState(false);
   const [iosPickerValue, setIosPickerValue] = useState(today);
-  const { windows, recommendation, suggestion, reasoning, isLoading, error } = useMuhurat(request);
+  const { rankedWindows, recommendation, confidence, suggestion, reasoning, warnings, isLoading, error } = useMuhurat(request);
 
   const applyDateSelection = (field: DateField, nextValue: Date) => {
     const normalized = normalizeDate(nextValue);
@@ -82,6 +82,7 @@ export default function MuhuratScreen() {
       DateTimePickerAndroid.open({
         value: currentValue,
         mode: 'date',
+        minimumDate: today,
         onChange: (event, pickedDate) => {
           if (event.type !== 'set' || !pickedDate) return;
           applyDateSelection(field, pickedDate);
@@ -181,9 +182,12 @@ export default function MuhuratScreen() {
         <MuhuratCard
           hasRequested={Boolean(request)}
           recommendation={recommendation}
+          confidence={confidence}
           suggestion={suggestion}
           reasoning={reasoning}
-          windows={windows}
+          warnings={warnings}
+          rankedWindows={rankedWindows}
+
           isLoading={isLoading}
           error={error}
         />
@@ -193,6 +197,7 @@ export default function MuhuratScreen() {
         visible={isIosDateSheetOpen}
         title={activeDateField === 'start' ? 'Start Date' : 'End Date'}
         value={iosPickerValue}
+        minimumDate={today}
         onChange={setIosPickerValue}
         onClose={() => setIsIosDateSheetOpen(false)}
         onConfirm={() => {

@@ -13,28 +13,21 @@ import { router } from 'expo-router';
 import { hapticLight } from '@/lib/haptics';
 import { colors, fonts } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
-import type { SacredDay } from '@/lib/sacredDays';
+import type { CalendarEvent } from '@/features/daily/useCalendarEvents';
 
-// Static require map — Metro resolves these at bundle time
-const IMAGE_MAP = {
-  'hanuman-jayanti': require('../../assets/sacred-days/hanuman-jayanti.png'),
-  'ram-navami': require('../../assets/sacred-days/ram-navami.png'),
-  'navratri': require('../../assets/sacred-days/navratri.png'),
-} as const;
+const ACCENT_COLOR = '#e8a020';
 
 interface SacredDayCardProps {
-  day: SacredDay;
+  event: CalendarEvent;
 }
 
-export function SacredDayCard({ day }: SacredDayCardProps) {
+export function SacredDayCard({ event }: SacredDayCardProps) {
   const handlePress = () => {
     hapticLight();
-    router.push(`/sacred-day/${day.id}`);
+    router.push(`/sacred-day/${event.id}`);
   };
 
-  const imageSource = IMAGE_MAP[day.imageKey];
-  // Derive a dark tinted background from the accent color
-  const bgColor = `${day.accentColor}22`;
+  const bgColor = `${ACCENT_COLOR}22`;
 
   return (
     <Pressable
@@ -42,9 +35,11 @@ export function SacredDayCard({ day }: SacredDayCardProps) {
       style={({ pressed }) => [styles.card, { backgroundColor: bgColor }, pressed && styles.cardPressed]}
     >
       {/* Right-side illustration — bleeds in from the right */}
-      <Image source={imageSource} style={styles.image} resizeMode="cover" />
+      {event.image_url ? (
+        <Image source={{ uri: event.image_url }} style={styles.image} resizeMode="cover" />
+      ) : null}
 
-      {/* Gradient: solid dark left → transparent right, so image only shows on right */}
+      {/* Gradient: solid dark left → transparent right */}
       <LinearGradient
         colors={[colors.surface, colors.surface, `${colors.surface}e0`, `${colors.surface}60`, 'transparent']}
         start={{ x: 0, y: 0 }}
@@ -54,22 +49,20 @@ export function SacredDayCard({ day }: SacredDayCardProps) {
 
       {/* Content row */}
       <View style={styles.row}>
-        {/* Star icon */}
-        <Star size={16} color={day.accentColor} fill={day.accentColor} style={styles.star} />
+        <Star size={16} color={ACCENT_COLOR} fill={ACCENT_COLOR} style={styles.star} />
 
-        {/* Label + Title */}
         <View style={styles.textBlock}>
-          <Text style={styles.label}>FESTIVAL</Text>
-          <Text style={styles.title} numberOfLines={1}>{day.title}</Text>
+          <Text style={styles.label}>
+            {event.tag ? event.tag.toUpperCase() : 'FESTIVAL'}
+          </Text>
+          <Text style={styles.title} numberOfLines={1}>{event.title}</Text>
         </View>
 
-        {/* Chevron */}
-        <View style={[styles.chevronWrap, { backgroundColor: `${day.accentColor}45` }]}>
+        <View style={[styles.chevronWrap, { backgroundColor: `${ACCENT_COLOR}45` }]}>
           <ChevronRight size={16} color={colors.onSurfaceVariant} />
         </View>
       </View>
 
-      {/* Accent border */}
       <View style={[styles.border]} />
     </Pressable>
   );

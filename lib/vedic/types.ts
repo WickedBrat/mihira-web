@@ -36,4 +36,5 @@ export interface MuhuratWindow {
   quality: string;
   type: 'abhijit' | 'chaughadiya';
   isAuspicious: boolean;
+  score?: number;  // 1–10, assigned by AI ranking
 }

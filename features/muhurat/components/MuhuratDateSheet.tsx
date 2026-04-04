@@ -8,6 +8,7 @@ interface MuhuratDateSheetProps {
   visible: boolean;
   title: string;
   value: Date;
+  minimumDate?: Date;
   onChange: (value: Date) => void;
   onClose: () => void;
   onConfirm: () => void;
@@ -17,6 +18,7 @@ export function MuhuratDateSheet({
   visible,
   title,
   value,
+  minimumDate,
   onChange,
   onClose,
   onConfirm,
@@ -43,6 +45,7 @@ export function MuhuratDateSheet({
         mode="date"
         display="spinner"
         value={value}
+        minimumDate={minimumDate}
         onChange={(_, nextValue) => {
           if (nextValue) onChange(nextValue);
         }}

@@ -5,14 +5,12 @@ import {
   getCachedDailyAlignment,
   getDailyAlignmentProfileKey,
   saveCachedDailyAlignment,
-  type DailyAlignmentHighlight,
+  type DailyFocusArea,
 } from '@/lib/dailyAlignmentStorage';
 
 interface DailyAlignmentState {
   chart: BirthChart | null;
-  summary: string | null;
-  highlights: DailyAlignmentHighlight[];
-  reasoning: string | null;
+  focusAreas: DailyFocusArea[];
   isLoading: boolean;
   error: string | null;
 }
@@ -20,7 +18,7 @@ interface DailyAlignmentState {
 export function useDailyAlignment(): DailyAlignmentState {
   const { profile } = useProfile();
   const [state, setState] = useState<DailyAlignmentState>({
-    chart: null, summary: null, highlights: [], reasoning: null, isLoading: false, error: null,
+    chart: null, focusAreas: [], isLoading: false, error: null,
   });
 
   useEffect(() => {
@@ -35,9 +33,7 @@ export function useDailyAlignment(): DailyAlignmentState {
         if (!isCancelled) {
           setState({
             chart: cached.chart,
-            summary: cached.summary,
-            highlights: cached.highlights,
-            reasoning: cached.reasoning,
+            focusAreas: cached.focusAreas ?? [],
             isLoading: false,
             error: null,
           });
@@ -66,29 +62,18 @@ export function useDailyAlignment(): DailyAlignmentState {
         }
 
         const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error ?? `Daily API failed with status ${response.status}`);
-        }
-
-        if (data.error) {
-          throw new Error(data.error);
-        }
+        if (!response.ok) throw new Error(data.error ?? `Daily API failed with status ${response.status}`);
+        if (data.error) throw new Error(data.error);
 
         const nextState = {
           chart: data.chart,
-          summary: data.summary,
-          highlights: data.highlights ?? [],
-          reasoning: data.reasoning,
+          focusAreas: Array.isArray(data.focusAreas) ? data.focusAreas : [],
         };
 
         await saveCachedDailyAlignment(profileKey, nextState);
 
         if (!isCancelled) {
-          setState({
-            ...nextState,
-            isLoading: false,
-            error: null,
-          });
+          setState({ ...nextState, isLoading: false, error: null });
         }
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Daily alignment unavailable';
@@ -99,10 +84,7 @@ export function useDailyAlignment(): DailyAlignmentState {
     };
 
     void loadDailyAlignment();
-
-    return () => {
-      isCancelled = true;
-    };
+    return () => { isCancelled = true; };
   }, [profile.birth_dt, profile.birth_place]);
 
   return state;

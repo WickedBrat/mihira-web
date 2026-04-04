@@ -1,17 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { BirthChart } from '@/lib/vedic/types';
 
-export interface DailyAlignmentHighlight {
+export interface DailyFocusArea {
+  area: string;
+  action: string;
   timeRange: string;
-  activity: string;
-  note: string;
+  suggestion: string;
+  reasoning: string;
 }
 
 export interface DailyAlignmentPayload {
   chart: BirthChart | null;
-  summary: string | null;
-  highlights: DailyAlignmentHighlight[];
-  reasoning: string | null;
+  focusAreas: DailyFocusArea[];
 }
 
 interface CachedDailyAlignment extends DailyAlignmentPayload {
@@ -19,7 +19,7 @@ interface CachedDailyAlignment extends DailyAlignmentPayload {
   profileKey: string;
 }
 
-const KEY = 'aksha_daily_alignment';
+const KEY = 'aksha_daily_alignment_v4';
 
 function getDateKey(date = new Date()) {
   const year = date.getFullYear();
@@ -43,11 +43,12 @@ export async function getCachedDailyAlignment(
     if (parsed.dateKey !== getDateKey()) return null;
     if (parsed.profileKey !== profileKey) return null;
 
+    // Invalidate cache if it's missing the new focusAreas shape
+    if (!Array.isArray(parsed.focusAreas) || parsed.focusAreas.length === 0) return null;
+
     return {
       chart: parsed.chart ?? null,
-      summary: parsed.summary ?? null,
-      highlights: parsed.highlights ?? [],
-      reasoning: parsed.reasoning ?? null,
+      focusAreas: parsed.focusAreas,
     };
   } catch {
     return null;

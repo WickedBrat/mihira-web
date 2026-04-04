@@ -4,7 +4,7 @@ import { buildBirthChart } from '@/lib/vedic/chart';
 import { parseModelJson } from '@/lib/ai/parseModelJson';
 import { perplexityChat } from '@/lib/ai/perplexity';
 import { DAILY_SYSTEM, buildDailyPrompt } from '@/lib/ai/prompts';
-import type { DailyAlignmentHighlight } from '@/lib/dailyAlignmentStorage';
+import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
 
 export async function POST(request: Request): Promise<Response> {
   try {
@@ -25,22 +25,16 @@ export async function POST(request: Request): Promise<Response> {
       { role: 'user',   content: buildDailyPrompt(chart) },
     ]);
 
-    let parsed: {
-      summary: string;
-      highlights: DailyAlignmentHighlight[];
-      reasoning: string;
-    };
+    let parsed: { focusAreas: DailyFocusArea[] };
     try {
-      parsed = parseModelJson(raw, ['summary', 'highlights', 'reasoning']);
+      parsed = parseModelJson(raw, ['focusAreas']);
     } catch {
       return Response.json({ error: 'AI response parse error', raw }, { status: 502 });
     }
 
     return Response.json({
       chart,
-      summary: parsed.summary,
-      highlights: Array.isArray(parsed.highlights) ? parsed.highlights : [],
-      reasoning: parsed.reasoning,
+      focusAreas: Array.isArray(parsed.focusAreas) ? parsed.focusAreas : [],
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';

@@ -7,16 +7,13 @@ import { DailyArthCard } from '@/features/daily/DailyArthCard';
 import { SacredDayCard } from '@/features/daily/SacredDayCard';
 import { DailyAlignmentCard } from '@/features/horoscope/DailyAlignmentCard';
 import { useDailyAlignment } from '@/features/horoscope/useDailyAlignment';
-import { getTodaySacredDays } from '@/lib/sacredDays';
+import { useCalendarEvents } from '@/features/daily/useCalendarEvents';
 import { colors, fonts, layout } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 
-const QUOTE = '"You have a right to your actions, but never to their fruits."';
-const SOURCE = 'The Bhagavad Gita';
-
 export default function HomeScreen() {
-  const { chart, summary, highlights, reasoning, isLoading, error } = useDailyAlignment();
-  const todayEvents = getTodaySacredDays();
+  const { chart, focusAreas, isLoading, error } = useDailyAlignment();
+  const { events: todayEvents } = useCalendarEvents();
 
   return (
     <View style={styles.root}>
@@ -45,10 +42,9 @@ export default function HomeScreen() {
             <View style={styles.sacredHeader}>
               <Text style={styles.sacredMeta}>✦  Special Today</Text>
             </View>
-
             <View style={styles.cardList}>
               {todayEvents.map((day) => (
-                <SacredDayCard key={day.id} day={day} />
+                <SacredDayCard key={day.id} event={day} />
               ))}
             </View>
           </View>
@@ -58,14 +54,12 @@ export default function HomeScreen() {
         <View style={styles.alignmentSection}>
           <View style={styles.alignmentHeader}>
             <Text style={styles.alignmentMeta}>Celestial Alignment</Text>
-            <Text style={styles.alignmentTitle}>Cosmos Today</Text>
+            <Text style={styles.alignmentTitle}>Your Top Focus Today</Text>
           </View>
 
           <DailyAlignmentCard
-            summary={summary}
-            highlights={highlights}
-            reasoning={reasoning}
             chart={chart}
+            focusAreas={focusAreas}
             isLoading={isLoading}
             error={error}
           />
@@ -113,19 +107,6 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
     color: colors.secondaryFixed,
   },
-  sacredTitle: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: scaleFont(32),
-    color: colors.onSurface,
-    letterSpacing: -0.8,
-    lineHeight: scaleFont(38),
-  },
-  sacredSub: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(14),
-    color: colors.onSurfaceVariant,
-    lineHeight: scaleFont(21),
-  },
   cardList: {
     paddingHorizontal: layout.screenPaddingX,
     gap: 10,
@@ -140,7 +121,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.screenPaddingX,
   },
   alignmentHeader: {
-    marginBottom: 16,
+    marginBottom: 24,
     gap: 8,
   },
   alignmentMeta: {
@@ -152,15 +133,9 @@ const styles = StyleSheet.create({
   },
   alignmentTitle: {
     fontFamily: fonts.headlineExtra,
-    fontSize: scaleFont(32),
+    fontSize: scaleFont(36),
     color: colors.onSurface,
     letterSpacing: -0.8,
-    lineHeight: scaleFont(38),
-  },
-  alignmentSub: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(15),
-    color: colors.onSurfaceVariant,
-    lineHeight: scaleFont(22),
+    lineHeight: scaleFont(42),
   },
 });

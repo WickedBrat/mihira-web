@@ -1,24 +1,20 @@
 // app/api/wisdom/muhurat+api.ts
-import { geocode } from '@/lib/vedic/geocode';
-import { buildBirthChart } from '@/lib/vedic/chart';
-import { getMuhuratWindowsForRange } from '@/lib/vedic/muhurat';
 import { parseModelJson } from '@/lib/ai/parseModelJson';
 import { perplexityChat } from '@/lib/ai/perplexity';
 import { MUHURAT_SYSTEM, buildMuhuratPrompt } from '@/lib/ai/prompts';
+import type { MuhuratWindow } from '@/lib/vedic/types';
 
 export async function POST(request: Request): Promise<Response> {
   try {
-    const { birthDt, birthPlace, eventDescription, startDate, endDate } = await request.json() as {
-      birthDt: string;
-      birthPlace: string;
+    const { eventDescription, startDate, endDate } = await request.json() as {
       eventDescription: string;
       startDate: string;
       endDate: string;
     };
 
-    if (!birthDt || !birthPlace || !eventDescription || !startDate || !endDate) {
+    if (!eventDescription || !startDate || !endDate) {
       return Response.json(
-        { error: 'birthDt, birthPlace, eventDescription, startDate, and endDate are required' },
+        { error: 'eventDescription, startDate, and endDate are required' },
         { status: 400 }
       );
     }
@@ -33,35 +29,43 @@ export async function POST(request: Request): Promise<Response> {
       return Response.json({ error: 'Start date must be before end date' }, { status: 400 });
     }
 
-    const days = Math.floor((end.getTime() - start.getTime()) / 86400000) + 1;
-    if (days > 14) {
-      return Response.json({ error: 'Please choose a date range of 14 days or fewer' }, { status: 400 });
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    if (start.getTime() < todayStart.getTime()) {
+      return Response.json({ error: 'Start date must be today or a future date' }, { status: 400 });
     }
-
-    const { lat, lng } = await geocode(birthPlace);
-    const chart = await buildBirthChart(birthDt, lat, lng);
-    const windows = getMuhuratWindowsForRange(start, end, lat, lng, eventDescription);
 
     const raw = await perplexityChat('sonar-pro', [
       { role: 'system', content: MUHURAT_SYSTEM },
-      {
-        role: 'user',
-        content: buildMuhuratPrompt(eventDescription, chart, windows, startDate, endDate),
-      },
+      { role: 'user', content: buildMuhuratPrompt(eventDescription, startDate, endDate) },
     ]);
 
-    let parsed: { recommendation: string; suggestion: string; reasoning: string };
+    let parsed: {
+      recommendation: string;
+      confidence: string;
+      suggestion: string;
+      reasoning: string;
+      warnings: string;
+      rankedWindows?: MuhuratWindow[];
+    };
     try {
       parsed = parseModelJson(raw, ['recommendation', 'suggestion', 'reasoning']);
     } catch {
       return Response.json({ error: 'AI response parse error', raw }, { status: 502 });
     }
 
+    const rankedWindows = (parsed.rankedWindows ?? [])
+      .filter(w => w.isAuspicious)
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+      .slice(0, 10);
+
     return Response.json({
-      windows,
+      rankedWindows,
       recommendation: parsed.recommendation,
+      confidence: parsed.confidence ?? 'Medium',
       suggestion: parsed.suggestion,
       reasoning: parsed.reasoning,
+      warnings: parsed.warnings ?? 'None',
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';

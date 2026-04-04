@@ -1,6 +1,5 @@
 // features/muhurat/useMuhurat.ts
 import { useState, useEffect } from 'react';
-import { useProfile } from '@/features/profile/useProfile';
 import type { MuhuratWindow } from '@/lib/vedic/types';
 
 export interface MuhuratRequest {
@@ -10,23 +9,24 @@ export interface MuhuratRequest {
 }
 
 interface MuhuratState {
-  windows: MuhuratWindow[];
+  rankedWindows: MuhuratWindow[];
   recommendation: string | null;
+  confidence: string | null;
   suggestion: string | null;
   reasoning: string | null;
+  warnings: string | null;
   isLoading: boolean;
   error: string | null;
 }
 
 export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
-  const { profile } = useProfile();
   const [state, setState] = useState<MuhuratState>({
-    windows: [], recommendation: null, suggestion: null,
-    reasoning: null, isLoading: false, error: null,
+    rankedWindows: [], recommendation: null, confidence: null,
+    suggestion: null, reasoning: null, warnings: null, isLoading: false, error: null,
   });
 
   useEffect(() => {
-    if (!profile.birth_dt || !profile.birth_place || !request) return;
+    if (!request) return;
 
     setState(s => ({ ...s, isLoading: true, error: null }));
 
@@ -34,8 +34,6 @@ export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        birthDt: profile.birth_dt,
-        birthPlace: profile.birth_place,
         eventDescription: request.eventDescription,
         startDate: request.startDate,
         endDate: request.endDate,
@@ -64,17 +62,19 @@ export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
           setState(s => ({ ...s, isLoading: false, error: data.error }));
         } else {
           setState({
-            windows: data.windows,
+            rankedWindows: data.rankedWindows ?? [],
             recommendation: data.recommendation,
+            confidence: data.confidence ?? null,
             suggestion: data.suggestion,
             reasoning: data.reasoning,
+            warnings: data.warnings ?? null,
             isLoading: false,
             error: null,
           });
         }
       })
       .catch((err: Error) => setState(s => ({ ...s, isLoading: false, error: err.message })));
-  }, [profile.birth_dt, profile.birth_place, request]);
+  }, [request]);
 
   return state;
 }

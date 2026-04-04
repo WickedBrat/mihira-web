@@ -8,6 +8,7 @@ import {
   Pressable,
   StyleSheet,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -18,22 +19,29 @@ import { ChevronLeft, Sparkles } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
 import { colors, fonts, layout } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
-import { getSacredDayById } from '@/lib/sacredDays';
+import { useCalendarEventById } from '@/features/daily/useCalendarEvents';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_CLEAR_HEIGHT = SCREEN_HEIGHT * 0.48;
 
-const IMAGE_MAP = {
-  'hanuman-jayanti': require('../../assets/sacred-days/hanuman-jayanti.png'),
-  'ram-navami': require('../../assets/sacred-days/ram-navami.png'),
-  'navratri': require('../../assets/sacred-days/navratri.png'),
-} as const;
+const ACCENT_COLOR = '#e8a020';
 
 export default function SacredDayDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const day = getSacredDayById(id);
+  const numericId = id ? parseInt(id, 10) : null;
+  const { event: day, isLoading, error } = useCalendarEventById(numericId);
 
-  if (!day) {
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.root}>
+        <View style={styles.notFound}>
+          <ActivityIndicator color={colors.onSurface} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!day || error) {
     return (
       <SafeAreaView style={styles.root}>
         <View style={styles.notFound}>
@@ -47,16 +55,23 @@ export default function SacredDayDetailScreen() {
     );
   }
 
+  const rituals = day.rituals ?? [];
+  const tag = day.tag ?? 'Sacred Day';
+
   return (
     <View style={styles.root}>
       {/* Full-screen fixed background image */}
-      <Image
-        source={IMAGE_MAP[day.imageKey]}
-        style={styles.bgImage}
-        resizeMode="cover"
-      />
+      {day.image_url ? (
+        <Image
+          source={{ uri: day.image_url }}
+          style={styles.bgImage}
+          resizeMode="cover"
+        />
+      ) : (
+        <View style={[styles.bgImage, { backgroundColor: `${ACCENT_COLOR}22` }]} />
+      )}
 
-      {/* Subtle dark overlay so image doesn't overpower on the clear half */}
+      {/* Subtle dark overlay */}
       <LinearGradient
         colors={['rgba(0,0,0,0.08)', 'rgba(0,0,0,0.18)', 'rgba(0,0,0,0.55)']}
         locations={[0, 0.45, 1]}
@@ -64,7 +79,7 @@ export default function SacredDayDetailScreen() {
         pointerEvents="none"
       />
 
-      {/* Back button — floats over image, always visible */}
+      {/* Back button */}
       <SafeAreaView edges={['top']} style={styles.backButtonLayer} pointerEvents="box-none">
         <Pressable
           style={styles.backPill}
@@ -74,82 +89,79 @@ export default function SacredDayDetailScreen() {
         </Pressable>
       </SafeAreaView>
 
-      {/* ScrollView: transparent spacer then glass content panel */}
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Transparent spacer — the image shows clearly through this */}
         <View style={styles.imageSpacer} />
 
-        {/* Glass panel — content lives here, image stays fixed behind it */}
         <BlurView intensity={55} tint="dark" style={styles.glassPanel}>
-          {/* Top edge shimmer */}
-          <View style={[styles.glassTopBorder, { borderColor: `${day.accentColor}30` }]} />
+          <View style={[styles.glassTopBorder, { borderColor: `${ACCENT_COLOR}30` }]} />
 
           <View style={styles.content}>
-            {/* Accent tag */}
+            {/* Tag */}
             <Animated.View
               entering={FadeInDown.delay(100).duration(500)}
-              style={[styles.tag, { backgroundColor: `${day.accentColor}22`, borderColor: `${day.accentColor}44` }]}
+              style={[styles.tag, { backgroundColor: `${ACCENT_COLOR}22`, borderColor: `${ACCENT_COLOR}44` }]}
             >
-              <Sparkles size={11} color={day.accentColor} />
-              <Text style={[styles.tagText, { color: day.accentColor }]}>
-                Sacred Day
+              <Sparkles size={11} color={ACCENT_COLOR} />
+              <Text style={[styles.tagText, { color: ACCENT_COLOR }]}>
+                {tag.charAt(0).toUpperCase() + tag.slice(1)}
               </Text>
             </Animated.View>
 
             <Animated.Text entering={FadeInDown.delay(160).duration(500)} style={styles.title}>
               {day.title}
             </Animated.Text>
-            <Animated.Text entering={FadeInDown.delay(200).duration(500)} style={styles.subtitle}>
-              {day.subtitle}
-            </Animated.Text>
+            {day.short_description ? (
+              <Animated.Text entering={FadeInDown.delay(200).duration(500)} style={styles.subtitle}>
+                {day.short_description}
+              </Animated.Text>
+            ) : null}
 
             {/* Mantra block */}
-            {day.mantra && (
+            {day.mantra ? (
               <Animated.View
                 entering={FadeInDown.delay(260).duration(500)}
-                style={[styles.mantraCard, { borderColor: `${day.accentColor}30` }]}
+                style={[styles.mantraCard, { borderColor: `${ACCENT_COLOR}30` }]}
               >
                 <LinearGradient
-                  colors={[`${day.accentColor}18`, `${day.accentColor}08`]}
+                  colors={[`${ACCENT_COLOR}18`, `${ACCENT_COLOR}08`]}
                   style={StyleSheet.absoluteFill}
                 />
                 <Text style={styles.mantraDevanagari}>{day.mantra}</Text>
-                {day.mantraTranslation && (
-                  <Text style={styles.mantraTranslation}>{day.mantraTranslation}</Text>
-                )}
               </Animated.View>
-            )}
+            ) : null}
 
             {/* Significance */}
-            <Animated.View entering={FadeInDown.delay(320).duration(500)} style={styles.section}>
-              <Text style={styles.sectionLabel}>Significance</Text>
-              <Text style={styles.body}>{day.significance}</Text>
-            </Animated.View>
+            {day.significance ? (
+              <Animated.View entering={FadeInDown.delay(320).duration(500)} style={styles.section}>
+                <Text style={styles.sectionLabel}>Significance</Text>
+                <Text style={styles.body}>{day.significance}</Text>
+              </Animated.View>
+            ) : null}
 
-            {/* How to observe */}
-            <Animated.View entering={FadeInDown.delay(380).duration(500)} style={styles.section}>
-              <Text style={styles.sectionLabel}>How to Observe</Text>
-              <View style={styles.stepList}>
-                {day.howToObserve.map((step, i) => (
-                  <View key={i} style={styles.stepRow}>
-                    <View style={[styles.stepDot, { backgroundColor: day.accentColor }]} />
-                    <Text style={styles.stepText}>{step}</Text>
-                  </View>
-                ))}
-              </View>
-            </Animated.View>
-
-            {/* Tags */}
-            <Animated.View entering={FadeInDown.delay(440).duration(500)} style={styles.tagRow}>
-              {day.tags.map((tag) => (
-                <View key={tag} style={styles.tagChip}>
-                  <Text style={styles.tagChipText}>{tag}</Text>
+            {/* Rituals */}
+            {rituals.length > 0 ? (
+              <Animated.View entering={FadeInDown.delay(380).duration(500)} style={styles.section}>
+                <Text style={styles.sectionLabel}>How to Observe</Text>
+                <View style={styles.stepList}>
+                  {rituals.map((step, i) => (
+                    <View key={i} style={styles.stepRow}>
+                      <View style={[styles.stepDot, { backgroundColor: ACCENT_COLOR }]} />
+                      <Text style={styles.stepText}>{step}</Text>
+                    </View>
+                  ))}
                 </View>
-              ))}
+              </Animated.View>
+            ) : null}
+
+            {/* Tag chip */}
+            <Animated.View entering={FadeInDown.delay(440).duration(500)} style={styles.tagRow}>
+              <View style={styles.tagChip}>
+                <Text style={styles.tagChipText}>{tag}</Text>
+              </View>
             </Animated.View>
           </View>
         </BlurView>
@@ -161,7 +173,6 @@ export default function SacredDayDetailScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#0a0a0a' },
 
-  // Fixed full-screen image
   bgImage: {
     position: 'absolute',
     top: 0,
@@ -172,7 +183,6 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 
-  // Back button layer
   backButtonLayer: {
     position: 'absolute',
     top: 0,
@@ -193,16 +203,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  // ScrollView
   scroll: { flex: 1 },
   scrollContent: { flexGrow: 1 },
 
-  // Transparent area — image shows clearly here
   imageSpacer: {
     height: IMAGE_CLEAR_HEIGHT,
   },
 
-  // Glass content panel
   glassPanel: {
     minHeight: SCREEN_HEIGHT * 0.6,
     paddingBottom: 120,
@@ -218,7 +225,6 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
 
-  // Content
   content: {
     paddingHorizontal: layout.screenPaddingX,
     paddingTop: 20,
@@ -257,7 +263,6 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
 
-  // Mantra card
   mantraCard: {
     borderRadius: 16,
     borderWidth: 1,
@@ -274,16 +279,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: 1,
   },
-  mantraTranslation: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(13),
-    color: 'rgba(255,255,255,0.6)',
-    textAlign: 'center',
-    lineHeight: scaleFont(20),
-    fontStyle: 'italic',
-  },
 
-  // Sections
   section: {
     marginBottom: 28,
     gap: 12,
@@ -302,7 +298,6 @@ const styles = StyleSheet.create({
     lineHeight: scaleFont(24),
   },
 
-  // Steps
   stepList: { gap: 12 },
   stepRow: {
     flexDirection: 'row',
@@ -324,7 +319,6 @@ const styles = StyleSheet.create({
     lineHeight: scaleFont(22),
   },
 
-  // Tag chips
   tagRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -346,7 +340,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
 
-  // Error
   notFound: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
   notFoundText: { fontFamily: fonts.body, fontSize: scaleFont(16), color: colors.onSurfaceVariant },
   backBtn: {
