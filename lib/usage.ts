@@ -49,10 +49,9 @@ export function useUsage(feature: Feature): UseUsageReturn {
   const getClient = useCallback(async () => {
     if (!isSignedIn || !userId || !isSessionLoaded) return null;
     try {
-      let token = await session?.getToken();
-      if (!token) token = await session?.getToken({ template: 'supabase' });
+      const token = await session?.getToken() ?? await session?.getToken({ template: 'supabase' });
       if (!token) return null;
-      return getSupabaseClient(async () => token);
+      return getSupabaseClient(() => session!.getToken());
     } catch {
       return null;
     }
@@ -69,7 +68,11 @@ export function useUsage(feature: Feature): UseUsageReturn {
 
     async function load() {
       const client = await getClient();
-      if (!client || cancelled) return;
+      if (cancelled) return;
+      if (!client) {
+        setIsLoaded(true);
+        return;
+      }
 
       const { data } = await client
         .from('user_usage')
@@ -133,6 +136,7 @@ export function useUsage(feature: Feature): UseUsageReturn {
 
     if (error) {
       console.error('[useUsage] increment error', error);
+      setCount(baseCount); // rollback to pre-increment count
     }
   }, [isSignedIn, userId, feature, getClient]);
 
