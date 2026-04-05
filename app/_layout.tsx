@@ -63,39 +63,42 @@ export default function RootLayout() {
 
   return (
     <ClerkProvider publishableKey={CLERK_KEY} tokenCache={tokenCache}>
-      <StripeProvider publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? ''}>
+      <StripeProvider
+          publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? ''}
+          urlScheme="aksha"
+        >
         <GestureHandlerRootView style={{ flex: 1 }}>
-        <SafeAreaProvider>
-          <PostHogProvider
-            client={posthog}
-            autocapture={{
-              captureScreens: false,
-              captureTouches: true,
-              propsToCapture: ['testID'],
-            }}
-          >
-            <ToastProvider>
-              <ScreenTracker />
-              <StatusBar style="light" backgroundColor="#0e0e0e" />
-              <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0e0e0e' } }}>
-                <Stack.Screen name="onboarding/index"   options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-2"  options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-3"  options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-4"  options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-5"  options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-6"  options={{ gestureEnabled: false, animation: 'fade' }} />
-                <Stack.Screen name="onboarding/step-7"  options={{ gestureEnabled: false, animation: 'fade' }} />
-                <Stack.Screen name="onboarding/step-8"  options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-9"  options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-10" options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-11" options={{ gestureEnabled: false }} />
-                <Stack.Screen name="onboarding/step-12" options={{ gestureEnabled: false, animation: 'fade' }} />
-                <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
-                <Stack.Screen name="sacred-day/[id]" options={{ animation: 'slide_from_right' }} />
-              </Stack>
-            </ToastProvider>
-          </PostHogProvider>
-        </SafeAreaProvider>
+          <SafeAreaProvider>
+            <PostHogProvider
+              client={posthog}
+              autocapture={{
+                captureScreens: false,
+                captureTouches: true,
+                propsToCapture: ['testID'],
+              }}
+            >
+              <ToastProvider>
+                <ScreenTracker />
+                <StatusBar style="light" backgroundColor="#0e0e0e" />
+                <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0e0e0e' } }}>
+                  <Stack.Screen name="onboarding/index"   options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-2"  options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-3"  options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-4"  options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-5"  options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-6"  options={{ gestureEnabled: false, animation: 'fade' }} />
+                  <Stack.Screen name="onboarding/step-7"  options={{ gestureEnabled: false, animation: 'fade' }} />
+                  <Stack.Screen name="onboarding/step-8"  options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-9"  options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-10" options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-11" options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="onboarding/step-12" options={{ gestureEnabled: false, animation: 'fade' }} />
+                  <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
+                  <Stack.Screen name="sacred-day/[id]" options={{ animation: 'slide_from_right' }} />
+                </Stack>
+              </ToastProvider>
+            </PostHogProvider>
+          </SafeAreaProvider>
         </GestureHandlerRootView>
       </StripeProvider>
     </ClerkProvider>
