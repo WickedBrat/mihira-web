@@ -43,7 +43,7 @@ export function PaywallSheet({
   const labelPlural = FEATURE_LABEL_PLURAL[feature];
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} sheetStyle={styles.sheet}>
+    <BottomSheet visible={visible} onClose={onClose} sheetStyle={styles.sheet} panEnabled={mode !== 'blocked'}>
       <View style={styles.header}>
         <View style={styles.iconWrap}>
           <Zap size={22} color={colors.secondaryFixed} />
@@ -132,9 +132,9 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: `${colors.secondaryFixed}18`,
+    backgroundColor: 'rgba(255, 149, 0, 0.09)',
     borderWidth: 1,
-    borderColor: `${colors.secondaryFixed}22`,
+    borderColor: 'rgba(255, 149, 0, 0.13)',
   },
   closeButton: {
     width: 36,
