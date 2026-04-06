@@ -1,5 +1,5 @@
 // lib/subscription.ts
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useClerk, useAuth } from '@clerk/clerk-expo';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useToast } from '@/components/ui/ToastProvider';
@@ -24,6 +24,7 @@ export function useSubscription(): UseSubscriptionReturn {
 
   const [plan, setPlan] = useState<Plan>('free');
   const [isLoaded, setIsLoaded] = useState(false);
+  const isCheckingOutRef = useRef(false);
 
   const fetchSubscription = useCallback(async () => {
     if (!isSignedIn) {
@@ -62,6 +63,9 @@ export function useSubscription(): UseSubscriptionReturn {
       });
       return;
     }
+
+    if (isCheckingOutRef.current) return;
+    isCheckingOutRef.current = true;
 
     const planId = process.env.EXPO_PUBLIC_CLERK_PRO_PLAN_ID;
     if (!planId) {
@@ -124,6 +128,12 @@ export function useSubscription(): UseSubscriptionReturn {
 
       if (confirmError) {
         console.error('[useSubscription] confirm error', confirmError);
+        showToast({
+          type: 'error',
+          title: 'Activation failed',
+          message: 'Payment received but activation failed. Please contact support.',
+        });
+        return;
       }
 
       await checkoutInstance.finalize?.();
@@ -136,6 +146,8 @@ export function useSubscription(): UseSubscriptionReturn {
     } catch (err) {
       console.error('[useSubscription] openCheckout error', err);
       showToast({ type: 'error', title: 'Something went wrong', message: 'Please try again.' });
+    } finally {
+      isCheckingOutRef.current = false;
     }
   }, [isSignedIn, clerk, initPaymentSheet, presentPaymentSheet, showToast, posthog, fetchSubscription]);
 
