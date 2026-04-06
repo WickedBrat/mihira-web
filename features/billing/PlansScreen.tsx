@@ -11,6 +11,7 @@ import { scaleFont } from '@/lib/typography';
 
 interface PlansScreenProps {
   isPro: boolean;
+  isCheckoutLoading?: boolean;
   onUpgrade: () => void;
   onClose: () => void;
 }
@@ -49,7 +50,7 @@ function FeatureRow({ label, freeValue, proValue }: FeatureRowProps) {
   );
 }
 
-export function PlansScreen({ isPro, onUpgrade, onClose }: PlansScreenProps) {
+export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClose }: PlansScreenProps) {
   return (
     <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
       <PageAmbientBlobs />
@@ -119,8 +120,8 @@ export function PlansScreen({ isPro, onUpgrade, onClose }: PlansScreenProps) {
 
         {!isPro && (
           <SacredButton
-            label="Upgrade to Pro — $19.99/mo"
-            onPress={onUpgrade}
+            label={isCheckoutLoading ? 'Opening checkout…' : 'Upgrade to Pro — $19.99/mo'}
+            onPress={isCheckoutLoading ? () => {} : onUpgrade}
             style={styles.upgradeCta}
           />
         )}
