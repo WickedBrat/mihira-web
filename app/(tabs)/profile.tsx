@@ -32,8 +32,6 @@ import { useSubscription } from '@/lib/subscription';
 import { colors, layout } from '@/lib/theme';
 import { clearCachedProfile } from '@/lib/profileStorage';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
-import { Pressable } from 'react-native-gesture-handler';
-import { Text } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { usePostHog } from 'posthog-react-native';
 
@@ -53,7 +51,7 @@ export default function ProfileScreen() {
   const authSheetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { clearGuide } = useGuide();
-  const { isPro, openCheckout } = useSubscription();
+  const { isPro } = useSubscription();
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -157,22 +155,24 @@ export default function ProfileScreen() {
           isSignedIn={signedIn}
           badgeLabel={isPro ? 'Aksha PRO' : 'Aksha FREE'}
         />
-        <View style={styles.debugActions}>
-          <SacredButton
-            label="Reset Ask Tab State"
-            onPress={async () => {
-              await clearGuide();
-              posthog.capture('guide_reset');
-              showToast({ type: 'success', title: 'Guide Reset', message: 'The ask tab state has been cleared.' });
-            }}
-            variant="secondary"
-          />
-          <SacredButton
-            label="Trigger Onboarding Flow"
-            onPress={() => router.push('/onboarding')}
-            variant="secondary"
-          />
-        </View>
+        {__DEV__ && (
+          <View style={styles.debugActions}>
+            <SacredButton
+              label="Reset Ask Tab State"
+              onPress={async () => {
+                await clearGuide();
+                posthog.capture('guide_reset');
+                showToast({ type: 'success', title: 'Guide Reset', message: 'The ask tab state has been cleared.' });
+              }}
+              variant="secondary"
+            />
+            <SacredButton
+              label="Trigger Onboarding Flow"
+              onPress={() => router.push('/onboarding')}
+              variant="secondary"
+            />
+          </View>
+        )}
         <ProfileFields
           profile={profile}
           onChangeField={(field, value) => updateField(field, value)}
