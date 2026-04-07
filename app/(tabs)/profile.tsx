@@ -4,11 +4,14 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
+import { SacredButton } from '@/components/ui/SacredButton';
+import { useGuide } from '@/lib/guideStore';
 import { ProfileAuthSheet } from '@/features/profile/components/ProfileAuthSheet';
 import { ProfileDateTimeSheet } from '@/features/profile/components/ProfileDateTimeSheet';
 import { ProfileFields } from '@/features/profile/components/ProfileFields';
@@ -25,18 +28,21 @@ import {
   mergeDateAndTime,
 } from '@/features/profile/utils';
 import { useSignIn } from '@/features/auth/useSignIn';
+import { useSubscription } from '@/lib/subscription';
 import { colors, layout } from '@/lib/theme';
 import { clearCachedProfile } from '@/lib/profileStorage';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { Pressable } from 'react-native-gesture-handler';
 import { Text } from 'lucide-react-native';
 import { router } from 'expo-router';
+import { usePostHog } from 'posthog-react-native';
 
 export default function ProfileScreen() {
   const { isSignedIn, userId, signOut } = useAuth();
   const { user } = useUser();
   const { showToast } = useToast();
   const { profile, updateField } = useProfile();
+  const posthog = usePostHog();
   const signedIn = Boolean(isSignedIn);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAuthSheetOpen, setIsAuthSheetOpen] = useState(false);
@@ -45,6 +51,9 @@ export default function ProfileScreen() {
   const [iosPickerValue, setIosPickerValue] = useState(DEFAULT_BIRTH_DATE);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const authSheetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const { clearGuide } = useGuide();
+  const { isPro, openCheckout } = useSubscription();
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -146,10 +155,24 @@ export default function ProfileScreen() {
           initials={initials}
           avatarUrl={user?.imageUrl ?? null}
           isSignedIn={signedIn}
+          badgeLabel={isPro ? 'Aksha PRO' : 'Aksha FREE'}
         />
-        {/* <Pressable onPress={() =>router.push('/onboarding')}>
-          <Text>Profile</Text>
-        </Pressable> */}
+        <View style={styles.debugActions}>
+          <SacredButton
+            label="Reset Ask Tab State"
+            onPress={async () => {
+              await clearGuide();
+              posthog.capture('guide_reset');
+              showToast({ type: 'success', title: 'Guide Reset', message: 'The ask tab state has been cleared.' });
+            }}
+            variant="secondary"
+          />
+          <SacredButton
+            label="Trigger Onboarding Flow"
+            onPress={() => router.push('/onboarding')}
+            variant="secondary"
+          />
+        </View>
         <ProfileFields
           profile={profile}
           onChangeField={(field, value) => updateField(field, value)}
@@ -171,6 +194,8 @@ export default function ProfileScreen() {
         onOpenAuth={openAuthSheet}
         onSignOut={async () => {
           try {
+            posthog.capture('user_signed_out');
+            posthog.reset();
             await signOut();
             await clearCachedProfile();
             closeSettingsSheet();
@@ -227,5 +252,10 @@ const styles = StyleSheet.create({
   },
   scrollContentKeyboardVisible: {
     paddingBottom: 36,
+  },
+  debugActions: {
+    paddingHorizontal: layout.screenPaddingX,
+    paddingVertical: 16,
+    gap: 12,
   },
 });
