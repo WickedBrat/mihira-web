@@ -51,8 +51,8 @@ export default function MuhuratScreen() {
     return normalizeDate(next);
   }, [today]);
   const { showToast } = useToast();
-  const { isPro, openCheckout } = useSubscription();
-  const { isAtLimit, isNearLimit, increment } = useUsage('muhurat');
+  const { isPro, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
+  const { isAtLimit, isNearLimit, isLoaded: isUsageLoaded, increment } = useUsage('muhurat');
   const [paywallMode, setPaywallMode] = useState<'warning' | 'blocked' | null>(null);
   const pendingQueryRef = useRef<(() => void) | null>(null);
   const [eventDescription, setEventDescription] = useState('');
@@ -206,7 +206,11 @@ export default function MuhuratScreen() {
             </Pressable>
           </View>
 
-          <SacredButton label="Find Auspicious Windows" onPress={handleFindMuhurat} style={styles.cta} />
+          <SacredButton
+            label="Find Auspicious Windows"
+            onPress={(!isSubscriptionLoaded || !isUsageLoaded) ? () => {} : handleFindMuhurat}
+            style={styles.cta}
+          />
         </View>
 
         <MuhuratCard
@@ -249,9 +253,10 @@ export default function MuhuratScreen() {
           openCheckout();
         }}
         onProceed={() => {
-          setPaywallMode(null);
-          pendingQueryRef.current?.();
+          const fn = pendingQueryRef.current;
           pendingQueryRef.current = null;
+          setPaywallMode(null);
+          fn?.();
         }}
       />
     </View>
