@@ -20,6 +20,9 @@ import { useChatState } from '@/features/chat/useChatState';
 import { GuideSelector } from '@/features/ask/GuideSelector';
 import { GuideLoader } from '@/features/ask/GuideLoader';
 import { useGuide } from '@/lib/guideStore';
+import { useUsage } from '@/lib/usage';
+import { useSubscription } from '@/lib/subscription';
+import { PaywallSheet } from '@/features/billing/PaywallSheet';
 import { colors, fonts, layout } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 import type { Message } from '@/features/chat/useChatState';
@@ -61,6 +64,10 @@ function TypingIndicator({ guideName }: { guideName: string | null }) {
 
 export default function AskScreen() {
   const { guide, isLoading, commitToGuide } = useGuide();
+  const { isPro, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
+  const { isAtLimit, isNearLimit, isLoaded: isUsageLoaded, increment } = useUsage('ask');
+  const [paywallMode, setPaywallMode] = React.useState<'warning' | 'blocked' | null>(null);
+  const pendingGuideRef = React.useRef<string | null>(null);
   const [phase, setPhase] = React.useState<Phase>(() =>
     guide ? 'chat' : 'selector'
   );
@@ -79,10 +86,33 @@ export default function AskScreen() {
   const flatListRef = useRef<FlatList<Message>>(null);
   const insets = useSafeAreaInsets();
 
-  const handleCommit = async (guideName: string) => {
+  const doCommit = async (guideName: string) => {
+    increment();
     setPendingGuide(guideName);
     await commitToGuide(guideName);
     setPhase('loading');
+  };
+
+  const handleCommit = (guideName: string) => {
+    if (!isSubscriptionLoaded || !isUsageLoaded) return; // loading guard
+
+    if (isPro) {
+      doCommit(guideName);
+      return;
+    }
+
+    if (isAtLimit) {
+      setPaywallMode('blocked');
+      return;
+    }
+
+    if (isNearLimit) {
+      pendingGuideRef.current = guideName;
+      setPaywallMode('warning');
+      return;
+    }
+
+    doCommit(guideName);
   };
 
   const handleLoaderComplete = () => {
@@ -92,7 +122,30 @@ export default function AskScreen() {
   if (isLoading) return <View style={styles.root} />;
 
   if (phase === 'selector') {
-    return <GuideSelector onCommit={handleCommit} />;
+    return (
+      <>
+        <GuideSelector onCommit={handleCommit} />
+        <PaywallSheet
+          visible={paywallMode !== null}
+          feature="ask"
+          mode={paywallMode ?? 'warning'}
+          onClose={() => {
+            setPaywallMode(null);
+            pendingGuideRef.current = null;
+          }}
+          onUpgrade={() => {
+            setPaywallMode(null);
+            openCheckout();
+          }}
+          onProceed={() => {
+            const name = pendingGuideRef.current;
+            pendingGuideRef.current = null;
+            setPaywallMode(null);
+            if (name) doCommit(name);
+          }}
+        />
+      </>
+    );
   }
 
   if (phase === 'loading' && pendingGuide) {
