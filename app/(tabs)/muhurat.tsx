@@ -1,5 +1,5 @@
 // app/(tabs)/muhurat.tsx
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -21,6 +21,9 @@ import { useToast } from '@/components/ui/ToastProvider';
 import { PageHero } from '@/components/ui/PageHero';
 import { colors, fonts, layout } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
+import { useUsage } from '@/lib/usage';
+import { useSubscription } from '@/lib/subscription';
+import { PaywallSheet } from '@/features/billing/PaywallSheet';
 
 type DateField = 'start' | 'end';
 
@@ -48,6 +51,10 @@ export default function MuhuratScreen() {
     return normalizeDate(next);
   }, [today]);
   const { showToast } = useToast();
+  const { isPro, openCheckout } = useSubscription();
+  const { isAtLimit, isNearLimit, increment } = useUsage('muhurat');
+  const [paywallMode, setPaywallMode] = useState<'warning' | 'blocked' | null>(null);
+  const pendingQueryRef = useRef<(() => void) | null>(null);
   const [eventDescription, setEventDescription] = useState('');
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(defaultEndDate);
@@ -96,6 +103,17 @@ export default function MuhuratScreen() {
     setIsIosDateSheetOpen(true);
   };
 
+  const runQuery = () => {
+    const trimmedEvent = eventDescription.trim();
+    if (!trimmedEvent) return;
+    increment();
+    setRequest({
+      eventDescription: trimmedEvent,
+      startDate: toApiDate(startDate),
+      endDate: toApiDate(endDate),
+    });
+  };
+
   const handleFindMuhurat = () => {
     const trimmedEvent = eventDescription.trim();
 
@@ -108,11 +126,23 @@ export default function MuhuratScreen() {
       return;
     }
 
-    setRequest({
-      eventDescription: trimmedEvent,
-      startDate: toApiDate(startDate),
-      endDate: toApiDate(endDate),
-    });
+    if (isPro) {
+      runQuery();
+      return;
+    }
+
+    if (isAtLimit) {
+      setPaywallMode('blocked');
+      return;
+    }
+
+    if (isNearLimit) {
+      pendingQueryRef.current = runQuery;
+      setPaywallMode('warning');
+      return;
+    }
+
+    runQuery();
   };
 
   return (
@@ -203,6 +233,25 @@ export default function MuhuratScreen() {
         onConfirm={() => {
           applyDateSelection(activeDateField, iosPickerValue);
           setIsIosDateSheetOpen(false);
+        }}
+      />
+
+      <PaywallSheet
+        visible={paywallMode !== null}
+        feature="muhurat"
+        mode={paywallMode ?? 'warning'}
+        onClose={() => {
+          setPaywallMode(null);
+          pendingQueryRef.current = null;
+        }}
+        onUpgrade={() => {
+          setPaywallMode(null);
+          openCheckout();
+        }}
+        onProceed={() => {
+          setPaywallMode(null);
+          pendingQueryRef.current?.();
+          pendingQueryRef.current = null;
         }}
       />
     </View>
