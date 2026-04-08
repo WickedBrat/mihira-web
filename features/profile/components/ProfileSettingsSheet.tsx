@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Check, ChevronDown, LogOut, X } from 'lucide-react-native';
+import { Check, ChevronDown, LogOut, X, Zap } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { LANGUAGE_OPTIONS } from '@/features/profile/constants';
@@ -20,6 +20,8 @@ interface ProfileSettingsSheetProps {
   onSelectLanguage: (language: ProfileData['language']) => void;
   onOpenAuth: () => void;
   onSignOut: () => void | Promise<void>;
+  isPro: boolean;
+  onOpenPlans: () => void;
 }
 
 export function ProfileSettingsSheet({
@@ -35,6 +37,8 @@ export function ProfileSettingsSheet({
   onSelectLanguage,
   onOpenAuth,
   onSignOut,
+  isPro,
+  onOpenPlans,
 }: ProfileSettingsSheetProps) {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
@@ -72,6 +76,13 @@ export function ProfileSettingsSheet({
                 <Text style={styles.identityEmail}>{email}</Text>
               </View>
             </View>
+
+            {!isPro && (
+              <Pressable style={styles.upgradeRow} onPress={onOpenPlans}>
+                <Zap size={16} color={colors.secondaryFixed} />
+                <Text style={styles.upgradeText}>Upgrade to Pro</Text>
+              </Pressable>
+            )}
 
             <Pressable style={styles.signOutRow} onPress={onSignOut}>
               <LogOut size={16} color="#CF6679" />
@@ -220,6 +231,23 @@ const styles = StyleSheet.create({
   signInButton: {
     alignSelf: 'stretch',
     marginBottom: 20,
+  },
+  upgradeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 149, 0, 0.063)',
+    borderColor: 'rgba(255, 149, 0, 0.102)',
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  upgradeText: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: 15,
+    color: colors.secondaryFixed,
   },
   signOutRow: {
     flexDirection: 'row',

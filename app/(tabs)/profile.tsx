@@ -29,6 +29,7 @@ import {
 } from '@/features/profile/utils';
 import { useSignIn } from '@/features/auth/useSignIn';
 import { useSubscription } from '@/lib/subscription';
+import { PlansScreen } from '@/features/billing/PlansScreen';
 import { colors, layout } from '@/lib/theme';
 import { clearCachedProfile } from '@/lib/profileStorage';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
@@ -51,7 +52,8 @@ export default function ProfileScreen() {
   const authSheetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { clearGuide } = useGuide();
-  const { isPro } = useSubscription();
+  const { isPro, openCheckout } = useSubscription();
+  const [isPlansOpen, setIsPlansOpen] = useState(false);
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -191,6 +193,11 @@ export default function ProfileScreen() {
         region={profile.region}
         userIdLabel={userIdLabel}
         onSelectLanguage={(language) => updateField('language', language)}
+        isPro={isPro}
+        onOpenPlans={() => {
+          closeSettingsSheet();
+          setTimeout(() => setIsPlansOpen(true), 240);
+        }}
         onOpenAuth={openAuthSheet}
         onSignOut={async () => {
           try {
@@ -222,6 +229,20 @@ export default function ProfileScreen() {
         onSignInWithApple={signInWithApple}
         isLoading={isSigningIn}
       />
+
+      {isPlansOpen && (
+        <View style={StyleSheet.absoluteFill}>
+          <PlansScreen
+            isPro={isPro}
+            isCheckoutLoading={false}
+            onUpgrade={() => {
+              setIsPlansOpen(false);
+              openCheckout();
+            }}
+            onClose={() => setIsPlansOpen(false)}
+          />
+        </View>
+      )}
 
       <ProfileDateTimeSheet
         visible={isIosDatePickerOpen}
