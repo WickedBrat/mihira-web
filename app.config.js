@@ -13,9 +13,11 @@ export default {
       backgroundColor: '#0e0e0e',
     },
     ios: {
+      bundleIdentifier: 'com.aksha.app',
       supportsTablet: false,
     },
     android: {
+      package: 'com.aksha.app',
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#0e0e0e',
@@ -38,12 +40,12 @@ export default {
         'expo-font',
         {
           fonts: [
-            './node_modules/@expo-google-fonts/lexend/Lexend_300Light.ttf',
-            './node_modules/@expo-google-fonts/lexend/Lexend_400Regular.ttf',
-            './node_modules/@expo-google-fonts/lexend/Lexend_500Medium.ttf',
-            './node_modules/@expo-google-fonts/lexend/Lexend_600SemiBold.ttf',
-            './node_modules/@expo-google-fonts/lexend/Lexend_700Bold.ttf',
-            './node_modules/@expo-google-fonts/lexend/Lexend_800ExtraBold.ttf',
+            './node_modules/@expo-google-fonts/lexend/300Light/Lexend_300Light.ttf',
+            './node_modules/@expo-google-fonts/lexend/400Regular/Lexend_400Regular.ttf',
+            './node_modules/@expo-google-fonts/lexend/500Medium/Lexend_500Medium.ttf',
+            './node_modules/@expo-google-fonts/lexend/600SemiBold/Lexend_600SemiBold.ttf',
+            './node_modules/@expo-google-fonts/lexend/700Bold/Lexend_700Bold.ttf',
+            './node_modules/@expo-google-fonts/lexend/800ExtraBold/Lexend_800ExtraBold.ttf',
           ],
         },
       ],

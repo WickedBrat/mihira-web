@@ -6,29 +6,72 @@ import { VedicReasoningAccordion } from './VedicReasoningAccordion';
 import { fonts } from '@/lib/theme';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
 
-const IMAGES: Record<string, ReturnType<typeof require>> = {
-  // Work / Career
-  Work:               require('@/assets/focus/work.png'),
-  Decisions:          require('@/assets/focus/decision.png'),
+const BASE = 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/daily-prediction';
+const img = (filename: string) => ({ uri: `${BASE}/${filename}.webp` });
+
+const IMAGES: Record<string, { uri: string }> = {
+  // Ambition / Career
+  Ambition:               img('ambition'),
+  Work:                   img('ambition'),
+  Career:                 img('ambition'),
+  'Public presence':      img('public-presence'),
+  'Public Presence':      img('public-presence'),
+  Networking:             img('networking'),
+  Community:              img('community'),
+
+  // Mind / Knowledge
+  Knowledge:              img('knowledge'),
+  Learning:               img('knowledge'),
+  Reading:                img('reading'),
+  Writing:                img('writing'),
+  Speaking:               img('speaking'),
+  'Problem solving':      img('problem-solving'),
+  'Problem Solving':      img('problem-solving'),
+  Focus:                  img('focus'),
+
+  // Decisions / Finance
+  Decisions:              img('decision'),
+  Decision:               img('decision'),
+  'Material decisions':   img('material-decision'),
+  'Material Decisions':   img('material-decision'),
+  Financial:              img('financial'),
+  Money:                  img('money'),
+  Negotiations:           img('negotiations'),
+  Correspondence:         img('correspondence'),
+
   // Relationships
-  Partnership:        require('@/assets/focus/partnership.png'),
-  'Social bonds':     require('@/assets/focus/partnership.png'),
-  Romance:            require('@/assets/focus/partnership.png'),
+  Romance:                img('romance'),
+  Partnership:            img('romance'),
+  'Social bonds':         img('social-bonds'),
+  'Social Bonds':         img('social-bonds'),
+
   // Family / Home
-  Home:               require('@/assets/focus/home.png'),
-  'Domestic matters': require('@/assets/focus/home.png'),
-  Lineage:            require('@/assets/focus/home.png'),
+  Home:                   img('domestic'),
+  'Domestic matters':     img('domestic'),
+  'Domestic Matters':     img('domestic'),
+  Domestic:               img('domestic'),
+  Lineage:                img('lineage'),
+
   // Self-care / Wellness
-  Rest:               require('@/assets/focus/selfcare.png'),
-  Health:             require('@/assets/focus/selfcare.png'),
-  Body:               require('@/assets/focus/selfcare.png'),
-  Routines:           require('@/assets/focus/selfcare.png'),
-  Exercise:           require('@/assets/focus/selfcare.png'),
-  Healing:            require('@/assets/focus/selfcare.png'),
-  'Physical vitality':require('@/assets/focus/selfcare.png'),
+  Rest:                   img('rest'),
+  Health:                 img('health'),
+  Body:                   img('body'),
+  Routines:               img('routine'),
+  Routine:                img('routine'),
+  Exercise:               img('exercise'),
+  Healing:                img('healing'),
+  'Physical vitality':    img('physical-vitality'),
+  'Physical Vitality':    img('physical-vitality'),
+  Movement:               img('movement'),
+  Meditation:             img('meditation'),
+
+  // Creativity / Spirit
+  Art:                    img('art'),
+  Making:                 img('making'),
+  Ritual:                 img('ritual'),
 };
 
-const FALLBACK = require('@/assets/time-of-the-day/night.png');
+const FALLBACK = img('focus');
 
 
 interface Props {
