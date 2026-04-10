@@ -1,88 +1,160 @@
 // features/ask/GuideSelector.tsx
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
-  ScrollView,
+  FlatList,
   Pressable,
   StyleSheet,
+  Dimensions,
+  Image,
 } from 'react-native';
+import type { ViewToken } from 'react-native';
 import Animated, {
-  FadeIn,
   FadeInDown,
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  withDelay,
   Easing,
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
-import { hapticLight, hapticMedium } from '@/lib/haptics';
-import { colors, fonts, layout } from '@/lib/theme';
+import * as Haptics from 'expo-haptics';
+import { colors, fonts } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { GUIDES, type GuidePersona } from './guidePersonas';
+import { analytics } from '@/lib/analytics';
+
+const { width: SW, height: SH } = Dimensions.get('window');
+const CARD_W = SW * 0.76;
+const CARD_GAP = 12;
+const SNAP = CARD_W + CARD_GAP;
+// Center the first card: paddingHorizontal = half the leftover space, minus half gap
+const CONTENT_PADDING = (SW - CARD_W) / 2 - CARD_GAP / 2;
 
 interface GuideSelectorProps {
   onCommit: (guideName: string) => void;
 }
 
-function GuideCard({
+function CarouselCard({
   guide,
-  isSelected,
-  onPress,
-  enterDelay,
+  isActive,
+  onLongPress,
 }: {
   guide: GuidePersona;
-  isSelected: boolean;
-  onPress: () => void;
-  enterDelay: number;
+  isActive: boolean;
+  onLongPress: () => void;
 }) {
-  const glowOpacity = useSharedValue(0);
+  const scale = useSharedValue(isActive ? 1 : 0.88);
+  const opacity = useSharedValue(isActive ? 1 : 0.38);
+  const glowOpacity = useSharedValue(isActive ? 1 : 0);
+
+  useEffect(() => {
+    scale.value = withTiming(isActive ? 1 : 0.88, {
+      duration: 380,
+      easing: Easing.out(Easing.cubic),
+    });
+    opacity.value = withTiming(isActive ? 1 : 0.38, { duration: 380 });
+    glowOpacity.value = withTiming(isActive ? 1 : 0, { duration: 520 });
+  }, [isActive]);
+
+  const cardStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));
 
   const glowStyle = useAnimatedStyle(() => ({
     opacity: glowOpacity.value,
   }));
 
-  const handlePress = () => {
-    hapticLight();
-    onPress();
-  };
-
-  React.useEffect(() => {
-    glowOpacity.value = withTiming(isSelected ? 1 : 0, {
-      duration: 800,
-      easing: Easing.out(Easing.cubic),
-    });
-  }, [isSelected]);
-
   return (
-    <Animated.View entering={FadeInDown.delay(enterDelay).duration(600)}>
-      <Pressable onPress={handlePress} style={styles.guideCard}>
-        <Animated.View style={[StyleSheet.absoluteFill, styles.guideCardGlow, glowStyle]} />
-        <Text style={styles.guideEmoji}>{guide.emoji}</Text>
-        <View style={styles.guideTextBlock}>
-          <Text style={styles.guideName}>{guide.name}</Text>
-          <Text style={styles.guideEssence}>{guide.essence}</Text>
-        </View>
-        {isSelected && (
-          <Animated.View entering={FadeIn.duration(400)} style={styles.selectedDot} />
-        )}
-      </Pressable>
-    </Animated.View>
+    <Pressable
+      onLongPress={isActive ? onLongPress : undefined}
+      delayLongPress={400}
+    >
+      <Animated.View style={[styles.card, cardStyle]}>
+        {/* Full-card background image */}
+        <Image
+          source={{ uri: guide.imageUrl }}
+          style={[StyleSheet.absoluteFill, styles.cardBgImage]}
+          resizeMode="cover"
+        />
+        {/* Dark scrim so text stays readable */}
+        <View style={[StyleSheet.absoluteFill, styles.cardScrim]} />
+        {/* Purple glow overlay for active card */}
+        <Animated.View style={[StyleSheet.absoluteFill, styles.cardGlow, glowStyle]} />
+
+        <Text style={styles.cardName}>{guide.name}</Text>
+        <Text style={styles.cardEssence}>{guide.essence}</Text>
+      </Animated.View>
+    </Pressable>
   );
 }
 
 export function GuideSelector({ onCommit }: GuideSelectorProps) {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [activeIndex, _setActiveIndex] = useState(0);
+  const activeIndexRef = useRef(0);
 
-  const selectedGuide = selected ? GUIDES.find(g => g.name === selected) : null;
+  // Header: starts offset down so it appears near screen center, slides up to top
+  const headerOffsetY = useSharedValue(SH * 0.27);
+  // Carousel: hidden initially, fades + slides in after header moves up
+  const carouselOpacity = useSharedValue(0);
+  const carouselOffsetY = useSharedValue(48);
 
-  const handleCommit = () => {
-    if (!selected) return;
-    hapticMedium();
-    onCommit(selected);
-  };
+  useEffect(() => {
+    // After 1.8s, slide header to top and reveal carousel
+    const t = setTimeout(() => {
+      headerOffsetY.value = withTiming(0, {
+        duration: 720,
+        easing: Easing.out(Easing.cubic),
+      });
+      carouselOpacity.value = withDelay(320, withTiming(1, { duration: 600 }));
+      carouselOffsetY.value = withDelay(
+        320,
+        withTiming(0, { duration: 600, easing: Easing.out(Easing.cubic) })
+      );
+    }, 1800);
+    return () => clearTimeout(t);
+  }, []);
+
+  const headerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: headerOffsetY.value }],
+  }));
+
+  const carouselStyle = useAnimatedStyle(() => ({
+    opacity: carouselOpacity.value,
+    transform: [{ translateY: carouselOffsetY.value }],
+  }));
+
+  // Stable refs for FlatList callbacks (can't change after mount)
+  const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 60 });
+  const onViewableItemsChanged = useRef(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      const visible = viewableItems.filter(v => v.isViewable);
+      if (visible.length > 0 && visible[0].index !== null) {
+        const newIdx = visible[0].index;
+        if (newIdx !== activeIndexRef.current) {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          activeIndexRef.current = newIdx;
+          _setActiveIndex(newIdx);
+        }
+      }
+    }
+  );
+
+  const handleLongPress = useCallback(() => {
+    const guide = GUIDES[activeIndexRef.current];
+    if (!guide) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    analytics.guideSelected({
+      guide_name: guide.name,
+      guide_index: activeIndexRef.current,
+    });
+    onCommit(guide.name);
+  }, [onCommit]);
+
+  const activeGuide = GUIDES[activeIndex];
 
   return (
     <View style={styles.root}>
@@ -91,55 +163,53 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
         <AmbientBlob color="rgba(184, 152, 122, 0.07)" top={400} left={20} size={300} />
       </View>
 
-      <SafeAreaView edges={['top']} style={styles.safeTop}>
-        <Animated.View entering={FadeInDown.duration(700)} style={styles.header}>
-          <Text style={styles.meta}>Sacred Guidance</Text>
-          <Text style={styles.title}>Who calls{'\n'}to your soul?</Text>
-          <Text style={styles.subtitle}>
-            This is a lifelong commitment.{'\n'}Choose with intention.
-          </Text>
-        </Animated.View>
-      </SafeAreaView>
-
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {GUIDES.map((guide, i) => (
-          <GuideCard
-            key={guide.name}
-            guide={guide}
-            isSelected={selected === guide.name}
-            onPress={() => setSelected(guide.name)}
-            enterDelay={200 + i * 60}
-          />
-        ))}
-        <View style={styles.scrollPad} />
-      </ScrollView>
-
-      <SafeAreaView edges={['bottom']} style={styles.footer}>
-        <Animated.View entering={FadeIn.delay(900).duration(600)}>
-          <Pressable
-            onPress={handleCommit}
-            disabled={!selected}
-            style={({ pressed }) => [
-              styles.commitBtn,
-              !selected && styles.commitBtnDisabled,
-              pressed && selected && styles.commitBtnPressed,
-            ]}
+      <SafeAreaView edges={['top', 'bottom']} style={styles.safe}>
+        {/* Header: fades in near center of screen, then slides up */}
+        <Animated.View style={[styles.header, headerStyle]}>
+          <Animated.Text
+            entering={FadeInDown.duration(600)}
+            style={styles.title}
           >
-            <LinearGradient
-              colors={selected ? ['rgba(181,100,252,0.9)', 'rgba(181,100,252,0.6)'] : ['rgba(60,60,60,0.5)', 'rgba(60,60,60,0.3)']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.commitBtnGradient}
-            >
-              <Text style={[styles.commitBtnText, !selected && styles.commitBtnTextDisabled]}>
-                {selectedGuide ? selectedGuide.commitmentVerb : 'Choose your guide'}
-              </Text>
-            </LinearGradient>
-          </Pressable>
+            Who calls to your soul?
+          </Animated.Text>
+          <Animated.Text
+            entering={FadeInDown.delay(350).duration(600)}
+            style={styles.subtitle}
+          >
+            You commit to your Guru for life. Take your time to choose.
+          </Animated.Text>
+        </Animated.View>
+
+        {/* Carousel + hint: hidden until header slides up */}
+        <Animated.View style={[styles.carouselWrapper, carouselStyle]}>
+          <FlatList
+            data={GUIDES}
+            keyExtractor={g => g.name}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={SNAP}
+            decelerationRate="fast"
+            contentContainerStyle={styles.carouselContent}
+            viewabilityConfig={viewabilityConfig.current}
+            onViewableItemsChanged={onViewableItemsChanged.current}
+            renderItem={({ item, index }) => (
+              <View style={styles.cardSlot}>
+                <CarouselCard
+                  guide={item}
+                  isActive={index === activeIndex}
+                  onLongPress={handleLongPress}
+                />
+              </View>
+            )}
+          />
+
+          {/* Commit hint below carousel */}
+          <View style={styles.hintRow}>
+            <Text style={styles.commitVerb} numberOfLines={1}>
+              {activeGuide?.commitmentVerb}
+            </Text>
+            <Text style={styles.holdHint}>— hold to commit</Text>
+          </View>
           <Text style={styles.permanentNote}>You cannot change this later</Text>
         </Animated.View>
       </SafeAreaView>
@@ -151,117 +221,109 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.surface,
+    paddingTop: 40,
   },
-  safeTop: {
-    paddingHorizontal: layout.screenPaddingX,
+  safe: {
+    flex: 1,
   },
+
+  // Header
   header: {
-    paddingTop: 16,
-    paddingBottom: 24,
     alignItems: 'center',
-  },
-  meta: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(10),
-    textTransform: 'uppercase',
-    letterSpacing: 3,
-    color: colors.secondaryFixed,
-    marginBottom: 12,
-    textAlign: 'center',
+    paddingHorizontal: 32,
+    paddingTop: 20,
+    paddingBottom: 28,
   },
   title: {
     fontFamily: fonts.headlineExtra,
-    fontSize: scaleFont(40),
+    fontSize: scaleFont(36),
     color: colors.onSurface,
-    letterSpacing: -1,
-    lineHeight: scaleFont(46),
-    marginBottom: 12,
+    letterSpacing: -0.8,
+    lineHeight: scaleFont(44),
     textAlign: 'center',
+    marginBottom: 12,
   },
   subtitle: {
     fontFamily: fonts.body,
     fontSize: scaleFont(15),
-    lineHeight: scaleFont(22),
     color: colors.onSurfaceVariant,
     textAlign: 'center',
+    letterSpacing: 0.3,
   },
-  scroll: {
+
+  // Carousel
+  carouselWrapper: {
     flex: 1,
+    justifyContent: 'center',
+    paddingBottom: 12,
   },
-  scrollContent: {
-    paddingHorizontal: layout.screenPaddingX,
-    gap: 10,
+  carouselContent: {
+    paddingHorizontal: CONTENT_PADDING,
   },
-  scrollPad: { height: 16 },
-  guideCard: {
+  cardSlot: {
+    width: CARD_W,
+    marginHorizontal: CARD_GAP / 2,
+  },
+
+  // Card
+  card: {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    borderRadius: 28,
+    borderWidth: 1,
+    borderColor: 'rgba(72, 72, 72, 0.25)',
+    paddingVertical: 48,
+    paddingHorizontal: 28,
+    alignItems: 'center',
+    gap: 12,
+    overflow: 'hidden',
+    height: SH * 0.48,
+    justifyContent: 'flex-end',
+  },
+  cardBgImage: {
+    borderRadius: 28,
+  },
+  cardScrim: {
+    borderRadius: 28,
+    backgroundColor: 'rgba(0, 0, 0, 0.52)',
+  },
+  cardGlow: {
+    borderRadius: 28,
+    borderWidth: 1.5,
+    borderColor: `${colors.secondaryFixedDim}55`,
+    backgroundColor: `${colors.onSecondary}0d`,
+  },
+  cardName: {
+    fontFamily: fonts.headline,
+    fontSize: scaleFont(28),
+    color: colors.onSurface,
+    textAlign: 'center',
+  },
+  cardEssence: {
+    fontFamily: fonts.body,
+    fontSize: scaleFont(14),
+    color: colors.onSurfaceVariant,
+    textAlign: 'center',
+    lineHeight: scaleFont(21),
+  },
+
+  // Commit hint
+  hintRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
-    backgroundColor: 'rgba(37, 38, 38, 0.6)',
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(72, 72, 72, 0.15)',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    overflow: 'hidden',
-  },
-  guideCardGlow: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: `${colors.primary}55`,
-    backgroundColor: `${colors.primary}0e`,
-  },
-  guideEmoji: {
-    fontSize: 28,
-  },
-  guideTextBlock: {
-    flex: 1,
-    gap: 2,
-  },
-  guideName: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(16),
-    color: colors.onSurface,
-  },
-  guideEssence: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(12),
-    color: colors.onSurfaceVariant,
-  },
-  selectedDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.primary,
-  },
-  footer: {
-    paddingHorizontal: layout.screenPaddingX,
-    paddingBottom: 16,
-    gap: 10,
-  },
-  commitBtn: {
-    borderRadius: 9999,
-    overflow: 'hidden',
-  },
-  commitBtnDisabled: {
-    opacity: 0.5,
-  },
-  commitBtnPressed: {
-    opacity: 0.85,
-  },
-  commitBtnGradient: {
-    paddingVertical: 18,
-    paddingHorizontal: 32,
-    alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 4,
+    gap: 6,
+    marginBottom: 8,
+    paddingHorizontal: 32,
   },
-  commitBtnText: {
+  commitVerb: {
     fontFamily: fonts.label,
-    fontSize: scaleFont(15),
-    color: colors.onSurface,
-    letterSpacing: 0.4,
+    fontSize: scaleFont(14),
+    color: colors.primary,
   },
-  commitBtnTextDisabled: {
+  holdHint: {
+    fontFamily: fonts.body,
+    fontSize: scaleFont(13),
     color: colors.onSurfaceVariant,
   },
   permanentNote: {
@@ -269,7 +331,7 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(11),
     color: colors.outline,
     textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 4,
+    marginTop: 8,
+    marginBottom: 8,
   },
 });

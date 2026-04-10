@@ -14,6 +14,7 @@ import Animated, {
 import * as Haptics from 'expo-haptics';
 import { OB } from '@/lib/onboardingStore';
 import { scaleFont } from '@/lib/typography';
+import { analytics } from '@/lib/analytics';
 
 export default function Screen1() {
   const breathe = useSharedValue(1);
@@ -65,6 +66,7 @@ export default function Screen1() {
         <Pressable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            analytics.onboardingStarted();
             router.push('/onboarding/step-2');
           }}
           style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}

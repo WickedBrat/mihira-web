@@ -19,16 +19,26 @@ export async function saveGuide(name: string): Promise<void> {
   }
 }
 
+export async function removeGuide(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(GUIDE_STORAGE_KEY);
+  } catch (err) {
+    console.error('[guideStore] remove error', err);
+  }
+}
+
 interface GuideContextValue {
   guide: string | null;
   isLoading: boolean;
   commitToGuide: (name: string) => Promise<void>;
+  clearGuide: () => Promise<void>;
 }
 
 const GuideContext = createContext<GuideContextValue>({
   guide: null,
   isLoading: true,
   commitToGuide: async () => {},
+  clearGuide: async () => {},
 });
 
 export function GuideProvider({ children }: { children: React.ReactNode }) {
@@ -47,8 +57,13 @@ export function GuideProvider({ children }: { children: React.ReactNode }) {
     setGuide(name);
   };
 
+  const clearGuide = async () => {
+    await removeGuide();
+    setGuide(null);
+  };
+
   return (
-    <GuideContext.Provider value={{ guide, isLoading, commitToGuide }}>
+    <GuideContext.Provider value={{ guide, isLoading, commitToGuide, clearGuide }}>
       {children}
     </GuideContext.Provider>
   );

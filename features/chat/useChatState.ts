@@ -1,7 +1,17 @@
 // features/chat/useChatState.ts
+import { fetch } from 'expo/fetch';
+import Constants from 'expo-constants';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { getHistory, saveHistory } from '@/lib/chatStorage';
 import { getGuide } from '@/features/ask/guidePersonas';
+import { analytics } from '@/lib/analytics';
+
+function apiUrl(path: string): string {
+  const hostUri = Constants.expoConfig?.hostUri;
+  const base = hostUri ? `http://${hostUri}` : '';
+  console.log('[chat] apiUrl:', base + path);
+  return base + path;
+}
 
 export interface Message {
   id: string;
@@ -48,6 +58,12 @@ export function useChatState(guide: string | null) {
     setIsTyping(true);
     setInputText('');
 
+    analytics.chatMessageSent({
+      guide: guide ?? null,
+      message_length: text.trim().length,
+      conversation_length: messages.length,
+    });
+
     const aiMsgId = `ai-${Date.now()}`;
     const aiMsg: Message = { id: aiMsgId, role: 'ai', text: '', timestamp: new Date() };
     setMessages(prev => [...prev, aiMsg]);
@@ -61,12 +77,14 @@ export function useChatState(guide: string | null) {
         .slice(-10)
         .map(m => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text }));
 
-      const res = await fetch('/api/chat', {
+      const res = await fetch(apiUrl('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text.trim(), history: historyForApi, persona: guide }),
         signal: controller.signal,
       });
+
+      console.log('[chat] response status:', res.status, 'has body:', !!res.body);
 
       if (!res.body) throw new Error('No response body');
 
@@ -77,8 +95,10 @@ export function useChatState(guide: string | null) {
 
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
+        if (done) { console.log('[chat] stream done'); break; }
+        const chunk = decoder.decode(value, { stream: true });
+        console.log('[chat] chunk:', chunk);
+        buffer += chunk;
         const lines = buffer.split('\n');
         buffer = lines.pop() ?? '';
 
@@ -91,6 +111,7 @@ export function useChatState(guide: string | null) {
           }
           try {
             const json = JSON.parse(data);
+            console.log('[chat] parsed:', json);
             if (json.token) {
               fullText += json.token;
               const captured = fullText;
@@ -98,7 +119,7 @@ export function useChatState(guide: string | null) {
                 prev.map(m => m.id === aiMsgId ? { ...m, text: captured } : m)
               );
             }
-          } catch {}
+          } catch (e) { console.warn('[chat] parse error:', e, 'raw:', data); }
         }
       }
 
@@ -107,6 +128,7 @@ export function useChatState(guide: string | null) {
         return prev;
       });
     } catch (err: unknown) {
+      console.error('[chat] error:', err);
       if ((err as Error).name === 'AbortError') return;
       const errMsg = err instanceof Error ? err.message : 'Connection error';
       setMessages(prev =>

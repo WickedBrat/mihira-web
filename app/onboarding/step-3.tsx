@@ -1,38 +1,39 @@
 // Screen 3: The Identity Chapter — Persona Selection
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OB, setOnboardingData } from '@/lib/onboardingStore';
+import { analytics } from '@/lib/analytics';
 import { scaleFont } from '@/lib/typography';
 
 const PERSONAS = [
   {
     id: 'builder',
-    icon: '⚒',
+    image: 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/builder.webp',
     name: 'The Builder',
     tagline: 'Focus on career and legacy.',
     desc: 'You are building something that outlasts you. Purpose lives in the work.',
   },
   {
     id: 'seeker',
-    icon: '◎',
+    image: 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/seeker.webp',
     name: 'The Seeker',
     tagline: 'Focus on spiritual depth.',
     desc: 'The inner journey is your true expedition. You crave meaning over metrics.',
   },
   {
     id: 'healer',
-    icon: '◈',
+    image: 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/healer.webp',
     name: 'The Healer',
     tagline: 'Focus on recovery and peace.',
     desc: 'You are mending something precious. Tenderness and truth are your tools.',
   },
   {
     id: 'protector',
-    icon: '⬡',
+    image: 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/protector.webp',
     name: 'The Protector',
     tagline: 'Focus on family and stability.',
     desc: 'You hold the world together for those you love. Strength in service.',
@@ -48,6 +49,7 @@ export default function Screen3() {
     if (!selected) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOnboardingData({ persona: selected });
+    analytics.onboardingPersonaSelected({ persona: selected });
     router.push('/onboarding/step-4');
   }
 
@@ -75,7 +77,7 @@ export default function Screen3() {
                   style={[styles.card, active && styles.cardActive]}
                 >
                   <View style={styles.cardLeft}>
-                    <Text style={styles.cardIcon}>{p.icon}</Text>
+                    <Image source={{ uri: p.image }} style={styles.cardIcon} />
                     <View style={styles.cardText}>
                       <Text style={[styles.cardName, active && styles.cardNameActive]}>{p.name}</Text>
                       <Text style={styles.cardTagline}>{p.tagline}</Text>
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: OB.saffronDim,
   },
   cardLeft:  { flexDirection: 'row', alignItems: 'flex-start', gap: 16, flex: 1 },
-  cardIcon:  { fontSize: scaleFont(28), marginTop: 2 },
+  cardIcon:  { width: 56, height: 56, borderRadius: 12, marginTop: 2 },
   cardText:  { flex: 1, gap: 4 },
   cardName: {
     fontFamily: 'Lexend_700Bold',

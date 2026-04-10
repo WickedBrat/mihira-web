@@ -24,6 +24,7 @@ import { scaleFont } from '@/lib/typography';
 import { useUsage } from '@/lib/usage';
 import { useSubscription } from '@/lib/subscription';
 import { PaywallSheet } from '@/features/billing/PaywallSheet';
+import { analytics } from '@/lib/analytics';
 
 type DateField = 'start' | 'end';
 
@@ -106,6 +107,8 @@ export default function MuhuratScreen() {
   const runQuery = () => {
     const trimmedEvent = eventDescription.trim();
     if (!trimmedEvent) return;
+    const dateRangeDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    analytics.muhuratQueried({ event_description_length: trimmedEvent.length, date_range_days: dateRangeDays });
     increment();
     setRequest({
       eventDescription: trimmedEvent,
@@ -132,11 +135,13 @@ export default function MuhuratScreen() {
     }
 
     if (isAtLimit) {
+      analytics.paywallShown({ feature: 'muhurat', mode: 'blocked' });
       setPaywallMode('blocked');
       return;
     }
 
     if (isNearLimit) {
+      analytics.paywallShown({ feature: 'muhurat', mode: 'warning' });
       pendingQueryRef.current = runQuery;
       setPaywallMode('warning');
       return;
@@ -245,14 +250,17 @@ export default function MuhuratScreen() {
         feature="muhurat"
         mode={paywallMode ?? 'warning'}
         onClose={() => {
+          analytics.paywallDismissed({ feature: 'muhurat', mode: paywallMode ?? 'warning' });
           setPaywallMode(null);
           pendingQueryRef.current = null;
         }}
         onUpgrade={() => {
+          analytics.paywallUpgradeTapped({ feature: 'muhurat' });
           setPaywallMode(null);
           openCheckout();
         }}
         onProceed={() => {
+          analytics.paywallProceedTapped({ feature: 'muhurat' });
           const fn = pendingQueryRef.current;
           pendingQueryRef.current = null;
           setPaywallMode(null);

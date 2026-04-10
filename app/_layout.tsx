@@ -3,9 +3,9 @@ import { Stack, SplashScreen, usePathname, useGlobalSearchParams } from 'expo-ro
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ClerkProvider } from '@clerk/clerk-expo';
-import { StripeProvider } from '@stripe/stripe-react-native';
+import { ClerkProvider, useAuth, useUser } from '@clerk/clerk-expo';
 import {
+
   useFonts,
   Lexend_300Light,
   Lexend_400Regular,
@@ -18,12 +18,38 @@ import { PostHogProvider } from 'posthog-react-native';
 import { tokenCache } from '@/lib/clerk';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { posthog } from '@/lib/posthog';
+import { analytics } from '@/lib/analytics';
 import '../global.css';
 
 SplashScreen.preventAutoHideAsync();
 
 const CLERK_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 if (!CLERK_KEY) throw new Error('Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY');
+
+// Safe conditionally load Stripe to avoid crash in Expo Go without dev clients
+let StripeProvider: React.FC<any> = ({ children }) => <>{children}</>;
+try {
+  const StripeModule = require('@stripe/stripe-react-native');
+  StripeProvider = StripeModule.StripeProvider;
+} catch (e: any) {
+  console.warn('Fallback: StripeProvider not found or failed to load. Are you in Expo Go?');
+}
+
+function AnalyticsIdentity() {
+  const { isSignedIn, userId } = useAuth();
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (isSignedIn && userId) {
+      analytics.userIdentified(userId, {
+        email: user?.primaryEmailAddress?.emailAddress,
+        name: user?.fullName,
+      });
+    }
+  }, [isSignedIn, userId, user]);
+
+  return null;
+}
 
 function ScreenTracker() {
   const pathname = usePathname();
@@ -78,6 +104,7 @@ export default function RootLayout() {
               }}
             >
               <ToastProvider>
+                <AnalyticsIdentity />
                 <ScreenTracker />
                 <StatusBar style="light" backgroundColor="#0e0e0e" />
                 <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0e0e0e' } }}>

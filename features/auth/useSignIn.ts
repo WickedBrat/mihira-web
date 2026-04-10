@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useOAuth } from '@clerk/clerk-expo';
 import * as WebBrowser from 'expo-web-browser';
 import { useToast } from '@/components/ui/ToastProvider';
+import { analytics } from '@/lib/analytics';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -17,6 +18,7 @@ export function useSignIn(onSuccess?: () => void) {
       const { createdSessionId, setActive } = await googleOAuth.startOAuthFlow();
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
+        analytics.userSignedIn({ method: 'google' });
         onSuccess?.();
       }
     } catch (err) {
@@ -37,6 +39,7 @@ export function useSignIn(onSuccess?: () => void) {
       const { createdSessionId, setActive } = await appleOAuth.startOAuthFlow();
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
+        analytics.userSignedIn({ method: 'apple' });
         onSuccess?.();
       }
     } catch (err) {

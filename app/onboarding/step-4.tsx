@@ -103,8 +103,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Lexend_700Bold',
     fontSize: scaleFont(32),
     color: OB.text,
-    letterSpacing: -0.5,
-    paddingBottom: 8,
   },
   inputLine: {
     height: 1,

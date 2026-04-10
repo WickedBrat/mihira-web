@@ -34,14 +34,14 @@ import { colors, layout } from '@/lib/theme';
 import { clearCachedProfile } from '@/lib/profileStorage';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { router } from 'expo-router';
-import { usePostHog } from 'posthog-react-native';
+import { analytics } from '@/lib/analytics';
+import { posthog } from '@/lib/posthog';
 
 export default function ProfileScreen() {
   const { isSignedIn, userId, signOut } = useAuth();
   const { user } = useUser();
   const { showToast } = useToast();
   const { profile, updateField } = useProfile();
-  const posthog = usePostHog();
   const signedIn = Boolean(isSignedIn);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAuthSheetOpen, setIsAuthSheetOpen] = useState(false);
@@ -163,7 +163,7 @@ export default function ProfileScreen() {
               label="Reset Ask Tab State"
               onPress={async () => {
                 await clearGuide();
-                posthog.capture('guide_reset');
+                analytics.guideReset();
                 showToast({ type: 'success', title: 'Guide Reset', message: 'The ask tab state has been cleared.' });
               }}
               variant="secondary"
@@ -201,7 +201,7 @@ export default function ProfileScreen() {
         onOpenAuth={openAuthSheet}
         onSignOut={async () => {
           try {
-            posthog.capture('user_signed_out');
+            analytics.userSignedOut();
             posthog.reset();
             await signOut();
             await clearCachedProfile();

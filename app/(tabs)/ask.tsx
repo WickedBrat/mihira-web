@@ -23,6 +23,7 @@ import { useGuide } from '@/lib/guideStore';
 import { useUsage } from '@/lib/usage';
 import { useSubscription } from '@/lib/subscription';
 import { PaywallSheet } from '@/features/billing/PaywallSheet';
+import { analytics } from '@/lib/analytics';
 import { colors, fonts, layout } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 import type { Message } from '@/features/chat/useChatState';
@@ -102,11 +103,13 @@ export default function AskScreen() {
     }
 
     if (isAtLimit) {
+      analytics.paywallShown({ feature: 'ask', mode: 'blocked' });
       setPaywallMode('blocked');
       return;
     }
 
     if (isNearLimit) {
+      analytics.paywallShown({ feature: 'ask', mode: 'warning' });
       pendingGuideRef.current = guideName;
       setPaywallMode('warning');
       return;
@@ -130,14 +133,17 @@ export default function AskScreen() {
           feature="ask"
           mode={paywallMode ?? 'warning'}
           onClose={() => {
+            analytics.paywallDismissed({ feature: 'ask', mode: paywallMode ?? 'warning' });
             setPaywallMode(null);
             pendingGuideRef.current = null;
           }}
           onUpgrade={() => {
+            analytics.paywallUpgradeTapped({ feature: 'ask' });
             setPaywallMode(null);
             openCheckout();
           }}
           onProceed={() => {
+            analytics.paywallProceedTapped({ feature: 'ask' });
             const name = pendingGuideRef.current;
             pendingGuideRef.current = null;
             setPaywallMode(null);

@@ -1,9 +1,23 @@
 // lib/subscription.ts
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useClerk, useAuth } from '@clerk/clerk-expo';
-import { useStripe } from '@stripe/stripe-react-native';
 import { useToast } from '@/components/ui/ToastProvider';
-import { usePostHog } from 'posthog-react-native';
+import { analytics } from '@/lib/analytics';
+
+// Safely conditionally load Stripe for Expo Go support
+let useStripe: any = () => ({
+  initPaymentSheet: async () => ({ error: { message: 'Stripe is unavailable without a custom dev client' } }),
+  presentPaymentSheet: async () => ({ error: { message: 'Stripe is unavailable without a custom dev client' } }),
+});
+let isStripeAvailable = false;
+
+try {
+  const StripeModule = require('@stripe/stripe-react-native');
+  useStripe = StripeModule.useStripe;
+  isStripeAvailable = true;
+} catch (e) {
+  console.warn('Fallback: Stripe not found or failed to load.');
+}
 
 export type Plan = 'free' | 'pro';
 
@@ -20,7 +34,6 @@ export function useSubscription(): UseSubscriptionReturn {
   const { isSignedIn } = useAuth();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { showToast } = useToast();
-  const posthog = usePostHog();
 
   const [plan, setPlan] = useState<Plan>('free');
   const [isLoaded, setIsLoaded] = useState(false);
@@ -83,7 +96,22 @@ export function useSubscription(): UseSubscriptionReturn {
       const { data: checkout, error: startError } = await checkoutInstance.start();
 
       if (startError || !checkout) {
+        console.log(startError);
+
         showToast({ type: 'error', title: 'Checkout failed', message: 'Please try again.' });
+        return;
+      }
+
+      // Expo Go fallback: simulate subscription in dev mode only
+      if (!isStripeAvailable) {
+        if (__DEV__) {
+          checkoutInstance.clear?.();
+          setPlan('pro');
+          analytics.subscriptionUpgraded({ plan: 'pro', simulated: true });
+          showToast({ type: 'success', title: '[DEV] Pro activated', message: 'Simulated — no real payment was made.' });
+        } else {
+          showToast({ type: 'error', title: 'Checkout unavailable', message: 'Please use the full app to subscribe.' });
+        }
         return;
       }
 
@@ -138,7 +166,7 @@ export function useSubscription(): UseSubscriptionReturn {
 
       await checkoutInstance.finalize?.();
 
-      posthog.capture('subscription_upgraded', { plan: 'pro' });
+      analytics.subscriptionUpgraded({ plan: 'pro' });
 
       showToast({ type: 'success', title: 'Welcome to Pro!', message: 'Your subscription is now active.' });
 
@@ -149,7 +177,7 @@ export function useSubscription(): UseSubscriptionReturn {
     } finally {
       isCheckingOutRef.current = false;
     }
-  }, [isSignedIn, clerk, initPaymentSheet, presentPaymentSheet, showToast, posthog, fetchSubscription]);
+  }, [isSignedIn, clerk, initPaymentSheet, presentPaymentSheet, showToast, fetchSubscription, setPlan]);
 
   return {
     isPro: plan === 'pro',

@@ -20,7 +20,7 @@ export function useDailyArth() {
       token = await session.getToken();
     }
     // getSupabaseClient gracefully handles token string or empty depending on setup
-    return getSupabaseClient(async () => token ?? '');
+    return getSupabaseClient(async () => token);
   }, [isSessionLoaded, isSignedIn, session]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function useDailyArth() {
         const { data, error: fetchError } = await client
           .from('spiritual_quotes')
           .select('quote, source')
-          .limit(1);
+          .limit(1000);
 
         if (fetchError) {
             console.error('[useDailyArth] SUPABASE ERROR:', fetchError);

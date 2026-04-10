@@ -18,6 +18,7 @@ import { useProfile } from '@/features/profile/useProfile';
 import { useAuth } from '@clerk/clerk-expo';
 import { scaleFont } from '@/lib/typography';
 import { OB } from '@/lib/onboardingStore';
+import { analytics } from '@/lib/analytics';
 
 const HOLD_DURATION = 2000; // ms to hold for full trigger
 
@@ -35,8 +36,13 @@ export default function Screen12() {
 
   const navigate = useCallback(() => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    const d = getOnboardingData();
+    analytics.onboardingCompleted({
+      has_birth_place: Boolean(d.birthPlace),
+      commitment_tier: d.commitmentTier ?? null,
+      is_signed_in: Boolean(isSignedIn),
+    });
     if (isSignedIn) {
-      const d = getOnboardingData();
       if (d.userName)       saveField('name', d.userName).catch(() => {});
       if (d.birthPlace)     saveField('birth_place', d.birthPlace).catch(() => {});
       if (d.commitmentTier) saveField('focus_area', d.commitmentTier).catch(() => {});

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
 import { Wind, Infinity as InfinityIcon } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { FeaturedCard } from '@/features/gurukul/FeaturedCard';
 import { CategoryCard } from '@/features/gurukul/CategoryCard';
 import { LessonRow } from '@/features/gurukul/LessonRow';
@@ -22,6 +23,19 @@ export default function GurukulScreen() {
   return (
     <View style={styles.root}>
       <PageAmbientBlobs />
+
+      <View style={styles.imagePortalContainer}>
+        <Image 
+          source={{uri: "https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/gurukul_coming_soon.webp"}}
+          style={styles.heroImage} 
+          resizeMode="cover"
+        />
+        <LinearGradient
+          colors={['transparent', colors.surface]}
+          style={styles.gradientOverlay}
+        />
+      </View>
+
       <View style={styles.comingSoonContainer}>
         <Text style={styles.comingSoonLabel}>Gurukul</Text>
         <Text style={styles.comingSoonTitle}>Coming Soon</Text>
@@ -115,6 +129,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: layout.screenPaddingX,
     gap: 12,
+    paddingTop: 200,
+    zIndex: 1,
+  },
+  imagePortalContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 480,
+    zIndex: 0,
+  },
+  heroImage: {
+    width: '100%',
+    height: '100%',
+    // opacity: 0.5,
+  },
+  gradientOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 300,
   },
   comingSoonLabel: {
     fontFamily: fonts.label,
