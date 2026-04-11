@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(19, 19, 19, 0.92)',
   },
   content: {
+    flex: 1,
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 24,

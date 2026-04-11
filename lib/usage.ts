@@ -1,6 +1,6 @@
 // lib/usage.ts
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth, useSession } from '@clerk/clerk-expo';
+import { useAuth, useSession } from '@clerk/expo';
 import { getSupabaseClient } from '@/lib/supabase';
 
 export type Feature = 'muhurat' | 'ask';
@@ -49,7 +49,7 @@ export function useUsage(feature: Feature): UseUsageReturn {
   const getClient = useCallback(async () => {
     if (!isSignedIn || !userId || !isSessionLoaded) return null;
     try {
-      const token = await session?.getToken() ?? await session?.getToken({ template: 'supabase' });
+      const token = await session?.getToken();
       if (!token) return null;
       return getSupabaseClient(() => session!.getToken());
     } catch {

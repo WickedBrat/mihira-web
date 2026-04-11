@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useAuth, useSession } from '@clerk/clerk-expo';
+import { useAuth, useSession } from '@clerk/expo';
 import { useToast } from '@/components/ui/ToastProvider';
 import { getSupabaseClient } from '@/lib/supabase';
 
@@ -102,10 +102,7 @@ export function useProfile() {
     if (!isSignedIn || !userId || !isSessionLoaded) return null;
 
     try {
-      let token = await session?.getToken();
-      if (!token) {
-        token = await session?.getToken({ template: 'supabase' });
-      }
+      const token = await session?.getToken();
       if (!token) throw new Error('Missing Clerk session token for Supabase');
 
       return getSupabaseClient(async () => token);

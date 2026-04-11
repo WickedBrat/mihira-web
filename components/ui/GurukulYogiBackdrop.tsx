@@ -1,8 +1,10 @@
 import React from 'react';
-import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Image, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
-const yogiAsset = Image.resolveAssetSource(require('../../assets/gurukul-yogi.svg'));
+const yogiAsset = Platform.OS !== 'web'
+  ? Image.resolveAssetSource(require('../../assets/gurukul-yogi.svg'))
+  : null;
 
 export function GurukulYogiBackdrop() {
   const { width } = useWindowDimensions();

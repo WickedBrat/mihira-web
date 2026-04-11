@@ -3,7 +3,7 @@ import { Stack, SplashScreen, usePathname, useGlobalSearchParams } from 'expo-ro
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ClerkProvider, useAuth, useUser } from '@clerk/clerk-expo';
+import { ClerkProvider, useAuth, useUser } from '@clerk/expo';
 import {
 
   useFonts,
@@ -30,7 +30,7 @@ if (!CLERK_KEY) throw new Error('Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY');
 let StripeProvider: React.FC<any> = ({ children }) => <>{children}</>;
 try {
   const StripeModule = require('@stripe/stripe-react-native');
-  StripeProvider = StripeModule.StripeProvider;
+  if (StripeModule.StripeProvider) StripeProvider = StripeModule.StripeProvider;
 } catch (e: any) {
   console.warn('Fallback: StripeProvider not found or failed to load. Are you in Expo Go?');
 }
@@ -88,7 +88,7 @@ export default function RootLayout() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <ClerkProvider publishableKey={CLERK_KEY} tokenCache={tokenCache}>
+    <ClerkProvider publishableKey={CLERK_KEY!} tokenCache={tokenCache}>
       <StripeProvider
           publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? ''}
           urlScheme="aksha"
@@ -122,6 +122,9 @@ export default function RootLayout() {
                   <Stack.Screen name="onboarding/step-12" options={{ gestureEnabled: false, animation: 'fade' }} />
                   <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
                   <Stack.Screen name="sacred-day/[id]" options={{ animation: 'slide_from_right' }} />
+                  <Stack.Screen name="pricing" options={{ headerShown: false, contentStyle: { backgroundColor: '#ffffff' } }} />
+                  <Stack.Screen name="payment-success" options={{ headerShown: false, contentStyle: { backgroundColor: '#f9f7ff' } }} />
+                  <Stack.Screen name="user-profile" options={{ headerShown: false, contentStyle: { backgroundColor: '#ffffff' } }} />
                 </Stack>
               </ToastProvider>
             </PostHogProvider>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useOAuth } from '@clerk/clerk-expo';
+import { useOAuth } from '@clerk/expo';
 import * as WebBrowser from 'expo-web-browser';
 import { useToast } from '@/components/ui/ToastProvider';
 import { analytics } from '@/lib/analytics';

@@ -8,10 +8,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  Alert,
+  TouchableOpacity,
 } from 'react-native';
+import { MoreVertical } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { SvgUri } from 'react-native-svg';
 import { ChatBubble } from '@/features/chat/ChatBubble';
 import { ChatInput } from '@/features/chat/ChatInput';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
@@ -19,6 +21,7 @@ import { PageHero } from '@/components/ui/PageHero';
 import { useChatState } from '@/features/chat/useChatState';
 import { GuideSelector } from '@/features/ask/GuideSelector';
 import { GuideLoader } from '@/features/ask/GuideLoader';
+import { getGuide } from '@/features/ask/guidePersonas';
 import { useGuide } from '@/lib/guideStore';
 import { useUsage } from '@/lib/usage';
 import { useSubscription } from '@/lib/subscription';
@@ -28,22 +31,24 @@ import { colors, fonts, layout } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 import type { Message } from '@/features/chat/useChatState';
 
-const askBackgroundArt = Image.resolveAssetSource(
-  require('../../assets/daily-arth-bg.svg')
-);
-
 type Phase = 'selector' | 'loading' | 'chat';
 
-function AskBackdrop() {
+function AskBackdrop({ guideName }: { guideName: string | null }) {
+  const persona = guideName ? getGuide(guideName) : null;
+  
   return (
     <View pointerEvents="none" style={styles.backdrop}>
-      <AmbientBlob color="rgba(212, 190, 228, 0.12)" top={-110} left={-90} size={380} />
-      <AmbientBlob color="rgba(184, 152, 122, 0.08)" top={280} left={-20} size={280} />
-      {askBackgroundArt?.uri ? (
-        <View style={styles.backgroundArt}>
-          <SvgUri uri={askBackgroundArt.uri} width="100%" height="100%" />
+      {persona?.imageUrl ? (
+        <View style={StyleSheet.absoluteFillObject}>
+          <Image 
+            source={{ uri: persona.imageUrl }} 
+            style={[StyleSheet.absoluteFillObject, { opacity: 0.15 }]} 
+            resizeMode="cover" 
+          />
         </View>
       ) : null}
+      <AmbientBlob color="rgba(212, 190, 228, 0.12)" top={-110} left={-90} size={380} />
+      <AmbientBlob color="rgba(184, 152, 122, 0.08)" top={280} left={-20} size={280} />
     </View>
   );
 }
@@ -82,7 +87,7 @@ export default function AskScreen() {
   }, [isLoading, guide]);
 
   const activeGuide = guide ?? pendingGuide;
-  const { messages, isTyping, inputText, setInputText, sendMessage } =
+  const { messages, isTyping, inputText, setInputText, sendMessage, clearChat } =
     useChatState(activeGuide);
   const flatListRef = useRef<FlatList<Message>>(null);
   const insets = useSafeAreaInsets();
@@ -165,7 +170,7 @@ export default function AskScreen() {
 
   return (
     <View style={styles.root}>
-      <AskBackdrop />
+      <AskBackdrop guideName={activeGuide} />
 
       <KeyboardAvoidingView
         style={styles.flex}
@@ -185,6 +190,23 @@ export default function AskScreen() {
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListHeaderComponent={(
             <SafeAreaView edges={['top']} style={styles.headerSafeArea}>
+              <View style={styles.topRightButton}>
+                <TouchableOpacity
+                  onPress={() => {
+                    Alert.alert(
+                      'Clear Chat',
+                      'Are you sure you want to clear your conversation history?',
+                      [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Clear', style: 'destructive', onPress: clearChat },
+                      ]
+                    );
+                  }}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <MoreVertical color={colors.onSurfaceVariant} size={24} />
+                </TouchableOpacity>
+              </View>
               <PageHero
                 meta="Sacred Guidance"
                 title={`Ask ${activeGuide ?? 'Aksha'}`}
@@ -216,17 +238,16 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
   },
-  backgroundArt: {
-    position: 'absolute',
-    top: -100,
-    right: -140,
-    width: 380,
-    height: 380,
-    opacity: 0.14,
-    transform: [{ rotate: '10deg' }],
-  },
   headerSafeArea: {
     marginBottom: 20,
+    position: 'relative',
+  },
+  topRightButton: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 0 : 20,
+    right: 16,
+    zIndex: 10,
+    padding: 8,
   },
   header: {
     paddingBottom: 24,

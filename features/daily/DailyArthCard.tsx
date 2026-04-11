@@ -1,18 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { View as MotiView } from 'moti/build/components/view';
 import { Quote } from 'lucide-react-native';
 import { SvgUri } from 'react-native-svg';
+import { useAssets } from 'expo-asset';
 import { colors, fonts } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
 
 import { ActivityIndicator } from 'react-native';
 import { useDailyArth } from './useDailyArth';
 
-const dailyArthBackground = Image.resolveAssetSource(require('../../assets/daily-arth-bg.svg'));
-
 export function DailyArthCard() {
   const { arth, isLoading } = useDailyArth();
+  const [bgAssets] = useAssets(
+    Platform.OS !== 'web' ? [require('../../assets/daily-arth-bg.svg')] : []
+  );
+  const bgUri = bgAssets?.[0]?.uri;
 
   // Fallback if loading or error to prevent layout jump while loading inside GlowCard
   const displayQuote = arth?.quote ?? '';
@@ -30,8 +33,8 @@ export function DailyArthCard() {
 
       <View style={[styles.card, isLoading && styles.cardLoading]}>
         <View pointerEvents="none" style={styles.backgroundArt}>
-          {dailyArthBackground?.uri ? (
-            <SvgUri uri={dailyArthBackground.uri} width="100%" height="100%" />
+          {bgUri ? (
+            <SvgUri uri={bgUri} width="100%" height="100%" />
           ) : null}
         </View>
 

@@ -22,3 +22,11 @@ export async function saveHistory(messages: Message[]): Promise<void> {
     console.error('[chatStorage] save error', err);
   }
 }
+
+export async function clearHistory(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(KEY);
+  } catch (err) {
+    console.error('[chatStorage] clear error', err);
+  }
+}

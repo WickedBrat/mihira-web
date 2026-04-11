@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Check, ChevronDown, LogOut, X, Zap } from 'lucide-react-native';
+import { Check, ChevronDown, LogOut, Settings, X, Zap } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { LANGUAGE_OPTIONS } from '@/features/profile/constants';
@@ -22,6 +22,7 @@ interface ProfileSettingsSheetProps {
   onSignOut: () => void | Promise<void>;
   isPro: boolean;
   onOpenPlans: () => void;
+  onManageAccount: () => void;
 }
 
 export function ProfileSettingsSheet({
@@ -39,6 +40,7 @@ export function ProfileSettingsSheet({
   onSignOut,
   isPro,
   onOpenPlans,
+  onManageAccount,
 }: ProfileSettingsSheetProps) {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
@@ -61,6 +63,7 @@ export function ProfileSettingsSheet({
       </View>
 
       <ScrollView
+        style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         bounces={false}
         contentContainerStyle={styles.scrollContent}
@@ -76,6 +79,11 @@ export function ProfileSettingsSheet({
                 <Text style={styles.identityEmail}>{email}</Text>
               </View>
             </View>
+
+            <Pressable style={styles.manageAccountRow} onPress={onManageAccount}>
+              <Settings size={16} color={colors.onSurfaceVariant} />
+              <Text style={styles.manageAccountText}>Manage Account</Text>
+            </Pressable>
 
             {!isPro && (
               <Pressable style={styles.upgradeRow} onPress={onOpenPlans}>
@@ -188,8 +196,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: `${colors.outlineVariant}33`,
   },
+  scrollView: {
+    flex: 1,
+  },
   scrollContent: {
-    overflow: 'scroll',
     paddingBottom: 6,
   },
   identityRow: {
@@ -248,6 +258,23 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyMedium,
     fontSize: 15,
     color: colors.secondaryFixed,
+  },
+  manageAccountRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 16,
+    backgroundColor: colors.surfaceContainerLow,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.05)',
+    marginBottom: 12,
+  },
+  manageAccountText: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: 15,
+    color: colors.onSurface,
   },
   signOutRow: {
     flexDirection: 'row',

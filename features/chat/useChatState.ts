@@ -2,7 +2,7 @@
 import { fetch } from 'expo/fetch';
 import Constants from 'expo-constants';
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { getHistory, saveHistory } from '@/lib/chatStorage';
+import { getHistory, saveHistory, clearHistory } from '@/lib/chatStorage';
 import { getGuide } from '@/features/ask/guidePersonas';
 import { analytics } from '@/lib/analytics';
 
@@ -140,5 +140,10 @@ export function useChatState(guide: string | null) {
     }
   }, [messages, isTyping, guide]);
 
-  return { messages, isTyping, inputText, setInputText, sendMessage };
+  const clearChat = useCallback(async () => {
+    setMessages([buildInitialMessage(guide)]);
+    await clearHistory();
+  }, [guide]);
+
+  return { messages, isTyping, inputText, setInputText, sendMessage, clearChat };
 }

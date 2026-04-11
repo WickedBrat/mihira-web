@@ -1,23 +1,10 @@
 // lib/subscription.ts
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useClerk, useAuth } from '@clerk/clerk-expo';
+import { useCallback, useRef } from 'react';
+import { useAuth, useSession } from '@clerk/expo';
+import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
 import { useToast } from '@/components/ui/ToastProvider';
 import { analytics } from '@/lib/analytics';
-
-// Safely conditionally load Stripe for Expo Go support
-let useStripe: any = () => ({
-  initPaymentSheet: async () => ({ error: { message: 'Stripe is unavailable without a custom dev client' } }),
-  presentPaymentSheet: async () => ({ error: { message: 'Stripe is unavailable without a custom dev client' } }),
-});
-let isStripeAvailable = false;
-
-try {
-  const StripeModule = require('@stripe/stripe-react-native');
-  useStripe = StripeModule.useStripe;
-  isStripeAvailable = true;
-} catch (e) {
-  console.warn('Fallback: Stripe not found or failed to load.');
-}
 
 export type Plan = 'free' | 'pro';
 
@@ -29,43 +16,29 @@ interface UseSubscriptionReturn {
   refreshSubscription: () => Promise<void>;
 }
 
+function getPricingUrl(): string {
+  if (__DEV__) {
+    // hostUri is e.g. "192.168.1.5:8081" on a device or "localhost:8081" on simulator
+    const hostUri = Constants.expoConfig?.hostUri ?? 'localhost:8081';
+    return `http://${hostUri}/pricing`;
+  }
+  return 'https://aksha.app/pricing'; // TODO: update with production URL
+}
+
 export function useSubscription(): UseSubscriptionReturn {
-  const clerk = useClerk();
-  const { isSignedIn } = useAuth();
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const { isLoaded: isAuthLoaded, isSignedIn, has } = useAuth();
+  const { session } = useSession();
   const { showToast } = useToast();
 
-  const [plan, setPlan] = useState<Plan>('free');
-  const [isLoaded, setIsLoaded] = useState(false);
   const isCheckingOutRef = useRef(false);
 
-  const fetchSubscription = useCallback(async () => {
-    if (!isSignedIn) {
-      setPlan('free');
-      setIsLoaded(true);
-      return;
-    }
+  // has() reads JWT claims — fast, no network call
+  const isPro = isAuthLoaded && isSignedIn ? (has?.({ plan: 'pro' }) ?? false) : false;
+  const plan: Plan = isPro ? 'pro' : 'free';
 
-    try {
-      // @ts-ignore — clerk.billing is experimental
-      const subscription = await clerk.billing.getSubscription({});
-      const isActive =
-        subscription?.status === 'active' &&
-        subscription?.subscriptionItems?.some(
-          (item: { plan: { slug: string } }) => item.plan.slug === 'pro'
-        );
-      setPlan(isActive ? 'pro' : 'free');
-    } catch {
-      // No active subscription — treat as free
-      setPlan('free');
-    } finally {
-      setIsLoaded(true);
-    }
-  }, [isSignedIn, clerk]);
-
-  useEffect(() => {
-    fetchSubscription();
-  }, [fetchSubscription]);
+  const refreshSubscription = useCallback(async () => {
+    await session?.reload();
+  }, [session]);
 
   const openCheckout = useCallback(async () => {
     if (!isSignedIn) {
@@ -80,110 +53,31 @@ export function useSubscription(): UseSubscriptionReturn {
     if (isCheckingOutRef.current) return;
     isCheckingOutRef.current = true;
 
-    const planId = process.env.EXPO_PUBLIC_CLERK_PRO_PLAN_ID;
-    if (!planId) {
-      console.error('[useSubscription] EXPO_PUBLIC_CLERK_PRO_PLAN_ID is not set');
-      return;
-    }
-
     try {
-      // @ts-ignore — clerk.__experimental_checkout is experimental
-      const checkoutInstance = clerk.__experimental_checkout({
-        planId,
-        planPeriod: 'month',
+      await WebBrowser.openBrowserAsync(getPricingUrl(), {
+        presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
       });
 
-      const { data: checkout, error: startError } = await checkoutInstance.start();
+      // Browser closed — reload session to pick up any new subscription in JWT
+      await session?.reload();
 
-      if (startError || !checkout) {
-        console.log(startError);
-
-        showToast({ type: 'error', title: 'Checkout failed', message: 'Please try again.' });
-        return;
+      if (has?.({ plan: 'pro' })) {
+        analytics.subscriptionUpgraded({ plan: 'pro' });
+        showToast({ type: 'success', title: 'Welcome to Pro!', message: 'Your subscription is now active.' });
       }
-
-      // Expo Go fallback: simulate subscription in dev mode only
-      if (!isStripeAvailable) {
-        if (__DEV__) {
-          checkoutInstance.clear?.();
-          setPlan('pro');
-          analytics.subscriptionUpgraded({ plan: 'pro', simulated: true });
-          showToast({ type: 'success', title: '[DEV] Pro activated', message: 'Simulated — no real payment was made.' });
-        } else {
-          showToast({ type: 'error', title: 'Checkout unavailable', message: 'Please use the full app to subscribe.' });
-        }
-        return;
-      }
-
-      const { error: initError } = await initPaymentSheet({
-        merchantDisplayName: 'Aksha',
-        paymentIntentClientSecret: checkout.externalClientSecret,
-        style: 'alwaysDark',
-        appearance: {
-          colors: {
-            primary: '#b564fc',
-            background: '#131313',
-            componentBackground: '#191a1a',
-            componentBorder: 'transparent',
-            componentDivider: '#252626',
-            primaryText: '#ffffff',
-            secondaryText: '#d3cec9',
-            componentText: '#ffffff',
-            placeholderText: '#6b6b6b',
-            icon: '#b564fc',
-            error: '#ee7d77',
-          },
-        },
-      });
-
-      if (initError) {
-        showToast({ type: 'error', title: 'Payment setup failed', message: initError.message });
-        return;
-      }
-
-      const { error: paymentError } = await presentPaymentSheet();
-
-      if (paymentError) {
-        if (paymentError.code !== 'Canceled') {
-          showToast({ type: 'error', title: 'Payment failed', message: paymentError.message });
-        }
-        checkoutInstance.clear();
-        return;
-      }
-
-      // Payment succeeded — confirm with Clerk and activate subscription
-      const { error: confirmError } = await checkoutInstance.confirm({});
-
-      if (confirmError) {
-        console.error('[useSubscription] confirm error', confirmError);
-        showToast({
-          type: 'error',
-          title: 'Activation failed',
-          message: 'Payment received but activation failed. Please contact support.',
-        });
-        return;
-      }
-
-      await checkoutInstance.finalize?.();
-
-      analytics.subscriptionUpgraded({ plan: 'pro' });
-
-      showToast({ type: 'success', title: 'Welcome to Pro!', message: 'Your subscription is now active.' });
-
-      await fetchSubscription();
     } catch (err) {
       console.error('[useSubscription] openCheckout error', err);
       showToast({ type: 'error', title: 'Something went wrong', message: 'Please try again.' });
     } finally {
       isCheckingOutRef.current = false;
     }
-  }, [isSignedIn, clerk, initPaymentSheet, presentPaymentSheet, showToast, fetchSubscription, setPlan]);
+  }, [isSignedIn, session, has, showToast]);
 
   return {
-    isPro: plan === 'pro',
+    isPro,
     plan,
-    isLoaded,
+    isLoaded: isAuthLoaded,
     openCheckout,
-    refreshSubscription: fetchSubscription,
+    refreshSubscription,
   };
 }

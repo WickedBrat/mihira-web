@@ -7,8 +7,10 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
-import { useAuth, useUser } from '@clerk/clerk-expo';
+import { useAuth, useUser } from '@clerk/expo';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { useGuide } from '@/lib/guideStore';
@@ -197,6 +199,14 @@ export default function ProfileScreen() {
         onOpenPlans={() => {
           closeSettingsSheet();
           setTimeout(() => setIsPlansOpen(true), 240);
+        }}
+        onManageAccount={async () => {
+          closeSettingsSheet();
+          const hostUri = Constants.expoConfig?.hostUri ?? 'localhost:8081';
+          const url = __DEV__ ? `http://${hostUri}/user-profile` : 'https://aksha.app/user-profile';
+          await WebBrowser.openBrowserAsync(url, {
+            presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
+          });
         }}
         onOpenAuth={openAuthSheet}
         onSignOut={async () => {

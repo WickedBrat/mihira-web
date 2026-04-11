@@ -15,7 +15,7 @@ import Animated, {
 import * as Haptics from 'expo-haptics';
 import { getOnboardingData } from '@/lib/onboardingStore';
 import { useProfile } from '@/features/profile/useProfile';
-import { useAuth } from '@clerk/clerk-expo';
+import { useAuth } from '@clerk/expo';
 import { scaleFont } from '@/lib/typography';
 import { OB } from '@/lib/onboardingStore';
 import { analytics } from '@/lib/analytics';

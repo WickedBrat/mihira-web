@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
     borderRadius: 9999,
-    backgroundColor: `${colors.primary}18`,
+    // backgroundColor: `${colors.primary}`,
     shadowColor: colors.primary,
     shadowOpacity: 0.28,
     shadowRadius: 48,

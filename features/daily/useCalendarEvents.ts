@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth, useSession } from '@clerk/clerk-expo';
+import { useAuth, useSession } from '@clerk/expo';
 import { getSupabaseClient } from '@/lib/supabase';
 
 export interface CalendarEvent {
