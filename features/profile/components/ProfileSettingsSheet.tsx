@@ -5,7 +5,8 @@ import { BottomSheet } from '@/components/ui/BottomSheet';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { LANGUAGE_OPTIONS } from '@/features/profile/constants';
 import type { ProfileData } from '@/features/profile/useProfile';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 
 interface ProfileSettingsSheetProps {
   visible: boolean;
@@ -34,7 +35,7 @@ export function ProfileSettingsSheet({
   email,
   language,
   region,
-  userIdLabel,
+  userIdLabel: _userIdLabel,
   onSelectLanguage,
   onOpenAuth,
   onSignOut,
@@ -43,12 +44,215 @@ export function ProfileSettingsSheet({
   onManageAccount,
 }: ProfileSettingsSheetProps) {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const { colors } = useTheme();
 
   useEffect(() => {
     if (!visible) {
       setIsLanguageDropdownOpen(false);
     }
   }, [visible]);
+
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      sheet: {
+        borderTopLeftRadius: 34,
+        borderTopRightRadius: 34,
+      },
+      header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 22,
+        gap: 12,
+      },
+      title: {
+        fontFamily: fonts.headline,
+        fontSize: 24,
+        color: c.onSurface,
+        letterSpacing: -0.4,
+        marginBottom: 4,
+      },
+      subtitle: {
+        fontFamily: fonts.body,
+        fontSize: 13,
+        color: c.onSurfaceVariant,
+        lineHeight: 19,
+        maxWidth: 220,
+      },
+      closeButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: `${c.outlineVariant}33`,
+      },
+      scrollView: {
+        flex: 1,
+        paddingBottom: 20,
+      },
+      scrollContent: {
+        paddingBottom: 6,
+      },
+      identityRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 14,
+        marginBottom: 16,
+        padding: 14,
+        borderRadius: 18,
+        backgroundColor: `${c.primary}12`,
+        borderWidth: 1,
+        borderColor: `${c.primary}22`,
+      },
+      identityAvatar: {
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: `${c.primary}30`,
+      },
+      identityInitials: {
+        fontFamily: fonts.headline,
+        fontSize: 16,
+        color: c.primaryFixed,
+      },
+      identityText: { flex: 1 },
+      identityName: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: 15,
+        color: c.onSurface,
+        marginBottom: 2,
+      },
+      identityEmail: {
+        fontFamily: fonts.body,
+        fontSize: 12,
+        color: c.onSurfaceVariant,
+      },
+      signInButton: {
+        alignSelf: 'stretch',
+        marginBottom: 20,
+      },
+      upgradeRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        borderRadius: 16,
+        backgroundColor: 'rgba(255, 149, 0, 0.063)',
+        borderColor: 'rgba(255, 149, 0, 0.102)',
+        borderWidth: 1,
+        marginBottom: 12,
+      },
+      upgradeText: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: 15,
+        color: c.secondaryFixed,
+      },
+      manageAccountRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        borderRadius: 16,
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+        marginBottom: 12,
+      },
+      manageAccountText: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: 15,
+        color: c.onSurface,
+      },
+      signOutRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        borderRadius: 16,
+        backgroundColor: 'rgba(207, 102, 121, 0.08)',
+        borderWidth: 1,
+        borderColor: 'rgba(207, 102, 121, 0.15)',
+        marginBottom: 20,
+      },
+      signOutText: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: 15,
+        color: '#CF6679',
+      },
+      section: { marginBottom: 18 },
+      label: {
+        fontFamily: fonts.label,
+        fontSize: 10,
+        textTransform: 'uppercase',
+        letterSpacing: 1.8,
+        color: c.onSurfaceVariant,
+        marginBottom: 10,
+      },
+      dropdownTrigger: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderRadius: 16,
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+      },
+      dropdownTriggerText: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: 15,
+        color: c.onSurface,
+      },
+      dropdownChevronOpen: { transform: [{ rotate: '180deg' }] },
+      dropdownMenu: {
+        marginTop: 10,
+        borderRadius: 18,
+        backgroundColor: c.surfaceContainer,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+        overflow: 'hidden',
+      },
+      dropdownOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+      },
+      dropdownOptionSelected: { backgroundColor: `${c.primary}14` },
+      dropdownOptionText: {
+        fontFamily: fonts.body,
+        fontSize: 15,
+        color: c.onSurface,
+      },
+      dropdownOptionTextSelected: {
+        fontFamily: fonts.bodyMedium,
+        color: c.primaryFixed,
+      },
+      infoRow: {
+        borderRadius: 16,
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+      },
+      infoValue: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: 15,
+        color: c.onSurface,
+      },
+    })
+  );
 
   return (
     <BottomSheet visible={visible} onClose={onClose} sheetStyle={styles.sheet}>
@@ -148,213 +352,7 @@ export function ProfileSettingsSheet({
             <Text style={styles.infoValue}>{region}</Text>
           </View>
         </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>User ID</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoValue}>{userIdLabel}</Text>
-          </View>
-        </View>
       </ScrollView>
     </BottomSheet>
   );
 }
-
-const styles = StyleSheet.create({
-  sheet: {
-    borderTopLeftRadius: 34,
-    borderTopRightRadius: 34,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 22,
-    gap: 12,
-  },
-  title: {
-    fontFamily: fonts.headline,
-    fontSize: 24,
-    color: colors.onSurface,
-    letterSpacing: -0.4,
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.onSurfaceVariant,
-    lineHeight: 19,
-    maxWidth: 220,
-  },
-  closeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: `${colors.outlineVariant}33`,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 6,
-  },
-  identityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-    marginBottom: 16,
-    padding: 14,
-    borderRadius: 18,
-    backgroundColor: `${colors.primary}12`,
-    borderWidth: 1,
-    borderColor: `${colors.primary}22`,
-  },
-  identityAvatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: `${colors.primary}30`,
-  },
-  identityInitials: {
-    fontFamily: fonts.headline,
-    fontSize: 16,
-    color: colors.primaryFixed,
-  },
-  identityText: { flex: 1 },
-  identityName: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.onSurface,
-    marginBottom: 2,
-  },
-  identityEmail: {
-    fontFamily: fonts.body,
-    fontSize: 12,
-    color: colors.onSurfaceVariant,
-  },
-  signInButton: {
-    alignSelf: 'stretch',
-    marginBottom: 20,
-  },
-  upgradeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 149, 0, 0.063)',
-    borderColor: 'rgba(255, 149, 0, 0.102)',
-    borderWidth: 1,
-    marginBottom: 12,
-  },
-  upgradeText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.secondaryFixed,
-  },
-  manageAccountRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 16,
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-    marginBottom: 12,
-  },
-  manageAccountText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.onSurface,
-  },
-  signOutRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 16,
-    backgroundColor: 'rgba(207, 102, 121, 0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(207, 102, 121, 0.15)',
-    marginBottom: 20,
-  },
-  signOutText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: '#CF6679',
-  },
-  section: { marginBottom: 18 },
-  label: {
-    fontFamily: fonts.label,
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 1.8,
-    color: colors.onSurfaceVariant,
-    marginBottom: 10,
-  },
-  dropdownTrigger: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderRadius: 16,
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  dropdownTriggerText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.onSurface,
-  },
-  dropdownChevronOpen: { transform: [{ rotate: '180deg' }] },
-  dropdownMenu: {
-    marginTop: 10,
-    borderRadius: 18,
-    backgroundColor: colors.surfaceContainer,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-    overflow: 'hidden',
-  },
-  dropdownOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  dropdownOptionSelected: { backgroundColor: `${colors.primary}14` },
-  dropdownOptionText: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-    color: colors.onSurface,
-  },
-  dropdownOptionTextSelected: {
-    fontFamily: fonts.bodyMedium,
-    color: colors.primaryFixed,
-  },
-  infoRow: {
-    borderRadius: 16,
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  infoValue: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.onSurface,
-  },
-});

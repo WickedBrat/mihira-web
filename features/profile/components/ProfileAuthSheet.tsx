@@ -3,7 +3,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { X } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { OAuthButton } from '@/features/auth/OAuthButton';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 
 interface ProfileAuthSheetProps {
   visible: boolean;
@@ -20,6 +21,48 @@ export function ProfileAuthSheet({
   onSignInWithApple,
   isLoading,
 }: ProfileAuthSheetProps) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      sheet: {
+        borderTopLeftRadius: 34,
+        borderTopRightRadius: 34,
+      },
+      header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 22,
+        gap: 12,
+      },
+      title: {
+        fontFamily: fonts.headline,
+        fontSize: 24,
+        color: c.onSurface,
+        letterSpacing: -0.4,
+        marginBottom: 4,
+      },
+      subtitle: {
+        fontFamily: fonts.body,
+        fontSize: 13,
+        color: c.onSurfaceVariant,
+        lineHeight: 19,
+        maxWidth: 220,
+      },
+      closeButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: `${c.outlineVariant}33`,
+      },
+      oauthList: { gap: 12 },
+    })
+  );
+
   return (
     <BottomSheet visible={visible} onClose={onClose} sheetStyle={styles.sheet}>
       <View style={styles.header}>
@@ -39,42 +82,3 @@ export function ProfileAuthSheet({
     </BottomSheet>
   );
 }
-
-const styles = StyleSheet.create({
-  sheet: {
-    borderTopLeftRadius: 34,
-    borderTopRightRadius: 34,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 22,
-    gap: 12,
-  },
-  title: {
-    fontFamily: fonts.headline,
-    fontSize: 24,
-    color: colors.onSurface,
-    letterSpacing: -0.4,
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.onSurfaceVariant,
-    lineHeight: 19,
-    maxWidth: 220,
-  },
-  closeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: `${colors.outlineVariant}33`,
-  },
-  oauthList: { gap: 12 },
-});

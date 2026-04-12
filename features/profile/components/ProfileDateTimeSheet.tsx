@@ -2,7 +2,8 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BottomSheet } from '@/components/ui/BottomSheet';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useThemedStyles } from '@/lib/theme-context';
 
 interface ProfileDateTimeSheetProps {
   visible: boolean;
@@ -21,6 +22,51 @@ export function ProfileDateTimeSheet({
   onClose,
   onConfirm,
 }: ProfileDateTimeSheetProps) {
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      sheet: {
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+      },
+      content: {
+        paddingBottom: 18,
+      },
+      header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 14,
+      },
+      title: {
+        fontFamily: fonts.headline,
+        fontSize: 17,
+        color: c.onSurface,
+        letterSpacing: -0.2,
+      },
+      action: {
+        fontFamily: fonts.label,
+        fontSize: 13,
+        color: c.primaryFixed,
+      },
+      section: {
+        gap: 10,
+      },
+      label: {
+        fontFamily: fonts.label,
+        fontSize: 10,
+        letterSpacing: 1.8,
+        textTransform: 'uppercase',
+        color: c.onSurfaceVariant,
+      },
+      divider: {
+        height: 1,
+        backgroundColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+        marginVertical: 12,
+      },
+      picker: { alignSelf: 'stretch' },
+    })
+  );
+
   return (
     <BottomSheet
       visible={visible}
@@ -69,47 +115,3 @@ export function ProfileDateTimeSheet({
     </BottomSheet>
   );
 }
-
-const styles = StyleSheet.create({
-  sheet: {
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-
-  },
-  content: {
-    paddingBottom: 18,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 14,
-  },
-  title: {
-    fontFamily: fonts.headline,
-    fontSize: 17,
-    color: colors.onSurface,
-    letterSpacing: -0.2,
-  },
-  action: {
-    fontFamily: fonts.label,
-    fontSize: 13,
-    color: colors.primaryFixed,
-  },
-  section: {
-    gap: 10,
-  },
-  label: {
-    fontFamily: fonts.label,
-    fontSize: 10,
-    letterSpacing: 1.8,
-    textTransform: 'uppercase',
-    color: colors.onSurfaceVariant,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    marginVertical: 12,
-  },
-  picker: { alignSelf: 'stretch' },
-});
