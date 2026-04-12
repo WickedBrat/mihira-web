@@ -11,12 +11,18 @@ export type BubbleType =
   | 'vani'
   | 'narad_closing';
 
+export type AnimationTrigger =
+  | 'gentle_pluck'
+  | 'rising_smoke'
+  | 'lotus_bloom'
+  | 'steady_dawn';
+
 export interface NaradResponse {
   interaction_metadata: {
     consulted_deity: DeityName;
     realm: string;
     ui_vibration_color: string;
-    animation_trigger: string;
+    animation_trigger: AnimationTrigger;
   };
   narad_narrative: {
     greeting: string;
