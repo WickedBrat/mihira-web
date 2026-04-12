@@ -74,6 +74,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const isDark = useMemo(() => {
     if (preference === 'light') return false;
     if (preference === 'dark') return true;
+    // osScheme can be null on platforms that don't report a preference.
+    // Defaulting null → dark matches Aksha's dark-first design.
     return osScheme !== 'light';
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preference, osScheme]);
@@ -105,8 +107,9 @@ export function useThemedStyles<T>(
   const { colors, glassMorphism, gradients, isDark } = useTheme();
   return useMemo(
     () => factory(colors, glassMorphism, gradients),
-    // isDark is the stable toggle; factory should be stable (defined outside render)
+    // colors, glassMorphism, gradients are stable references (keyed on isDark inside ThemeProvider)
+    // factory must be included so callers with closing-over state don't get stale styles
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isDark]
+    [isDark, factory]
   );
 }

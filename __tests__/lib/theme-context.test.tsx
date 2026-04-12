@@ -45,6 +45,15 @@ describe('useTheme', () => {
     const stored = await AsyncStorage.getItem('@aksha/theme-preference');
     expect(stored).toBe('light');
   });
+
+  it('throws when used outside ThemeProvider', () => {
+    // Suppress expected error output
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => renderHook(() => useTheme())).toThrow(
+      'useTheme must be used inside ThemeProvider'
+    );
+    spy.mockRestore();
+  });
 });
 
 describe('useThemedStyles', () => {
