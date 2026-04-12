@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 
 interface OAuthButtonProps {
   provider: 'google' | 'apple';
@@ -19,6 +20,50 @@ const PROVIDER_SYMBOL: Record<OAuthButtonProps['provider'], string> = {
 };
 
 export function OAuthButton({ provider, onPress, isLoading }: OAuthButtonProps) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      button: {
+        borderRadius: 16,
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)',
+      },
+      pressed: {
+        opacity: 0.7,
+      },
+      inner: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 16,
+        gap: 14,
+      },
+      symbolWrap: {
+        width: 32,
+        height: 32,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+      },
+      symbol: {
+        fontFamily: fonts.headline,
+        fontSize: 14,
+        color: c.onSurface,
+      },
+      label: {
+        flex: 1,
+        fontFamily: fonts.bodyMedium,
+        fontSize: 15,
+        color: c.onSurface,
+      },
+      placeholder: {
+        width: 20,
+      },
+    })
+  );
+
   return (
     <Pressable
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
@@ -39,44 +84,3 @@ export function OAuthButton({ provider, onPress, isLoading }: OAuthButtonProps) 
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    borderRadius: 16,
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.07)',
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  inner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    gap: 14,
-  },
-  symbolWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.06)',
-  },
-  symbol: {
-    fontFamily: fonts.headline,
-    fontSize: 14,
-    color: colors.onSurface,
-  },
-  label: {
-    flex: 1,
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.onSurface,
-  },
-  placeholder: {
-    width: 20,
-  },
-});

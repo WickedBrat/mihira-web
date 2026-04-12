@@ -15,6 +15,7 @@ interface MuhuratState {
   suggestion: string | null;
   reasoning: string | null;
   warnings: string | null;
+  festivalNote: string | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -22,7 +23,8 @@ interface MuhuratState {
 export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
   const [state, setState] = useState<MuhuratState>({
     rankedWindows: [], recommendation: null, confidence: null,
-    suggestion: null, reasoning: null, warnings: null, isLoading: false, error: null,
+    suggestion: null, reasoning: null, warnings: null, festivalNote: null,
+    isLoading: false, error: null,
   });
 
   useEffect(() => {
@@ -68,6 +70,7 @@ export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
             suggestion: data.suggestion,
             reasoning: data.reasoning,
             warnings: data.warnings ?? null,
+            festivalNote: data.festivalNote ?? null,
             isLoading: false,
             error: null,
           });

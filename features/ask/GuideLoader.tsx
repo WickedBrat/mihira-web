@@ -11,7 +11,8 @@ import Animated, {
   FadeIn,
   runOnJS,
 } from 'react-native-reanimated';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { getGuide } from './guidePersonas';
@@ -20,7 +21,6 @@ const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get('window');
 const CENTER_X = SCREEN_W / 2;
 const CENTER_Y = SCREEN_H / 2;
 
-// Scattered starting positions (as fractions of screen)
 const ORB_STARTS: { x: number; y: number; size: number }[] = [
   { x: 0.08,  y: 0.18, size: 14 },
   { x: 0.82,  y: 0.12, size: 18 },
@@ -29,6 +29,31 @@ const ORB_STARTS: { x: number; y: number; size: number }[] = [
   { x: 0.18,  y: 0.82, size: 20 },
   { x: 0.76,  y: 0.78, size: 13 },
 ];
+
+const orbStyles = StyleSheet.create({
+  orb: {
+    position: 'absolute',
+    backgroundColor: 'rgba(255, 240, 200, 0.85)',
+    shadowColor: '#fff8e0',
+    shadowOpacity: 0.9,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 0 },
+  },
+  mergePulse: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: CENTER_Y - 30,
+    left: CENTER_X - 30,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 240, 200, 0.75)',
+    shadowColor: '#fff8e0',
+    shadowOpacity: 1,
+    shadowRadius: 24,
+    shadowOffset: { width: 0, height: 0 },
+  },
+});
 
 interface OrbProps {
   startX: number;
@@ -49,10 +74,7 @@ function Orb({ startX, startY, size, delay, onAllArrived, isLast }: OrbProps) {
     const targetY = CENTER_Y - size / 2;
     const easing = Easing.out(Easing.cubic);
 
-    // Fade in gently first
     opacity.value = withDelay(delay, withTiming(0.75, { duration: 600, easing }));
-
-    // Drift to center
     x.value = withDelay(delay + 200, withTiming(targetX, { duration: 2800, easing }));
 
     if (isLast && onAllArrived) {
@@ -72,7 +94,7 @@ function Orb({ startX, startY, size, delay, onAllArrived, isLast }: OrbProps) {
   return (
     <Animated.View
       style={[
-        styles.orb,
+        orbStyles.orb,
         { width: size, height: size, borderRadius: size / 2 },
         orbStyle,
       ]}
@@ -105,9 +127,7 @@ function MergePulse({ onComplete }: MergePulseProps) {
   }));
 
   return (
-    <Animated.View
-      style={[styles.mergePulse, pulseStyle]}
-    />
+    <Animated.View style={[orbStyles.mergePulse, pulseStyle]} />
   );
 }
 
@@ -119,16 +139,37 @@ interface GuideLoaderProps {
 export function GuideLoader({ guideName, onComplete }: GuideLoaderProps) {
   const [showMerge, setShowMerge] = React.useState(false);
   const [showGuide, setShowGuide] = React.useState(false);
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      root: {
+        flex: 1,
+        backgroundColor: c.surface,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      guideReveal: {
+        alignItems: 'center',
+        gap: 20,
+      },
+      guideEmoji: {
+        fontSize: 80,
+      },
+      guideText: {
+        fontFamily: fonts.labelLight,
+        fontSize: scaleFont(20),
+        color: c.onSurfaceVariant,
+        letterSpacing: 2,
+        textAlign: 'center',
+      },
+    })
+  );
 
   const guide = getGuide(guideName);
 
-  const handleOrbsArrived = () => {
-    setShowMerge(true);
-  };
-
+  const handleOrbsArrived = () => setShowMerge(true);
   const handleMergeComplete = () => {
     setShowGuide(true);
-    // Auto-advance after emoji + text have settled
     setTimeout(onComplete, 2200);
   };
 
@@ -139,7 +180,6 @@ export function GuideLoader({ guideName, onComplete }: GuideLoaderProps) {
         <AmbientBlob color="rgba(184, 152, 122, 0.06)" top={380} left={60} size={280} />
       </View>
 
-      {/* Orbs layer */}
       <View style={StyleSheet.absoluteFill} pointerEvents="none">
         {ORB_STARTS.map((orb, i) => (
           <Orb
@@ -155,7 +195,6 @@ export function GuideLoader({ guideName, onComplete }: GuideLoaderProps) {
         {showMerge && <MergePulse onComplete={handleMergeComplete} />}
       </View>
 
-      {/* Guide reveal */}
       {showGuide && (
         <Animated.View entering={FadeIn.duration(900)} style={styles.guideReveal}>
           <Text style={styles.guideEmoji}>{guide.emoji}</Text>
@@ -170,48 +209,3 @@ export function GuideLoader({ guideName, onComplete }: GuideLoaderProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  orb: {
-    position: 'absolute',
-    backgroundColor: 'rgba(255, 240, 200, 0.85)',
-    shadowColor: '#fff8e0',
-    shadowOpacity: 0.9,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 0 },
-  },
-  mergePulse: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: CENTER_Y - 30,
-    left: CENTER_X - 30,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: 'rgba(255, 240, 200, 0.75)',
-    shadowColor: '#fff8e0',
-    shadowOpacity: 1,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 0 },
-  },
-  guideReveal: {
-    alignItems: 'center',
-    gap: 20,
-  },
-  guideEmoji: {
-    fontSize: 80,
-  },
-  guideText: {
-    fontFamily: fonts.labelLight,
-    fontSize: scaleFont(20),
-    color: colors.onSurfaceVariant,
-    letterSpacing: 2,
-    textAlign: 'center',
-  },
-});

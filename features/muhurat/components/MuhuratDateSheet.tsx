@@ -2,7 +2,8 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BottomSheet } from '@/components/ui/BottomSheet';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useThemedStyles } from '@/lib/theme-context';
 
 interface MuhuratDateSheetProps {
   visible: boolean;
@@ -23,6 +24,38 @@ export function MuhuratDateSheet({
   onClose,
   onConfirm,
 }: MuhuratDateSheetProps) {
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      sheet: {
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+      },
+      content: {
+        paddingBottom: 18,
+      },
+      header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 14,
+      },
+      title: {
+        fontFamily: fonts.headline,
+        fontSize: 17,
+        color: c.onSurface,
+        letterSpacing: -0.2,
+      },
+      action: {
+        fontFamily: fonts.label,
+        fontSize: 13,
+        color: c.primaryFixed,
+      },
+      picker: {
+        alignSelf: 'stretch',
+      },
+    })
+  );
+
   return (
     <BottomSheet
       visible={visible}
@@ -54,33 +87,3 @@ export function MuhuratDateSheet({
     </BottomSheet>
   );
 }
-
-const styles = StyleSheet.create({
-  sheet: {
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-  },
-  content: {
-    paddingBottom: 18,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 14,
-  },
-  title: {
-    fontFamily: fonts.headline,
-    fontSize: 17,
-    color: colors.onSurface,
-    letterSpacing: -0.2,
-  },
-  action: {
-    fontFamily: fonts.label,
-    fontSize: 13,
-    color: colors.primaryFixed,
-  },
-  picker: {
-    alignSelf: 'stretch',
-  },
-});

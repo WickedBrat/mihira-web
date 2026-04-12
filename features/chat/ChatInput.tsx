@@ -3,7 +3,8 @@ import { View, TextInput, Pressable, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Send } from 'lucide-react-native';
 import { hapticMedium } from '@/lib/haptics';
-import { colors, fonts, gradients } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 
 interface ChatInputProps {
@@ -13,6 +14,51 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
+  const { colors, gradients } = useTheme();
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      container: {
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+      },
+      inputRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        backgroundColor: dark ? 'rgba(37, 38, 38, 0.7)' : 'rgba(232, 225, 212, 0.7)',
+        borderRadius: 9999,
+        borderWidth: 1,
+        borderColor: `${c.primaryFixedDim}02`,
+        paddingLeft: 26,
+        paddingRight: 10,
+        paddingVertical: 5,
+        shadowColor: c.primary,
+        shadowOpacity: 0.12,
+        shadowRadius: 16,
+        shadowOffset: { width: 0, height: 0 },
+      },
+      input: {
+        flex: 1,
+        fontFamily: fonts.body,
+        fontSize: scaleFont(15),
+        lineHeight: scaleFont(20),
+        color: c.onSurface,
+        paddingVertical: 12,
+        textAlignVertical: 'center',
+        maxHeight: 100,
+      },
+      sendBtn: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      pressed: { opacity: 0.8 },
+      sendBtnWrapper: {},
+    })
+  );
+
   const handleSend = () => {
     hapticMedium();
     onSend();
@@ -50,45 +96,3 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    backgroundColor: 'rgba(37, 38, 38, 0.7)',
-    borderRadius: 9999,
-    borderWidth: 1,
-    borderColor: `${colors.primaryFixedDim}02`,
-    paddingLeft: 26,
-    paddingRight: 10,
-    paddingVertical: 5,
-    shadowColor: colors.primary,
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 0 },
-  },
-  input: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: scaleFont(15),
-    lineHeight: scaleFont(20),
-    color: colors.onSurface,
-    paddingVertical: 12,
-    textAlignVertical: 'center',
-    maxHeight: 100,
-  },
-  sendBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pressed: { opacity: 0.8 },
-  sendBtnWrapper: {},
-});

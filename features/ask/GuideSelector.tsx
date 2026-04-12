@@ -20,7 +20,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { GUIDES, type GuidePersona } from './guidePersonas';
@@ -30,7 +31,6 @@ const { width: SW, height: SH } = Dimensions.get('window');
 const CARD_W = SW * 0.76;
 const CARD_GAP = 12;
 const SNAP = CARD_W + CARD_GAP;
-// Center the first card: paddingHorizontal = half the leftover space, minus half gap
 const CONTENT_PADDING = (SW - CARD_W) / 2 - CARD_GAP / 2;
 
 interface GuideSelectorProps {
@@ -49,6 +49,49 @@ function CarouselCard({
   const scale = useSharedValue(isActive ? 1 : 0.88);
   const opacity = useSharedValue(isActive ? 1 : 0.38);
   const glowOpacity = useSharedValue(isActive ? 1 : 0);
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      card: {
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        borderRadius: 28,
+        borderWidth: 1,
+        borderColor: 'rgba(72, 72, 72, 0.25)',
+        paddingVertical: 48,
+        paddingHorizontal: 28,
+        alignItems: 'center',
+        gap: 12,
+        overflow: 'hidden',
+        height: SH * 0.48,
+        justifyContent: 'flex-end',
+      },
+      cardBgImage: {
+        borderRadius: 28,
+      },
+      cardScrim: {
+        borderRadius: 28,
+        backgroundColor: 'rgba(0, 0, 0, 0.52)',
+      },
+      cardGlow: {
+        borderRadius: 28,
+        borderWidth: 1.5,
+        borderColor: `${c.secondaryFixedDim}55`,
+        backgroundColor: `${c.onSecondary}0d`,
+      },
+      cardName: {
+        fontFamily: fonts.headline,
+        fontSize: scaleFont(28),
+        color: '#ffffff',
+        textAlign: 'center',
+      },
+      cardEssence: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(14),
+        color: 'rgba(255,255,255,0.75)',
+        textAlign: 'center',
+        lineHeight: scaleFont(21),
+      },
+    })
+  );
 
   useEffect(() => {
     scale.value = withTiming(isActive ? 1 : 0.88, {
@@ -74,15 +117,12 @@ function CarouselCard({
       delayLongPress={400}
     >
       <Animated.View style={[styles.card, cardStyle]}>
-        {/* Full-card background image */}
         <Image
           source={{ uri: guide.imageUrl }}
           style={[StyleSheet.absoluteFill, styles.cardBgImage]}
           resizeMode="cover"
         />
-        {/* Dark scrim so text stays readable */}
         <View style={[StyleSheet.absoluteFill, styles.cardScrim]} />
-        {/* Purple glow overlay for active card */}
         <Animated.View style={[StyleSheet.absoluteFill, styles.cardGlow, glowStyle]} />
 
         <Text style={styles.cardName}>{guide.name}</Text>
@@ -95,15 +135,83 @@ function CarouselCard({
 export function GuideSelector({ onCommit }: GuideSelectorProps) {
   const [activeIndex, _setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      root: {
+        flex: 1,
+        backgroundColor: c.surface,
+        paddingTop: 40,
+      },
+      safe: { flex: 1 },
+      header: {
+        alignItems: 'center',
+        paddingHorizontal: 32,
+        paddingTop: 20,
+        paddingBottom: 28,
+      },
+      title: {
+        fontFamily: fonts.headlineExtra,
+        fontSize: scaleFont(36),
+        color: c.onSurface,
+        letterSpacing: -0.8,
+        lineHeight: scaleFont(44),
+        textAlign: 'center',
+        marginBottom: 12,
+      },
+      subtitle: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(15),
+        color: c.onSurfaceVariant,
+        textAlign: 'center',
+        letterSpacing: 0.3,
+      },
+      carouselWrapper: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingBottom: 12,
+      },
+      carouselContent: {
+        paddingHorizontal: CONTENT_PADDING,
+      },
+      cardSlot: {
+        width: CARD_W,
+        marginHorizontal: CARD_GAP / 2,
+      },
+      hintRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 4,
+        gap: 6,
+        marginBottom: 8,
+        paddingHorizontal: 32,
+      },
+      commitVerb: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(14),
+        color: c.primary,
+      },
+      holdHint: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(13),
+        color: c.onSurfaceVariant,
+      },
+      permanentNote: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(11),
+        color: c.outline,
+        textAlign: 'center',
+        marginTop: 8,
+        marginBottom: 8,
+      },
+    })
+  );
 
-  // Header: starts offset down so it appears near screen center, slides up to top
   const headerOffsetY = useSharedValue(SH * 0.27);
-  // Carousel: hidden initially, fades + slides in after header moves up
   const carouselOpacity = useSharedValue(0);
   const carouselOffsetY = useSharedValue(48);
 
   useEffect(() => {
-    // After 1.8s, slide header to top and reveal carousel
     const t = setTimeout(() => {
       headerOffsetY.value = withTiming(0, {
         duration: 720,
@@ -127,7 +235,6 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
     transform: [{ translateY: carouselOffsetY.value }],
   }));
 
-  // Stable refs for FlatList callbacks (can't change after mount)
   const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 60 });
   const onViewableItemsChanged = useRef(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -164,23 +271,15 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
       </View>
 
       <SafeAreaView edges={['top', 'bottom']} style={styles.safe}>
-        {/* Header: fades in near center of screen, then slides up */}
         <Animated.View style={[styles.header, headerStyle]}>
-          <Animated.Text
-            entering={FadeInDown.duration(600)}
-            style={styles.title}
-          >
+          <Animated.Text entering={FadeInDown.duration(600)} style={styles.title}>
             Who calls to your soul?
           </Animated.Text>
-          <Animated.Text
-            entering={FadeInDown.delay(350).duration(600)}
-            style={styles.subtitle}
-          >
+          <Animated.Text entering={FadeInDown.delay(350).duration(600)} style={styles.subtitle}>
             You commit to your Guru for life. Take your time to choose.
           </Animated.Text>
         </Animated.View>
 
-        {/* Carousel + hint: hidden until header slides up */}
         <Animated.View style={[styles.carouselWrapper, carouselStyle]}>
           <FlatList
             data={GUIDES}
@@ -203,7 +302,6 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
             )}
           />
 
-          {/* Commit hint below carousel */}
           <View style={styles.hintRow}>
             <Text style={styles.commitVerb} numberOfLines={1}>
               {activeGuide?.commitmentVerb}
@@ -216,122 +314,3 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.surface,
-    paddingTop: 40,
-  },
-  safe: {
-    flex: 1,
-  },
-
-  // Header
-  header: {
-    alignItems: 'center',
-    paddingHorizontal: 32,
-    paddingTop: 20,
-    paddingBottom: 28,
-  },
-  title: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: scaleFont(36),
-    color: colors.onSurface,
-    letterSpacing: -0.8,
-    lineHeight: scaleFont(44),
-    textAlign: 'center',
-    marginBottom: 12,
-  },
-  subtitle: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(15),
-    color: colors.onSurfaceVariant,
-    textAlign: 'center',
-    letterSpacing: 0.3,
-  },
-
-  // Carousel
-  carouselWrapper: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingBottom: 12,
-  },
-  carouselContent: {
-    paddingHorizontal: CONTENT_PADDING,
-  },
-  cardSlot: {
-    width: CARD_W,
-    marginHorizontal: CARD_GAP / 2,
-  },
-
-  // Card
-  card: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: 28,
-    borderWidth: 1,
-    borderColor: 'rgba(72, 72, 72, 0.25)',
-    paddingVertical: 48,
-    paddingHorizontal: 28,
-    alignItems: 'center',
-    gap: 12,
-    overflow: 'hidden',
-    height: SH * 0.48,
-    justifyContent: 'flex-end',
-  },
-  cardBgImage: {
-    borderRadius: 28,
-  },
-  cardScrim: {
-    borderRadius: 28,
-    backgroundColor: 'rgba(0, 0, 0, 0.52)',
-  },
-  cardGlow: {
-    borderRadius: 28,
-    borderWidth: 1.5,
-    borderColor: `${colors.secondaryFixedDim}55`,
-    backgroundColor: `${colors.onSecondary}0d`,
-  },
-  cardName: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(28),
-    color: colors.onSurface,
-    textAlign: 'center',
-  },
-  cardEssence: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(14),
-    color: colors.onSurfaceVariant,
-    textAlign: 'center',
-    lineHeight: scaleFont(21),
-  },
-
-  // Commit hint
-  hintRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 4,
-    gap: 6,
-    marginBottom: 8,
-    paddingHorizontal: 32,
-  },
-  commitVerb: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(14),
-    color: colors.primary,
-  },
-  holdHint: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(13),
-    color: colors.onSurfaceVariant,
-  },
-  permanentNote: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(11),
-    color: colors.outline,
-    textAlign: 'center',
-    marginTop: 8,
-    marginBottom: 8,
-  },
-});

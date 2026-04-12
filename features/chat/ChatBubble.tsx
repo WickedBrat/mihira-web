@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { FadeIn, SlideInRight } from 'react-native-reanimated';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 import type { Message } from './useChatState';
 
@@ -12,6 +13,64 @@ interface ChatBubbleProps {
 
 export function ChatBubble({ message, senderName = 'Aksha' }: ChatBubbleProps) {
   const isAI = message.role === 'ai';
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      row: {
+        maxWidth: '85%',
+        gap: 6,
+      },
+      rowAI: {
+        alignSelf: 'flex-start',
+        alignItems: 'flex-start',
+      },
+      rowUser: {
+        alignSelf: 'flex-end',
+        alignItems: 'flex-end',
+      },
+      senderRow: {
+        paddingHorizontal: 6,
+        marginBottom: 2,
+      },
+      senderLabel: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(9),
+        textTransform: 'uppercase',
+        letterSpacing: 2,
+        color: c.secondaryDim,
+      },
+      bubble: {
+        paddingHorizontal: 22,
+        paddingVertical: 14,
+        borderRadius: 28,
+      },
+      bubbleAI: {
+        backgroundColor: dark ? 'rgba(242, 206, 173, 0.1)' : 'rgba(242, 206, 173, 0.18)',
+        borderTopLeftRadius: 8,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(242, 206, 173, 0.05)' : 'rgba(200, 150, 100, 0.12)',
+      },
+      bubbleUser: {
+        backgroundColor: dark ? 'rgba(212, 190, 228, 0.08)' : 'rgba(212, 190, 228, 0.18)',
+        borderTopRightRadius: 8,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(212, 190, 228, 0.05)' : 'rgba(160, 120, 200, 0.12)',
+      },
+      text: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(15),
+        color: c.onSurface,
+        lineHeight: scaleFont(22),
+      },
+      timestamp: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(9),
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+        color: c.outline,
+        paddingHorizontal: 10,
+      },
+    })
+  );
 
   return (
     <Animated.View
@@ -34,60 +93,3 @@ export function ChatBubble({ message, senderName = 'Aksha' }: ChatBubbleProps) {
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  row: {
-    maxWidth: '85%',
-    gap: 6,
-  },
-  rowAI: {
-    alignSelf: 'flex-start',
-    alignItems: 'flex-start',
-  },
-  rowUser: {
-    alignSelf: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  senderRow: {
-    paddingHorizontal: 6,
-    marginBottom: 2,
-  },
-  senderLabel: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(9),
-    textTransform: 'uppercase',
-    letterSpacing: 2,
-    color: colors.secondaryDim,
-  },
-  bubble: {
-    paddingHorizontal: 22,
-    paddingVertical: 14,
-    borderRadius: 28,
-  },
-  bubbleAI: {
-    backgroundColor: 'rgba(242, 206, 173, 0.1)',
-    borderTopLeftRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(242, 206, 173, 0.05)',
-  },
-  bubbleUser: {
-    backgroundColor: 'rgba(212, 190, 228, 0.08)',
-    borderTopRightRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(212, 190, 228, 0.05)',
-  },
-  text: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(15),
-    color: colors.onSurface,
-    lineHeight: scaleFont(22),
-  },
-  timestamp: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(9),
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    color: colors.outline,
-    paddingHorizontal: 10,
-  },
-});

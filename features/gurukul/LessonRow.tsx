@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Play } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 
 export interface Lesson {
@@ -18,6 +19,52 @@ interface LessonRowProps {
 }
 
 export function LessonRow({ lesson, onPress }: LessonRowProps) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      pressable: {
+        borderRadius: 16,
+      },
+      row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 16,
+        padding: 16,
+      },
+      pressed: {
+        backgroundColor: c.surfaceContainerHighest,
+      },
+      thumbnail: {
+        width: 52,
+        height: 52,
+        borderRadius: 12,
+        backgroundColor: c.surfaceContainerHigh,
+        flexShrink: 0,
+      },
+      text: { flex: 1 },
+      title: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: scaleFont(15),
+        color: c.onSurface,
+        marginBottom: 3,
+      },
+      meta: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(12),
+        color: c.onSurfaceVariant,
+      },
+      playBtn: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        borderWidth: 1,
+        borderColor: `${c.outlineVariant}33`,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+    })
+  );
+
   return (
     <Pressable
       onPress={() => { hapticLight(); onPress?.(); }}
@@ -36,46 +83,3 @@ export function LessonRow({ lesson, onPress }: LessonRowProps) {
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  pressable: {
-    borderRadius: 16,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    padding: 16,
-  },
-  pressed: {
-    backgroundColor: colors.surfaceContainerHighest,
-  },
-  thumbnail: {
-    width: 52,
-    height: 52,
-    borderRadius: 12,
-    backgroundColor: colors.surfaceContainerHigh,
-    flexShrink: 0,
-  },
-  text: { flex: 1 },
-  title: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: scaleFont(15),
-    color: colors.onSurface,
-    marginBottom: 3,
-  },
-  meta: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(12),
-    color: colors.onSurfaceVariant,
-  },
-  playBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: `${colors.outlineVariant}33`,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

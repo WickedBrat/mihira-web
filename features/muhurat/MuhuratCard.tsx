@@ -2,7 +2,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { VedicReasoningAccordion } from '@/features/horoscope/VedicReasoningAccordion';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import type { MuhuratWindow } from '@/lib/vedic/types';
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
   suggestion: string | null;
   reasoning: string | null;
   warnings: string | null;
+  festivalNote: string | null;
   rankedWindows: MuhuratWindow[];
   isLoading: boolean;
   error: string | null;
@@ -37,10 +39,147 @@ export function MuhuratCard({
   suggestion,
   reasoning,
   warnings,
+  festivalNote,
   rankedWindows,
   isLoading,
   error,
 }: Props) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      card: {
+        backgroundColor: c.surfaceContainerLow,
+        borderRadius: 20,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+        gap: 14,
+      },
+      headerRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+      },
+      badge: {
+        alignSelf: 'flex-start',
+        borderWidth: 1.5,
+        borderRadius: 8,
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+      },
+      badgeText: { fontFamily: fonts.headlineExtra, fontSize: 18, letterSpacing: 1 },
+      confidence: {
+        fontFamily: fonts.label,
+        fontSize: 10,
+        textTransform: 'uppercase',
+        letterSpacing: 1.5,
+        color: c.onSurfaceVariant,
+      },
+      suggestion: {
+        fontFamily: fonts.body, fontSize: 15, color: c.onSurface, lineHeight: 24,
+      },
+      festivalBanner: {
+        backgroundColor: 'rgba(251,191,36,0.10)',
+        borderWidth: 1,
+        borderColor: 'rgba(251,191,36,0.45)',
+        borderRadius: 10,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: 8,
+      },
+      festivalIcon: {
+        fontSize: 14,
+        color: '#fbbf24',
+        marginTop: 1,
+      },
+      festivalText: {
+        fontFamily: fonts.body,
+        fontSize: 13,
+        color: '#fde68a',
+        lineHeight: 20,
+        flex: 1,
+      },
+      warningBox: {
+        backgroundColor: 'rgba(251,191,36,0.08)',
+        borderWidth: 1,
+        borderColor: 'rgba(251,191,36,0.3)',
+        borderRadius: 10,
+        paddingHorizontal: 14,
+        paddingVertical: 10,
+      },
+      warningText: {
+        fontFamily: fonts.body,
+        fontSize: 13,
+        color: '#fbbf24',
+        lineHeight: 20,
+      },
+      emptyText: {
+        fontFamily: fonts.body,
+        fontSize: 14,
+        color: c.onSurfaceVariant,
+        textAlign: 'center',
+        lineHeight: 22,
+      },
+      windowsLabel: {
+        fontFamily: fonts.label, fontSize: 9, letterSpacing: 2,
+        textTransform: 'uppercase', color: c.secondaryFixed,
+      },
+      window: {
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+        paddingVertical: 8, paddingHorizontal: 12,
+        backgroundColor: dark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
+        borderRadius: 8,
+        gap: 12,
+      },
+      windowFestival: { borderWidth: 1.5, borderColor: 'rgba(251,191,36,0.55)', backgroundColor: 'rgba(251,191,36,0.06)' },
+      windowAbhijit: { borderWidth: 1, borderColor: 'rgba(255,159,75,0.4)' },
+      windowCopy: {
+        flex: 1,
+        gap: 4,
+      },
+      windowDate: {
+        fontFamily: fonts.label,
+        fontSize: 9,
+        color: c.secondaryFixed,
+        letterSpacing: 1.1,
+        textTransform: 'uppercase',
+      },
+      windowTime: { fontFamily: fonts.body, fontSize: 13, color: c.onSurface },
+      windowQuality: {
+        fontFamily: fonts.label,
+        fontSize: 9,
+        color: c.onSurfaceVariant,
+        letterSpacing: 1,
+      },
+      scoreBadge: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        borderWidth: 1.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        gap: 1,
+      },
+      scoreText: {
+        fontFamily: fonts.headlineExtra,
+        fontSize: 16,
+      },
+      scoreDenom: {
+        fontFamily: fonts.label,
+        fontSize: 9,
+        color: c.onSurfaceVariant,
+        letterSpacing: 0.5,
+      },
+      loadingText: {
+        fontFamily: fonts.body, fontSize: 14, color: c.onSurfaceVariant,
+        textAlign: 'center', marginTop: 12,
+      },
+      errorText: { fontFamily: fonts.body, fontSize: 14, color: c.error, textAlign: 'center' },
+    })
+  );
+
   if (isLoading) {
     return (
       <View style={styles.card}>
@@ -79,6 +218,13 @@ export function MuhuratCard({
         )}
       </View>
 
+      {festivalNote && (
+        <View style={styles.festivalBanner}>
+          <Text style={styles.festivalIcon}>✦</Text>
+          <Text style={styles.festivalText}>{festivalNote}</Text>
+        </View>
+      )}
+
       {suggestion && <Text style={styles.suggestion}>{suggestion}</Text>}
 
       {warnings && warnings !== 'None' && (
@@ -93,7 +239,11 @@ export function MuhuratCard({
           {rankedWindows.map((w, i) => (
             <View
               key={i}
-              style={[styles.window, w.type === 'abhijit' && styles.windowAbhijit]}
+              style={[
+                styles.window,
+                w.type === 'festival' && styles.windowFestival,
+                w.type === 'abhijit' && styles.windowAbhijit,
+              ]}
             >
               <View style={styles.windowCopy}>
                 <Text style={styles.windowDate}>
@@ -125,111 +275,3 @@ export function MuhuratCard({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surfaceContainerLow,
-    borderRadius: 20,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)',
-    gap: 14,
-  },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  badge: {
-    alignSelf: 'flex-start',
-    borderWidth: 1.5,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-  },
-  badgeText: { fontFamily: fonts.headlineExtra, fontSize: 18, letterSpacing: 1 },
-  confidence: {
-    fontFamily: fonts.label,
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 1.5,
-    color: colors.onSurfaceVariant,
-  },
-  suggestion: {
-    fontFamily: fonts.body, fontSize: 15, color: colors.onSurface, lineHeight: 24,
-  },
-  warningBox: {
-    backgroundColor: 'rgba(251,191,36,0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(251,191,36,0.3)',
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  warningText: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: '#fbbf24',
-    lineHeight: 20,
-  },
-  emptyText: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.onSurfaceVariant,
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-  windowsLabel: {
-    fontFamily: fonts.label, fontSize: 9, letterSpacing: 2,
-    textTransform: 'uppercase', color: colors.secondaryFixed,
-  },
-  window: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingVertical: 8, paddingHorizontal: 12,
-    backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: 8,
-    gap: 12,
-  },
-  windowAbhijit: { borderWidth: 1, borderColor: 'rgba(255,159,75,0.4)' },
-  windowCopy: {
-    flex: 1,
-    gap: 4,
-  },
-  windowDate: {
-    fontFamily: fonts.label,
-    fontSize: 9,
-    color: colors.secondaryFixed,
-    letterSpacing: 1.1,
-    textTransform: 'uppercase',
-  },
-  windowTime: { fontFamily: fonts.body, fontSize: 13, color: colors.onSurface },
-  windowQuality: {
-    fontFamily: fonts.label,
-    fontSize: 9,
-    color: colors.onSurfaceVariant,
-    letterSpacing: 1,
-  },
-  scoreBadge: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    borderWidth: 1.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    gap: 1,
-  },
-  scoreText: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: 16,
-  },
-  scoreDenom: {
-    fontFamily: fonts.label,
-    fontSize: 9,
-    color: colors.onSurfaceVariant,
-    letterSpacing: 0.5,
-  },
-  loadingText: {
-    fontFamily: fonts.body, fontSize: 14, color: colors.onSurfaceVariant,
-    textAlign: 'center', marginTop: 12,
-  },
-  errorText: { fontFamily: fonts.body, fontSize: 14, color: colors.error, textAlign: 'center' },
-});
