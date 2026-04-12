@@ -11,17 +11,17 @@ interface GlassCardProps {
 
 export function GlassCard({ children, style, intensity = 20 }: GlassCardProps) {
   const { isDark } = useTheme();
-  const styles = useThemedStyles((_colors) =>
+  const styles = useThemedStyles((_colors, _glass, _gradients, darkMode) =>
     StyleSheet.create({
       container: {
         borderRadius: 24,
         overflow: 'hidden',
         borderWidth: 1,
-        borderColor: isDark ? 'rgba(72, 72, 72, 0.15)' : 'rgba(0, 0, 0, 0.08)',
+        borderColor: darkMode ? 'rgba(72, 72, 72, 0.15)' : 'rgba(0, 0, 0, 0.08)',
       },
       overlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: isDark ? 'rgba(37, 38, 38, 0.5)' : 'rgba(250, 247, 242, 0.6)',
+        backgroundColor: darkMode ? 'rgba(37, 38, 38, 0.5)' : 'rgba(250, 247, 242, 0.6)',
       },
       content: { position: 'relative', zIndex: 1 },
     })

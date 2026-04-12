@@ -96,7 +96,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
   const { guide } = useGuide();
   const { isDark } = useTheme();
 
-  const styles = useThemedStyles((colors) =>
+  const styles = useThemedStyles((colors, _glass, _gradients, darkMode) =>
     StyleSheet.create({
       container: {
         width: '95%',
@@ -106,8 +106,8 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
         overflow: 'hidden',
         padding: BAR_PADDING,
         borderWidth: 1,
-        borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-        backgroundColor: isDark ? 'rgba(18, 18, 22, 0.10)' : 'rgba(250, 247, 242, 0.10)',
+        borderColor: darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+        backgroundColor: darkMode ? 'rgba(18, 18, 22, 0.10)' : 'rgba(250, 247, 242, 0.10)',
         shadowColor: '#000',
         shadowOpacity: 0.22,
         shadowRadius: 18,
@@ -116,15 +116,15 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
       },
       containerTint: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: isDark ? 'rgba(255,255,255,0.015)' : 'rgba(0,0,0,0.015)',
+        backgroundColor: darkMode ? 'rgba(255,255,255,0.015)' : 'rgba(0,0,0,0.015)',
       },
       selector: {
         position: 'absolute',
         borderRadius: 30,
         overflow: 'hidden',
         borderWidth: 1,
-        borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-        backgroundColor: isDark ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.04)',
+        borderColor: darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+        backgroundColor: darkMode ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.04)',
         shadowColor: '#000',
         shadowOpacity: 0.08,
         shadowRadius: 10,
@@ -132,13 +132,13 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
       },
       selectorTint: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',
+        backgroundColor: darkMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',
       },
       tabLabel: {
         fontFamily: fonts.label,
         fontSize: scaleFont(10),
         lineHeight: scaleFont(12),
-        color: isDark ? 'rgba(255,255,255,0.40)' : 'rgba(0,0,0,0.35)',
+        color: darkMode ? 'rgba(255,255,255,0.40)' : 'rgba(0,0,0,0.35)',
         letterSpacing: 0.2,
         textAlign: 'center',
       },

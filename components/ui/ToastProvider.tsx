@@ -48,16 +48,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-18)).current;
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { isDark, colors } = useTheme();
+  const { isDark } = useTheme();
 
-  const TOAST_ACCENTS: Record<ToastType, string> = {
-    success: colors.primaryFixed,
-    error: colors.error,
-    info: colors.secondaryFixed,
-  };
-
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
+  const { styles, toastAccents } = useThemedStyles((c, _glass, _gradients, darkMode) => ({
+    toastAccents: {
+      success: c.primaryFixed,
+      error: c.error,
+      info: c.secondaryFixed,
+    } as Record<ToastType, string>,
+    styles: StyleSheet.create({
       host: {
         position: 'absolute',
         left: 16,
@@ -74,7 +73,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         gap: 12,
         paddingHorizontal: 16,
         paddingVertical: 14,
-        backgroundColor: isDark ? 'rgba(25, 26, 26, 0.9)' : 'rgba(250, 247, 242, 0.95)',
+        backgroundColor: darkMode ? 'rgba(25, 26, 26, 0.9)' : 'rgba(250, 247, 242, 0.95)',
         borderWidth: 1,
       },
       iconWrap: {
@@ -99,8 +98,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         color: c.onSurfaceVariant,
         lineHeight: 18,
       },
-    })
-  );
+    }),
+  }));
 
   const hideToast = useCallback(() => {
     if (hideTimeoutRef.current) {
@@ -208,7 +207,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 style={[
                   styles.toast,
                   {
-                    borderColor: `${TOAST_ACCENTS[toast.type]}55`,
+                    borderColor: `${toastAccents[toast.type]}55`,
                   },
                 ]}
               >
@@ -216,11 +215,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                   style={[
                     styles.iconWrap,
                     {
-                      backgroundColor: `${TOAST_ACCENTS[toast.type]}22`,
+                      backgroundColor: `${toastAccents[toast.type]}22`,
                     },
                   ]}
                 >
-                  <Icon size={18} color={TOAST_ACCENTS[toast.type]} />
+                  <Icon size={18} color={toastAccents[toast.type]} />
                 </View>
 
                 <View style={styles.copy}>

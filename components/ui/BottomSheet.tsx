@@ -20,7 +20,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
+import { useThemedStyles } from '@/lib/theme-context';
 
 interface BottomSheetProps {
   visible: boolean;
@@ -50,10 +50,15 @@ export function BottomSheet({
   const translateY = useSharedValue(windowHeight);
   const measuredHeight = useSharedValue(windowHeight);
   const dragStartY = useSharedValue(0);
-  const { isDark } = useTheme();
-
-  const styles = useThemedStyles((colors) =>
-    StyleSheet.create({
+  const { styles, isDark } = useThemedStyles((colors, _glass, _gradients, isDark) => ({
+    isDark,
+    styles: StyleSheet.create<{
+      backdrop: ViewStyle;
+      sheet: ViewStyle;
+      sheetOverlay: ViewStyle;
+      content: ViewStyle;
+      handle: ViewStyle;
+    }>({
       backdrop: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: isDark ? 'rgba(0, 0, 0, 0.54)' : 'rgba(0, 0, 0, 0.32)',
@@ -87,8 +92,8 @@ export function BottomSheet({
         backgroundColor: `${colors.onSurfaceVariant}66`,
         marginBottom: 18,
       },
-    })
-  );
+    }),
+  }));
 
   useEffect(() => {
     if (visible) {

@@ -102,14 +102,14 @@ export function useTheme(): ThemeContextValue {
 }
 
 export function useThemedStyles<T>(
-  factory: (colors: Colors, glassMorphism: GlassMorphism, gradients: Gradients) => T
+  factory: (colors: Colors, glassMorphism: GlassMorphism, gradients: Gradients, isDark: boolean) => T
 ): T {
   const { colors, glassMorphism, gradients, isDark } = useTheme();
   return useMemo(
-    () => factory(colors, glassMorphism, gradients),
-    // colors, glassMorphism, gradients are stable references (keyed on isDark inside ThemeProvider)
-    // factory must be included so callers with closing-over state don't get stale styles
+    () => factory(colors, glassMorphism, gradients, isDark),
+    // Factory is expected to be stable (module-level const or useCallback).
+    // isDark is the theme toggle — styles recompute only on theme change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isDark, factory]
+    [isDark]
   );
 }
