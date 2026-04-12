@@ -116,10 +116,6 @@ export const lightColors = {
   errorContainer: '#fde8e6',
 } as const satisfies ColorPalette;
 
-// Legacy re-export so existing code that hasn't been migrated yet keeps working.
-// Remove after all 47 files are migrated.
-export const colors = darkColors;
-
 export const fonts = {
   headlineExtra: 'Lexend_800ExtraBold',
   headline: 'Lexend_700Bold',
@@ -149,8 +145,6 @@ export const lightGlassMorphism = {
 
 export type GlassMorphism = GlassMorphismType;
 
-// Legacy re-export
-export const glassMorphism = darkGlassMorphism;
 
 type GradientsType = {
   primaryToContainer: readonly [string, string];
@@ -182,8 +176,6 @@ export const lightGradients = {
 
 export type Gradients = GradientsType;
 
-// Legacy re-export
-export const gradients = darkGradients;
 
 export const layout = {
   screenPaddingX: 24,
