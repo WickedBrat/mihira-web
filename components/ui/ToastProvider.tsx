@@ -18,7 +18,8 @@ import {
 import { BlurView } from 'expo-blur';
 import { AlertCircle, CheckCircle2, Info } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -41,18 +42,65 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-const TOAST_ACCENTS: Record<ToastType, string> = {
-  success: colors.primaryFixed,
-  error: colors.error,
-  info: colors.secondaryFixed,
-};
-
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const insets = useSafeAreaInsets();
   const [toast, setToast] = useState<ToastPayload | null>(null);
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-18)).current;
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { isDark, colors } = useTheme();
+
+  const TOAST_ACCENTS: Record<ToastType, string> = {
+    success: colors.primaryFixed,
+    error: colors.error,
+    info: colors.secondaryFixed,
+  };
+
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      host: {
+        position: 'absolute',
+        left: 16,
+        right: 16,
+        zIndex: 300,
+      },
+      pressable: {
+        borderRadius: 22,
+        overflow: 'hidden',
+      },
+      toast: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        backgroundColor: isDark ? 'rgba(25, 26, 26, 0.9)' : 'rgba(250, 247, 242, 0.95)',
+        borderWidth: 1,
+      },
+      iconWrap: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      copy: {
+        flex: 1,
+        gap: 3,
+      },
+      title: {
+        fontFamily: fonts.label,
+        fontSize: 13,
+        color: c.onSurface,
+      },
+      message: {
+        fontFamily: fonts.body,
+        fontSize: 12,
+        color: c.onSurfaceVariant,
+        lineHeight: 18,
+      },
+    })
+  );
 
   const hideToast = useCallback(() => {
     if (hideTimeoutRef.current) {
@@ -155,7 +203,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             ]}
           >
             <Pressable onPress={hideToast} style={styles.pressable}>
-              <BlurView intensity={42} tint="dark" style={StyleSheet.absoluteFill} />
+              <BlurView intensity={42} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />
               <View
                 style={[
                   styles.toast,
@@ -192,47 +240,3 @@ export function useToast() {
   const context = useContext(ToastContext);
   return context ?? { showToast: () => undefined };
 }
-
-const styles = StyleSheet.create({
-  host: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    zIndex: 300,
-  },
-  pressable: {
-    borderRadius: 22,
-    overflow: 'hidden',
-  },
-  toast: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    backgroundColor: 'rgba(25, 26, 26, 0.9)',
-    borderWidth: 1,
-  },
-  iconWrap: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  copy: {
-    flex: 1,
-    gap: 3,
-  },
-  title: {
-    fontFamily: fonts.label,
-    fontSize: 13,
-    color: colors.onSurface,
-  },
-  message: {
-    fontFamily: fonts.body,
-    fontSize: 12,
-    color: colors.onSurfaceVariant,
-    lineHeight: 18,
-  },
-});

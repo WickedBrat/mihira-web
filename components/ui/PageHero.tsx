@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text, View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
+import { useThemedStyles } from '@/lib/theme-context';
 
 interface PageHeroProps {
   meta?: React.ReactNode;
@@ -15,15 +16,39 @@ interface PageHeroProps {
 }
 
 export function PageHero({
-  meta,
-  title,
-  subtitle,
-  style,
-  metaStyle,
-  titleStyle,
-  subtitleStyle,
-  subtitleMaxWidth = 340,
+  meta, title, subtitle, style, metaStyle, titleStyle, subtitleStyle, subtitleMaxWidth = 340,
 }: PageHeroProps) {
+  const styles = useThemedStyles((colors) =>
+    StyleSheet.create({
+      container: { alignSelf: 'stretch', alignItems: 'center', paddingTop: 28, paddingBottom: 40 },
+      meta: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(10),
+        textTransform: 'uppercase',
+        letterSpacing: 3,
+        color: colors.secondaryFixed,
+        marginBottom: 12,
+        textAlign: 'center',
+      },
+      title: {
+        fontFamily: fonts.headlineExtra,
+        fontSize: scaleFont(42),
+        color: colors.onSurface,
+        letterSpacing: -1,
+        lineHeight: scaleFont(46),
+        marginBottom: 8,
+        textAlign: 'center',
+      },
+      subtitle: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(16),
+        lineHeight: scaleFont(24),
+        color: colors.onSurfaceVariant,
+        textAlign: 'center',
+      },
+    })
+  );
+
   return (
     <View style={[styles.container, style]}>
       {meta ? <Text style={[styles.meta, metaStyle]}>{meta}</Text> : null}
@@ -36,37 +61,3 @@ export function PageHero({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    paddingTop: 28,
-    paddingBottom: 40,
-  },
-  meta: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(10),
-    textTransform: 'uppercase',
-    letterSpacing: 3,
-    color: colors.secondaryFixed,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  title: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: scaleFont(42),
-    color: colors.onSurface,
-    letterSpacing: -1,
-    lineHeight: scaleFont(46),
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(16),
-    lineHeight: scaleFont(24),
-    color: colors.onSurfaceVariant,
-    textAlign: 'center',
-  },
-});

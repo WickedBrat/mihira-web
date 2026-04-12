@@ -20,7 +20,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
-import { colors } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 
 interface BottomSheetProps {
   visible: boolean;
@@ -50,58 +50,81 @@ export function BottomSheet({
   const translateY = useSharedValue(windowHeight);
   const measuredHeight = useSharedValue(windowHeight);
   const dragStartY = useSharedValue(0);
+  const { isDark } = useTheme();
+
+  const styles = useThemedStyles((colors) =>
+    StyleSheet.create({
+      backdrop: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: isDark ? 'rgba(0, 0, 0, 0.54)' : 'rgba(0, 0, 0, 0.32)',
+      },
+      sheet: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'hidden',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        borderWidth: 1,
+        borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)',
+      },
+      sheetOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: isDark ? 'rgba(19, 19, 19, 0.92)' : 'rgba(250, 247, 242, 0.96)',
+      },
+      content: {
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingTop: 12,
+        paddingBottom: 24,
+      },
+      handle: {
+        alignSelf: 'center',
+        width: 48,
+        height: 5,
+        borderRadius: 9999,
+        backgroundColor: `${colors.onSurfaceVariant}66`,
+        marginBottom: 18,
+      },
+    })
+  );
 
   useEffect(() => {
     if (visible) {
       setIsMounted(true);
       translateY.value = measuredHeight.value + 32;
-      translateY.value = withSpring(0, {
-        damping: 50,
-        stiffness: 300,
-      });
+      translateY.value = withSpring(0, { damping: 50, stiffness: 300 });
       return;
     }
-
     if (!isMounted) return;
-
     translateY.value = withTiming(measuredHeight.value + 32, { duration: 220 }, (finished) => {
-      if (finished) {
-        runOnJS(setIsMounted)(false);
-      }
+      if (finished) runOnJS(setIsMounted)(false);
     });
   }, [isMounted, measuredHeight, translateY, visible]);
 
   const onSheetLayout = (event: LayoutChangeEvent) => {
     const nextHeight = event.nativeEvent.layout.height;
     measuredHeight.value = nextHeight;
-    if (!visible) {
-      translateY.value = nextHeight + 32;
-    }
+    if (!visible) translateY.value = nextHeight + 32;
   };
 
   const panGesture = useMemo(
     () =>
       Gesture.Pan()
         .enabled(panEnabled)
-        .onBegin(() => {
-          dragStartY.value = translateY.value;
-        })
+        .onBegin(() => { dragStartY.value = translateY.value; })
         .onUpdate((event) => {
           translateY.value = Math.max(0, dragStartY.value + event.translationY);
         })
         .onEnd((event) => {
           const shouldClose =
             translateY.value > measuredHeight.value * 0.32 || event.velocityY > 950;
-
           if (shouldClose) {
             runOnJS(onClose)();
             return;
           }
-
-          translateY.value = withSpring(0, {
-            damping: 22,
-            stiffness: 220,
-          });
+          translateY.value = withSpring(0, { damping: 22, stiffness: 220 });
         }),
     [dragStartY, measuredHeight, onClose, panEnabled, translateY]
   );
@@ -126,7 +149,7 @@ export function BottomSheet({
       onLayout={onSheetLayout}
       style={[styles.sheet, { zIndex, maxHeight: windowHeight * 0.82 }, sheetAnimatedStyle, sheetStyle]}
     >
-      <BlurView intensity={50} tint="dark" style={StyleSheet.absoluteFill} />
+      <BlurView intensity={50} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />
       <View style={styles.sheetOverlay} />
       <SafeAreaView style={[styles.content, contentStyle]} edges={safeAreaEdges}>
         {showHandle && <View style={styles.handle} />}
@@ -144,39 +167,3 @@ export function BottomSheet({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.54)',
-  },
-  sheet: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    overflow: 'hidden',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)',
-  },
-  sheetOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(19, 19, 19, 0.92)',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 24,
-  },
-  handle: {
-    alignSelf: 'center',
-    width: 48,
-    height: 5,
-    borderRadius: 9999,
-    backgroundColor: `${colors.onSurfaceVariant}66`,
-    marginBottom: 18,
-  },
-});

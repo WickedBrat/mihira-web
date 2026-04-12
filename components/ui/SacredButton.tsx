@@ -2,8 +2,9 @@ import React from 'react';
 import { Pressable, Text, StyleSheet, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { hapticMedium } from '@/lib/haptics';
-import { colors, fonts, gradients } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
 import { scaleFont } from '@/lib/typography';
+import { useThemedStyles } from '@/lib/theme-context';
 
 interface SacredButtonProps {
   label: string;
@@ -13,67 +14,55 @@ interface SacredButtonProps {
   variant?: 'primary' | 'secondary';
 }
 
-export function SacredButton({
-  label,
-  onPress,
-  style,
-  icon,
-  variant = 'primary',
-}: SacredButtonProps) {
-  const handlePress = () => {
-    hapticMedium();
-    onPress();
-  };
-
-  const gradientColors =
-    variant === 'primary'
+export function SacredButton({ label, onPress, style, icon, variant = 'primary' }: SacredButtonProps) {
+  const theme = useThemedStyles((_colors, _glass, gradients) => ({
+    styles: StyleSheet.create({
+      container: {
+        shadowColor: _colors.primary,
+        shadowOpacity: 0.2,
+        shadowRadius: 20,
+        shadowOffset: { width: 0, height: 0 },
+        elevation: 4,
+      },
+      pressed: { opacity: 0.85, transform: [{ scale: 0.97 }] },
+      gradient: {
+        paddingHorizontal: 32,
+        paddingVertical: 16,
+        borderRadius: 9999,
+        overflow: 'hidden',
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        gap: 8,
+      },
+      label: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(16),
+        color: _colors.onPrimary,
+        letterSpacing: 0.5,
+      },
+    }),
+    gradientColors: variant === 'primary'
       ? gradients.primaryToContainer
-      : gradients.secondaryToContainer;
+      : gradients.secondaryToContainer,
+  }));
+
+  const handlePress = () => { hapticMedium(); onPress(); };
 
   return (
     <Pressable
       onPress={handlePress}
-      style={({ pressed }) => [styles.container, pressed && styles.pressed, style]}
+      style={({ pressed }) => [theme.styles.container, pressed && theme.styles.pressed, style]}
     >
       <LinearGradient
-        colors={gradientColors}
+        colors={theme.gradientColors}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.gradient}
+        style={theme.styles.gradient}
       >
         {icon}
-        <Text style={styles.label}>{label}</Text>
+        <Text style={theme.styles.label}>{label}</Text>
       </LinearGradient>
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    shadowColor: colors.primary,
-    shadowOpacity: 0.2,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 4,
-  },
-  pressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.97 }],
-  },
-  gradient: {
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 9999,
-    overflow: 'hidden',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  label: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(16),
-    color: colors.onPrimary,
-    letterSpacing: 0.5,
-  },
-});
