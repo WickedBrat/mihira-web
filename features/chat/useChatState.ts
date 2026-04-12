@@ -5,6 +5,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { getHistory, saveHistory, clearHistory } from '@/lib/chatStorage';
 import { getGuide } from '@/features/ask/guidePersonas';
 import { analytics } from '@/lib/analytics';
+import type { BubbleType } from '@/features/ask/types';
 
 function apiUrl(path: string): string {
   const hostUri = Constants.expoConfig?.hostUri;
@@ -18,6 +19,11 @@ export interface Message {
   role: 'ai' | 'user';
   text: string;
   timestamp: Date;
+  bubbleType?: BubbleType;
+  visibleAfterMs?: number;
+  accentColor?: string;
+  deityLabel?: string;  // deity name for vani bubble; scripture source for shloka bubble
+  subtitle?: string;    // IAST transliteration for shloka bubble
 }
 
 function buildInitialMessage(guide: string | null): Message {
