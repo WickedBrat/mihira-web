@@ -6,7 +6,7 @@ import { SacredButton } from '@/components/ui/SacredButton';
 import { LANGUAGE_OPTIONS } from '@/features/profile/constants';
 import type { ProfileData } from '@/features/profile/useProfile';
 import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
+import { useTheme, useThemedStyles, type ThemePreference } from '@/lib/theme-context';
 
 interface ProfileSettingsSheetProps {
   visible: boolean;
@@ -44,7 +44,7 @@ export function ProfileSettingsSheet({
   onManageAccount,
 }: ProfileSettingsSheetProps) {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-  const { colors } = useTheme();
+  const { colors, preference, setPreference } = useTheme();
 
   useEffect(() => {
     if (!visible) {
@@ -251,6 +251,35 @@ export function ProfileSettingsSheet({
         fontSize: 15,
         color: c.onSurface,
       },
+      appearanceRow: {
+        flexDirection: 'row',
+        borderRadius: 16,
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+        padding: 4,
+        gap: 4,
+      },
+      appearanceOption: {
+        flex: 1,
+        paddingVertical: 10,
+        alignItems: 'center',
+        borderRadius: 12,
+      },
+      appearanceOptionActive: {
+        backgroundColor: c.surfaceContainerHigh,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+      },
+      appearanceOptionText: {
+        fontFamily: fonts.body,
+        fontSize: 14,
+        color: c.onSurfaceVariant,
+      },
+      appearanceOptionTextActive: {
+        fontFamily: fonts.bodyMedium,
+        color: c.onSurface,
+      },
     })
   );
 
@@ -344,6 +373,23 @@ export function ProfileSettingsSheet({
               })}
             </View>
           )}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.label}>Appearance</Text>
+          <View style={styles.appearanceRow}>
+            {(['system', 'light', 'dark'] as ThemePreference[]).map((option) => (
+              <Pressable
+                key={option}
+                style={[styles.appearanceOption, preference === option && styles.appearanceOptionActive]}
+                onPress={() => setPreference(option)}
+              >
+                <Text style={[styles.appearanceOptionText, preference === option && styles.appearanceOptionTextActive]}>
+                  {option.charAt(0).toUpperCase() + option.slice(1)}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
         </View>
 
         <View style={styles.section}>
