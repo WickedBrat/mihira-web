@@ -19,7 +19,8 @@ import { SacredButton } from '@/components/ui/SacredButton';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { useToast } from '@/components/ui/ToastProvider';
 import { PageHero } from '@/components/ui/PageHero';
-import { colors, fonts, layout } from '@/lib/theme';
+import { fonts, layout } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 import { useUsage } from '@/lib/usage';
 import { useSubscription } from '@/lib/subscription';
@@ -63,7 +64,97 @@ export default function MuhuratScreen() {
   const [activeDateField, setActiveDateField] = useState<DateField>('start');
   const [isIosDateSheetOpen, setIsIosDateSheetOpen] = useState(false);
   const [iosPickerValue, setIosPickerValue] = useState(today);
-  const { rankedWindows, recommendation, confidence, suggestion, reasoning, warnings, isLoading, error } = useMuhurat(request);
+  const { rankedWindows, recommendation, confidence, suggestion, reasoning, warnings, festivalNote, isLoading, error } = useMuhurat(request);
+
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      root: { flex: 1, backgroundColor: c.surface },
+      scroll: { flex: 1 },
+      content: { paddingTop: 64, paddingHorizontal: layout.screenPaddingX, paddingBottom: 176, gap: 24 },
+      banner: { paddingBottom: 24 },
+      title: {
+        fontSize: scaleFont(38),
+        lineHeight: scaleFont(44),
+      },
+      sub: { lineHeight: scaleFont(22) },
+      formCard: {
+        padding: 24,
+        borderRadius: 24,
+        backgroundColor: dark ? 'rgba(37, 38, 38, 0.62)' : 'rgba(232, 225, 212, 0.62)',
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+        gap: 16,
+      },
+      inputHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+      },
+      inputMeta: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(10),
+        textTransform: 'uppercase',
+        letterSpacing: 2,
+        color: c.secondaryFixed,
+      },
+      textArea: {
+        minHeight: 126,
+        borderRadius: 18,
+        borderWidth: 1,
+        borderColor: `${c.outlineVariant}40`,
+        backgroundColor: dark ? 'rgba(14, 14, 14, 0.45)' : 'rgba(240, 234, 222, 0.55)',
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+        fontFamily: fonts.body,
+        fontSize: scaleFont(15),
+        color: c.onSurface,
+        lineHeight: scaleFont(22),
+      },
+      rangeLabel: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(10),
+        textTransform: 'uppercase',
+        letterSpacing: 2,
+        color: c.onSurfaceVariant,
+      },
+      dateRow: {
+        flexDirection: 'row',
+        gap: 14,
+      },
+      dateField: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: 10,
+        borderRadius: 18,
+        borderWidth: 1,
+        borderColor: `${c.outlineVariant}40`,
+        backgroundColor: dark ? 'rgba(14, 14, 14, 0.45)' : 'rgba(240, 234, 222, 0.55)',
+        paddingHorizontal: 10,
+        paddingVertical: 14,
+      },
+      dateCopy: {
+        flex: 1,
+        gap: 3,
+      },
+      dateCaption: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(9),
+        textTransform: 'uppercase',
+        letterSpacing: 1.5,
+        color: c.onSurfaceVariant,
+      },
+      dateValue: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: scaleFont(14),
+        color: c.onSurface,
+      },
+      cta: {
+        marginTop: 4,
+      },
+    })
+  );
 
   const applyDateSelection = (field: DateField, nextValue: Date) => {
     const normalized = normalizeDate(nextValue);
@@ -225,8 +316,8 @@ export default function MuhuratScreen() {
           suggestion={suggestion}
           reasoning={reasoning}
           warnings={warnings}
+          festivalNote={festivalNote}
           rankedWindows={rankedWindows}
-
           isLoading={isLoading}
           error={error}
         />
@@ -270,90 +361,3 @@ export default function MuhuratScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.surface },
-  scroll: { flex: 1 },
-  content: { paddingTop: 64, paddingHorizontal: layout.screenPaddingX, paddingBottom: 176, gap: 24 },
-  banner: { paddingBottom: 24 },
-  title: {
-    fontSize: scaleFont(38),
-    lineHeight: scaleFont(44),
-  },
-  sub: { lineHeight: scaleFont(22) },
-  formCard: {
-    padding: 24,
-    borderRadius: 24,
-    backgroundColor: 'rgba(37, 38, 38, 0.62)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-    gap: 16,
-  },
-  inputHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  inputMeta: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(10),
-    textTransform: 'uppercase',
-    letterSpacing: 2,
-    color: colors.secondaryFixed,
-  },
-  textArea: {
-    minHeight: 126,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: `${colors.outlineVariant}40`,
-    backgroundColor: 'rgba(14, 14, 14, 0.45)',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    fontFamily: fonts.body,
-    fontSize: scaleFont(15),
-    color: colors.onSurface,
-    lineHeight: scaleFont(22),
-  },
-  rangeLabel: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(10),
-    textTransform: 'uppercase',
-    letterSpacing: 2,
-    color: colors.onSurfaceVariant,
-  },
-  dateRow: {
-    flexDirection: 'row',
-    gap: 14,
-  },
-  dateField: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 10,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: `${colors.outlineVariant}40`,
-    backgroundColor: 'rgba(14, 14, 14, 0.45)',
-    paddingHorizontal: 10,
-    paddingVertical: 14,
-  },
-  dateCopy: {
-    flex: 1,
-    gap: 3,
-  },
-  dateCaption: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(9),
-    textTransform: 'uppercase',
-    letterSpacing: 1.5,
-    color: colors.onSurfaceVariant,
-  },
-  dateValue: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: scaleFont(14),
-    color: colors.onSurface,
-  },
-  cta: {
-    marginTop: 4,
-  },
-});

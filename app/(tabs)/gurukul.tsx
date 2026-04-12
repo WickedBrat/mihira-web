@@ -1,33 +1,79 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
-import { Wind, Infinity as InfinityIcon } from 'lucide-react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FeaturedCard } from '@/features/gurukul/FeaturedCard';
-import { CategoryCard } from '@/features/gurukul/CategoryCard';
-import { LessonRow } from '@/features/gurukul/LessonRow';
-import { GurukulYogiBackdrop } from '@/components/ui/GurukulYogiBackdrop';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
-import { PageHero } from '@/components/ui/PageHero';
-import { colors, fonts, layout } from '@/lib/theme';
+import { fonts, layout } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
-import type { Lesson } from '@/features/gurukul/LessonRow';
-
-const LESSONS: Lesson[] = [
-  { id: '1', title: 'Mindful Relationships', duration: '6 mins', category: 'Emotional Intelligence' },
-  { id: '2', title: 'The Silent Observer', duration: '4 mins', category: 'Meditation Basics' },
-  { id: '3', title: 'Karma & Right Action', duration: '8 mins', category: 'Philosophy' },
-  { id: '4', title: 'Breath as Gateway', duration: '5 mins', category: 'Breathwork' },
-];
 
 export default function GurukulScreen() {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      root: { flex: 1, backgroundColor: c.surface },
+      comingSoonContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: layout.screenPaddingX,
+        gap: 12,
+        paddingTop: 200,
+        zIndex: 1,
+      },
+      imagePortalContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 480,
+        zIndex: 0,
+      },
+      heroImage: {
+        width: '100%',
+        height: '100%',
+      },
+      gradientOverlay: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 300,
+      },
+      comingSoonLabel: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(11),
+        textTransform: 'uppercase',
+        letterSpacing: 2,
+        color: c.secondaryFixedDim,
+        marginBottom: 4,
+      },
+      comingSoonTitle: {
+        fontFamily: fonts.headlineExtra,
+        fontSize: scaleFont(40),
+        color: c.onSurface,
+        letterSpacing: -0.8,
+        textAlign: 'center',
+      },
+      comingSoonSubtitle: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(15),
+        color: c.onSurfaceVariant,
+        textAlign: 'center',
+        lineHeight: scaleFont(22),
+        maxWidth: 280,
+        marginTop: 4,
+      },
+    })
+  );
+
   return (
     <View style={styles.root}>
       <PageAmbientBlobs />
 
       <View style={styles.imagePortalContainer}>
-        <Image 
+        <Image
           source={{uri: "https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/gurukul_coming_soon.webp"}}
-          style={styles.heroImage} 
+          style={styles.heroImage}
           resizeMode="cover"
         />
         <LinearGradient
@@ -46,201 +92,3 @@ export default function GurukulScreen() {
     </View>
   );
 }
-
-/*
-function GurukulScreenFull() {
-  return (
-    <View style={styles.root}>
-      <PageAmbientBlobs />
-      {/* <GurukulYogiBackdrop /> * /}
-
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <PageHero
-          meta="Gurukul"
-          title={(
-            <>
-              Your Sacred{'\n'}
-              <Text style={styles.heroTitleAccent}>Digital Library</Text>
-            </>
-          )}
-          subtitle="Explore bite-sized wisdom designed to settle the mind and nourish the soul."
-          style={styles.hero}
-          titleStyle={styles.heroTitle}
-          subtitleMaxWidth={340}
-        />
-
-        <FeaturedCard
-          title="The Art of Detachment"
-          description="A guide to releasing expectations and finding peace in the present moment. A 12-minute deep dive into ancient philosophies."
-          duration="12 min"
-          onBegin={() => { }}
-        />
-
-        <View style={styles.categoryRow}>
-          <CategoryCard
-            icon={<Wind size={22} color={colors.primary} />}
-            title="Breathwork"
-            sessionCount="4 Active Sessions"
-            progress={0.66}
-            accentColor={colors.primary}
-          />
-          <CategoryCard
-            icon={<InfinityIcon size={22} color={colors.secondary} />}
-            title="Philosophy"
-            sessionCount="12 Masterclasses"
-            progress={0.33}
-            accentColor={colors.secondary}
-          />
-        </View>
-
-        <View style={styles.recentSection}>
-          <View style={styles.recentHeader}>
-            <Text style={styles.recentTitle}>Recent Insights</Text>
-            <Text style={styles.recentViewAll}>View All</Text>
-          </View>
-          <View style={styles.lessonList}>
-            {LESSONS.map((lesson) => (
-              <LessonRow key={lesson.id} lesson={lesson} />
-            ))}
-          </View>
-        </View>
-
-        <View style={styles.quoteSection}>
-          <Text style={styles.quoteText}>
-            "The quieter you become, the more you are able to hear."
-          </Text>
-          <Text style={styles.quoteCite}>Rumi</Text>
-        </View>
-      </ScrollView>
-    </View>
-  );
-}
-*/
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.surface },
-  comingSoonContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: layout.screenPaddingX,
-    gap: 12,
-    paddingTop: 200,
-    zIndex: 1,
-  },
-  imagePortalContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 480,
-    zIndex: 0,
-  },
-  heroImage: {
-    width: '100%',
-    height: '100%',
-    // opacity: 0.5,
-  },
-  gradientOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 300,
-  },
-  comingSoonLabel: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(11),
-    textTransform: 'uppercase',
-    letterSpacing: 2,
-    color: colors.secondaryFixedDim,
-    marginBottom: 4,
-  },
-  comingSoonTitle: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: scaleFont(40),
-    color: colors.onSurface,
-    letterSpacing: -0.8,
-    textAlign: 'center',
-  },
-  comingSoonSubtitle: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(15),
-    color: colors.onSurfaceVariant,
-    textAlign: 'center',
-    lineHeight: scaleFont(22),
-    maxWidth: 280,
-    marginTop: 4,
-  },
-  scroll: { flex: 1 },
-  scrollContent: {
-    paddingTop: 84,
-    paddingHorizontal: layout.screenPaddingX,
-    paddingBottom: 176,
-    gap: 24,
-  },
-  hero: { paddingBottom: 24 },
-  heroTitle: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: scaleFont(40),
-    color: colors.onSurface,
-    letterSpacing: -0.8,
-    lineHeight: scaleFont(46),
-  },
-  heroTitleAccent: {
-    color: colors.secondaryFixedDim,
-  },
-  categoryRow: {
-    flexDirection: 'row',
-    gap: 14,
-    height: 168,
-  },
-  recentSection: { gap: 6 },
-  recentHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  recentTitle: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(20),
-    color: colors.onSurface,
-    letterSpacing: -0.3,
-  },
-  recentViewAll: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(11),
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    color: colors.onSurfaceVariant,
-  },
-  lessonList: { gap: 2 },
-  quoteSection: {
-    paddingVertical: 48,
-    borderTopWidth: 1,
-    borderTopColor: `${colors.outlineVariant}1A`,
-    alignItems: 'center',
-    gap: 20,
-  },
-  quoteText: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(20),
-    fontStyle: 'italic',
-    color: `${colors.onSurface}CC`,
-    textAlign: 'center',
-    lineHeight: scaleFont(30),
-    maxWidth: 320,
-  },
-  quoteCite: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(9),
-    textTransform: 'uppercase',
-    letterSpacing: 4,
-    color: colors.onSurfaceVariant,
-  },
-});

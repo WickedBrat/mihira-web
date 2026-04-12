@@ -11,7 +11,6 @@ import * as WebBrowser from 'expo-web-browser';
 import Constants from 'expo-constants';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { useAuth, useUser } from '@clerk/expo';
-import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { useGuide } from '@/lib/guideStore';
 import { ProfileAuthSheet } from '@/features/profile/components/ProfileAuthSheet';
@@ -32,7 +31,8 @@ import {
 import { useSignIn } from '@/features/auth/useSignIn';
 import { useSubscription } from '@/lib/subscription';
 import { PlansScreen } from '@/features/billing/PlansScreen';
-import { colors, layout } from '@/lib/theme';
+import { layout } from '@/lib/theme';
+import { useThemedStyles } from '@/lib/theme-context';
 import { clearCachedProfile } from '@/lib/profileStorage';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { router } from 'expo-router';
@@ -56,6 +56,25 @@ export default function ProfileScreen() {
   const { clearGuide } = useGuide();
   const { isPro, openCheckout } = useSubscription();
   const [isPlansOpen, setIsPlansOpen] = useState(false);
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      container: { flex: 1, backgroundColor: c.surface },
+      scroll: { flex: 1 },
+      scrollContent: {
+        paddingHorizontal: layout.screenPaddingX,
+        paddingTop: 28,
+        paddingBottom: 176,
+      },
+      scrollContentKeyboardVisible: {
+        paddingBottom: 36,
+      },
+      debugActions: {
+        paddingHorizontal: layout.screenPaddingX,
+        paddingVertical: 16,
+        gap: 12,
+      },
+    })
+  );
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -273,20 +292,3 @@ export default function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.surface },
-  scroll: { flex: 1 },
-  scrollContent: {
-    paddingHorizontal: layout.screenPaddingX,
-    paddingTop: 28,
-    paddingBottom: 176,
-  },
-  scrollContentKeyboardVisible: {
-    paddingBottom: 36,
-  },
-  debugActions: {
-    paddingHorizontal: layout.screenPaddingX,
-    paddingVertical: 16,
-    gap: 12,
-  },
-});

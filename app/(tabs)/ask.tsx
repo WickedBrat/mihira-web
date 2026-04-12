@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MoreVertical } from 'lucide-react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { ChatBubble } from '@/features/chat/ChatBubble';
 import { ChatInput } from '@/features/chat/ChatInput';
@@ -27,23 +27,30 @@ import { useUsage } from '@/lib/usage';
 import { useSubscription } from '@/lib/subscription';
 import { PaywallSheet } from '@/features/billing/PaywallSheet';
 import { analytics } from '@/lib/analytics';
-import { colors, fonts, layout } from '@/lib/theme';
+import { fonts, layout } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 import type { Message } from '@/features/chat/useChatState';
 
 type Phase = 'selector' | 'loading' | 'chat';
 
+const staticStyles = StyleSheet.create({
+  backdrop: { ...StyleSheet.absoluteFillObject },
+  separator: { height: 0 },
+  bottomSpacer: { height: 96 },
+});
+
 function AskBackdrop({ guideName }: { guideName: string | null }) {
   const persona = guideName ? getGuide(guideName) : null;
-  
+
   return (
-    <View pointerEvents="none" style={styles.backdrop}>
+    <View pointerEvents="none" style={staticStyles.backdrop}>
       {persona?.imageUrl ? (
         <View style={StyleSheet.absoluteFillObject}>
-          <Image 
-            source={{ uri: persona.imageUrl }} 
-            style={[StyleSheet.absoluteFillObject, { opacity: 0.15 }]} 
-            resizeMode="cover" 
+          <Image
+            source={{ uri: persona.imageUrl }}
+            style={[StyleSheet.absoluteFillObject, { opacity: 0.15 }]}
+            resizeMode="cover"
           />
         </View>
       ) : null}
@@ -54,6 +61,39 @@ function AskBackdrop({ guideName }: { guideName: string | null }) {
 }
 
 function TypingIndicator({ guideName }: { guideName: string | null }) {
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      typingRow: {
+        alignSelf: 'flex-start',
+        marginTop: 8,
+      },
+      typingBubble: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+        backgroundColor: dark ? 'rgba(37, 38, 38, 0.7)' : 'rgba(232, 225, 212, 0.7)',
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        borderRadius: 9999,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(72, 72, 72, 0.1)' : 'rgba(0, 0, 0, 0.08)',
+      },
+      typingDot: {
+        width: 5,
+        height: 5,
+        borderRadius: 3,
+        backgroundColor: c.secondaryDim,
+      },
+      typingText: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(11),
+        color: c.onSurfaceVariant,
+        fontStyle: 'italic',
+        marginLeft: 4,
+      },
+    })
+  );
+
   return (
     <Animated.View entering={FadeIn.duration(300)} style={styles.typingRow}>
       <View style={styles.typingBubble}>
@@ -90,7 +130,40 @@ export default function AskScreen() {
   const { messages, isTyping, inputText, setInputText, sendMessage, clearChat } =
     useChatState(activeGuide);
   const flatListRef = useRef<FlatList<Message>>(null);
-  const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      root: { flex: 1, backgroundColor: c.surface },
+      flex: { flex: 1 },
+      headerSafeArea: {
+        marginBottom: 20,
+        position: 'relative',
+      },
+      topRightButton: {
+        position: 'absolute',
+        top: Platform.OS === 'ios' ? 0 : 20,
+        right: 16,
+        zIndex: 10,
+        padding: 8,
+      },
+      header: {
+        paddingBottom: 24,
+      },
+      headerTitle: {
+        fontSize: scaleFont(38),
+        lineHeight: scaleFont(44),
+      },
+      headerSub: {
+        maxWidth: 340,
+      },
+      listContent: {
+        paddingTop: 28,
+        paddingHorizontal: layout.screenPaddingX,
+        paddingBottom: 28,
+        gap: 28,
+      },
+    })
+  );
 
   const doCommit = async (guideName: string) => {
     increment();
@@ -187,7 +260,7 @@ export default function AskScreen() {
           renderItem={({ item }) => (
             <ChatBubble message={item} senderName={activeGuide ?? 'Aksha'} />
           )}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          ItemSeparatorComponent={() => <View style={staticStyles.separator} />}
           ListHeaderComponent={(
             <SafeAreaView edges={['top']} style={styles.headerSafeArea}>
               <View style={styles.topRightButton}>
@@ -227,74 +300,7 @@ export default function AskScreen() {
         />
       </KeyboardAvoidingView>
 
-      <View style={styles.bottomSpacer} />
+      <View style={staticStyles.bottomSpacer} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.surface },
-  flex: { flex: 1 },
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  headerSafeArea: {
-    marginBottom: 20,
-    position: 'relative',
-  },
-  topRightButton: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 0 : 20,
-    right: 16,
-    zIndex: 10,
-    padding: 8,
-  },
-  header: {
-    paddingBottom: 24,
-  },
-  headerTitle: {
-    fontSize: scaleFont(38),
-    lineHeight: scaleFont(44),
-  },
-  headerSub: {
-    maxWidth: 340,
-  },
-  listContent: {
-    paddingTop: 28,
-    paddingHorizontal: layout.screenPaddingX,
-    paddingBottom: 28,
-    gap: 28,
-  },
-  separator: { height: 0 },
-  typingRow: {
-    alignSelf: 'flex-start',
-    marginTop: 8,
-  },
-  typingBubble: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(37, 38, 38, 0.7)',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 9999,
-    borderWidth: 1,
-    borderColor: 'rgba(72, 72, 72, 0.1)',
-  },
-  typingDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: colors.secondaryDim,
-  },
-  typingText: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(11),
-    color: colors.onSurfaceVariant,
-    fontStyle: 'italic',
-    marginLeft: 4,
-  },
-  bottomSpacer: {
-    height: 96,
-  },
-});

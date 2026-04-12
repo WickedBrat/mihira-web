@@ -17,7 +17,8 @@ import { useLocalSearchParams, router } from 'expo-router';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { ChevronLeft, Sparkles } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
-import { colors, fonts, layout } from '@/lib/theme';
+import { fonts, layout } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 import { useCalendarEventById } from '@/features/daily/useCalendarEvents';
 
@@ -30,6 +31,189 @@ export default function SacredDayDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const numericId = id ? parseInt(id, 10) : null;
   const { event: day, isLoading, error } = useCalendarEventById(numericId);
+
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      root: { flex: 1, backgroundColor: '#0a0a0a' },
+
+      bgImage: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100%',
+        height: '100%',
+      },
+
+      backButtonLayer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        paddingHorizontal: layout.screenPaddingX,
+        paddingTop: 8,
+        zIndex: 10,
+      },
+      backPill: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: 'rgba(14,14,14,0.50)',
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.15)',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+
+      scroll: { flex: 1 },
+      scrollContent: { flexGrow: 1 },
+
+      imageSpacer: {
+        height: IMAGE_CLEAR_HEIGHT,
+      },
+
+      glassPanel: {
+        minHeight: SCREEN_HEIGHT * 0.6,
+        paddingBottom: 120,
+        overflow: 'hidden',
+        borderTopLeftRadius: 28,
+        borderTopRightRadius: 28,
+      },
+      glassTopBorder: {
+        height: 1,
+        marginHorizontal: 32,
+        marginTop: 10,
+        borderTopWidth: 1,
+        marginBottom: 6,
+      },
+
+      content: {
+        paddingHorizontal: layout.screenPaddingX,
+        paddingTop: 20,
+        gap: 0,
+      },
+      tag: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
+        gap: 5,
+        paddingHorizontal: 12,
+        paddingVertical: 5,
+        borderRadius: 9999,
+        borderWidth: 1,
+        marginBottom: 14,
+      },
+      tagText: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(10),
+        letterSpacing: 1.4,
+        textTransform: 'uppercase',
+      },
+      title: {
+        fontFamily: fonts.headlineExtra,
+        fontSize: scaleFont(34),
+        color: '#fff',
+        letterSpacing: -0.8,
+        lineHeight: scaleFont(40),
+        marginBottom: 8,
+      },
+      subtitle: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(16),
+        color: 'rgba(255,255,255,0.65)',
+        lineHeight: scaleFont(24),
+        marginBottom: 28,
+      },
+
+      mantraCard: {
+        borderRadius: 16,
+        borderWidth: 1,
+        padding: 20,
+        gap: 10,
+        overflow: 'hidden',
+        marginBottom: 32,
+        alignItems: 'center',
+      },
+      mantraDevanagari: {
+        fontFamily: fonts.headline,
+        fontSize: scaleFont(22),
+        color: '#fff',
+        textAlign: 'center',
+        letterSpacing: 1,
+      },
+
+      section: {
+        marginBottom: 28,
+        gap: 12,
+      },
+      sectionLabel: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(11),
+        color: c.secondaryFixed,
+        letterSpacing: 2.5,
+        textTransform: 'uppercase',
+      },
+      body: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(15),
+        color: 'rgba(255,255,255,0.62)',
+        lineHeight: scaleFont(24),
+      },
+
+      stepList: { gap: 12 },
+      stepRow: {
+        flexDirection: 'row',
+        gap: 12,
+        alignItems: 'flex-start',
+      },
+      stepDot: {
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        marginTop: 7,
+        flexShrink: 0,
+      },
+      stepText: {
+        flex: 1,
+        fontFamily: fonts.body,
+        fontSize: scaleFont(14),
+        color: 'rgba(255,255,255,0.62)',
+        lineHeight: scaleFont(22),
+      },
+
+      tagRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+        marginTop: 4,
+      },
+      tagChip: {
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 9999,
+        backgroundColor: 'rgba(255,255,255,0.08)',
+        borderWidth: 1,
+        borderColor: 'rgba(255,255,255,0.12)',
+      },
+      tagChipText: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(11),
+        color: 'rgba(255,255,255,0.55)',
+        letterSpacing: 0.3,
+      },
+
+      notFound: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
+      notFoundText: { fontFamily: fonts.body, fontSize: scaleFont(16), color: c.onSurfaceVariant },
+      backBtn: {
+        flexDirection: 'row', alignItems: 'center', gap: 6,
+        paddingHorizontal: 16, paddingVertical: 10,
+        borderRadius: 9999, backgroundColor: c.surfaceContainerLow,
+      },
+      backBtnText: { fontFamily: fonts.label, fontSize: scaleFont(14), color: c.onSurface },
+    })
+  );
 
   if (isLoading) {
     return (
@@ -169,183 +353,3 @@ export default function SacredDayDetailScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#0a0a0a' },
-
-  bgImage: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: '100%',
-    height: '100%',
-  },
-
-  backButtonLayer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    paddingHorizontal: layout.screenPaddingX,
-    paddingTop: 8,
-    zIndex: 10,
-  },
-  backPill: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(14,14,14,0.50)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  scroll: { flex: 1 },
-  scrollContent: { flexGrow: 1 },
-
-  imageSpacer: {
-    height: IMAGE_CLEAR_HEIGHT,
-  },
-
-  glassPanel: {
-    minHeight: SCREEN_HEIGHT * 0.6,
-    paddingBottom: 120,
-    overflow: 'hidden',
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-  },
-  glassTopBorder: {
-    height: 1,
-    marginHorizontal: 32,
-    marginTop: 10,
-    borderTopWidth: 1,
-    marginBottom: 6,
-  },
-
-  content: {
-    paddingHorizontal: layout.screenPaddingX,
-    paddingTop: 20,
-    gap: 0,
-  },
-  tag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: 5,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 9999,
-    borderWidth: 1,
-    marginBottom: 14,
-  },
-  tagText: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(10),
-    letterSpacing: 1.4,
-    textTransform: 'uppercase',
-  },
-  title: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: scaleFont(34),
-    color: '#fff',
-    letterSpacing: -0.8,
-    lineHeight: scaleFont(40),
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(16),
-    color: 'rgba(255,255,255,0.65)',
-    lineHeight: scaleFont(24),
-    marginBottom: 28,
-  },
-
-  mantraCard: {
-    borderRadius: 16,
-    borderWidth: 1,
-    padding: 20,
-    gap: 10,
-    overflow: 'hidden',
-    marginBottom: 32,
-    alignItems: 'center',
-  },
-  mantraDevanagari: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(22),
-    color: '#fff',
-    textAlign: 'center',
-    letterSpacing: 1,
-  },
-
-  section: {
-    marginBottom: 28,
-    gap: 12,
-  },
-  sectionLabel: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(11),
-    color: colors.secondaryFixed,
-    letterSpacing: 2.5,
-    textTransform: 'uppercase',
-  },
-  body: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(15),
-    color: 'rgba(255,255,255,0.62)',
-    lineHeight: scaleFont(24),
-  },
-
-  stepList: { gap: 12 },
-  stepRow: {
-    flexDirection: 'row',
-    gap: 12,
-    alignItems: 'flex-start',
-  },
-  stepDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginTop: 7,
-    flexShrink: 0,
-  },
-  stepText: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: scaleFont(14),
-    color: 'rgba(255,255,255,0.62)',
-    lineHeight: scaleFont(22),
-  },
-
-  tagRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-    marginTop: 4,
-  },
-  tagChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 9999,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
-  },
-  tagChipText: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(11),
-    color: 'rgba(255,255,255,0.55)',
-    letterSpacing: 0.3,
-  },
-
-  notFound: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 },
-  notFoundText: { fontFamily: fonts.body, fontSize: scaleFont(16), color: colors.onSurfaceVariant },
-  backBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 16, paddingVertical: 10,
-    borderRadius: 9999, backgroundColor: colors.surfaceContainerLow,
-  },
-  backBtnText: { fontFamily: fonts.label, fontSize: scaleFont(14), color: colors.onSurface },
-});
