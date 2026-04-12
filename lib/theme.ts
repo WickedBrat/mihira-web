@@ -1,3 +1,39 @@
+// Type definition for color palettes - ensures lightColors and darkColors have the same shape
+type ColorPalette = {
+  surface: string;
+  surfaceDim: string;
+  surfaceContainerLowest: string;
+  surfaceContainerLow: string;
+  surfaceContainer: string;
+  surfaceContainerHigh: string;
+  surfaceContainerHighest: string;
+  surfaceBright: string;
+  surfaceBrightGlass: string;
+  surfaceVariant: string;
+  primary: string;
+  primaryDim: string;
+  primaryFixed: string;
+  primaryFixedDim: string;
+  primaryContainer: string;
+  onPrimary: string;
+  onPrimaryFixed: string;
+  secondary: string;
+  secondaryDim: string;
+  secondaryFixed: string;
+  secondaryFixedDim: string;
+  secondaryContainer: string;
+  onSecondary: string;
+  onSecondaryContainer: string;
+  onSurface: string;
+  onSurfaceVariant: string;
+  onBackground: string;
+  background: string;
+  outline: string;
+  outlineVariant: string;
+  error: string;
+  errorContainer: string;
+};
+
 export const darkColors = {
   surface: '#0e0e0e',
   surfaceDim: '#0e0e0e',
@@ -13,14 +49,14 @@ export const darkColors = {
   primary: '#b564fc',
   primaryDim: '#c6b1d6',
   primaryFixed: '#f0dbff',
-  primaryFixedDim: '#b44affff',
+  primaryFixedDim: '#b44aff',
   primaryContainer: '#b564fc',
-  onPrimary: '#ffffffff',
+  onPrimary: '#ffffff',
   onPrimaryFixed: '#b564fc',
 
   secondary: '#b8987a',
   secondaryDim: '#b8987a',
-  secondaryFixed: '#ff9500ff',
+  secondaryFixed: '#ff9500',
   secondaryFixedDim: '#ff9239',
   secondaryContainer: '#4e371f',
   onSecondary: '#2f1c07',
@@ -36,7 +72,9 @@ export const darkColors = {
 
   error: '#ee7d77',
   errorContainer: '#7f2927',
-} as const;
+} as const satisfies ColorPalette;
+
+export type Colors = ColorPalette;
 
 export const lightColors = {
   surface: '#faf7f2',
@@ -76,7 +114,7 @@ export const lightColors = {
 
   error: '#c0392b',
   errorContainer: '#fde8e6',
-} as const;
+} as const satisfies ColorPalette;
 
 // Legacy re-export so existing code that hasn't been migrated yet keeps working.
 // Remove after all 47 files are migrated.
@@ -91,20 +129,34 @@ export const fonts = {
   labelLight: 'Lexend_300Light',
 } as const;
 
+type GlassMorphismType = {
+  background: string;
+  backgroundLight: string;
+  backgroundInput: string;
+};
+
 export const darkGlassMorphism = {
   background: 'rgba(43, 44, 44, 0.6)',
   backgroundLight: 'rgba(43, 44, 44, 0.4)',
   backgroundInput: 'rgba(37, 38, 38, 0.7)',
-} as const;
+} as const satisfies GlassMorphismType;
 
 export const lightGlassMorphism = {
   background: 'rgba(250, 247, 242, 0.8)',
   backgroundLight: 'rgba(250, 247, 242, 0.6)',
   backgroundInput: 'rgba(242, 237, 228, 0.9)',
-} as const;
+} as const satisfies GlassMorphismType;
+
+export type GlassMorphism = GlassMorphismType;
 
 // Legacy re-export
 export const glassMorphism = darkGlassMorphism;
+
+type GradientsType = {
+  primaryToContainer: readonly [string, string];
+  secondaryToContainer: readonly [string, string];
+  peaceBg: readonly [string, string, string, string];
+};
 
 export const darkGradients = {
   primaryToContainer: [darkColors.primary, darkColors.primaryContainer] as const,
@@ -115,7 +167,7 @@ export const darkGradients = {
     'rgba(184, 152, 122, 0.1)',
     'transparent',
   ] as const,
-} as const;
+} as const satisfies GradientsType;
 
 export const lightGradients = {
   primaryToContainer: [lightColors.primary, lightColors.primaryContainer] as const,
@@ -126,7 +178,9 @@ export const lightGradients = {
     'rgba(146, 114, 42, 0.08)',
     'transparent',
   ] as const,
-} as const;
+} as const satisfies GradientsType;
+
+export type Gradients = GradientsType;
 
 // Legacy re-export
 export const gradients = darkGradients;
@@ -135,7 +189,4 @@ export const layout = {
   screenPaddingX: 24,
 } as const;
 
-export type Colors = typeof darkColors;
-export type GlassMorphism = typeof darkGlassMorphism;
-export type Gradients = typeof darkGradients;
 export type ColorKey = keyof Colors;
