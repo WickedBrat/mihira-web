@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { VedicReasoningAccordion } from './VedicReasoningAccordion';
 import { fonts } from '@/lib/theme';
+import { useThemedStyles } from '@/lib/theme-context';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
 
 const BASE = 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/daily-prediction';
@@ -73,7 +74,6 @@ const IMAGES: Record<string, { uri: string }> = {
 
 const FALLBACK = img('focus');
 
-
 interface Props {
   focusArea: DailyFocusArea;
   isLast?: boolean;
@@ -81,6 +81,83 @@ interface Props {
 
 export function FocusAreaCard({ focusArea, isLast = false }: Props) {
   const image = IMAGES[focusArea.area] ?? FALLBACK;
+  const styles = useThemedStyles((_c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      imageBg: {
+        alignSelf: 'stretch',
+        height: 140,
+        borderRadius: 24,
+        overflow: 'hidden',
+      },
+      image: {
+        borderRadius: 24,
+      },
+      imageGradient: {
+        flex: 1,
+        padding: 20,
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+      },
+      emoji: {
+        fontSize: 32,
+      },
+      areaLabel: {
+        fontFamily: fonts.headlineExtra,
+        fontSize: 24,
+        color: '#fff',
+        letterSpacing: -0.3,
+        textAlign: 'right',
+      },
+      timeRange: {
+        fontFamily: fonts.body,
+        fontSize: 13,
+        color: 'rgba(255,255,255,0.55)',
+        textAlign: 'right',
+        marginTop: 2,
+      },
+      body: {
+        alignSelf: 'stretch',
+        backgroundColor: dark ? 'rgba(37,38,38,0.6)' : 'rgba(232,225,212,0.6)',
+        borderRadius: 20,
+        padding: 20,
+        marginTop: 10,
+        gap: 10,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)',
+      },
+      action: {
+        fontFamily: fonts.headline,
+        fontSize: 19,
+        color: '#fff',
+        letterSpacing: -0.3,
+        lineHeight: 27,
+      },
+      suggestion: {
+        fontFamily: fonts.body,
+        fontSize: 15,
+        color: 'rgba(255,255,255,0.65)',
+        lineHeight: 23,
+      },
+      connector: {
+        alignItems: 'center',
+        height: 36,
+        gap: 4,
+        paddingVertical: 4,
+      },
+      connectorLine: {
+        flex: 1,
+        width: 1.5,
+        backgroundColor: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+      },
+      connectorDot: {
+        width: 5,
+        height: 5,
+        borderRadius: 3,
+        backgroundColor: dark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)',
+      },
+    })
+  );
 
   return (
     <View>
@@ -117,81 +194,3 @@ export function FocusAreaCard({ focusArea, isLast = false }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  imageBg: {
-    alignSelf: 'stretch',
-    height: 140,
-    borderRadius: 24,
-    overflow: 'hidden',
-  },
-  image: {
-    borderRadius: 24,
-  },
-  imageGradient: {
-    flex: 1,
-    padding: 20,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-  },
-  emoji: {
-    fontSize: 32,
-  },
-  areaLabel: {
-    fontFamily: fonts.headlineExtra,
-    fontSize: 24,
-    color: '#fff',
-    letterSpacing: -0.3,
-    textAlign: 'right',
-  },
-  timeRange: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.55)',
-    textAlign: 'right',
-    marginTop: 2,
-  },
-  body: {
-    alignSelf: 'stretch',
-    backgroundColor: 'rgba(37,38,38,0.6)',
-    borderRadius: 20,
-    padding: 20,
-    marginTop: 10,
-    gap: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-  },
-  action: {
-    fontFamily: fonts.headline,
-    fontSize: 19,
-    color: '#fff',
-    letterSpacing: -0.3,
-    lineHeight: 27,
-  },
-  suggestion: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-    color: 'rgba(255,255,255,0.65)',
-    lineHeight: 23,
-  },
-
-  // Connector
-  connector: {
-    alignItems: 'center',
-    height: 36,
-    gap: 4,
-    paddingVertical: 4,
-  },
-  connectorLine: {
-    flex: 1,
-    width: 1.5,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-  },
-  connectorDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-  },
-});

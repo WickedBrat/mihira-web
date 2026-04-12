@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { fonts } from '@/lib/theme';
+import { useThemedStyles } from '@/lib/theme-context';
 
 const AREA_META: Record<string, { emoji: string; color: string; bg: string }> = {
   Career:        { emoji: '💼', color: '#f0c060', bg: 'rgba(240,192,96,0.15)' },
@@ -24,6 +25,44 @@ interface Props {
 }
 
 export function FocusAreaChips({ areas }: Props) {
+  const styles = useThemedStyles((c) =>
+    StyleSheet.create({
+      container: {
+        gap: 12,
+        marginBottom: 28,
+      },
+      label: {
+        fontFamily: fonts.label,
+        fontSize: 10,
+        textTransform: 'uppercase',
+        letterSpacing: 3,
+        color: c.onSurfaceVariant,
+      },
+      chips: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 10,
+      },
+      chip: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+        paddingHorizontal: 14,
+        paddingVertical: 9,
+        borderRadius: 100,
+        borderWidth: 1,
+      },
+      chipEmoji: {
+        fontSize: 15,
+      },
+      chipText: {
+        fontFamily: fonts.label,
+        fontSize: 13,
+        letterSpacing: 0.2,
+      },
+    })
+  );
+
   if (!areas.length) return null;
 
   return (
@@ -43,39 +82,3 @@ export function FocusAreaChips({ areas }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    gap: 12,
-    marginBottom: 28,
-  },
-  label: {
-    fontFamily: fonts.label,
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 3,
-    color: 'rgba(255,255,255,0.4)',
-  },
-  chips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-  },
-  chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 9,
-    borderRadius: 100,
-    borderWidth: 1,
-  },
-  chipEmoji: {
-    fontSize: 15,
-  },
-  chipText: {
-    fontFamily: fonts.label,
-    fontSize: 13,
-    letterSpacing: 0.2,
-  },
-});

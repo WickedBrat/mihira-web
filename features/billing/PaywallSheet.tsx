@@ -4,7 +4,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Zap, X } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { SacredButton } from '@/components/ui/SacredButton';
-import { colors, fonts } from '@/lib/theme';
+import { fonts } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 import type { Feature } from '@/lib/usage';
 import { LIMITS } from '@/lib/usage';
@@ -41,6 +42,129 @@ export function PaywallSheet({
   const limit = LIMITS[feature];
   const label = FEATURE_LABEL[feature];
   const labelPlural = FEATURE_LABEL_PLURAL[feature];
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      sheet: {
+        borderTopLeftRadius: 34,
+        borderTopRightRadius: 34,
+      },
+      header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 20,
+      },
+      iconWrap: {
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255, 149, 0, 0.09)',
+        borderWidth: 1,
+        borderColor: 'rgba(255, 149, 0, 0.13)',
+      },
+      closeButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: `${c.outlineVariant}33`,
+      },
+      title: {
+        fontFamily: fonts.headline,
+        fontSize: scaleFont(22),
+        color: c.onSurface,
+        letterSpacing: -0.3,
+        marginBottom: 10,
+      },
+      body: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(14),
+        color: c.onSurfaceVariant,
+        lineHeight: scaleFont(21),
+        marginBottom: 20,
+      },
+      planRow: {
+        gap: 10,
+        marginBottom: 20,
+      },
+      planFeatureRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+        padding: 14,
+        borderRadius: 14,
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+      },
+      planBadge: {
+        paddingHorizontal: 8,
+        paddingVertical: 3,
+        borderRadius: 6,
+      },
+      planBadgeFree: {
+        backgroundColor: `${c.onSurfaceVariant}18`,
+      },
+      planBadgePro: {
+        backgroundColor: `${c.primary}22`,
+      },
+      planBadgeText: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(9),
+        letterSpacing: 1.2,
+      },
+      planBadgeTextFree: {
+        color: c.onSurfaceVariant,
+      },
+      planBadgeTextPro: {
+        color: c.primaryFixed,
+      },
+      planFeatureText: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: scaleFont(14),
+        color: c.onSurface,
+        flex: 1,
+      },
+      featureList: {
+        gap: 12,
+        marginBottom: 24,
+      },
+      featureItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+      },
+      featureDot: {
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: c.primary,
+      },
+      featureItemText: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(14),
+        color: c.onSurfaceVariant,
+      },
+      cta: {
+        marginBottom: 12,
+      },
+      laterButton: {
+        alignItems: 'center',
+        paddingVertical: 10,
+      },
+      laterText: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(13),
+        color: c.onSurfaceVariant,
+      },
+    })
+  );
 
   return (
     <BottomSheet visible={visible} onClose={onClose} sheetStyle={styles.sheet} panEnabled={mode !== 'blocked'}>
@@ -61,8 +185,8 @@ export function PaywallSheet({
           </Text>
 
           <View style={styles.planRow}>
-            <PlanFeatureRow label={`${limit} ${labelPlural}/month`} isFree />
-            <PlanFeatureRow label={`Unlimited ${labelPlural}`} isFree={false} />
+            <PlanFeatureRow label={`${limit} ${labelPlural}/month`} isFree styles={styles} />
+            <PlanFeatureRow label={`Unlimited ${labelPlural}`} isFree={false} styles={styles} />
           </View>
 
           <SacredButton label="Upgrade to Pro — $19.99/mo" onPress={onUpgrade} style={styles.cta} />
@@ -78,9 +202,9 @@ export function PaywallSheet({
           </Text>
 
           <View style={styles.featureList}>
-            <FeatureItem text={`Unlimited ${labelPlural}`} />
-            <FeatureItem text="All home page content" />
-            <FeatureItem text="Priority access to new features" />
+            <FeatureItem text={`Unlimited ${labelPlural}`} styles={styles} />
+            <FeatureItem text="All home page content" styles={styles} />
+            <FeatureItem text="Priority access to new features" styles={styles} />
           </View>
 
           <SacredButton label="Upgrade to Pro — $19.99/mo" onPress={onUpgrade} style={styles.cta} />
@@ -93,7 +217,9 @@ export function PaywallSheet({
   );
 }
 
-function PlanFeatureRow({ label, isFree }: { label: string; isFree: boolean }) {
+type SheetStyles = ReturnType<typeof StyleSheet.create<Record<string, object>>>;
+
+function PlanFeatureRow({ label, isFree, styles }: { label: string; isFree: boolean; styles: any }) {
   return (
     <View style={styles.planFeatureRow}>
       <View style={[styles.planBadge, isFree ? styles.planBadgeFree : styles.planBadgePro]}>
@@ -106,7 +232,7 @@ function PlanFeatureRow({ label, isFree }: { label: string; isFree: boolean }) {
   );
 }
 
-function FeatureItem({ text }: { text: string }) {
+function FeatureItem({ text, styles }: { text: string; styles: any }) {
   return (
     <View style={styles.featureItem}>
       <View style={styles.featureDot} />
@@ -114,124 +240,3 @@ function FeatureItem({ text }: { text: string }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  sheet: {
-    borderTopLeftRadius: 34,
-    borderTopRightRadius: 34,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  iconWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255, 149, 0, 0.09)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 149, 0, 0.13)',
-  },
-  closeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: `${colors.outlineVariant}33`,
-  },
-  title: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(22),
-    color: colors.onSurface,
-    letterSpacing: -0.3,
-    marginBottom: 10,
-  },
-  body: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(14),
-    color: colors.onSurfaceVariant,
-    lineHeight: scaleFont(21),
-    marginBottom: 20,
-  },
-  planRow: {
-    gap: 10,
-    marginBottom: 20,
-  },
-  planFeatureRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 14,
-    borderRadius: 14,
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.04)',
-  },
-  planBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
-  },
-  planBadgeFree: {
-    backgroundColor: `${colors.onSurfaceVariant}18`,
-  },
-  planBadgePro: {
-    backgroundColor: `${colors.primary}22`,
-  },
-  planBadgeText: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(9),
-    letterSpacing: 1.2,
-  },
-  planBadgeTextFree: {
-    color: colors.onSurfaceVariant,
-  },
-  planBadgeTextPro: {
-    color: colors.primaryFixed,
-  },
-  planFeatureText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: scaleFont(14),
-    color: colors.onSurface,
-    flex: 1,
-  },
-  featureList: {
-    gap: 12,
-    marginBottom: 24,
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  featureDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.primary,
-  },
-  featureItemText: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(14),
-    color: colors.onSurfaceVariant,
-  },
-  cta: {
-    marginBottom: 12,
-  },
-  laterButton: {
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  laterText: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(13),
-    color: colors.onSurfaceVariant,
-  },
-});

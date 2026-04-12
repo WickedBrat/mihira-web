@@ -6,7 +6,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Check, X, Zap } from 'lucide-react-native';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
-import { colors, fonts, layout } from '@/lib/theme';
+import { fonts, layout } from '@/lib/theme';
+import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 
 interface PlansScreenProps {
@@ -23,6 +24,44 @@ interface FeatureRowProps {
 }
 
 function FeatureRow({ label, freeValue, proValue }: FeatureRowProps) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      featureRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        borderBottomWidth: 1,
+        borderBottomColor: dark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.04)',
+      },
+      featureLabel: {
+        flex: 1,
+        fontFamily: fonts.body,
+        fontSize: scaleFont(14),
+        color: c.onSurface,
+      },
+      featureValues: {
+        flexDirection: 'row',
+        gap: 0,
+      },
+      featureCell: {
+        width: 72,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      featureCellText: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: scaleFont(12),
+        color: c.onSurfaceVariant,
+        textAlign: 'center',
+      },
+      featureCellTextPro: {
+        color: c.primaryFixed,
+      },
+    })
+  );
+
   return (
     <View style={styles.featureRow}>
       <Text style={styles.featureLabel}>{label}</Text>
@@ -36,7 +75,7 @@ function FeatureRow({ label, freeValue, proValue }: FeatureRowProps) {
             <Text style={styles.featureCellText}>{freeValue}</Text>
           )}
         </View>
-        <View style={[styles.featureCell, styles.featureCellPro]}>
+        <View style={styles.featureCell}>
           {typeof proValue === 'boolean' ? (
             proValue
               ? <Check size={16} color={colors.primary} />
@@ -51,6 +90,177 @@ function FeatureRow({ label, freeValue, proValue }: FeatureRowProps) {
 }
 
 export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClose }: PlansScreenProps) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      root: { flex: 1, backgroundColor: c.surface },
+      navBar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: layout.screenPaddingX,
+        paddingVertical: 14,
+      },
+      navTitle: {
+        fontFamily: fonts.headline,
+        fontSize: scaleFont(20),
+        color: c.onSurface,
+        letterSpacing: -0.3,
+      },
+      closeButton: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: `${c.outlineVariant}33`,
+      },
+      scroll: { flex: 1 },
+      content: {
+        paddingHorizontal: layout.screenPaddingX,
+        paddingTop: 8,
+        paddingBottom: 48,
+        gap: 24,
+      },
+      planCards: {
+        flexDirection: 'row',
+        gap: 12,
+      },
+      planCard: {
+        flex: 1,
+        borderRadius: 20,
+        padding: 18,
+        borderWidth: 1,
+        alignItems: 'center',
+        gap: 4,
+      },
+      planCardFree: {
+        backgroundColor: c.surfaceContainerLow,
+        borderColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+      },
+      planCardPro: {
+        borderColor: `${c.primary}30`,
+      },
+      planProHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+        marginBottom: 2,
+      },
+      planProLabel: {
+        fontFamily: fonts.headline,
+        fontSize: scaleFont(15),
+        color: c.secondaryFixed,
+        letterSpacing: 0.5,
+      },
+      planName: {
+        fontFamily: fonts.bodyMedium,
+        fontSize: scaleFont(15),
+        color: c.onSurfaceVariant,
+        marginBottom: 4,
+      },
+      planPrice: {
+        fontFamily: fonts.headline,
+        fontSize: scaleFont(28),
+        color: c.onSurface,
+        letterSpacing: -0.5,
+      },
+      planPricePro: {
+        color: c.primaryFixed,
+      },
+      planPriceSub: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(11),
+        color: c.onSurfaceVariant,
+      },
+      currentBadge: {
+        marginTop: 8,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 20,
+        backgroundColor: `${c.onSurfaceVariant}18`,
+      },
+      currentBadgePro: {
+        backgroundColor: `${c.primary}22`,
+      },
+      currentBadgeText: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(9),
+        color: c.onSurfaceVariant,
+        letterSpacing: 0.8,
+      },
+      currentBadgeTextPro: {
+        color: c.primaryFixed,
+      },
+      featureTable: {
+        borderRadius: 20,
+        backgroundColor: c.surfaceContainerLow,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+        overflow: 'hidden',
+      },
+      featureTableHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+      },
+      featureTableHeaderLabel: {
+        flex: 1,
+        fontFamily: fonts.label,
+        fontSize: scaleFont(9),
+        textTransform: 'uppercase',
+        letterSpacing: 1.5,
+        color: c.onSurfaceVariant,
+      },
+      featureValues: {
+        flexDirection: 'row',
+        gap: 0,
+      },
+      featureColumnLabel: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(9),
+        textTransform: 'uppercase',
+        letterSpacing: 1.2,
+        color: c.onSurfaceVariant,
+        width: 72,
+        textAlign: 'center',
+      },
+      featureColumnLabelPro: {
+        color: c.primaryFixed,
+      },
+      upgradeCta: {
+        marginTop: 4,
+      },
+      activeMessage: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: 12,
+        padding: 16,
+        borderRadius: 16,
+        backgroundColor: `${c.primary}10`,
+        borderWidth: 1,
+        borderColor: `${c.primary}20`,
+      },
+      activeMessageText: {
+        flex: 1,
+        fontFamily: fonts.body,
+        fontSize: scaleFont(13),
+        color: c.onSurfaceVariant,
+        lineHeight: scaleFont(20),
+      },
+    })
+  );
+
+  const gradientColors: [string, string] = [
+    `${colors.primary}30`,
+    `${colors.primaryFixedDim}18`,
+  ];
+
   return (
     <SafeAreaView style={styles.root} edges={['top', 'bottom']}>
       <PageAmbientBlobs />
@@ -67,9 +277,7 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Plan cards */}
         <View style={styles.planCards}>
-          {/* Free card */}
           <View style={[styles.planCard, styles.planCardFree]}>
             <Text style={styles.planName}>Free</Text>
             <Text style={styles.planPrice}>$0</Text>
@@ -81,9 +289,8 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
             )}
           </View>
 
-          {/* Pro card */}
           <LinearGradient
-            colors={[`${colors.primary}30`, `${colors.primaryFixedDim}18`]}
+            colors={gradientColors}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={[styles.planCard, styles.planCardPro]}
@@ -102,7 +309,6 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
           </LinearGradient>
         </View>
 
-        {/* Feature comparison */}
         <View style={styles.featureTable}>
           <View style={styles.featureTableHeader}>
             <Text style={styles.featureTableHeaderLabel}>Features</Text>
@@ -136,195 +342,3 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.surface },
-  navBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: layout.screenPaddingX,
-    paddingVertical: 14,
-  },
-  navTitle: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(20),
-    color: colors.onSurface,
-    letterSpacing: -0.3,
-  },
-  closeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: `${colors.outlineVariant}33`,
-  },
-  scroll: { flex: 1 },
-  content: {
-    paddingHorizontal: layout.screenPaddingX,
-    paddingTop: 8,
-    paddingBottom: 48,
-    gap: 24,
-  },
-  planCards: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  planCard: {
-    flex: 1,
-    borderRadius: 20,
-    padding: 18,
-    borderWidth: 1,
-    alignItems: 'center',
-    gap: 4,
-  },
-  planCardFree: {
-    backgroundColor: colors.surfaceContainerLow,
-    borderColor: 'rgba(255,255,255,0.06)',
-  },
-  planCardPro: {
-    borderColor: `${colors.primary}30`,
-  },
-  planProHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    marginBottom: 2,
-  },
-  planProLabel: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(15),
-    color: colors.secondaryFixed,
-    letterSpacing: 0.5,
-  },
-  planName: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: scaleFont(15),
-    color: colors.onSurfaceVariant,
-    marginBottom: 4,
-  },
-  planPrice: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(28),
-    color: colors.onSurface,
-    letterSpacing: -0.5,
-  },
-  planPricePro: {
-    color: colors.primaryFixed,
-  },
-  planPriceSub: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(11),
-    color: colors.onSurfaceVariant,
-  },
-  currentBadge: {
-    marginTop: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 20,
-    backgroundColor: `${colors.onSurfaceVariant}18`,
-  },
-  currentBadgePro: {
-    backgroundColor: `${colors.primary}22`,
-  },
-  currentBadgeText: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(9),
-    color: colors.onSurfaceVariant,
-    letterSpacing: 0.8,
-  },
-  currentBadgeTextPro: {
-    color: colors.primaryFixed,
-  },
-  featureTable: {
-    borderRadius: 20,
-    backgroundColor: colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.04)',
-    overflow: 'hidden',
-  },
-  featureTableHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.04)',
-  },
-  featureTableHeaderLabel: {
-    flex: 1,
-    fontFamily: fonts.label,
-    fontSize: scaleFont(9),
-    textTransform: 'uppercase',
-    letterSpacing: 1.5,
-    color: colors.onSurfaceVariant,
-  },
-  featureColumnLabel: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(9),
-    textTransform: 'uppercase',
-    letterSpacing: 1.2,
-    color: colors.onSurfaceVariant,
-    width: 72,
-    textAlign: 'center',
-  },
-  featureColumnLabelPro: {
-    color: colors.primaryFixed,
-  },
-  featureRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.03)',
-  },
-  featureLabel: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: scaleFont(14),
-    color: colors.onSurface,
-  },
-  featureValues: {
-    flexDirection: 'row',
-    gap: 0,
-  },
-  featureCell: {
-    width: 72,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  featureCellPro: {},
-  featureCellText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: scaleFont(12),
-    color: colors.onSurfaceVariant,
-    textAlign: 'center',
-  },
-  featureCellTextPro: {
-    color: colors.primaryFixed,
-  },
-  upgradeCta: {
-    marginTop: 4,
-  },
-  activeMessage: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-    padding: 16,
-    borderRadius: 16,
-    backgroundColor: `${colors.primary}10`,
-    borderWidth: 1,
-    borderColor: `${colors.primary}20`,
-  },
-  activeMessageText: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: scaleFont(13),
-    color: colors.onSurfaceVariant,
-    lineHeight: scaleFont(20),
-  },
-});
