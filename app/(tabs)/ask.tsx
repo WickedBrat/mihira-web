@@ -7,7 +7,6 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Image,
   Alert,
   TouchableOpacity,
 } from 'react-native';
@@ -16,13 +15,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { ChatBubble } from '@/features/chat/ChatBubble';
 import { ChatInput } from '@/features/chat/ChatInput';
-import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { PageHero } from '@/components/ui/PageHero';
-import { useChatState } from '@/features/chat/useChatState';
-import { GuideSelector } from '@/features/ask/GuideSelector';
-import { GuideLoader } from '@/features/ask/GuideLoader';
-import { getGuide } from '@/features/ask/guidePersonas';
-import { useGuide } from '@/lib/guideStore';
+import { RealmBackdrop } from '@/components/ui/RealmBackdrop';
+import { NaradIntro } from '@/features/ask/NaradIntro';
+import { useNaradState } from '@/features/ask/useNaradState';
 import { useUsage } from '@/lib/usage';
 import { useSubscription } from '@/lib/subscription';
 import { PaywallSheet } from '@/features/billing/PaywallSheet';
@@ -32,41 +28,15 @@ import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
 import type { Message } from '@/features/chat/useChatState';
 
-type Phase = 'selector' | 'loading' | 'chat';
-
 const staticStyles = StyleSheet.create({
-  backdrop: { ...StyleSheet.absoluteFillObject },
   separator: { height: 0 },
   bottomSpacer: { height: 96 },
 });
 
-function AskBackdrop({ guideName }: { guideName: string | null }) {
-  const persona = guideName ? getGuide(guideName) : null;
-
-  return (
-    <View pointerEvents="none" style={staticStyles.backdrop}>
-      {persona?.imageUrl ? (
-        <View style={StyleSheet.absoluteFillObject}>
-          <Image
-            source={{ uri: persona.imageUrl }}
-            style={[StyleSheet.absoluteFillObject, { opacity: 0.15 }]}
-            resizeMode="cover"
-          />
-        </View>
-      ) : null}
-      <AmbientBlob color="rgba(212, 190, 228, 0.12)" top={-110} left={-90} size={380} />
-      <AmbientBlob color="rgba(184, 152, 122, 0.08)" top={280} left={-20} size={280} />
-    </View>
-  );
-}
-
-function TypingIndicator({ guideName }: { guideName: string | null }) {
+function TypingIndicator() {
   const styles = useThemedStyles((c, _glass, _gradients, dark) =>
     StyleSheet.create({
-      typingRow: {
-        alignSelf: 'flex-start',
-        marginTop: 8,
-      },
+      typingRow: { alignSelf: 'flex-start', marginTop: 8 },
       typingBubble: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -78,12 +48,7 @@ function TypingIndicator({ guideName }: { guideName: string | null }) {
         borderWidth: 1,
         borderColor: dark ? 'rgba(72, 72, 72, 0.1)' : 'rgba(0, 0, 0, 0.08)',
       },
-      typingDot: {
-        width: 5,
-        height: 5,
-        borderRadius: 3,
-        backgroundColor: c.secondaryDim,
-      },
+      typingDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: c.secondaryDim },
       typingText: {
         fontFamily: fonts.body,
         fontSize: scaleFont(11),
@@ -91,7 +56,7 @@ function TypingIndicator({ guideName }: { guideName: string | null }) {
         fontStyle: 'italic',
         marginLeft: 4,
       },
-    })
+    }),
   );
 
   return (
@@ -100,45 +65,42 @@ function TypingIndicator({ guideName }: { guideName: string | null }) {
         <View style={[styles.typingDot, { opacity: 0.6 }]} />
         <View style={[styles.typingDot, { opacity: 0.4 }]} />
         <View style={[styles.typingDot, { opacity: 0.2 }]} />
-        <Text style={styles.typingText}>
-          {guideName ? `${guideName} is reflecting…` : 'Aksha is reflecting…'}
-        </Text>
+        <Text style={styles.typingText}>Narad is journeying…</Text>
       </View>
     </Animated.View>
   );
 }
 
 export default function AskScreen() {
-  const { guide, isLoading, commitToGuide } = useGuide();
   const { isPro, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
   const { isAtLimit, isNearLimit, isLoaded: isUsageLoaded, increment } = useUsage('ask');
   const [paywallMode, setPaywallMode] = React.useState<'warning' | 'blocked' | null>(null);
-  const pendingGuideRef = React.useRef<string | null>(null);
-  const [phase, setPhase] = React.useState<Phase>(() =>
-    guide ? 'chat' : 'selector'
-  );
-  const [pendingGuide, setPendingGuide] = React.useState<string | null>(null);
+  const pendingEnterRef = React.useRef(false);
 
-  // Resolve phase once guide store finishes loading
-  React.useEffect(() => {
-    if (!isLoading) {
-      setPhase(guide ? 'chat' : 'selector');
-    }
-  }, [isLoading, guide]);
+  const {
+    messages,
+    isTyping,
+    inputText,
+    setInputText,
+    sendMessage,
+    clearChat,
+    naradContext,
+    isContextLoaded,
+    realmPhase,
+    currentDeity,
+    accentColor,
+  } = useNaradState();
 
-  const activeGuide = guide ?? pendingGuide;
-  const { messages, isTyping, inputText, setInputText, sendMessage, clearChat } =
-    useChatState(activeGuide);
+  const [hasEnteredChat, setHasEnteredChat] = React.useState(false);
+  const showIntro = isContextLoaded && naradContext.interactionCount === 0 && !hasEnteredChat;
+
   const flatListRef = useRef<FlatList<Message>>(null);
   const { colors } = useTheme();
   const styles = useThemedStyles((c) =>
     StyleSheet.create({
       root: { flex: 1, backgroundColor: c.surface },
       flex: { flex: 1 },
-      headerSafeArea: {
-        marginBottom: 20,
-        position: 'relative',
-      },
+      headerSafeArea: { marginBottom: 20, position: 'relative' },
       topRightButton: {
         position: 'absolute',
         top: Platform.OS === 'ios' ? 0 : 20,
@@ -146,66 +108,48 @@ export default function AskScreen() {
         zIndex: 10,
         padding: 8,
       },
-      header: {
-        paddingBottom: 24,
-      },
-      headerTitle: {
-        fontSize: scaleFont(38),
-        lineHeight: scaleFont(44),
-      },
-      headerSub: {
-        maxWidth: 340,
-      },
+      header: { paddingBottom: 24 },
+      headerTitle: { fontSize: scaleFont(38), lineHeight: scaleFont(44) },
+      headerSub: { maxWidth: 340 },
       listContent: {
         paddingTop: 28,
         paddingHorizontal: layout.screenPaddingX,
         paddingBottom: 28,
         gap: 28,
       },
-    })
+    }),
   );
 
-  const doCommit = async (guideName: string) => {
+  const doEnter = () => {
     increment();
-    setPendingGuide(guideName);
-    await commitToGuide(guideName);
-    setPhase('loading');
+    setHasEnteredChat(true);
+    analytics.guideSelected({ guide_name: 'Narad', guide_index: 0 });
   };
 
-  const handleCommit = (guideName: string) => {
-    if (!isSubscriptionLoaded || !isUsageLoaded) return; // loading guard
-
-    if (isPro) {
-      doCommit(guideName);
-      return;
-    }
-
+  const handleEnter = () => {
+    if (!isSubscriptionLoaded || !isUsageLoaded) return;
+    if (isPro) { doEnter(); return; }
     if (isAtLimit) {
       analytics.paywallShown({ feature: 'ask', mode: 'blocked' });
       setPaywallMode('blocked');
       return;
     }
-
     if (isNearLimit) {
       analytics.paywallShown({ feature: 'ask', mode: 'warning' });
-      pendingGuideRef.current = guideName;
+      pendingEnterRef.current = true;
       setPaywallMode('warning');
       return;
     }
-
-    doCommit(guideName);
+    doEnter();
   };
 
-  const handleLoaderComplete = () => {
-    setPhase('chat');
-  };
+  // Show blank while context loads (avoids flicker between intro and chat)
+  if (!isContextLoaded) return <View style={styles.root} />;
 
-  if (isLoading) return <View style={styles.root} />;
-
-  if (phase === 'selector') {
+  if (showIntro) {
     return (
       <>
-        <GuideSelector onCommit={handleCommit} />
+        <NaradIntro onEnter={handleEnter} />
         <PaywallSheet
           visible={paywallMode !== null}
           feature="ask"
@@ -213,7 +157,7 @@ export default function AskScreen() {
           onClose={() => {
             analytics.paywallDismissed({ feature: 'ask', mode: paywallMode ?? 'warning' });
             setPaywallMode(null);
-            pendingGuideRef.current = null;
+            pendingEnterRef.current = false;
           }}
           onUpgrade={() => {
             analytics.paywallUpgradeTapped({ feature: 'ask' });
@@ -222,28 +166,17 @@ export default function AskScreen() {
           }}
           onProceed={() => {
             analytics.paywallProceedTapped({ feature: 'ask' });
-            const name = pendingGuideRef.current;
-            pendingGuideRef.current = null;
             setPaywallMode(null);
-            if (name) doCommit(name);
+            if (pendingEnterRef.current) { pendingEnterRef.current = false; doEnter(); }
           }}
         />
       </>
     );
   }
 
-  if (phase === 'loading' && pendingGuide) {
-    return (
-      <GuideLoader
-        guideName={pendingGuide}
-        onComplete={handleLoaderComplete}
-      />
-    );
-  }
-
   return (
     <View style={styles.root}>
-      <AskBackdrop guideName={activeGuide} />
+      <RealmBackdrop phase={realmPhase} deityName={currentDeity} accentColor={accentColor} />
 
       <KeyboardAvoidingView
         style={styles.flex}
@@ -257,9 +190,7 @@ export default function AskScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-          renderItem={({ item }) => (
-            <ChatBubble message={item} senderName={activeGuide ?? 'Aksha'} />
-          )}
+          renderItem={({ item }) => <ChatBubble message={item} senderName="Narad" />}
           ItemSeparatorComponent={() => <View style={staticStyles.separator} />}
           ListHeaderComponent={(
             <SafeAreaView edges={['top']} style={styles.headerSafeArea}>
@@ -268,11 +199,11 @@ export default function AskScreen() {
                   onPress={() => {
                     Alert.alert(
                       'Clear Chat',
-                      'Are you sure you want to clear your conversation history?',
+                      'Are you sure you want to clear your conversation?',
                       [
                         { text: 'Cancel', style: 'cancel' },
                         { text: 'Clear', style: 'destructive', onPress: clearChat },
-                      ]
+                      ],
                     );
                   }}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -282,15 +213,15 @@ export default function AskScreen() {
               </View>
               <PageHero
                 meta="Sacred Guidance"
-                title={`Ask ${activeGuide ?? 'Aksha'}`}
-                subtitle="Bring your doubt, conflict, or question into one clear sacred space."
+                title="Ask Narad"
+                subtitle="Bring your question into the sacred space."
                 style={styles.header}
                 titleStyle={styles.headerTitle}
                 subtitleStyle={styles.headerSub}
               />
             </SafeAreaView>
           )}
-          ListFooterComponent={isTyping ? <TypingIndicator guideName={activeGuide} /> : null}
+          ListFooterComponent={isTyping ? <TypingIndicator /> : null}
         />
 
         <ChatInput
