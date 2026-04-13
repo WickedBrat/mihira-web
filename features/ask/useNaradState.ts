@@ -118,6 +118,7 @@ export function useNaradState() {
         setCurrentDeity(deity);
         setAccentColor(accentHex);
         setRealmPhase('deity_reveal');
+        setIsTyping(false);
 
         const now = Date.now();
         const responseMsgs: Message[] = [
@@ -185,7 +186,7 @@ export function useNaradState() {
         };
         setNaradContext(newContext);
         saveNaradContext(newContext);
-        appendNaradHistory({
+        await appendNaradHistory({
           query: text.trim(),
           wisdom_text: divine_vani.wisdom_text,
           deity,
@@ -210,7 +211,6 @@ export function useNaradState() {
           },
         ]);
         setRealmPhase('idle');
-      } finally {
         setIsTyping(false);
       }
     },
