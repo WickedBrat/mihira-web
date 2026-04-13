@@ -21,7 +21,8 @@ export async function loadNaradContext(): Promise<NaradContext> {
   try {
     const raw = await AsyncStorage.getItem(CONTEXT_KEY);
     if (!raw) return { ...DEFAULT_NARAD_CONTEXT };
-    return JSON.parse(raw) as NaradContext;
+    const parsed = JSON.parse(raw) as Partial<NaradContext>;
+    return { ...DEFAULT_NARAD_CONTEXT, ...parsed };
   } catch {
     return { ...DEFAULT_NARAD_CONTEXT };
   }
@@ -95,13 +96,16 @@ export async function syncNaradContextToSupabase(
 ): Promise<void> {
   try {
     const supabase = getSupabaseClient(getToken);
-    await supabase.from('user_narad_context').upsert({
+    const { error } = await supabase.from('user_narad_context').upsert({
       user_id: userId,
       last_deity: ctx.lastDeity,
       last_theme: ctx.lastTheme,
       interaction_count: ctx.interactionCount,
       updated_at: new Date().toISOString(),
     });
+    if (error) {
+      console.error('[naradStorage] syncNaradContextToSupabase supabase error', error.message);
+    }
   } catch (err) {
     console.error('[naradStorage] syncNaradContextToSupabase error', err);
   }
