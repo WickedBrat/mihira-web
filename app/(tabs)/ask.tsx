@@ -26,7 +26,6 @@ import { analytics } from '@/lib/analytics';
 import { fonts, layout } from '@/lib/theme';
 import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
-import type { Message } from '@/features/chat/useChatState';
 
 const staticStyles = StyleSheet.create({
   separator: { height: 0 },
@@ -94,7 +93,7 @@ export default function AskScreen() {
   const [hasEnteredChat, setHasEnteredChat] = React.useState(false);
   const showIntro = isContextLoaded && naradContext.interactionCount === 0 && !hasEnteredChat;
 
-  const flatListRef = useRef<FlatList<Message>>(null);
+  const flatListRef = useRef<FlatList>(null);
   const { colors } = useTheme();
   const styles = useThemedStyles((c) =>
     StyleSheet.create({
