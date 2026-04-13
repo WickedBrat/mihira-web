@@ -94,7 +94,7 @@ export function NaradIntro({ onEnter }: NaradIntroProps) {
     <View style={styles.root}>
       <View pointerEvents="none" style={StyleSheet.absoluteFill}>
         <AmbientBlob color="rgba(212, 175, 55, 0.10)" top={-80} left={-60} size={360} />
-        <AmbientBlob color="rgba(181, 100, 252, 0.07)" top={400} left={60} size={280} />
+        <AmbientBlob color="rgba(255, 140, 0, 0.06)" top={400} left={60} size={280} />
       </View>
 
       <SafeAreaView edges={['top', 'bottom']} style={styles.safe}>
