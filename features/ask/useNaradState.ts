@@ -1,7 +1,7 @@
 // features/ask/useNaradState.ts
 import { fetch } from 'expo/fetch';
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useAuth, useUser } from '@clerk/clerk-expo';
+import { useAuth, useUser } from '@clerk/expo';
 import { apiUrl } from '@/lib/apiUrl';
 import type { Message } from '@/features/chat/useChatState';
 import type { DeityName, NaradContext, NaradResponse, RealmPhase } from './types';
