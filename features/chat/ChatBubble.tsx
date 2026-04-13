@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { FadeIn, SlideInRight } from 'react-native-reanimated';
+
+const AI_FADE_IN = FadeIn.duration(700);
 import { fonts } from '@/lib/theme';
 import { useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
@@ -28,7 +30,7 @@ function StaggerWrapper({
   }, [visibleAfterMs]);
 
   if (!visible) return null;
-  return <Animated.View entering={FadeIn.duration(700)}>{children}</Animated.View>;
+  return <Animated.View entering={AI_FADE_IN}>{children}</Animated.View>;
 }
 
 export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
@@ -176,7 +178,7 @@ export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
     const borderColor = accentColor ?? 'rgba(212, 175, 55, 0.5)';
     return (
       <StaggerWrapper visibleAfterMs={message.visibleAfterMs ?? 0}>
-        <View style={[styles.shlokaCard, { borderColor, borderLeftColor: borderColor }]}>
+        <View style={[styles.shlokaCard, { borderColor }]}>
           <Text style={styles.shlokaDevanagari}>{message.text}</Text>
           {subtitle ? <Text style={styles.shlokaTranslit}>{subtitle}</Text> : null}
           {deityLabel ? <Text style={styles.shlokaSource}>{deityLabel}</Text> : null}
@@ -204,14 +206,14 @@ export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
   if (bubbleType === 'narad_greeting' || bubbleType === 'narad_closing') {
     return (
       <StaggerWrapper visibleAfterMs={message.visibleAfterMs ?? 0}>
-        <Animated.View style={[styles.row, styles.rowAI]}>
+        <View style={[styles.row, styles.rowAI]}>
           <View style={styles.senderRow}>
             <Text style={styles.senderLabel}>{senderName}</Text>
           </View>
           <View style={[styles.bubble, styles.bubbleAI]}>
             <Text style={styles.naradText}>{message.text}</Text>
           </View>
-        </Animated.View>
+        </View>
       </StaggerWrapper>
     );
   }
@@ -219,7 +221,7 @@ export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
   // ── Default (user messages + any legacy AI messages) ─────────────────────
   return (
     <Animated.View
-      entering={isAI ? FadeIn.duration(700) : SlideInRight.duration(400)}
+      entering={isAI ? AI_FADE_IN : SlideInRight.duration(400)}
       style={[styles.row, isAI ? styles.rowAI : styles.rowUser]}
     >
       {isAI && (
