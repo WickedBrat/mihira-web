@@ -1,8 +1,8 @@
 // features/ask/useNaradState.ts
 import { fetch } from 'expo/fetch';
-import Constants from 'expo-constants';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-expo';
+import { apiUrl } from '@/lib/apiUrl';
 import type { Message } from '@/features/chat/useChatState';
 import type { DeityName, NaradContext, NaradResponse, RealmPhase } from './types';
 import {
@@ -16,12 +16,6 @@ import {
   appendNaradHistory,
   syncNaradContextToSupabase,
 } from '@/lib/naradStorage';
-
-function apiUrl(path: string): string {
-  const hostUri = Constants.expoConfig?.hostUri;
-  const base = hostUri ? `http://${hostUri}` : '';
-  return base + path;
-}
 
 const NARAD_WELCOME: Message = {
   id: 'narad-welcome',
@@ -45,21 +39,41 @@ export function useNaradState() {
   const [currentDeity, setCurrentDeity] = useState<DeityName | null>(null);
   const [accentColor, setAccentColor] = useState<string | null>(null);
 
+  const naradContextRef = useRef<NaradContext>({ ...DEFAULT_NARAD_CONTEXT });
+  const settledTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Effect 1: runs ONCE on mount — load context and messages from storage
   useEffect(() => {
     const load = async () => {
       const ctx = await loadNaradContext();
-      const finalCtx: NaradContext = {
-        ...ctx,
-        userName:
-          ctx.userName !== 'Seeker' ? ctx.userName : (user?.firstName ?? 'Seeker'),
-      };
-      setNaradContext(finalCtx);
+      setNaradContext(ctx);
       const msgs = await loadNaradMessages();
       if (msgs.length > 0) setMessages(msgs);
       setIsContextLoaded(true);
     };
     load();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Effect 2: sync firstName from Clerk once it resolves (no message overwrite)
+  useEffect(() => {
+    if (!user?.firstName) return;
+    setNaradContext(prev => {
+      if (prev.userName !== 'Seeker') return prev; // already has a real name
+      return { ...prev, userName: user.firstName! };
+    });
   }, [user?.firstName]);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    naradContextRef.current = naradContext;
+  }, [naradContext]);
+
+  // Cleanup settled timer on unmount
+  useEffect(() => {
+    return () => {
+      if (settledTimerRef.current) clearTimeout(settledTimerRef.current);
+    };
+  }, []);
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -86,7 +100,7 @@ export function useNaradState() {
           body: JSON.stringify({
             message: text.trim(),
             history,
-            userContext: naradContext,
+            userContext: naradContextRef.current,
           }),
         });
 
@@ -164,10 +178,10 @@ export function useNaradState() {
         });
 
         const newContext: NaradContext = {
-          ...naradContext,
+          ...naradContextRef.current,
           lastDeity: deity,
           lastTheme: text.trim().slice(0, 80),
-          interactionCount: naradContext.interactionCount + 1,
+          interactionCount: naradContextRef.current.interactionCount + 1,
         };
         setNaradContext(newContext);
         saveNaradContext(newContext);
@@ -181,7 +195,8 @@ export function useNaradState() {
           syncNaradContextToSupabase(newContext, userId, getToken).catch(() => {});
         }
 
-        setTimeout(() => setRealmPhase('settled'), 1400);
+        if (settledTimerRef.current) clearTimeout(settledTimerRef.current);
+        settledTimerRef.current = setTimeout(() => setRealmPhase('settled'), 1400);
       } catch (err) {
         console.error('[narad] sendMessage error:', err);
         const errMsg = err instanceof Error ? err.message : 'Connection error';
@@ -199,7 +214,7 @@ export function useNaradState() {
         setIsTyping(false);
       }
     },
-    [isTyping, naradContext, userId, getToken],
+    [isTyping, userId, getToken],
   );
 
   const clearChat = useCallback(async () => {
@@ -207,6 +222,7 @@ export function useNaradState() {
     setRealmPhase('idle');
     setCurrentDeity(null);
     setAccentColor(null);
+    setNaradContext(prev => ({ ...prev, lastDeity: null, lastTheme: null }));
     await clearNaradMessages();
   }, []);
 

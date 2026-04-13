@@ -1,18 +1,11 @@
 // features/chat/useChatState.ts
 import { fetch } from 'expo/fetch';
-import Constants from 'expo-constants';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { getHistory, saveHistory, clearHistory } from '@/lib/chatStorage';
 import { getGuide } from '@/features/ask/guidePersonas';
 import { analytics } from '@/lib/analytics';
+import { apiUrl } from '@/lib/apiUrl';
 import type { BubbleType } from '@/features/ask/types';
-
-function apiUrl(path: string): string {
-  const hostUri = Constants.expoConfig?.hostUri;
-  const base = hostUri ? `http://${hostUri}` : '';
-  console.log('[chat] apiUrl:', base + path);
-  return base + path;
-}
 
 export interface Message {
   id: string;
