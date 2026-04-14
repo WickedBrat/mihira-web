@@ -7,6 +7,13 @@ import { analytics } from '@/lib/analytics';
 import { apiUrl } from '@/lib/apiUrl';
 import type { BubbleType } from '@/features/ask/types';
 
+export interface ShlokaData {
+  devanagari: string;
+  transliteration: string;
+  meaning: string;
+  source: string;
+}
+
 export interface Message {
   id: string;
   role: 'ai' | 'user';
@@ -17,6 +24,7 @@ export interface Message {
   accentColor?: string;
   deityLabel?: string;  // deity name for vani bubble; scripture source for shloka bubble
   subtitle?: string;    // IAST transliteration for shloka bubble
+  shlokaData?: ShlokaData; // expandable shloka panel for vani bubble
 }
 
 function buildInitialMessage(guide: string | null): Message {

@@ -238,12 +238,12 @@ const styles = StyleSheet.create({
   star: { position: 'absolute', backgroundColor: OB.gold },
   top:  { paddingTop: 60, gap: 16 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(40),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(40),
     color: OB.text, letterSpacing: -1.2, lineHeight: scaleFont(46),
   },
   headlineName: { color: OB.gold },
   sub: {
-    fontFamily: 'Lexend_300Light', fontSize: scaleFont(20),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(20),
     color: 'rgba(240,237,232,0.6)', letterSpacing: 1,
   },
   btnZone: {
@@ -289,15 +289,15 @@ const styles = StyleSheet.create({
     borderRadius: BTN_SIZE / 2,
   },
   btnLabel: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(14),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(14),
     color: OB.text, letterSpacing: 0.3, textAlign: 'center',
   },
   btnProgressText: {
-    fontFamily: 'Lexend_300Light', fontSize: scaleFont(28), color: OB.gold,
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(28), color: OB.gold,
   },
   bottom: { alignItems: 'center' },
   bottomQuote: {
-    fontFamily: 'Lexend_300Light', fontSize: scaleFont(14),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
     color: 'rgba(240,237,232,0.4)', textAlign: 'center',
     letterSpacing: 0.3, lineHeight: scaleFont(22), fontStyle: 'italic',
   },

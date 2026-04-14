@@ -207,14 +207,14 @@ const styles = StyleSheet.create({
   body:     { flex: 1, paddingHorizontal: 32, paddingTop: 28, gap: 16, alignItems: 'center' },
   header:   { alignSelf: 'stretch', gap: 8 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(28),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(28),
     color: OB.text, letterSpacing: -0.6,
   },
   center: { alignItems: 'center', justifyContent: 'center' },
   centerMoon: { fontSize: scaleFont(36), color: OB.gold },
   statusWrap: { alignItems: 'center', gap: 16, paddingTop: 8 },
   statusText: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(14),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
     color: OB.muted, textAlign: 'center', letterSpacing: 0.2,
   },
   dotsRow: { flexDirection: 'row', gap: 6 },

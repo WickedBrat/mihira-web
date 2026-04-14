@@ -17,6 +17,8 @@ import {
   syncNaradContextToSupabase,
 } from '@/lib/naradStorage';
 
+const PAGE_SIZE = 12; // ~2 exchanges (each exchange = 1 user + 5 AI messages)
+
 const NARAD_WELCOME: Message = {
   id: 'narad-welcome',
   role: 'ai',
@@ -30,7 +32,11 @@ export function useNaradState() {
   const { getToken, userId } = useAuth();
   const { user } = useUser();
 
+  // Source of truth for all messages — never truncated (pagination reads from here)
+  const allMessagesRef = useRef<Message[]>([NARAD_WELCOME]);
+  // Displayed slice — tail window into allMessagesRef
   const [messages, setMessages] = useState<Message[]>([NARAD_WELCOME]);
+  const [hasMoreMessages, setHasMoreMessages] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [inputText, setInputText] = useState('');
   const [naradContext, setNaradContext] = useState<NaradContext>({ ...DEFAULT_NARAD_CONTEXT });
@@ -48,7 +54,12 @@ export function useNaradState() {
       const ctx = await loadNaradContext();
       setNaradContext(ctx);
       const msgs = await loadNaradMessages();
-      if (msgs.length > 0) setMessages(msgs);
+      if (msgs.length > 0) {
+        allMessagesRef.current = msgs;
+        const slice = msgs.slice(Math.max(0, msgs.length - PAGE_SIZE));
+        setMessages(slice);
+        setHasMoreMessages(msgs.length > PAGE_SIZE);
+      }
       setIsContextLoaded(true);
     };
     load();
@@ -75,6 +86,18 @@ export function useNaradState() {
     };
   }, []);
 
+  // Prepend an older page of messages (called when user scrolls to top)
+  const loadMoreMessages = useCallback(() => {
+    const all = allMessagesRef.current;
+    setMessages(prev => {
+      const currentStart = all.length - prev.length;
+      if (currentStart <= 0) return prev;
+      const newStart = Math.max(0, currentStart - PAGE_SIZE);
+      setHasMoreMessages(newStart > 0);
+      return all.slice(newStart);
+    });
+  }, []);
+
   const sendMessage = useCallback(
     async (text: string) => {
       if (!text.trim() || isTyping) return;
@@ -86,6 +109,7 @@ export function useNaradState() {
         timestamp: new Date(),
       };
 
+      allMessagesRef.current = [...allMessagesRef.current, userMsg];
       setMessages(prev => [...prev, userMsg]);
       setIsTyping(true);
       setInputText('');
@@ -123,60 +147,35 @@ export function useNaradState() {
         const now = Date.now();
         const responseMsgs: Message[] = [
           {
-            id: `narad-greeting-${now}`,
+            id: `narad-narrative-${now}`,
             role: 'ai',
-            text: narad_narrative.greeting,
+            text: `${narad_narrative.greeting} ${narad_narrative.journey_description}`,
             timestamp: new Date(),
             bubbleType: 'narad_greeting',
             visibleAfterMs: 0,
             accentColor: accentHex,
           },
           {
-            id: `narad-journey-${now}`,
-            role: 'ai',
-            text: narad_narrative.journey_description,
-            timestamp: new Date(),
-            bubbleType: 'narad_journey',
-            visibleAfterMs: 600,
-            accentColor: accentHex,
-          },
-          {
-            id: `shloka-${now}`,
-            role: 'ai',
-            text: divine_vani.shloka_devanagari,
-            timestamp: new Date(),
-            bubbleType: 'shloka',
-            visibleAfterMs: 1400,
-            accentColor: accentHex,
-            subtitle: divine_vani.shloka_transliteration,
-            deityLabel: divine_vani.source_scripture,
-          },
-          {
             id: `vani-${now}`,
             role: 'ai',
-            text: divine_vani.wisdom_text,
+            text: `${divine_vani.wisdom_text}\n\n${narad_closing}`,
             timestamp: new Date(),
             bubbleType: 'vani',
-            visibleAfterMs: 2400,
+            visibleAfterMs: 800,
             accentColor: accentHex,
-            deityLabel: deity,
-          },
-          {
-            id: `narad-closing-${now}`,
-            role: 'ai',
-            text: narad_closing,
-            timestamp: new Date(),
-            bubbleType: 'narad_closing',
-            visibleAfterMs: 3200,
-            accentColor: accentHex,
+            shlokaData: {
+              devanagari: divine_vani.shloka_devanagari,
+              transliteration: divine_vani.shloka_transliteration,
+              meaning: divine_vani.shloka_meaning,
+              source: divine_vani.source_scripture,
+            },
           },
         ];
 
-        setMessages(prev => {
-          const updated = [...prev, ...responseMsgs];
-          saveNaradMessages(updated);
-          return updated;
-        });
+        const fullHistory = [...allMessagesRef.current, ...responseMsgs];
+        allMessagesRef.current = fullHistory;
+        saveNaradMessages(fullHistory);
+        setMessages(prev => [...prev, ...responseMsgs]);
 
         const newContext: NaradContext = {
           ...naradContextRef.current,
@@ -201,15 +200,14 @@ export function useNaradState() {
       } catch (err) {
         console.error('[narad] sendMessage error:', err);
         const errMsg = err instanceof Error ? err.message : 'Connection error';
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `error-${Date.now()}`,
-            role: 'ai',
-            text: `Something went wrong: ${errMsg}`,
-            timestamp: new Date(),
-          },
-        ]);
+        const errMsg2: Message = {
+          id: `error-${Date.now()}`,
+          role: 'ai',
+          text: `Something went wrong: ${errMsg}`,
+          timestamp: new Date(),
+        };
+        allMessagesRef.current = [...allMessagesRef.current, errMsg2];
+        setMessages(prev => [...prev, errMsg2]);
         setRealmPhase('idle');
         setIsTyping(false);
       }
@@ -218,7 +216,9 @@ export function useNaradState() {
   );
 
   const clearChat = useCallback(async () => {
+    allMessagesRef.current = [NARAD_WELCOME];
     setMessages([NARAD_WELCOME]);
+    setHasMoreMessages(false);
     setRealmPhase('idle');
     setCurrentDeity(null);
     setAccentColor(null);
@@ -228,6 +228,8 @@ export function useNaradState() {
 
   return {
     messages,
+    hasMoreMessages,
+    loadMoreMessages,
     isTyping,
     inputText,
     setInputText,

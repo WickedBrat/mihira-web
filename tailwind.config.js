@@ -44,12 +44,12 @@ module.exports = {
         'surface-bright-glass': 'rgba(43,44,44,0.6)',
       },
       fontFamily: {
-        headline: ['Lexend_700Bold'],
-        'headline-extra': ['Lexend_800ExtraBold'],
-        body: ['Lexend_400Regular'],
-        'body-medium': ['Lexend_500Medium'],
-        label: ['Lexend_600SemiBold'],
-        'label-light': ['Lexend_300Light'],
+        headline: ['GoogleSans_700Bold'],
+        'headline-extra': ['GoogleSans_700Bold'],
+        body: ['GoogleSans_400Regular'],
+        'body-medium': ['GoogleSans_500Medium'],
+        label: ['GoogleSans_600SemiBold'],
+        'label-light': ['GoogleSans_400Regular'],
       },
       borderRadius: {
         DEFAULT: '4px',

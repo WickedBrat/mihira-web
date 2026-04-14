@@ -105,14 +105,14 @@ const styles = StyleSheet.create({
   body:        { flex: 1, paddingHorizontal: 32, paddingTop: 32, gap: 36 },
   header:      { gap: 10 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold',
+    fontFamily: 'GoogleSans_700Bold',
     fontSize: scaleFont(36),
     color: OB.text,
     letterSpacing: -1,
     lineHeight: scaleFont(42),
   },
   sub: {
-    fontFamily: 'Lexend_400Regular',
+    fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(15),
     color: OB.muted,
   },
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     color: OB.saffron,
   },
   pillText: {
-    fontFamily: 'Lexend_500Medium',
+    fontFamily: 'GoogleSans_500Medium',
     fontSize: scaleFont(15),
     color: OB.muted,
   },
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   btnDisabled: { opacity: 0.35 },
   btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold',
+    fontFamily: 'GoogleSans_600SemiBold',
     fontSize: scaleFont(16),
     color: '#fff',
     letterSpacing: 0.3,
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   toastText: {
-    fontFamily: 'Lexend_400Regular',
+    fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(13),
     color: OB.gold,
     textAlign: 'center',

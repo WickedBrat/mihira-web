@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Page — Updated Mockup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+  .subtitle { font-size: 13px; color: #9ca3af; margin-bottom: 28px; text-align: center; }
+
+  .phone-frame {
+    background: #0e0e0e;
+    border-radius: 48px;
+    padding: 14px 10px 20px;
+    border: 2px solid #2d2d2d;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+    width: 300px;
+  }
+  .phone-notch {
+    width: 72px; height: 18px;
+    background: #0e0e0e;
+    border-radius: 0 0 12px 12px;
+    margin: 0 auto 10px;
+    border: 2px solid #2d2d2d;
+    border-top: none;
+  }
+  .phone-screen {
+    background: #0e0e0e;
+    border-radius: 30px;
+    overflow: hidden;
+    min-height: 560px;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 8px;
+  }
+  .top-bar-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.2px;
+  }
+  .top-bar-actions { display: flex; align-items: center; gap: 10px; }
+  .icon-btn {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    position: relative;
+  }
+  .notif-dot {
+    position: absolute;
+    top: 1px; right: 1px;
+    width: 7px; height: 7px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 1.5px solid #0e0e0e;
+  }
+
+  /* AVATAR SECTION */
+  .avatar-section {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 10px 0 16px;
+  }
+  .avatar-outer {
+    width: 86px; height: 86px; border-radius: 43px;
+    background: linear-gradient(135deg, #b564fc88, #b44aff88);
+    padding: 2.5px;
+    margin-bottom: 12px;
+  }
+  .avatar-inner {
+    width: 100%; height: 100%; border-radius: 40px;
+    overflow: hidden;
+    background: #191a1a;
+  }
+  .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, #b564fc, #6366f1);
+  }
+  .user-name {
+    font-size: 22px; font-weight: 800; color: #fff;
+    letter-spacing: -0.4px; margin-bottom: 5px;
+  }
+  .zodiac-row {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 13px; color: #9ca3af; font-weight: 500;
+  }
+  .zodiac-glyph { font-size: 15px; color: #c4b5fd; }
+
+  /* CARDS */
+  .cards { padding: 0 10px; display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+
+  /* Premium card */
+  .premium-card {
+    border-radius: 22px;
+    padding: 18px 20px;
+    background: linear-gradient(125deg, #7a4f2b 0%, #c4863a 45%, #7a4f2b 100%);
+    position: relative;
+    overflow: hidden;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .moon-left {
+    position: absolute; left: -10px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 64px; color: rgba(255,255,255,0.1);
+    line-height: 1; pointer-events: none;
+  }
+  .moon-right {
+    position: absolute; right: -16px; top: 50%;
+    transform: translateY(-50%) scaleX(-1);
+    font-size: 64px; color: rgba(255,255,255,0.1);
+    line-height: 1; pointer-events: none;
+  }
+  .premium-title { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 4px; position: relative; }
+  .premium-sub { font-size: 11px; color: rgba(255,255,255,0.72); line-height: 1.45; position: relative; max-width: 200px; }
+
+  /* Invite card */
+  .invite-card {
+    border-radius: 22px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #2d2a6e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .invite-decor {
+    position: absolute; top: 8px; left: 10px;
+    display: flex; gap: 4px;
+  }
+  .decor-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+  .invite-text { padding-top: 8px; }
+  .invite-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .invite-sub { font-size: 10px; color: rgba(255,255,255,0.55); }
+  .invite-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+  .invite-stat { display: flex; align-items: baseline; gap: 5px; }
+  .invite-num { font-size: 22px; font-weight: 800; color: #fff; }
+  .invite-tag {
+    font-size: 10px; font-weight: 700; color: #4ade80;
+    background: rgba(74,222,128,0.15); padding: 2px 6px; border-radius: 6px;
+  }
+  .bars { display: flex; align-items: flex-end; gap: 3px; }
+  .bar { width: 7px; border-radius: 3px; background: rgba(255,255,255,0.25); }
+  .bar.on { background: #818cf8; }
+
+  /* Ref code */
+  .ref-row {
+    margin: 4px 10px 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 13px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ref-label { font-size: 11px; color: #9ca3af; font-weight: 500; }
+  .ref-code { font-size: 13px; font-weight: 700; color: #c4b5fd; letter-spacing: 0.5px; }
+  .ref-icon { font-size: 15px; }
+
+  /* Notes */
+  .notes {
+    max-width: 340px;
+    margin: 28px 0 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 18px 20px;
+  }
+  .notes-title { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .note { font-size: 13px; color: #d1d5db; line-height: 1.6; display: flex; gap: 8px; margin-bottom: 4px; }
+  .note-icon { color: #b564fc; }
+</style>
+</head>
+<body>
+
+<h2>Profile — Updated Mockup</h2>
+<p class="subtitle">No karma counter · Zodiac from birth date · Simplified top bar</p>
+
+<div class="phone-frame">
+  <div class="phone-notch"></div>
+  <div class="phone-screen">
+
+    <!-- Top bar -->
+    <div class="top-bar">
+      <div class="top-bar-title">Profile</div>
+      <div class="top-bar-actions">
+        <div class="icon-btn">
+          🔔
+          <div class="notif-dot"></div>
+        </div>
+        <div class="icon-btn">⚙</div>
+      </div>
+    </div>
+
+    <!-- Avatar + name + zodiac -->
+    <div class="avatar-section">
+      <div class="avatar-outer">
+        <div class="avatar-inner">
+          <img src="https://i.pravatar.cc/150?img=47" alt="avatar" />
+        </div>
+      </div>
+      <div class="user-name">Arjun Sharma</div>
+      <div class="zodiac-row">
+        <span class="zodiac-glyph">♑</span>
+        <span>Capricorn</span>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards">
+
+      <div class="premium-card">
+        <span class="moon-left">☽</span>
+        <span class="moon-right">☽</span>
+        <div class="premium-title">Get Premium</div>
+        <div class="premium-sub">Unlimited Ask Aksha, No Ads &amp; Exclusive Spiritual Insights</div>
+      </div>
+
+      <div class="invite-card">
+        <div class="invite-decor">
+          <div class="decor-dot"></div>
+          <div class="decor-dot"></div>
+          <div class="decor-dot" style="background:rgba(255,255,255,0.45)"></div>
+        </div>
+        <div class="invite-text">
+          <div class="invite-title">Invite Friends</div>
+          <div class="invite-sub">Earn rewards for each referral</div>
+        </div>
+        <div class="invite-right">
+          <div class="invite-stat">
+            <div class="invite-num">3</div>
+            <div class="invite-tag">invited</div>
+          </div>
+          <div class="bars">
+            <div class="bar on" style="height:14px"></div>
+            <div class="bar on" style="height:20px"></div>
+            <div class="bar on" style="height:10px"></div>
+            <div class="bar" style="height:18px"></div>
+            <div class="bar" style="height:12px"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Reference code -->
+    <div class="ref-row">
+      <div>
+        <div class="ref-label">Your referral code</div>
+        <div class="ref-code">AKSHA-XJ7K</div>
+      </div>
+      <div class="ref-icon">🔗</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="notes">
+  <div class="notes-title">What stays / what changes</div>
+  <div class="note"><span class="note-icon">↓</span> Profile fields (name, birth date, place) move into the Settings sheet</div>
+  <div class="note"><span class="note-icon">✦</span> Zodiac auto-derived from stored birth date</div>
+  <div class="note"><span class="note-icon">◎</span> Notification bell — UI only for now (no backend)</div>
+  <div class="note"><span class="note-icon">◎</span> Referral code — does Aksha have one? Next question below</div>
+</div>
+
+</body>
+</html>

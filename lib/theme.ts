@@ -117,12 +117,12 @@ export const lightColors = {
 } as const satisfies ColorPalette;
 
 export const fonts = {
-  headlineExtra: 'Lexend_800ExtraBold',
-  headline: 'Lexend_700Bold',
-  label: 'Lexend_600SemiBold',
-  bodyMedium: 'Lexend_500Medium',
-  body: 'Lexend_400Regular',
-  labelLight: 'Lexend_300Light',
+  headlineExtra: 'GoogleSans_700Bold',
+  headline: 'GoogleSans_700Bold',
+  label: 'GoogleSans_600SemiBold',
+  bodyMedium: 'GoogleSans_500Medium',
+  body: 'GoogleSans_400Regular',
+  labelLight: 'GoogleSans_400Regular',
 } as const;
 
 type GlassMorphismType = {

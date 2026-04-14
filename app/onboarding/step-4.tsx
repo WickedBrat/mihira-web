@@ -86,21 +86,21 @@ const styles = StyleSheet.create({
   body:      { flex: 1, paddingHorizontal: 32, paddingTop: 40, gap: 48 },
   header:    { gap: 14 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold',
+    fontFamily: 'GoogleSans_700Bold',
     fontSize: scaleFont(36),
     color: OB.text,
     letterSpacing: -1,
     lineHeight: scaleFont(42),
   },
   sub: {
-    fontFamily: 'Lexend_400Regular',
+    fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(15),
     color: OB.muted,
     lineHeight: scaleFont(23),
   },
   inputWrap: { gap: 16 },
   input: {
-    fontFamily: 'Lexend_700Bold',
+    fontFamily: 'GoogleSans_700Bold',
     fontSize: scaleFont(32),
     color: OB.text,
   },
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: OB.goldBorder,
   },
   preview: {
-    fontFamily: 'Lexend_400Regular',
+    fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(14),
     color: OB.gold,
     letterSpacing: 1,
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   btnDisabled: { opacity: 0.35 },
   btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold',
+    fontFamily: 'GoogleSans_600SemiBold',
     fontSize: scaleFont(16),
     color: '#fff',
     letterSpacing: 0.3,

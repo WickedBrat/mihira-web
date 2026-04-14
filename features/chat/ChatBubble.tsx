@@ -1,17 +1,127 @@
 // features/chat/ChatBubble.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Animated, { FadeIn, SlideInRight } from 'react-native-reanimated';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Animated, { FadeIn, SlideInRight, FadeInDown } from 'react-native-reanimated';
 
 const AI_FADE_IN = FadeIn.duration(700);
 import { fonts } from '@/lib/theme';
 import { useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
-import type { Message } from './useChatState';
+import type { Message, ShlokaData } from './useChatState';
 
 interface ChatBubbleProps {
   message: Message;
   senderName?: string;
+}
+
+function VaniCard({
+  text,
+  borderColor,
+  shloka,
+}: {
+  text: string;
+  borderColor: string;
+  shloka: ShlokaData | undefined;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
+    StyleSheet.create({
+      card: {
+        borderRadius: 20,
+        paddingHorizontal: 22,
+        paddingVertical: 18,
+        borderLeftWidth: 3,
+        gap: 8,
+        backgroundColor: dark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+      },
+      text: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(16),
+        color: c.onSurface,
+        lineHeight: scaleFont(25),
+      },
+      readBtn: {
+        alignSelf: 'flex-start',
+        marginTop: 4,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(212, 175, 55, 0.3)' : 'rgba(180, 140, 30, 0.35)',
+        backgroundColor: dark ? 'rgba(212, 175, 55, 0.06)' : 'rgba(212, 175, 55, 0.08)',
+      },
+      readBtnText: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(11),
+        letterSpacing: 0.8,
+        color: dark ? 'rgba(212, 175, 55, 0.85)' : 'rgba(150, 110, 10, 0.9)',
+      },
+      panel: {
+        marginTop: 4,
+        borderRadius: 14,
+        paddingHorizontal: 18,
+        paddingVertical: 16,
+        gap: 10,
+        backgroundColor: dark ? 'rgba(212, 175, 55, 0.06)' : 'rgba(212, 175, 55, 0.09)',
+        borderWidth: 1,
+        borderColor: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.22)',
+      },
+      panelDevanagari: {
+        fontFamily: fonts.headline,
+        fontSize: scaleFont(18),
+        color: 'rgba(212, 175, 55, 0.95)',
+        lineHeight: scaleFont(28),
+        textAlign: 'center',
+      },
+      panelTranslit: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(12),
+        color: c.onSurfaceVariant,
+        fontStyle: 'italic',
+        textAlign: 'center',
+        lineHeight: scaleFont(18),
+      },
+      panelDivider: {
+        height: 1,
+        backgroundColor: dark ? 'rgba(212, 175, 55, 0.12)' : 'rgba(212, 175, 55, 0.18)',
+        marginVertical: 2,
+      },
+      panelMeaning: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(13),
+        color: c.onSurface,
+        lineHeight: scaleFont(20),
+      },
+    }),
+  );
+
+  return (
+    <View style={[styles.card, { borderLeftColor: borderColor }]}>
+      <Text style={styles.text}>{text}</Text>
+      {shloka ? (
+        <TouchableOpacity
+          style={styles.readBtn}
+          onPress={() => setExpanded(v => !v)}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.readBtnText}>
+            {expanded ? 'Hide verse' : `Read from ${shloka.source}`}
+          </Text>
+        </TouchableOpacity>
+      ) : null}
+      {expanded && shloka ? (
+        <Animated.View entering={FadeInDown.duration(300)} style={styles.panel}>
+          <Text style={styles.panelDevanagari}>{shloka.devanagari}</Text>
+          <Text style={styles.panelTranslit}>{shloka.transliteration}</Text>
+          <View style={styles.panelDivider} />
+          <Text style={styles.panelMeaning}>{shloka.meaning}</Text>
+        </Animated.View>
+      ) : null}
+    </View>
+  );
 }
 
 function StaggerWrapper({
@@ -135,30 +245,6 @@ export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
         letterSpacing: 1,
         textTransform: 'uppercase',
       },
-      // ── vani ───────────────────────────────────────────────────────────
-      vaniCard: {
-        borderRadius: 20,
-        paddingHorizontal: 22,
-        paddingVertical: 18,
-        borderLeftWidth: 3,
-        gap: 8,
-        backgroundColor: dark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
-      },
-      vaniDeityLabel: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(10),
-        letterSpacing: 2,
-        textTransform: 'uppercase',
-        color: c.outline,
-      },
-      vaniText: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(16),
-        color: c.onSurface,
-        lineHeight: scaleFont(25),
-      },
     }),
   );
 
@@ -190,14 +276,14 @@ export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
   // ── vani card ────────────────────────────────────────────────────────────
   if (bubbleType === 'vani') {
     const borderColor = accentColor ?? 'rgba(255,255,255,0.2)';
+    const shloka = message.shlokaData;
     return (
       <StaggerWrapper visibleAfterMs={message.visibleAfterMs ?? 0}>
-        <View style={[styles.vaniCard, { borderLeftColor: borderColor }]}>
-          {deityLabel ? (
-            <Text style={[styles.vaniDeityLabel, { color: borderColor }]}>{deityLabel}</Text>
-          ) : null}
-          <Text style={styles.vaniText}>{message.text}</Text>
-        </View>
+        <VaniCard
+          text={message.text}
+          borderColor={borderColor}
+          shloka={shloka}
+        />
       </StaggerWrapper>
     );
   }

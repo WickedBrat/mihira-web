@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   body:     { flex: 1, paddingHorizontal: 28, paddingTop: 24, gap: 20 },
   header:   { gap: 8 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(34),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(34),
     color: OB.text, letterSpacing: -0.8, lineHeight: scaleFont(40),
   },
   glow: {
@@ -186,11 +186,11 @@ const styles = StyleSheet.create({
   },
   cardTop:   { gap: 4 },
   cardName: {
-    fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(26),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(26),
     color: OB.text, letterSpacing: -0.5,
   },
   cardSub: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(12),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(12),
     color: OB.muted, letterSpacing: 1,
   },
   cardDivider: { height: 1, backgroundColor: OB.divider },
@@ -202,20 +202,20 @@ const styles = StyleSheet.create({
   },
   pillRight: { borderColor: OB.goldBorder, backgroundColor: OB.goldDim },
   pillLabel: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(9),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(9),
     letterSpacing: 2, color: OB.muted, textTransform: 'uppercase',
   },
   pillValue: {
-    fontFamily: 'Lexend_700Bold', fontSize: scaleFont(15), color: OB.text,
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(15), color: OB.text,
   },
   insightBlock: { gap: 8 },
   insightLabel: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(9),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(9),
     letterSpacing: 2, color: OB.saffron, textTransform: 'uppercase',
   },
-  insightName: { color: OB.gold, fontFamily: 'Lexend_600SemiBold' },
+  insightName: { color: OB.gold, fontFamily: 'GoogleSans_600SemiBold' },
   insightText: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(14),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
     color: OB.text, lineHeight: scaleFont(22),
   },
   corner: {
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(16),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
     color: '#fff', letterSpacing: 0.3,
   },
 });

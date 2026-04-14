@@ -6,13 +6,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ClerkProvider, useAuth, useUser } from '@clerk/expo';
 import {
   useFonts,
-  Lexend_300Light,
-  Lexend_400Regular,
-  Lexend_500Medium,
-  Lexend_600SemiBold,
-  Lexend_700Bold,
-  Lexend_800ExtraBold,
-} from '@expo-google-fonts/lexend';
+  GoogleSans_400Regular,
+  GoogleSans_500Medium,
+  GoogleSans_600SemiBold,
+  GoogleSans_700Bold,
+} from '@expo-google-fonts/google-sans';
 import { PostHogProvider } from 'posthog-react-native';
 import { tokenCache } from '@/lib/clerk';
 import { ToastProvider } from '@/components/ui/ToastProvider';
@@ -81,15 +79,15 @@ function ThemedStack() {
           contentStyle: { backgroundColor: colors.background },
         }}
       >
-        <Stack.Screen name="onboarding/index"   options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-2"  options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-3"  options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-4"  options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-5"  options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-6"  options={{ gestureEnabled: false, animation: 'fade' }} />
-        <Stack.Screen name="onboarding/step-7"  options={{ gestureEnabled: false, animation: 'fade' }} />
-        <Stack.Screen name="onboarding/step-8"  options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-9"  options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/index" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-2" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-3" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-4" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-5" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-6" options={{ gestureEnabled: false, animation: 'fade' }} />
+        <Stack.Screen name="onboarding/step-7" options={{ gestureEnabled: false, animation: 'fade' }} />
+        <Stack.Screen name="onboarding/step-8" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-9" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-10" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-11" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-12" options={{ gestureEnabled: false, animation: 'fade' }} />
@@ -105,12 +103,10 @@ function ThemedStack() {
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
-    Lexend_300Light,
-    Lexend_400Regular,
-    Lexend_500Medium,
-    Lexend_600SemiBold,
-    Lexend_700Bold,
-    Lexend_800ExtraBold,
+    GoogleSans_400Regular,
+    GoogleSans_500Medium,
+    GoogleSans_600SemiBold,
+    GoogleSans_700Bold,
   });
 
   useEffect(() => {

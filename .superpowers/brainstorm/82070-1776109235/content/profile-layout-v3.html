@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Page — v3</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+  .subtitle { font-size: 13px; color: #9ca3af; margin-bottom: 28px; text-align: center; }
+
+  .phone-frame {
+    background: #0e0e0e;
+    border-radius: 48px;
+    padding: 14px 10px 20px;
+    border: 2px solid #2d2d2d;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+    width: 300px;
+  }
+  .phone-notch {
+    width: 72px; height: 18px;
+    background: #0e0e0e;
+    border-radius: 0 0 12px 12px;
+    margin: 0 auto 10px;
+    border: 2px solid #2d2d2d;
+    border-top: none;
+  }
+  .phone-screen {
+    background: #0e0e0e;
+    border-radius: 30px;
+    overflow: hidden;
+    min-height: 600px;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 8px;
+  }
+  .top-bar-title { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: -0.2px; }
+  .top-bar-actions { display: flex; align-items: center; gap: 10px; }
+  .icon-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; position: relative;
+  }
+  .notif-dot {
+    position: absolute; top: 1px; right: 1px;
+    width: 7px; height: 7px;
+    background: #ef4444; border-radius: 50%;
+    border: 1.5px solid #0e0e0e;
+  }
+
+  /* AVATAR */
+  .avatar-section {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 10px 0 14px;
+  }
+  .avatar-outer {
+    width: 86px; height: 86px; border-radius: 43px;
+    background: linear-gradient(135deg, #b564fc88, #b44aff88);
+    padding: 2.5px; margin-bottom: 12px;
+  }
+  .avatar-inner {
+    width: 100%; height: 100%; border-radius: 40px;
+    overflow: hidden; background: #191a1a;
+  }
+  .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+  .user-name { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.4px; margin-bottom: 5px; }
+  .zodiac-row { display: flex; align-items: center; gap: 5px; font-size: 13px; color: #9ca3af; }
+  .zodiac-glyph { font-size: 15px; color: #c4b5fd; }
+
+  /* PREMIUM CARD */
+  .cards { padding: 0 10px; display: flex; flex-direction: column; gap: 10px; }
+
+  .premium-card {
+    border-radius: 22px;
+    padding: 18px 20px;
+    background: linear-gradient(125deg, #7a4f2b 0%, #c4863a 45%, #7a4f2b 100%);
+    position: relative; overflow: hidden;
+    min-height: 78px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .moon-left {
+    position: absolute; left: -10px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 64px; color: rgba(255,255,255,0.1); line-height: 1;
+  }
+  .moon-right {
+    position: absolute; right: -16px; top: 50%;
+    transform: translateY(-50%) scaleX(-1);
+    font-size: 64px; color: rgba(255,255,255,0.1); line-height: 1;
+  }
+  .premium-title { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 4px; position: relative; }
+  .premium-sub { font-size: 11px; color: rgba(255,255,255,0.72); line-height: 1.45; position: relative; max-width: 200px; }
+
+  /* PROFILE FIELDS (read-only) */
+  .fields-section {
+    padding: 6px 10px 0;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; color: #6b7280;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    padding: 4px 4px 6px;
+  }
+  .field-row {
+    background: rgba(37,38,38,0.62);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 13px 16px;
+    display: flex; align-items: center; gap: 13px;
+  }
+  .field-icon {
+    width: 36px; height: 36px; border-radius: 11px;
+    background: rgba(181,100,252,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .field-content { flex: 1; }
+  .field-label { font-size: 8px; text-transform: uppercase; letter-spacing: 1.8px; color: #767575; margin-bottom: 3px; }
+  .field-value { font-size: 13px; font-weight: 600; color: #e5e7eb; letter-spacing: -0.1px; }
+  .field-value.empty { color: #484848; font-weight: 400; font-style: italic; }
+</style>
+</head>
+<body>
+
+<h2>Profile Page — Final Direction</h2>
+<p class="subtitle">No referral · Read-only fields · Zodiac derived from birth date</p>
+
+<div class="phone-frame">
+  <div class="phone-notch"></div>
+  <div class="phone-screen">
+
+    <div class="top-bar">
+      <div class="top-bar-title">Profile</div>
+      <div class="top-bar-actions">
+        <div class="icon-btn">🔔<div class="notif-dot"></div></div>
+        <div class="icon-btn">⚙</div>
+      </div>
+    </div>
+
+    <div class="avatar-section">
+      <div class="avatar-outer">
+        <div class="avatar-inner">
+          <img src="https://i.pravatar.cc/150?img=47" alt="avatar" />
+        </div>
+      </div>
+      <div class="user-name">Arjun Sharma</div>
+      <div class="zodiac-row">
+        <span class="zodiac-glyph">♑</span>
+        <span>Capricorn</span>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="premium-card">
+        <span class="moon-left">☽</span>
+        <span class="moon-right">☽</span>
+        <div class="premium-title">Get Premium</div>
+        <div class="premium-sub">Unlimited Ask Aksha, No Ads &amp; Exclusive Spiritual Insights</div>
+      </div>
+    </div>
+
+    <div class="fields-section">
+      <div class="section-label">Your Details</div>
+
+      <div class="field-row">
+        <div class="field-icon">👤</div>
+        <div class="field-content">
+          <div class="field-label">Name</div>
+          <div class="field-value">Arjun Sharma</div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-icon">🎂</div>
+        <div class="field-content">
+          <div class="field-label">Date of Birth</div>
+          <div class="field-value">Jan 14, 1992 · 8:30 AM</div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-icon">📍</div>
+        <div class="field-content">
+          <div class="field-label">Birth Place</div>
+          <div class="field-value empty">Not set</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

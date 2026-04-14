@@ -1,5 +1,5 @@
 // components/ui/RealmBackdrop.tsx
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import type { DeityName, RealmPhase } from '@/features/ask/types';
@@ -34,17 +34,17 @@ export function RealmBackdrop({ phase, deityName, accentColor }: RealmBackdropPr
   const startTimeRef = useRef(Date.now());
   const progressRef = useRef(0);
   const targetProgressRef = useRef(0);
+  // Keep dimensions in a ref so the rAF closure always reads current values
+  const dimsRef = useRef({ width, height });
+  useEffect(() => { dimsRef.current = { width, height }; }, [width, height]);
+
+  const skiaAvailable = !!(SkiaCanvas && SkiaFill && SkiaShader && Skia);
 
   const [uniforms, setUniforms] = useState({
     iResolution: [width, height] as [number, number],
     iTime: 0,
     progress: 0,
   });
-
-  // Update resolution if window dimensions change
-  useEffect(() => {
-    setUniforms((prev) => ({ ...prev, iResolution: [width, height] as [number, number] }));
-  }, [width, height]);
 
   // Drive progress target based on phase transitions
   useEffect(() => {
@@ -56,8 +56,10 @@ export function RealmBackdrop({ phase, deityName, accentColor }: RealmBackdropPr
     // 'settled' leaves progress wherever it reached (1)
   }, [phase]);
 
-  // Drive a continuous clock for shader animation via rAF loop
+  // Drive a continuous clock for shader animation via rAF loop — only when Skia is available
   useEffect(() => {
+    if (!skiaAvailable) return;
+
     const PROGRESS_SPEED_UP = 1 / 1.2;   // ~1200ms to reach 1
     const PROGRESS_SPEED_DOWN = 1 / 0.6; // ~600ms to reach 0
 
@@ -76,8 +78,9 @@ export function RealmBackdrop({ phase, deityName, accentColor }: RealmBackdropPr
         progressRef.current = next;
       }
 
+      const { width: w, height: h } = dimsRef.current;
       setUniforms({
-        iResolution: [width, height],
+        iResolution: [w, h],
         iTime: elapsed,
         progress: next,
       });
@@ -92,13 +95,17 @@ export function RealmBackdrop({ phase, deityName, accentColor }: RealmBackdropPr
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [skiaAvailable]);
 
   const shaderKey = getShaderKey(phase, deityName);
-  const shaderSource = Skia ? Skia.RuntimeEffect.Make(SHADERS[shaderKey]) : null;
+  // Memoize shader compilation — RuntimeEffect.Make is expensive and must not run every render
+  const shaderSource = useMemo(
+    () => (Skia ? Skia.RuntimeEffect.Make(SHADERS[shaderKey]) : null),
+    [shaderKey],
+  );
 
   // Fallback: AmbientBlob tinted with accentColor when Skia is unavailable
-  if (!SkiaCanvas || !SkiaFill || !SkiaShader || !shaderSource) {
+  if (!skiaAvailable || !shaderSource) {
     const blobColor = accentColor ? `${accentColor}22` : 'rgba(181, 100, 252, 0.10)';
     return (
       <View pointerEvents="none" style={StyleSheet.absoluteFill}>
@@ -108,13 +115,17 @@ export function RealmBackdrop({ phase, deityName, accentColor }: RealmBackdropPr
     );
   }
 
+  const Canvas = SkiaCanvas!;
+  const Fill = SkiaFill!;
+  const Shader = SkiaShader!;
+
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
-      <SkiaCanvas style={{ width, height }}>
-        <SkiaFill>
-          <SkiaShader source={shaderSource} uniforms={uniforms} />
-        </SkiaFill>
-      </SkiaCanvas>
+      <Canvas style={{ width, height }}>
+        <Fill>
+          <Shader source={shaderSource} uniforms={uniforms} />
+        </Fill>
+      </Canvas>
     </View>
   );
 }

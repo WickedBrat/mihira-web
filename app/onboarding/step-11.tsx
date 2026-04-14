@@ -139,11 +139,11 @@ const styles = StyleSheet.create({
   body:     { padding: 32, paddingTop: 32, gap: 28 },
   header:   { gap: 10 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(34),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(34),
     color: OB.text, letterSpacing: -0.8, lineHeight: scaleFont(40),
   },
   sub: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(15),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
     color: OB.muted, lineHeight: scaleFont(23),
   },
   tiers:    { gap: 14 },
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
   },
   recommendedText: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(9),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(9),
     color: '#fff', letterSpacing: 1.5,
   },
   cardHeader: {
@@ -173,11 +173,11 @@ const styles = StyleSheet.create({
   cardLeft: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   tierIcon: { fontSize: scaleFont(28) },
   tierName: {
-    fontFamily: 'Lexend_700Bold', fontSize: scaleFont(17), color: OB.muted,
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(17), color: OB.muted,
   },
   tierNameActive: { color: OB.text },
   tierDuration: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(12), color: OB.muted,
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(12), color: OB.muted,
   },
   checkCircle: {
     width: 30, height: 30, borderRadius: 15,
@@ -188,17 +188,17 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(13), color: '#fff',
   },
   tierDesc: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(13),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13),
     color: OB.muted, lineHeight: scaleFont(20),
   },
   tierDescActive: { color: OB.text },
   features: { gap: 6, paddingTop: 4 },
   featureRow: { flexDirection: 'row', gap: 6, alignItems: 'flex-start' },
   featureDot: {
-    fontFamily: 'Lexend_700Bold', fontSize: scaleFont(16), color: OB.gold, lineHeight: scaleFont(20),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(16), color: OB.gold, lineHeight: scaleFont(20),
   },
   featureText: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(13),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13),
     color: OB.gold, lineHeight: scaleFont(20),
   },
   footer: {
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(16),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
     color: '#fff', letterSpacing: 0.3,
   },
 });

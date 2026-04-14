@@ -31,6 +31,7 @@ export interface NaradResponse {
   divine_vani: {
     shloka_devanagari: string;
     shloka_transliteration: string;
+    shloka_meaning: string;
     wisdom_text: string;
     source_scripture: string;
   };

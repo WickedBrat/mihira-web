@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   body:     { padding: 32, paddingTop: 32, gap: 32 },
   header:   { gap: 10 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold',
+    fontFamily: 'GoogleSans_700Bold',
     fontSize: scaleFont(34),
     color: OB.text,
     letterSpacing: -0.8,
@@ -149,18 +149,18 @@ const styles = StyleSheet.create({
   cardIcon:  { width: 56, height: 56, borderRadius: 12, marginTop: 2 },
   cardText:  { flex: 1, gap: 4 },
   cardName: {
-    fontFamily: 'Lexend_700Bold',
+    fontFamily: 'GoogleSans_700Bold',
     fontSize: scaleFont(17),
     color: OB.muted,
   },
   cardNameActive: { color: OB.text },
   cardTagline: {
-    fontFamily: 'Lexend_400Regular',
+    fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(12),
     color: OB.muted,
   },
   cardDesc: {
-    fontFamily: 'Lexend_400Regular',
+    fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(12),
     color: OB.gold,
     marginTop: 6,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   btnDisabled: { opacity: 0.35 },
   btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold',
+    fontFamily: 'GoogleSans_600SemiBold',
     fontSize: scaleFont(16),
     color: '#fff',
     textAlign: 'right',

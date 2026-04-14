@@ -13,9 +13,9 @@ export default function TabLayout() {
           screenOptions={{ headerShown: false, tabBarStyle: { display: 'none' } }}
         >
           <Tabs.Screen name="index" />
+          <Tabs.Screen name="muhurat" />
           <Tabs.Screen name="ask" />
           <Tabs.Screen name="gurukul" />
-          <Tabs.Screen name="muhurat" />
           <Tabs.Screen name="profile" />
         </Tabs>
       </View>

@@ -27,9 +27,9 @@ describe('theme — light palette', () => {
 });
 
 describe('theme — shared', () => {
-  it('exports Lexend font names', () => {
-    expect(fonts.headline).toBe('Lexend_700Bold');
-    expect(fonts.body).toBe('Lexend_400Regular');
+  it('exports Google Sans font names', () => {
+    expect(fonts.headline).toBe('GoogleSans_700Bold');
+    expect(fonts.body).toBe('GoogleSans_400Regular');
   });
   it('Colors type has surface token', () => {
     const c: Colors = darkColors;

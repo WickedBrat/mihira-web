@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 import { View as MotiView } from 'moti/build/components/view';
 import { Quote } from 'lucide-react-native';
-import { SvgUri } from 'react-native-svg';
-import { useAssets } from 'expo-asset';
+import DailyArthBg from '../../assets/daily-arth-bg.svg';
 import { fonts } from '@/lib/theme';
 import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
@@ -11,10 +10,6 @@ import { useDailyArth } from './useDailyArth';
 
 export function DailyArthCard() {
   const { arth, isLoading } = useDailyArth();
-  const [bgAssets] = useAssets(
-    Platform.OS !== 'web' ? [require('../../assets/daily-arth-bg.svg')] : []
-  );
-  const bgUri = bgAssets?.[0]?.uri;
 
   const { colors } = useTheme();
   const styles = useThemedStyles((c, _glass, _gradients, dark) =>
@@ -116,8 +111,8 @@ export function DailyArthCard() {
 
       <View style={[styles.card, isLoading && styles.cardLoading]}>
         <View pointerEvents="none" style={styles.backgroundArt}>
-          {bgUri ? (
-            <SvgUri uri={bgUri} width="100%" height="100%" />
+          {Platform.OS !== 'web' ? (
+            <DailyArthBg width="100%" height="100%" />
           ) : null}
         </View>
 

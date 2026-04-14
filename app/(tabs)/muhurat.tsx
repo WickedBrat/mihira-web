@@ -19,6 +19,7 @@ import { SacredButton } from '@/components/ui/SacredButton';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { useToast } from '@/components/ui/ToastProvider';
 import { PageHero } from '@/components/ui/PageHero';
+import { MuhuratSvg } from '@/components/ui/MuhuratSvg';
 import { fonts, layout } from '@/lib/theme';
 import { useTheme, useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
@@ -78,6 +79,14 @@ export default function MuhuratScreen() {
         lineHeight: scaleFont(44),
       },
       sub: { lineHeight: scaleFont(22) },
+      svgBackdrop: {
+        position: 'absolute',
+        top: 0,
+        width: 100,
+        height: 100,
+        left: -100, // Adjust so it peeks from the left side
+        opacity: dark ? 1 : 0.25, // Increased visibility
+      },
       formCard: {
         padding: 24,
         borderRadius: 24,
@@ -244,6 +253,14 @@ export default function MuhuratScreen() {
   return (
     <View style={styles.root}>
       <PageAmbientBlobs />
+
+      <MuhuratSvg
+        width={4000}
+        height={4000}
+        // fill={colors.primary}
+        style={styles.svgBackdrop}
+        pointerEvents="none"
+      />
 
       <ScrollView
         style={styles.scroll}

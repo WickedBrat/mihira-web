@@ -144,14 +144,14 @@ const styles = StyleSheet.create({
   body:       { flex: 1, paddingHorizontal: 32, paddingTop: 24, gap: 24 },
   header:     { gap: 10 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(34),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(34),
     color: OB.text, letterSpacing: -0.8, lineHeight: scaleFont(40),
   },
   sub: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(14),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
     color: OB.muted, lineHeight: scaleFont(22),
   },
-  subAccent: { color: OB.gold, fontFamily: 'Lexend_600SemiBold' },
+  subAccent: { color: OB.gold, fontFamily: 'GoogleSans_600SemiBold' },
   dialContainer: { alignItems: 'center', justifyContent: 'center' },
   dialGlow: {
     position: 'absolute',
@@ -162,13 +162,13 @@ const styles = StyleSheet.create({
   },
   dialCenter: { alignItems: 'center', justifyContent: 'center' },
   dialCenterIcon:  { fontSize: scaleFont(30), color: OB.gold, marginBottom: 4 },
-  dialCenterLabel: { fontFamily: 'Lexend_700Bold', fontSize: scaleFont(14), color: OB.text },
-  dialCenterSub:   { fontFamily: 'Lexend_400Regular', fontSize: scaleFont(11), color: OB.muted },
+  dialCenterLabel: { fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(14), color: OB.text },
+  dialCenterSub:   { fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(11), color: OB.muted },
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   tag:    { flexDirection: 'row', alignItems: 'center', gap: 8 },
   tagDot: { width: 10, height: 10, borderRadius: 5 },
   tagText: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(12), color: OB.muted,
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(12), color: OB.muted,
   },
   footer: { padding: 32, paddingBottom: 44, gap: 14, alignItems: 'flex-end' },
   btn: {
@@ -185,10 +185,10 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(16),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
     color: '#fff', letterSpacing: 0.3,
   },
   skip: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(13), color: OB.muted,
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13), color: OB.muted,
   },
 });

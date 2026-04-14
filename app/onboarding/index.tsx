@@ -73,6 +73,16 @@ export default function Screen1() {
         >
           <Text style={styles.btnText}>Begin My Alignment</Text>
         </Pressable>
+
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            router.replace('/(tabs)');
+          }}
+          style={({ pressed }) => [styles.skipBtn, pressed && styles.btnPressed]}
+        >
+          <Text style={styles.skipBtnText}>Skip Onboarding</Text>
+        </Pressable>
       </Animated.View>
     </SafeAreaView>
   );
@@ -92,7 +102,7 @@ const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16, paddingHorizontal: 32 },
   crescent: { fontSize: scaleFont(52), color: OB.gold, textAlign: 'center', marginBottom: -8 },
   logo: {
-    fontFamily: 'Lexend_800ExtraBold',
+    fontFamily: 'GoogleSans_700Bold',
     fontSize: scaleFont(48),
     color: OB.gold,
     letterSpacing: -2,
@@ -100,14 +110,14 @@ const styles = StyleSheet.create({
   },
   copy:     { alignItems: 'center', gap: 10, marginTop: 12 },
   headline: {
-    fontFamily: 'Lexend_700Bold',
+    fontFamily: 'GoogleSans_700Bold',
     fontSize: scaleFont(22),
     color: OB.text,
     letterSpacing: -0.4,
     textAlign: 'center',
   },
   sub: {
-    fontFamily: 'Lexend_400Regular',
+    fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(16),
     color: OB.muted,
     textAlign: 'center',
@@ -127,17 +137,27 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.82, transform: [{ scale: 0.97 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold',
+    fontFamily: 'GoogleSans_600SemiBold',
     fontSize: scaleFont(16),
     color: '#fff',
     textAlign: 'right',
     letterSpacing: 0.3,
   },
   footNote: {
-    fontFamily: 'Lexend_400Regular',
+    fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(12),
     color: OB.muted,
     letterSpacing: 0.5,
+  },
+  skipBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+  },
+  skipBtnText: {
+    fontFamily: 'GoogleSans_400Regular',
+    fontSize: scaleFont(14),
+    color: OB.muted,
+    textAlign: 'right',
   },
   star: {
     position: 'absolute',

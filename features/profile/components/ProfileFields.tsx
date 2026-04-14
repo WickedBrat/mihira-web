@@ -1,105 +1,92 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import type { ProfileData } from '@/features/profile/useProfile';
-import { PROFILE_FIELDS, type ProfileFieldId } from '@/features/profile/constants';
+import { PROFILE_FIELDS } from '@/features/profile/constants';
 import { fonts } from '@/lib/theme';
 import { useTheme, useThemedStyles } from '@/lib/theme-context';
+import { scaleFont } from '@/lib/typography';
 
 interface ProfileFieldsProps {
   profile: Pick<ProfileData, 'name' | 'birth_dt' | 'birth_place'>;
-  onChangeField: (field: Exclude<ProfileFieldId, 'birth_dt'>, value: string) => void;
-  onPressBirthDate: () => void;
 }
 
-export function ProfileFields({
-  profile,
-  onChangeField,
-  onPressBirthDate,
-}: ProfileFieldsProps) {
+export function ProfileFields({ profile }: ProfileFieldsProps) {
   const { colors } = useTheme();
   const styles = useThemedStyles((c, _glass, _gradients, dark) =>
     StyleSheet.create({
-      sectionList: { gap: 14 },
-      infoCard: {
+      container: { gap: 10 },
+      sectionLabel: {
+        fontFamily: fonts.label,
+        fontSize: scaleFont(10),
+        textTransform: 'uppercase',
+        letterSpacing: 1.8,
+        color: c.onSurfaceVariant,
+        paddingHorizontal: 4,
+        marginBottom: 2,
+      },
+      card: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 16,
-        padding: 18,
-        borderRadius: 24,
+        gap: 14,
+        padding: 14,
+        borderRadius: 20,
         backgroundColor: dark ? 'rgba(37, 38, 38, 0.62)' : 'rgba(232, 225, 212, 0.62)',
         borderWidth: 1,
         borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)',
       },
-      infoIconWrap: {
-        width: 46,
-        height: 46,
-        borderRadius: 14,
+      iconWrap: {
+        width: 40,
+        height: 40,
+        borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: `${c.primary}18`,
+        flexShrink: 0,
       },
-      infoText: { flex: 1, gap: 4 },
-      infoLabel: {
+      textBlock: { flex: 1, gap: 3 },
+      label: {
         fontFamily: fonts.label,
-        fontSize: 10,
+        fontSize: scaleFont(9),
         textTransform: 'uppercase',
         letterSpacing: 1.8,
         color: c.onSurfaceVariant,
       },
-      infoInput: {
+      value: {
         fontFamily: fonts.bodyMedium,
-        fontSize: 16,
+        fontSize: scaleFont(14),
         color: c.onSurface,
-        letterSpacing: -0.2,
-        backgroundColor: dark ? 'rgba(14, 14, 14, 0.45)' : 'rgba(250, 247, 242, 0.7)',
-        borderRadius: 14,
-        borderWidth: 1,
-        borderColor: `${c.outlineVariant}40`,
-        paddingHorizontal: 14,
-        paddingVertical: 12,
+        letterSpacing: -0.1,
       },
-      infoInputText: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: 16,
-        color: c.onSurface,
-        letterSpacing: -0.2,
+      empty: {
+        fontFamily: fonts.body,
+        fontSize: scaleFont(14),
+        color: c.outline,
+        fontStyle: 'italic',
       },
-      infoInputPlaceholder: { color: c.outline },
     })
   );
 
   return (
-    <View style={styles.sectionList}>
-      {PROFILE_FIELDS.map(({ id, label, placeholder, icon: Icon, autoCapitalize }) => (
-        <View key={id} style={styles.infoCard}>
-          <View style={styles.infoIconWrap}>
-            <Icon size={18} color={colors.primaryFixed} />
+    <View style={styles.container}>
+      <Text style={styles.sectionLabel}>Your Details</Text>
+      {PROFILE_FIELDS.map(({ id, label, placeholder, icon: Icon }) => {
+        const value = profile[id];
+        return (
+          <View key={id} style={styles.card}>
+            <View style={styles.iconWrap}>
+              <Icon size={17} color={colors.primaryFixed} />
+            </View>
+            <View style={styles.textBlock}>
+              <Text style={styles.label}>{label}</Text>
+              {value ? (
+                <Text style={styles.value}>{value}</Text>
+              ) : (
+                <Text style={styles.empty}>{placeholder}</Text>
+              )}
+            </View>
           </View>
-          <View style={styles.infoText}>
-            <Text style={styles.infoLabel}>{label}</Text>
-            {id === 'birth_dt' ? (
-              <Pressable style={styles.infoInput} onPress={onPressBirthDate}>
-                <Text
-                  style={[styles.infoInputText, !profile[id] && styles.infoInputPlaceholder]}
-                >
-                  {profile[id] || placeholder}
-                </Text>
-              </Pressable>
-            ) : (
-              <TextInput
-                value={profile[id]}
-                onChangeText={(text) => onChangeField(id, text)}
-                placeholder={placeholder}
-                placeholderTextColor={colors.outline}
-                autoCapitalize={autoCapitalize}
-                autoCorrect={false}
-                selectionColor={colors.primary}
-                style={styles.infoInput}
-              />
-            )}
-          </View>
-        </View>
-      ))}
+        );
+      })}
     </View>
   );
 }

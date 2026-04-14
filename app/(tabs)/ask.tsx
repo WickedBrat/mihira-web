@@ -1,5 +1,5 @@
 // app/(tabs)/ask.tsx
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Platform,
   Alert,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { MoreVertical } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,6 +31,7 @@ import { scaleFont } from '@/lib/typography';
 const staticStyles = StyleSheet.create({
   separator: { height: 0 },
   bottomSpacer: { height: 96 },
+  loadMoreSpinner: { marginBottom: 12 },
 });
 
 function TypingIndicator() {
@@ -78,6 +80,8 @@ export default function AskScreen() {
 
   const {
     messages,
+    hasMoreMessages,
+    loadMoreMessages,
     isTyping,
     inputText,
     setInputText,
@@ -94,6 +98,19 @@ export default function AskScreen() {
   const showIntro = isContextLoaded && naradContext.interactionCount === 0 && !hasEnteredChat;
 
   const flatListRef = useRef<FlatList>(null);
+  const isLoadingMoreRef = useRef(false);
+
+  const handleScroll = useCallback(
+    ({ nativeEvent }: { nativeEvent: { contentOffset: { y: number } } }) => {
+      if (nativeEvent.contentOffset.y < 80 && hasMoreMessages && !isLoadingMoreRef.current) {
+        isLoadingMoreRef.current = true;
+        loadMoreMessages();
+        // Debounce: allow another load after 400ms
+        setTimeout(() => { isLoadingMoreRef.current = false; }, 400);
+      }
+    },
+    [hasMoreMessages, loadMoreMessages],
+  );
   const { colors } = useTheme();
   const styles = useThemedStyles((c) =>
     StyleSheet.create({
@@ -189,10 +206,20 @@ export default function AskScreen() {
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
+          onScroll={handleScroll}
+          scrollEventThrottle={200}
           renderItem={({ item }) => <ChatBubble message={item} senderName="Narad" />}
           ItemSeparatorComponent={() => <View style={staticStyles.separator} />}
           ListHeaderComponent={(
             <SafeAreaView edges={['top']} style={styles.headerSafeArea}>
+              {hasMoreMessages && (
+                <ActivityIndicator
+                  size="small"
+                  color={colors.onSurfaceVariant}
+                  style={staticStyles.loadMoreSpinner}
+                />
+              )}
               <View style={styles.topRightButton}>
                 <TouchableOpacity
                   onPress={() => {

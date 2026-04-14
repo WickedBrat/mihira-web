@@ -137,11 +137,11 @@ const styles = StyleSheet.create({
   body:     { flex: 1, paddingHorizontal: 32, paddingTop: 24, gap: 28 },
   header:   { gap: 8 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(34),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(34),
     color: OB.text, letterSpacing: -0.8, lineHeight: scaleFont(40),
   },
   sub: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(15), color: OB.muted,
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15), color: OB.muted,
   },
   card: {
     backgroundColor: OB.card,
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   stars: { fontSize: scaleFont(16), color: OB.gold, letterSpacing: 3 },
   cardQuote: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(15),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
     color: OB.text, lineHeight: scaleFont(24), fontStyle: 'italic',
   },
   cardAuthor: { flexDirection: 'row', alignItems: 'center', gap: 12 },
@@ -161,21 +161,21 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   avatarInitial: {
-    fontFamily: 'Lexend_700Bold', fontSize: scaleFont(17), color: OB.saffron,
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(17), color: OB.saffron,
   },
   authorText: { flex: 1, gap: 2 },
   authorName: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(13), color: OB.text,
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(13), color: OB.text,
   },
   authorTitle: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(11), color: OB.muted,
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(11), color: OB.muted,
   },
   nakshatraPill: {
     backgroundColor: OB.goldDim, borderRadius: 20, borderWidth: 1,
     borderColor: OB.goldBorder, paddingHorizontal: 10, paddingVertical: 4,
   },
   nakshatraText: {
-    fontFamily: 'Lexend_500Medium', fontSize: scaleFont(10), color: OB.gold,
+    fontFamily: 'GoogleSans_500Medium', fontSize: scaleFont(10), color: OB.gold,
   },
   pageDots: { flexDirection: 'row', gap: 8, justifyContent: 'center' },
   pageDot: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(16),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
     color: '#fff', letterSpacing: 0.3,
   },
 });

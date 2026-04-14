@@ -20,6 +20,22 @@ export function mergeDateAndTime(datePart: Date, timePart: Date) {
   );
 }
 
+import type { LucideIcon } from 'lucide-react-native';
+import {
+  ZodiacAquarius,
+  ZodiacAries,
+  ZodiacCancer,
+  ZodiacCapricorn,
+  ZodiacGemini,
+  ZodiacLeo,
+  ZodiacLibra,
+  ZodiacPisces,
+  ZodiacSagittarius,
+  ZodiacScorpio,
+  ZodiacTaurus,
+  ZodiacVirgo,
+} from 'lucide-react-native';
+
 export function getProfileDisplayName(
   profileName: string,
   firstName?: string | null,
@@ -30,6 +46,34 @@ export function getProfileDisplayName(
   if (firstName) return `${firstName}${lastName ? ` ${lastName}` : ''}`;
 
   return 'Your Aksha Profile';
+}
+
+const ZODIAC_SIGNS = [
+  { sign: 'Capricorn', icon: ZodiacCapricorn, month: 1, day: 19 },
+  { sign: 'Aquarius', icon: ZodiacAquarius, month: 2, day: 18 },
+  { sign: 'Pisces', icon: ZodiacPisces, month: 3, day: 20 },
+  { sign: 'Aries', icon: ZodiacAries, month: 4, day: 19 },
+  { sign: 'Taurus', icon: ZodiacTaurus, month: 5, day: 20 },
+  { sign: 'Gemini', icon: ZodiacGemini, month: 6, day: 20 },
+  { sign: 'Cancer', icon: ZodiacCancer, month: 7, day: 22 },
+  { sign: 'Leo', icon: ZodiacLeo, month: 8, day: 22 },
+  { sign: 'Virgo', icon: ZodiacVirgo, month: 9, day: 22 },
+  { sign: 'Libra', icon: ZodiacLibra, month: 10, day: 22 },
+  { sign: 'Scorpio', icon: ZodiacScorpio, month: 11, day: 21 },
+  { sign: 'Sagittarius', icon: ZodiacSagittarius, month: 12, day: 21 },
+  { sign: 'Capricorn', icon: ZodiacCapricorn, month: 12, day: 31 },
+] as const;
+
+/** Derives zodiac sign from a birth_dt string formatted as `DD/MM/YYYY, HH:MM AM/PM`. */
+export function getZodiacSign(birthDt: string): { sign: string; icon: LucideIcon } | null {
+  if (!birthDt) return null;
+  const match = birthDt.match(/^(\d{2})\/(\d{2})/);
+  if (!match) return null;
+  const day = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10);
+  const entry = ZODIAC_SIGNS.find((z) => month < z.month || (month === z.month && day <= z.day));
+  if (!entry) return null;
+  return { sign: entry.sign, icon: entry.icon };
 }
 
 export function getProfileInitials(

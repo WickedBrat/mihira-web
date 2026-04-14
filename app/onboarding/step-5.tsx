@@ -181,16 +181,16 @@ const styles = StyleSheet.create({
   body:       { padding: 32, paddingTop: 32, gap: 28 },
   header:     { gap: 10, marginBottom: 4 },
   headline: {
-    fontFamily: 'Lexend_800ExtraBold', fontSize: scaleFont(36),
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(36),
     color: OB.text, letterSpacing: -1, lineHeight: scaleFont(42),
   },
   sub: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(15),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
     color: OB.muted, lineHeight: scaleFont(23),
   },
   field:      { gap: 8 },
   fieldLabel: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(10),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(10),
     letterSpacing: 2, color: OB.muted, textTransform: 'uppercase',
   },
   fieldRow: {
@@ -202,22 +202,22 @@ const styles = StyleSheet.create({
   fieldRowActive:   { borderColor: OB.goldBorder, backgroundColor: OB.goldDim },
   fieldRowDisabled: { opacity: 0.5 },
   fieldValue: {
-    fontFamily: 'Lexend_500Medium', fontSize: scaleFont(16), color: OB.text,
+    fontFamily: 'GoogleSans_500Medium', fontSize: scaleFont(16), color: OB.text,
   },
   fieldValueMuted: { color: OB.muted, fontSize: scaleFont(13) },
   fieldCaret: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(20), color: OB.muted,
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(20), color: OB.muted,
   },
   fieldInput: {
     flex: 1,
-    fontFamily: 'Lexend_500Medium', fontSize: scaleFont(16), color: OB.text,
+    fontFamily: 'GoogleSans_500Medium', fontSize: scaleFont(16), color: OB.text,
   },
   toggleRow: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingTop: 4,
   },
   toggleLabel: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(13), color: OB.muted,
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13), color: OB.muted,
   },
   picker: { alignSelf: 'stretch' },
   seal: {
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   },
   sealIcon: { fontSize: scaleFont(14), marginTop: 1 },
   sealText: {
-    flex: 1, fontFamily: 'Lexend_400Regular',
+    flex: 1, fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(12), color: OB.muted, lineHeight: scaleFont(18),
   },
   footer:     { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 32, paddingBottom: 44, backgroundColor: 'rgba(7,9,12,0.95)', alignItems: 'flex-end' },
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   btnDisabled: { opacity: 0.35 },
   btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(16),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
     color: '#fff', letterSpacing: 0.3,
   },
 });

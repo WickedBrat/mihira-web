@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5, borderColor: OB.bg,
   },
   avatarLabel: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(11),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(11),
     color: OB.muted, letterSpacing: 0.5,
   },
   bubble: {
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   bubbleText: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(15),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
     color: OB.text, lineHeight: scaleFont(24),
   },
   userBubble: {
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   userBubbleText: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(14),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
     color: OB.text, lineHeight: scaleFont(22),
   },
   inputWrap: {
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(15),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
     color: OB.text, lineHeight: scaleFont(23),
     maxHeight: 120,
   },
@@ -225,11 +225,11 @@ const styles = StyleSheet.create({
   sendBtnDisabled: { opacity: 0.35 },
   sendBtnPressed:  { opacity: 0.75, transform: [{ scale: 0.94 }] },
   sendBtnText: {
-    fontFamily: 'Lexend_700Bold', fontSize: scaleFont(18), color: '#fff',
+    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(18), color: '#fff',
   },
   loadingWrap: { alignItems: 'flex-start', gap: 10 },
   loadingText: {
-    fontFamily: 'Lexend_400Regular', fontSize: scaleFont(13),
+    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13),
     color: OB.muted, fontStyle: 'italic',
   },
   loadingDots: { flexDirection: 'row', gap: 6, paddingLeft: 4 },
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   },
   btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
   btnText: {
-    fontFamily: 'Lexend_600SemiBold', fontSize: scaleFont(16),
+    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
     color: '#fff', letterSpacing: 0.3,
   },
 });

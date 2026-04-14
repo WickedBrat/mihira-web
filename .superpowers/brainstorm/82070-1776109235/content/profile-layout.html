@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Page Redesign</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a1a2e;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 24px;
+  }
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+  .subtitle { font-size: 14px; color: #9ca3af; margin-bottom: 28px; }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .phone-frame {
+    background: #0e0e0e;
+    border-radius: 44px;
+    padding: 16px 12px;
+    border: 2px solid #2d2d2d;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    position: relative;
+  }
+  .phone-notch {
+    width: 80px;
+    height: 20px;
+    background: #0e0e0e;
+    border-radius: 0 0 14px 14px;
+    margin: 0 auto 8px;
+    border: 2px solid #2d2d2d;
+    border-top: none;
+  }
+  .phone-screen {
+    background: #0e0e0e;
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: 580px;
+  }
+  .label-badge {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #6b7280;
+    text-transform: uppercase;
+  }
+
+  /* CURRENT DESIGN */
+  .current-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px 10px;
+    position: relative;
+  }
+  .current-header-title { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+  .settings-btn {
+    position: absolute;
+    right: 16px;
+    top: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #1f2020;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 16px;
+  }
+  .current-avatar-wrap { display: flex; flex-direction: column; align-items: center; padding: 12px 0 8px; }
+  .avatar-ring {
+    width: 120px; height: 120px; border-radius: 60px;
+    background: linear-gradient(135deg, #b564fc, #b44aff);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .avatar-inner {
+    width: 112px; height: 112px; border-radius: 56px;
+    background: #0e0e0e;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; font-weight: 800; color: #fff;
+    overflow: hidden;
+  }
+  .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+  .plan-badge {
+    background: rgba(184,152,122,0.13);
+    border: 1px solid rgba(184,152,122,0.15);
+    border-radius: 9999px;
+    padding: 5px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: #ff9500;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .hero-name { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+
+  .fields { padding: 8px 12px; display: flex; flex-direction: column; gap: 10px; }
+  .field-card {
+    background: rgba(37,38,38,0.62);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .field-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(181,100,252,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .field-info { flex: 1; }
+  .field-label { font-size: 8px; text-transform: uppercase; letter-spacing: 1.5px; color: #767575; margin-bottom: 3px; }
+  .field-value { font-size: 13px; color: #fff; }
+
+  /* NEW DESIGN */
+  .new-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 14px 6px;
+  }
+  .new-add-btn {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: #fff;
+  }
+  .karma-counter {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 14px; font-weight: 700; color: #fff;
+  }
+  .karma-icon { font-size: 14px; }
+  .notif-btn { position: relative; }
+  .notif-bell { font-size: 18px; }
+  .notif-dot {
+    position: absolute;
+    top: -2px; right: -2px;
+    width: 8px; height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    border: 1.5px solid #0e0e0e;
+  }
+
+  .new-avatar-section { display: flex; flex-direction: column; align-items: center; padding: 8px 0 12px; }
+  .new-avatar {
+    width: 80px; height: 80px; border-radius: 40px;
+    border: 2.5px solid rgba(181,100,252,0.5);
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .new-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .new-avatar-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #b564fc, #6366f1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 800; color: #fff;
+  }
+  .new-name { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .new-zodiac {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: #9ca3af; font-weight: 500;
+  }
+  .zodiac-symbol { font-size: 14px; color: #c4b5fd; }
+
+  .new-cards { padding: 6px 10px; display: flex; flex-direction: column; gap: 10px; }
+
+  .premium-card {
+    border-radius: 20px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #8B5E3C 0%, #C4863A 50%, #8B5E3C 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .premium-card::before {
+    content: "☽";
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 52px;
+    color: rgba(255,255,255,0.12);
+    line-height: 1;
+  }
+  .premium-card::after {
+    content: "☽";
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%) scaleX(-1);
+    font-size: 52px;
+    color: rgba(255,255,255,0.12);
+    line-height: 1;
+  }
+  .premium-card-title { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  .premium-card-sub { font-size: 11px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+
+  .invite-card {
+    border-radius: 20px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .invite-dots {
+    position: absolute;
+    top: 8px; left: 8px;
+    display: flex; gap: 3px;
+  }
+  .invite-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .invite-left { flex: 1; }
+  .invite-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .invite-sub { font-size: 11px; color: rgba(255,255,255,0.6); }
+  .invite-right { align-items: flex-end; display: flex; flex-direction: column; gap: 4px; }
+  .invite-stat {
+    display: flex; align-items: center; gap: 4px;
+  }
+  .invite-pct { font-size: 20px; font-weight: 800; color: #fff; }
+  .invite-delta { font-size: 10px; font-weight: 700; color: #4ade80; background: rgba(74,222,128,0.15); padding: 2px 5px; border-radius: 6px; }
+  .invite-bars {
+    display: flex; align-items: flex-end; gap: 2px;
+  }
+  .bar {
+    width: 6px; border-radius: 2px;
+    background: rgba(255,255,255,0.3);
+  }
+  .bar.active { background: #818cf8; }
+
+  .ref-section {
+    margin: 4px 10px 0;
+    background: rgba(37,38,38,0.4);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ref-label { font-size: 11px; color: #9ca3af; }
+  .ref-icon { font-size: 16px; color: #6b7280; }
+
+  .section-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 0 8px;
+  }
+  .section-label { font-size: 13px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+
+<h2>Profile Page Redesign</h2>
+<p class="subtitle">Left: current layout &nbsp;|&nbsp; Right: new design matching the reference screenshot</p>
+
+<div class="split">
+
+  <!-- CURRENT -->
+  <div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="current-header">
+          <div class="current-header-title">You</div>
+          <div class="settings-btn">⚙</div>
+        </div>
+
+        <div class="current-avatar-wrap">
+          <div class="avatar-ring">
+            <div class="avatar-inner">
+              <img src="https://i.pravatar.cc/150?img=47" alt="avatar" />
+            </div>
+          </div>
+          <div class="plan-badge">✓ Aksha FREE</div>
+          <div class="hero-name">Arjun Sharma</div>
+        </div>
+
+        <div class="fields">
+          <div class="field-card">
+            <div class="field-icon">👤</div>
+            <div class="field-info">
+              <div class="field-label">Name</div>
+              <div class="field-value">Arjun Sharma</div>
+            </div>
+          </div>
+          <div class="field-card">
+            <div class="field-icon">🎂</div>
+            <div class="field-info">
+              <div class="field-label">Date of Birth</div>
+              <div class="field-value">Jan 14, 1992 · 8:30 AM</div>
+            </div>
+          </div>
+          <div class="field-card">
+            <div class="field-icon">📍</div>
+            <div class="field-info">
+              <div class="field-label">Birth Place</div>
+              <div class="field-value">Mumbai, India</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="label-badge">Current</div>
+  </div>
+
+  <!-- NEW -->
+  <div>
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+
+        <!-- Top bar with karma + notif -->
+        <div class="new-top-bar">
+          <div class="new-add-btn">+</div>
+          <div class="karma-counter">
+            <span class="karma-icon">✦</span>
+            <span>2,847</span>
+            <span style="font-size:12px; color:#b564fc;">karma</span>
+          </div>
+          <div class="notif-btn">
+            <div class="notif-bell">🔔</div>
+            <div class="notif-dot"></div>
+          </div>
+        </div>
+
+        <!-- Avatar + name + zodiac -->
+        <div class="new-avatar-section">
+          <div class="new-avatar">
+            <img src="https://i.pravatar.cc/150?img=47" alt="avatar" />
+          </div>
+          <div class="new-name">Arjun Sharma</div>
+          <div class="new-zodiac">
+            <span class="zodiac-symbol">♑</span>
+            <span>Capricorn</span>
+          </div>
+        </div>
+
+        <!-- Cards -->
+        <div class="new-cards">
+
+          <!-- Premium card -->
+          <div class="premium-card">
+            <div class="premium-card-title">Get Premium</div>
+            <div class="premium-card-sub">Unlimited Ask Aksha, No Ads &amp; Exclusive Spiritual Insights</div>
+          </div>
+
+          <!-- Invite Friends card -->
+          <div class="invite-card">
+            <div class="invite-dots">
+              <div class="invite-dot"></div>
+              <div class="invite-dot"></div>
+              <div class="invite-dot" style="background:rgba(255,255,255,0.5)"></div>
+            </div>
+            <div class="invite-left">
+              <div class="invite-title">Invite Friends</div>
+              <div class="invite-sub">Earn karma for each referral</div>
+            </div>
+            <div class="invite-right">
+              <div class="invite-stat">
+                <div class="invite-pct">3</div>
+                <div class="invite-delta">invited</div>
+              </div>
+              <div class="invite-bars">
+                <div class="bar active" style="height:14px"></div>
+                <div class="bar active" style="height:20px"></div>
+                <div class="bar active" style="height:10px"></div>
+                <div class="bar" style="height:16px"></div>
+                <div class="bar" style="height:8px"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Reference Code -->
+        <div class="ref-section">
+          <div class="ref-label">Reference Code · AKSHA-XJ7K</div>
+          <div class="ref-icon">🔗</div>
+        </div>
+
+      </div>
+    </div>
+    <div class="label-badge">New Design</div>
+  </div>
+
+</div>
+
+<div style="max-width:900px;margin:28px auto 0;padding:20px;background:rgba(255,255,255,0.04);border-radius:16px;border:1px solid rgba(255,255,255,0.08);">
+  <div style="font-size:13px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Key Changes</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:#d1d5db;line-height:1.6;">
+    <div>
+      <div style="color:#b564fc;font-weight:600;margin-bottom:4px;">Added</div>
+      <div>• Karma points counter in top bar</div>
+      <div>• Notification bell</div>
+      <div>• Zodiac sign below name</div>
+      <div>• Premium upsell card (warm gradient)</div>
+      <div>• Invite Friends gamification card</div>
+      <div>• Reference/referral code section</div>
+    </div>
+    <div>
+      <div style="color:#6b7280;font-weight:600;margin-bottom:4px;">Moved/Removed</div>
+      <div>• "You" title header → replaced by top bar</div>
+      <div>• Plan badge → folded into Premium card</div>
+      <div>• Profile input fields → moved to settings sheet</div>
+      <div>• Settings gear → still accessible via top bar</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

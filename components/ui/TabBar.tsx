@@ -10,12 +10,12 @@ import {
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import {
-  BookOpen,
-  Clock,
   Home,
   MessageCircle,
   User,
 } from 'lucide-react-native';
+import { MuhuratIcon } from '@/components/ui/MuhuratIcon';
+import { GurukulIcon } from '@/components/ui/GurukulIcon';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -31,8 +31,8 @@ import { useTheme, useThemedStyles } from '@/lib/theme-context';
 const TAB_ICONS = {
   index: Home,
   ask: MessageCircle,
-  gurukul: BookOpen,
-  muhurat: Clock,
+  gurukul: GurukulIcon,
+  muhurat: MuhuratIcon,
   profile: User,
 } as const;
 
@@ -209,7 +209,9 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             const tabName = route.name as TabName;
             const Icon = TAB_ICONS[tabName];
             const label = getLabel(tabName);
-            const iconColor = isFocused ? styles.tabLabelActive.color : inactiveIconColor;
+            const iconColor = tabName === 'gurukul' && isFocused
+              ? '#ff9500'
+              : isFocused ? styles.tabLabelActive.color : inactiveIconColor;
 
             return (
               <Pressable
@@ -232,12 +234,24 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                 style={({ pressed }) => [staticStyles.tab, pressed && staticStyles.tabPressed]}
               >
                 <View style={staticStyles.tabContent}>
-                  <Icon
-                    size={isFocused ? 21 : 20}
-                    color={iconColor}
-                    fill={iconColor}
-                    strokeWidth={isFocused ? 2.15 : 1.7}
-                  />
+                  {tabName === 'muhurat' ? (
+                    <MuhuratIcon
+                      size={isFocused ? 23 : 21}
+                      color={iconColor as string}
+                    />
+                  ) : tabName === 'gurukul' ? (
+                    <GurukulIcon
+                      size={isFocused ? 38 : 36}
+                      color={iconColor as string}
+                    />
+                  ) : (
+                    <Icon
+                      size={isFocused ? 21 : 20}
+                      color={iconColor}
+                      fill={iconColor}
+                      strokeWidth={isFocused ? 2.15 : 1.7}
+                    />
+                  )}
                   <Text
                     style={[styles.tabLabel, isFocused && styles.tabLabelActive]}
                     numberOfLines={1}
