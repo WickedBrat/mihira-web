@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
+import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import {
   onboardingButtonShadow,
   pressedButtonStyle,
@@ -53,6 +54,8 @@ export default function Screen8() {
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
+      <OnboardingDevBackButton />
+
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -73,7 +76,7 @@ export default function Screen8() {
           {/* Bubble */}
           <Animated.View
             entering={FadeInDown.delay(500).duration(500)}
-            className="max-w-[90%] self-start rounded-[20px] rounded-tl p-[18px] border border-ob-card-border bg-ob-card"
+            className="max-w-[90%] self-start rounded-[20px] rounded-tl border border-ob-card-border bg-ob-card p-[18px]"
           >
             <Text className="font-body text-[15px] leading-6 text-ob-text">
               I am your Sarathi — your Charioteer.{'\n\n'}
@@ -126,10 +129,10 @@ export default function Screen8() {
           {/* User bubble + response */}
           {answered && (
             <Animated.View entering={FadeInDown.duration(400)} className="gap-3">
-              <View className="max-w-[85%] self-end rounded-[20px] rounded-br bg-ob-saffron-dim p-4 border border-ob-saffron-border">
+              <View className="max-w-[85%] self-end rounded-[20px] rounded-br border border-ob-saffron-border bg-ob-saffron-dim p-4">
                 <Text className="font-body text-sm leading-[22px] text-ob-text">{question}</Text>
               </View>
-              <View className="max-w-[90%] self-start rounded-[20px] rounded-tl p-[18px] border border-ob-card-border bg-ob-card">
+              <View className="max-w-[90%] self-start rounded-[20px] rounded-tl border border-ob-card-border bg-ob-card p-[18px]">
                 <Text className="font-body text-[15px] leading-6 text-ob-text">
                   Your question is received. The stars have noted your seeking.{'\n\n'}
                   As we journey together, the patterns will reveal what your mind already knows.

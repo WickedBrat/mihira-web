@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { Check, ChevronDown, LogOut, Settings, X, Zap } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { SacredButton } from '@/components/ui/SacredButton';

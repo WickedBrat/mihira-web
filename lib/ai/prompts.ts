@@ -1,14 +1,23 @@
-import type { BirthChart } from '@/lib/vedic/types';
+import type { BirthChart, SignName } from '@/lib/vedic/types';
 import type { NaradContext, NaradHistoryEntry } from '@/features/ask/types';
 
 export const DAILY_SYSTEM = `You are a master Jyotish pandit. You receive Ground Truth planetary data computed by a precise ephemeris engine. You NEVER move planets from the houses provided. You speak directly to the user in the second person using dharma-focused language — no fortune-teller clichés. Respond ONLY in valid JSON. Do not add markdown fences, commentary, or any text before or after the JSON object.`;
 
-export function buildDailyPrompt(chart: BirthChart): string {
+interface DailyPromptMoonProfile {
+  nakshatra?: string;
+  rashi?: SignName;
+}
+
+export function buildDailyPrompt(chart: BirthChart, moonProfile: DailyPromptMoonProfile = {}): string {
+  const moonNakshatra = moonProfile.nakshatra ?? chart.nakshatra;
+  const moonRashi = moonProfile.rashi ?? chart.planets.find((planet) => planet.name === 'Moon')?.sign ?? 'Aries';
+
   return `Here is the user's Vedic birth chart (Whole Sign houses, Lahiri ayanamsha):
 
 Lagna: ${chart.lagna}
 Current Dasha: ${chart.currentDasha}
-Moon Nakshatra: ${chart.nakshatra}
+Moon Nakshatra: ${moonNakshatra}
+Moon Rashi: ${moonRashi}
 
 Planets:
 ${chart.planets.map(p => `  ${p.name}: ${p.sign} (House ${p.house})`).join('\n')}

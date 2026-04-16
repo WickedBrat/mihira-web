@@ -1,6 +1,10 @@
 // Screen 1: The Initial Spark
 import React, { useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import {
+  View,
+  Pressable,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, {
@@ -13,6 +17,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { analytics } from '@/lib/analytics';
+import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { onboardingButtonShadow, pressedLogoButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 export default function Screen1() {
@@ -39,6 +44,8 @@ export default function Screen1() {
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
+      <OnboardingDevBackButton />
+
       {/* Ambient star field */}
       <View pointerEvents="none" className="absolute inset-0">
         {STARS.map((s, i) => (
@@ -69,7 +76,7 @@ export default function Screen1() {
         </Animated.View>
       </View>
 
-      <Animated.View entering={FadeIn.delay(2200).duration(800)} className="items-end gap-3.5 p-8 pb-11">
+      <Animated.View entering={FadeIn.delay(2200).duration(800)} className="items-center gap-3.5 p-8 pb-11">
         <Pressable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -82,7 +89,7 @@ export default function Screen1() {
             pressed && pressedLogoButtonStyle,
           ]}
         >
-          <Text className="text-right font-label text-base tracking-[0.3px] text-white">
+          <Text className="text-center font-label text-base tracking-[0.3px] text-white">
             Begin My Alignment
           </Text>
         </Pressable>
@@ -95,7 +102,7 @@ export default function Screen1() {
           className="px-2 py-2"
           style={({ pressed }) => pressed && pressedLogoButtonStyle}
         >
-          <Text className="text-right font-body text-sm text-ob-muted">Skip Onboarding</Text>
+          <Text className="text-center font-body text-sm text-ob-muted">Skip Onboarding</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>

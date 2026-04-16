@@ -1,5 +1,10 @@
 import React from 'react';
-import { Pressable, View, Text, ActivityIndicator } from 'react-native';
+import {
+  Pressable,
+  View,
+  ActivityIndicator,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { useTheme } from '@/lib/theme-context';
 import AppleLogoIcon from './AppleLogo';
 import GoogleLogoSolidIcon from './GoogleLogo';

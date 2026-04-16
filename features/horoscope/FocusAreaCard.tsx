@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, Text, ImageBackground } from 'react-native';
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { LinearGradient } from 'expo-linear-gradient';
 import { VedicReasoningAccordion } from './VedicReasoningAccordion';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
@@ -89,9 +94,9 @@ export function FocusAreaCard({ focusArea, isLast = false }: Props) {
       >
         <LinearGradient
           colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,0.5)']}
-          className="flex-1 flex-row items-end justify-end p-5"
+          style={styles.imageOverlay}
         >
-          <View>
+          <View style={styles.imageTextBlock}>
             <Text className="text-right font-headline-extra text-2xl tracking-[-0.3px] text-white">{focusArea.area}</Text>
             <Text className="mt-0.5 text-right font-body text-sm text-white/55">{focusArea.timeRange}</Text>
           </View>
@@ -114,3 +119,15 @@ export function FocusAreaCard({ focusArea, isLast = false }: Props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  imageOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    padding: 20,
+  },
+  imageTextBlock: {
+    alignItems: 'flex-end',
+  },
+});

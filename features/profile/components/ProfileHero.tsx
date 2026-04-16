@@ -1,5 +1,9 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import {
+  Image,
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { UserRound, type LucideIcon } from 'lucide-react-native';
 import { useTheme } from '@/lib/theme-context';
 import ProfileBg from '@/assets/profile_bg.svg';

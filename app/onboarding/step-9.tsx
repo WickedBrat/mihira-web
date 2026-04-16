@@ -1,6 +1,10 @@
 // Screen 9: The First Alignment — Feature Tease + Notifications
 import React, { useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import {
+  View,
+  Pressable,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import {
@@ -13,6 +17,7 @@ import Animated, {
 import * as Haptics from 'expo-haptics';
 import { useWindowDimensions } from 'react-native';
 import { OB } from '@/lib/onboardingStore';
+import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import {
   absoluteFillStyle,
   dialGlowShadow,
@@ -48,12 +53,14 @@ export default function Screen9() {
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
-      <View className="flex-1 gap-6 px-8 pt-6">
-        <Animated.View entering={FadeInDown.duration(500)} className="gap-2.5">
-          <Text className="font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
+      <OnboardingDevBackButton />
+
+      <View className="flex-1 items-center justify-center gap-6 px-8 pt-6">
+        <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
+          <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
             Your Daily{'\n'}Alignment Dial
           </Text>
-          <Text className="font-body text-sm leading-[22px] text-ob-muted">
+          <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
             Time is not a clock — it's a cycle. Every day, we find your{' '}
             <Text className="font-label text-ob-gold">48-minute Abhijit Muhurat</Text>
             {' '}— your window of peak grace.
@@ -120,7 +127,7 @@ export default function Screen9() {
           </View>
         </View>
 
-        <View className="flex-row flex-wrap gap-2.5">
+        <View className="items-center gap-2.5">
           <View className="flex-row items-center gap-2">
             <View className="h-2.5 w-2.5 rounded-full bg-ob-gold" />
             <Text className="font-body text-xs text-ob-muted">Abhijit Muhurat — peak grace</Text>
@@ -132,7 +139,7 @@ export default function Screen9() {
         </View>
       </View>
 
-      <Animated.View entering={FadeInUp.delay(800).duration(500)} className="items-end gap-3.5 p-8 pb-11">
+      <Animated.View entering={FadeInUp.delay(800).duration(500)} className="items-center gap-3.5 p-8 pb-11">
         <Pressable
           onPress={requestNotifications}
           className="items-center rounded-full bg-ob-saffron px-8 py-4"
@@ -149,7 +156,7 @@ export default function Screen9() {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           router.push('/onboarding/step-10');
         }}>
-          <Text className="font-body text-sm text-ob-muted">Skip for now</Text>
+          <Text className="text-center font-body text-sm text-ob-muted">Skip for now</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>

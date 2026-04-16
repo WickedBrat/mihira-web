@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const TESTIMONIALS = [
@@ -55,12 +56,14 @@ export default function Screen10() {
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
-      <View className="flex-1 gap-7 px-8 pt-6">
-        <Animated.View entering={FadeInDown.duration(500)} className="gap-2">
-          <Text className="font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
+      <OnboardingDevBackButton />
+
+      <View className="flex-1 items-center justify-center gap-7 px-8 pt-6">
+        <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2">
+          <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
             Thousands have{'\n'}found their axis.
           </Text>
-          <Text className="font-body text-[15px] text-ob-muted">Real people. Real shifts.</Text>
+          <Text className="text-center font-body text-[15px] text-ob-muted">Real people. Real shifts.</Text>
         </Animated.View>
 
         {/* Carousel */}
@@ -82,9 +85,9 @@ export default function Screen10() {
               style={{ width: CARD_W, marginHorizontal: 16 }}
             >
               {/* Stars */}
-              <Text className="text-base tracking-[3px] text-ob-gold">★★★★★</Text>
+              <Text className="text-center text-base tracking-[3px] text-ob-gold">★★★★★</Text>
 
-              <Text className="font-body text-[15px] italic leading-6 text-ob-text">"{t.quote}"</Text>
+              <Text className="text-center font-body text-[15px] italic leading-6 text-ob-text">"{t.quote}"</Text>
 
               <View className="flex-row items-center gap-3">
                 <View className="h-[42px] w-[42px] items-center justify-center rounded-full border border-ob-saffron-border bg-ob-saffron-dim">
@@ -120,7 +123,7 @@ export default function Screen10() {
         </View>
       </View>
 
-      <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-end p-8 pb-11">
+      <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-center p-8 pb-11">
         <Pressable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

@@ -1,5 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import {
+  View,
+  ScrollView,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { GlowCard } from '@/components/ui/GlowCard';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { PageHero } from '@/components/ui/PageHero';

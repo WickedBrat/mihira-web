@@ -1,6 +1,10 @@
 // Screen 12: The Threshold — Long Press Initiation
 import React, { useEffect, useRef, useCallback } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import {
+  View,
+  Pressable,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -17,6 +21,8 @@ import { getOnboardingData } from '@/lib/onboardingStore';
 import { useProfile } from '@/features/profile/useProfile';
 import { useAuth } from '@clerk/expo';
 import { analytics } from '@/lib/analytics';
+import { formatBirthDateTime, mergeDateAndTime } from '@/features/profile/utils';
+import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { absoluteFillStyle, hazeScaleStyle } from '@/features/onboarding/onboardingStyles';
 
 const HOLD_DURATION = 2000; // ms to hold for full trigger
@@ -42,7 +48,12 @@ export default function Screen12() {
       is_signed_in: Boolean(isSignedIn),
     });
     if (isSignedIn) {
+      const birthDateTime = !d.unknownBirthTime
+        ? formatBirthDateTime(mergeDateAndTime(d.birthDate, d.birthTime))
+        : '';
+
       if (d.userName)       saveField('name', d.userName).catch(() => {});
+      if (birthDateTime)    saveField('birth_dt', birthDateTime).catch(() => {});
       if (d.birthPlace)     saveField('birth_place', d.birthPlace).catch(() => {});
       if (d.commitmentTier) saveField('focus_area', d.commitmentTier).catch(() => {});
     }
@@ -132,6 +143,8 @@ export default function Screen12() {
 
   return (
     <View className="flex-1">
+      <OnboardingDevBackButton />
+
       {/* Full-screen gradient backdrop */}
       <LinearGradient
         colors={['#0D0500', '#14080C', '#07090C']}
@@ -157,18 +170,18 @@ export default function Screen12() {
         />
       ))}
 
-      <SafeAreaView className="flex-1 justify-between px-8 pb-[52px]">
-        <View className="gap-4 pt-[60px]">
+      <SafeAreaView className="flex-1 items-center justify-between px-8 pb-[52px]">
+        <View className="items-center gap-4 pt-[60px]">
           <Animated.Text
             entering={FadeIn.delay(500).duration(700)}
-            className="font-headline text-[40px] leading-[46px] tracking-[-1.2px] text-ob-text"
+            className="text-center font-headline text-[40px] leading-[46px] tracking-[-1.2px] text-ob-text"
           >
             Your axis is aligned,{'\n'}
             <Text className="text-ob-gold">{name0}.</Text>
           </Animated.Text>
           <Animated.Text
             entering={FadeIn.delay(900).duration(700)}
-            className="font-body text-xl tracking-[1px] text-ob-text/60"
+            className="text-center font-body text-xl tracking-[1px] text-ob-text/60"
           >
             Enter the current.
           </Animated.Text>

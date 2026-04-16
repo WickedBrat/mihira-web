@@ -9,6 +9,7 @@ import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OB, setOnboardingData } from '@/lib/onboardingStore';
+import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 export default function Screen4() {
@@ -25,25 +26,27 @@ export default function Screen4() {
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
+      <OnboardingDevBackButton />
+
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View className="flex-1 gap-12 px-8 pt-10">
-          <Animated.View entering={FadeInDown.duration(500)} className="gap-3.5">
-            <Text className="font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
+        <View className="flex-1 items-center justify-center gap-12 px-8 pt-10">
+          <Animated.View entering={FadeInDown.duration(500)} className="max-w-[360px] items-center gap-3.5">
+            <Text className="text-center font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
               What shall we call{'\n'}you in this space?
             </Text>
-            <Text className="font-body text-[15px] leading-[23px] text-ob-muted">
+            <Text className="text-center font-body text-[15px] leading-[23px] text-ob-muted">
               A name given to a space becomes sacred.{'\n'}
               Choose yours with care.
             </Text>
           </Animated.View>
 
-          <Animated.View entering={FadeInDown.delay(300).duration(500)} className="gap-4">
+          <Animated.View entering={FadeInDown.delay(300).duration(500)} className="w-full max-w-[360px] items-center gap-4">
             <TextInput
               ref={inputRef}
-              className="font-headline text-[32px] text-ob-text"
+              className="w-full text-center font-headline text-[32px] text-ob-text"
               value={name}
               onChangeText={setName}
               placeholder="Your name…"
@@ -54,11 +57,11 @@ export default function Screen4() {
               onSubmitEditing={proceed}
               maxLength={40}
             />
-            <View className="h-px bg-ob-gold-border" />
+            <View className="h-px w-full bg-ob-gold-border" />
             {name.length > 0 && (
               <Animated.Text
                 entering={FadeInDown.duration(300)}
-                className="mt-1 font-body text-sm tracking-[1px] text-ob-gold"
+                className="mt-1 text-center font-body text-sm tracking-[1px] text-ob-gold"
               >
                 ☽  {name}
               </Animated.Text>
@@ -66,7 +69,7 @@ export default function Screen4() {
           </Animated.View>
         </View>
 
-        <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-end p-8 pb-11">
+        <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-center p-8 pb-11">
           <Pressable
             onPress={proceed}
             className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${

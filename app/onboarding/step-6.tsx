@@ -1,6 +1,9 @@
 // Screen 6: Telemetric Sync — The "Wait" Ritual
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text } from 'react-native';
+import {
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import {
@@ -23,6 +26,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useWindowDimensions } from 'react-native';
 import { OB, getOnboardingData } from '@/lib/onboardingStore';
+import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { absoluteFillStyle } from '@/features/onboarding/onboardingStyles';
 
 const STEPS = [
@@ -94,9 +98,11 @@ export default function Screen6() {
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
-      <View className="flex-1 items-center gap-4 px-8 pt-7">
-        <Animated.View entering={FadeInDown.duration(500)} className="self-stretch gap-2">
-          <Text className="font-headline text-[28px] tracking-[-0.6px] text-ob-text">
+      <OnboardingDevBackButton />
+
+      <View className="flex-1 items-center justify-center gap-4 px-8 pt-7">
+        <Animated.View entering={FadeInDown.duration(500)} className="self-stretch items-center gap-2">
+          <Text className="text-center font-headline text-[28px] tracking-[-0.6px] text-ob-text">
             {name ? `Mapping ${name}'s universe` : 'Mapping your universe'}
           </Text>
         </Animated.View>
@@ -150,10 +156,12 @@ export default function Screen6() {
               <Circle
                 cx={cx} cy={cx + R - 6} r={5}
                 color={OB.saffron}
+                strokeWidth={4}
               />
               <Circle
                 cx={cx} cy={cx - R + 6} r={3}
                 color={OB.gold}
+                strokeWidth={4}
               />
             </Canvas>
           </Animated.View>

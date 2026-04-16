@@ -5,12 +5,15 @@ import { parseModelJson } from '@/lib/ai/parseModelJson';
 import { perplexityChat } from '@/lib/ai/perplexity';
 import { DAILY_SYSTEM, buildDailyPrompt } from '@/lib/ai/prompts';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
+import type { SignName } from '@/lib/vedic/types';
 
 export async function POST(request: Request): Promise<Response> {
   try {
-    const { birthDt, birthPlace } = await request.json() as {
+    const { birthDt, birthPlace, nakshatra, rashi } = await request.json() as {
       birthDt: string;
       birthPlace: string;
+      nakshatra?: string;
+      rashi?: SignName;
     };
 
     if (!birthDt || !birthPlace) {
@@ -22,7 +25,7 @@ export async function POST(request: Request): Promise<Response> {
 
     const raw = await perplexityChat('sonar-pro', [
       { role: 'system', content: DAILY_SYSTEM },
-      { role: 'user',   content: buildDailyPrompt(chart) },
+      { role: 'user',   content: buildDailyPrompt(chart, { nakshatra, rashi }) },
     ]);
 
     let parsed: { focusAreas: DailyFocusArea[] };

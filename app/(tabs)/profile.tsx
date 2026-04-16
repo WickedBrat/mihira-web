@@ -32,6 +32,9 @@ import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { router } from 'expo-router';
 import { analytics } from '@/lib/analytics';
 import { posthog } from '@/lib/posthog';
+import { deriveMoonProfileFromBirthDt } from '@/lib/vedic/moonProfile';
+
+const ENABLE_DEV_BUTTONS = Constants.expoConfig?.extra?.enableDevButtons === true;
 
 export default function ProfileScreen() {
   const { isSignedIn, userId, signOut } = useAuth();
@@ -64,6 +67,7 @@ export default function ProfileScreen() {
   const displayName = getProfileDisplayName(profile.name, user?.firstName, user?.lastName);
   const initials = getProfileInitials(profile.name, user?.firstName, user?.lastName);
   const zodiacSign = getZodiacSign(profile.birth_dt);
+  const moonProfile = deriveMoonProfileFromBirthDt(profile.birth_dt);
   const userIdLabel = signedIn ? (userId?.slice(0, 8) ?? '—') : '—';
   const identityEmail = user?.primaryEmailAddress?.emailAddress ?? '';
 
@@ -96,9 +100,9 @@ export default function ProfileScreen() {
           onPress={() => setIsPlansOpen(true)}
         />
 
-        <ProfileFields profile={profile} />
+        <ProfileFields profile={profile} moonProfile={moonProfile} />
 
-        {__DEV__ && (
+        {ENABLE_DEV_BUTTONS && (
           <View className="gap-3">
             <SacredButton
               label="Reset Ask Tab State"
@@ -108,11 +112,13 @@ export default function ProfileScreen() {
                 showToast({ type: 'success', title: 'Guide Reset', message: 'The ask tab state has been cleared.' });
               }}
               variant="secondary"
+              fullWidth
             />
             <SacredButton
               label="Trigger Onboarding Flow"
               onPress={() => router.push('/onboarding')}
               variant="secondary"
+              fullWidth
             />
             <SacredButton
               label="Clear Daily Suggestion"
@@ -121,6 +127,7 @@ export default function ProfileScreen() {
                 showToast({ type: 'success', title: 'Cache Cleared', message: 'Daily suggestion will refresh on next load.' });
               }}
               variant="secondary"
+              fullWidth
             />
           </View>
         )}

@@ -1,5 +1,10 @@
 import React from 'react';
-import { ImageBackground, Pressable, Text, View } from 'react-native';
+import {
+  ImageBackground,
+  Pressable,
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface PremiumCardProps {
@@ -8,7 +13,7 @@ interface PremiumCardProps {
 }
 
 export function PremiumCard({ isPro, onPress }: PremiumCardProps) {
-  if (isPro) return null;
+  // if (isPro) return null;
 
   return (
     <Pressable className="mb-1 overflow-hidden rounded-[22px]" onPress={onPress}>
@@ -23,9 +28,9 @@ export function PremiumCard({ isPro, onPress }: PremiumCardProps) {
           imageStyle={{ opacity: 0.3 }}
           resizeMode="cover"
         >
-        <View className="min-h-[88px] items-center justify-center rounded-[22px] bg-black/[0.18] px-[30px] py-[30px]">
-          <Text className="mb-[5px] font-headline text-2xl tracking-[-0.3px] text-white">Get Premium</Text>
-          <Text className="max-w-[220px] text-center font-body text-xs leading-[18px] text-white/80">
+        <View className="min-h-[88px] items-center justify-center rounded-[22px] bg-black/[0.18] px-10 py-12">
+          <Text className="mb-[5px] font-headline text-4xl tracking-[-0.3px] text-white">Get Premium</Text>
+          <Text className="pt-2 text-center font-body leading-[18px] text-white/80">
             Unlimited Ask Aksha, No Ads &amp; Exclusive Spiritual Insights
           </Text>
         </View>

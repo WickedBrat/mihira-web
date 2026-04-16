@@ -1,6 +1,10 @@
 // features/muhurat/MuhuratCard.tsx
 import React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import {
+  View,
+} from 'react-native';
+import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
+import { Text } from '@/components/ui/Text';
 import { VedicReasoningAccordion } from '@/features/horoscope/VedicReasoningAccordion';
 import { useTheme } from '@/lib/theme-context';
 import type { MuhuratWindow } from '@/lib/vedic/types';
@@ -48,8 +52,10 @@ export function MuhuratCard({
   if (isLoading) {
     return (
       <View className="gap-3.5 rounded-[20px] border border-black/[0.06] bg-surface-container-low p-5 dark:border-white/[0.06]">
-        <ActivityIndicator color={colors.primary} />
-        <Text className="mt-3 text-center font-body text-sm text-on-surface-variant">Calculating auspicious timings…</Text>
+        <ConstellationLoader
+          size={150}
+          message="Calculating auspicious timings…"
+        />
       </View>
     );
   }

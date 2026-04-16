@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { View as MotiView } from 'moti/build/components/view';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { TimelineEntry } from './types';

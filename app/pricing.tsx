@@ -1,6 +1,11 @@
-import { PricingTable } from '@clerk/expo/web';
-import { useUser, useClerk } from '@clerk/expo';
-import { View, Text, TouchableOpacity } from 'react-native';
+import {
+  PricingTable } from '@clerk/expo/web';
+import { useUser,
+  useClerk } from '@clerk/expo';
+import { View,
+  TouchableOpacity,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { User, LogOut } from 'lucide-react-native';
 
 export default function PricingPage() {

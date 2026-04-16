@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import {
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 
 const AREA_META: Record<string, { emoji: string; color: string; bg: string }> = {
   Career:        { emoji: '💼', color: '#f0c060', bg: 'rgba(240,192,96,0.15)' },

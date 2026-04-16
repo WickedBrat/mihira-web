@@ -220,6 +220,7 @@ export default function MuhuratScreen() {
           <SacredButton
             label="Find Auspicious Windows"
             onPress={(!isSubscriptionLoaded || !isUsageLoaded) ? () => {} : handleFindMuhurat}
+            fullWidth
             style={{ marginTop: 4 }}
           />
         </View>

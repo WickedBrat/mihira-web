@@ -7,7 +7,6 @@ import {
   ScrollView,
   Pressable,
   Dimensions,
-  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,9 +14,9 @@ import { BlurView } from 'expo-blur';
 import { useLocalSearchParams, router } from 'expo-router';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { ChevronLeft, Sparkles } from 'lucide-react-native';
+import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
 import { hapticLight } from '@/lib/haptics';
 import { layout } from '@/lib/theme';
-import { useTheme } from '@/lib/theme-context';
 import { useCalendarEventById } from '@/features/daily/useCalendarEvents';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -30,12 +29,15 @@ export default function SacredDayDetailScreen() {
   const numericId = id ? parseInt(id, 10) : null;
   const { event: day, isLoading, error } = useCalendarEventById(numericId);
 
-  const { colors } = useTheme();
   if (isLoading) {
     return (
       <SafeAreaView className="flex-1 bg-[#0a0a0a]">
         <View className="flex-1 items-center justify-center gap-4">
-          <ActivityIndicator color={colors.onSurface} />
+          <ConstellationLoader
+            size={180}
+            message="Gathering the sacred details…"
+            messageStyle={{ color: 'rgba(255,255,255,0.7)' }}
+          />
         </View>
       </SafeAreaView>
     );
@@ -47,7 +49,7 @@ export default function SacredDayDetailScreen() {
         <View className="flex-1 items-center justify-center gap-4">
           <Text className="font-body text-base text-on-surface-variant">Sacred day not found.</Text>
           <Pressable onPress={() => router.back()} className="flex-row items-center gap-1.5 rounded-full bg-surface-container-low px-4 py-2.5">
-            <ChevronLeft size={20} color={colors.onSurface} />
+            <ChevronLeft size={20} color="#fff" />
             <Text className="font-label text-sm text-on-surface">Go back</Text>
           </Pressable>
         </View>

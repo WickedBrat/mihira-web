@@ -1,5 +1,12 @@
-import { useUser } from '@clerk/expo';
-import { View, Text, Image, TouchableOpacity, Linking, Platform } from 'react-native';
+import {
+  useUser } from '@clerk/expo';
+import { View,
+  Image,
+  TouchableOpacity,
+  Linking,
+  Platform,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { CheckCircle, Sparkles } from 'lucide-react-native';
 
 const DEEP_LINK = 'aksha://';

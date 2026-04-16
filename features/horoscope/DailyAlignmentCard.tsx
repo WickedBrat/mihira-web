@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import {
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
+import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
 import { FocusAreaCard } from './FocusAreaCard';
-import { useTheme } from '@/lib/theme-context';
 import type { BirthChart } from '@/lib/vedic/types';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
 
@@ -13,12 +16,13 @@ interface Props {
 }
 
 export function DailyAlignmentCard({ chart, focusAreas, isLoading, error }: Props) {
-  const { colors } = useTheme();
   if (isLoading) {
     return (
-      <View className="items-center gap-3 py-6">
-        <ActivityIndicator color={colors.primary} />
-        <Text className="font-body text-sm text-on-surface-variant">Reading the cosmos…</Text>
+      <View className="py-2">
+        <ConstellationLoader
+          size={150}
+          message="Reading the cosmos…"
+        />
       </View>
     );
   }

@@ -7,6 +7,7 @@ import {
   saveCachedDailyAlignment,
   type DailyFocusArea,
 } from '@/lib/dailyAlignmentStorage';
+import { deriveMoonProfileFromBirthDt } from '@/lib/vedic/moonProfile';
 
 interface DailyAlignmentState {
   chart: BirthChart | null;
@@ -25,6 +26,7 @@ export function useDailyAlignment(): DailyAlignmentState {
     if (!profile.birth_dt || !profile.birth_place) return;
 
     const profileKey = getDailyAlignmentProfileKey(profile.birth_dt, profile.birth_place);
+    const moonProfile = deriveMoonProfileFromBirthDt(profile.birth_dt);
     let isCancelled = false;
 
     const loadDailyAlignment = async () => {
@@ -49,7 +51,12 @@ export function useDailyAlignment(): DailyAlignmentState {
         const response = await fetch('/api/wisdom/daily', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ birthDt: profile.birth_dt, birthPlace: profile.birth_place }),
+          body: JSON.stringify({
+            birthDt: profile.birth_dt,
+            birthPlace: profile.birth_place,
+            nakshatra: moonProfile?.nakshatra,
+            rashi: moonProfile?.rashi,
+          }),
         });
         const contentType = response.headers.get('content-type') ?? '';
 

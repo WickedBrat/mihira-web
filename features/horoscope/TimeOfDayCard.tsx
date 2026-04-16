@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, Text, ImageBackground } from 'react-native';
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '@/lib/theme-context';
@@ -32,9 +37,9 @@ export function TimeOfDayCard({ entry, isLast = false }: Props) {
         <BlurView intensity={8} tint={isDark ? 'dark' : 'light'} className="absolute inset-0" />
         <LinearGradient
           colors={['rgba(0,0,0,0.05)', 'rgba(0,0,0,0.6)']}
-          className="min-h-[190px] flex-1 justify-end gap-1.5 p-5"
+          style={styles.imageOverlay}
         >
-          <View className="flex-row items-center gap-1.5">
+          <View style={styles.metaRow}>
             <Text className="font-label text-xs uppercase tracking-[3px] text-white/65">{entry.subtitle}</Text>
             <View className="h-[5px] w-[5px] rounded-full bg-black/20 dark:bg-white/25" />
             {entry.timeRange ? (
@@ -56,3 +61,18 @@ export function TimeOfDayCard({ entry, isLast = false }: Props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  imageOverlay: {
+    minHeight: 190,
+    flex: 1,
+    justifyContent: 'flex-end',
+    padding: 20,
+    rowGap: 6,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 6,
+  },
+});

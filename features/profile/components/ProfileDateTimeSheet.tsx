@@ -1,5 +1,9 @@
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import {
+  Pressable,
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 

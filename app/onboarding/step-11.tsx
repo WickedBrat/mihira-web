@@ -1,11 +1,17 @@
 // Screen 11: The Sankalpa — Commitment Tier
 import React, { useState } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import {
+  View,
+  Pressable,
+  ScrollView,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { setOnboardingData } from '@/lib/onboardingStore';
+import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const TIERS = [
@@ -49,21 +55,23 @@ export default function Screen11() {
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
+      <OnboardingDevBackButton />
+
       <ScrollView
         className="flex-1"
-        contentContainerClassName="gap-7 p-8 pt-8"
+        contentContainerClassName="items-center gap-7 p-8 pt-8"
         showsVerticalScrollIndicator={false}
       >
-        <Animated.View entering={FadeInDown.duration(500)} className="gap-2.5">
-          <Text className="font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
+        <Animated.View entering={FadeInDown.duration(500)} className="max-w-[360px] items-center gap-2.5">
+          <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
             Choose your{'\n'}daily commitment.
           </Text>
-          <Text className="font-body text-[15px] leading-[23px] text-ob-muted">
+          <Text className="text-center font-body text-[15px] leading-[23px] text-ob-muted">
             Meaningful change requires rhythm. You can always change this later.
           </Text>
         </Animated.View>
 
-        <View className="gap-3.5">
+        <View className="w-full max-w-[360px] gap-3.5">
           {TIERS.map((tier, i) => {
             const active = selected === tier.id;
             return (
@@ -132,7 +140,7 @@ export default function Screen11() {
 
       <Animated.View
         entering={FadeInUp.delay(700).duration(500)}
-        className="absolute bottom-0 left-0 right-0 items-end bg-[rgba(7,9,12,0.96)] p-8 pb-11"
+        className="absolute bottom-0 left-0 right-0 items-center bg-[rgba(7,9,12,0.96)] p-8 pb-11"
       >
         <Pressable
           onPress={proceed}

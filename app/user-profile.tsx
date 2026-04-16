@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Platform, View, Text, Pressable, Alert } from 'react-native';
+import {
+  Platform,
+  View,
+  Pressable,
+  Alert,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { UserProfile } from '@clerk/expo/web';
 import { useUser, useAuth } from '@clerk/expo';
 import { SafeAreaView } from 'react-native-safe-area-context';

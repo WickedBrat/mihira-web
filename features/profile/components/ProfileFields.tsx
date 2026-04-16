@@ -1,14 +1,19 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import {
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import type { ProfileData } from '@/features/profile/useProfile';
 import { PROFILE_FIELDS } from '@/features/profile/constants';
 import { useTheme } from '@/lib/theme-context';
+import type { MoonProfile } from '@/lib/vedic/moonProfile';
 
 interface ProfileFieldsProps {
   profile: Pick<ProfileData, 'name' | 'birth_dt' | 'birth_place'>;
+  moonProfile: MoonProfile | null;
 }
 
-export function ProfileFields({ profile }: ProfileFieldsProps) {
+export function ProfileFields({ profile, moonProfile }: ProfileFieldsProps) {
   const { colors } = useTheme();
 
   return (
@@ -30,16 +35,33 @@ export function ProfileFields({ profile }: ProfileFieldsProps) {
               <Icon size={17} color={colors.primaryFixed} />
             </View>
             <View className="flex-1 gap-[3px]">
-              <Text className="font-label text-[9px] uppercase tracking-[1.8px] text-on-surface-variant">{label}</Text>
+              <Text className="font-label text-[9px] uppercase tracking-wide text-on-surface-variant">{label}</Text>
               {value ? (
-                <Text className="font-body-medium text-sm tracking-[-0.1px] text-on-surface">{value}</Text>
+                <Text className="font-body-medium text tracking-wide  text-on-surface">{value}</Text>
               ) : (
-                <Text className="font-body text-sm italic text-outline">{placeholder}</Text>
+                <Text className="font-body italic text-outline">{placeholder}</Text>
               )}
             </View>
           </View>
         );
       })}
+      {moonProfile ? (
+        <View className="rounded-[20px] border border-black/[0.06] bg-[rgba(232,225,212,0.62)] p-4 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]">
+          <Text className="mb-3 px-1 font-label text-[9px] uppercase tracking-wide text-on-surface-variant">
+            Cosmic Signature
+          </Text>
+          <View className="flex-row gap-3">
+            <View className="flex-1 rounded-2xl bg-black/[0.04] px-3 py-3 dark:bg-white/[0.04]">
+              <Text className="font-label text-[9px] uppercase tracking-wide text-on-surface-variant">Nakshatra</Text>
+              <Text className="mt-1 font-body-medium tracking-wide text-on-surface">{moonProfile.nakshatra}</Text>
+            </View>
+            <View className="flex-1 rounded-2xl bg-black/[0.04] px-3 py-3 dark:bg-white/[0.04]">
+              <Text className="font-label text-[9px] uppercase tracking-wide text-on-surface-variant">Rashi</Text>
+              <Text className="mt-1 font-body-medium tracking-wide text-on-surface">{moonProfile.rashi}</Text>
+            </View>
+          </View>
+        </View>
+      ) : null}
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import type { ImageStyle, TextStyle, ViewStyle } from 'react-native';
+import type { TextStyle, ViewStyle } from 'react-native';
 import { OB } from '@/lib/onboardingStore';
 
 export const absoluteFillStyle: ViewStyle = {
@@ -31,14 +31,6 @@ export const pressedSendButtonStyle: ViewStyle = {
   opacity: 0.75,
   transform: [{ scale: 0.94 }],
 };
-
-export const personaImageShadow = {
-  shadowColor: '#000',
-  shadowOpacity: 0.45,
-  shadowRadius: 12,
-  shadowOffset: { width: 0, height: 6 },
-  elevation: 10,
-} as ImageStyle;
 
 export const goldGlowShadow: ViewStyle = {
   shadowColor: OB.gold,

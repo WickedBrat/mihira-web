@@ -1,6 +1,10 @@
 // features/billing/PaywallSheet.tsx
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import {
+  Pressable,
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { Zap, X } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { SacredButton } from '@/components/ui/SacredButton';

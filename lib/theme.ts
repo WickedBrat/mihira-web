@@ -54,8 +54,8 @@ export const darkColors = {
   onPrimary: '#ffffff',
   onPrimaryFixed: '#b564fc',
 
-  secondary: '#b8987a',
-  secondaryDim: '#b8987a',
+  secondary: '#ff9500',
+  secondaryDim: '#ff9500',
   secondaryFixed: '#ff9500',
   secondaryFixedDim: '#ff9239',
   secondaryContainer: '#4e371f',
@@ -63,7 +63,7 @@ export const darkColors = {
   onSecondaryContainer: '#dcb99a',
 
   onSurface: '#fff',
-  onSurfaceVariant: '#d3cec9',
+  onSurfaceVariant: '#aee3ffff',
   onBackground: '#fff',
   background: '#0e0e0e',
 

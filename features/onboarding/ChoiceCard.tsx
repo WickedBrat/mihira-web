@@ -1,5 +1,9 @@
 import React from 'react';
-import { Pressable, Text, ViewStyle } from 'react-native';
+import {
+  Pressable,
+  ViewStyle,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import Animated, {
   SlideInRight,
   useSharedValue,

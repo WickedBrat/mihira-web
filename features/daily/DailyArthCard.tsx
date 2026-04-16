@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, Text, Platform, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Platform,
+} from 'react-native';
+import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
+import { Text } from '@/components/ui/Text';
 import { View as MotiView } from 'moti/build/components/view';
 import { Quote } from 'lucide-react-native';
 import DailyArthBg from '../../assets/daily-arth-bg.svg';
@@ -45,7 +50,7 @@ export function DailyArthCard() {
         </View>
 
         {isLoading ? (
-          <ActivityIndicator size="small" color={colors.primary} />
+          <ConstellationLoader size={140} />
         ) : (
           <View className="z-[1] w-full items-center">
             <Quote size={32} color={colors.primary} style={{ marginBottom: 28 }} />

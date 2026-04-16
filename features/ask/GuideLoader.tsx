@@ -1,6 +1,10 @@
 // features/ask/GuideLoader.tsx
 import React, { useEffect } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import {
+  View,
+  Dimensions,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,

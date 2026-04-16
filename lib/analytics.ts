@@ -5,9 +5,6 @@ export const analytics = {
   onboardingStarted: () =>
     posthog.capture('onboarding_started'),
 
-  onboardingPersonaSelected: (props: { persona: 'builder' | 'seeker' | 'healer' | 'protector' }) =>
-    posthog.capture('onboarding_persona_selected', props),
-
   onboardingCompleted: (props: { has_birth_place: boolean; commitment_tier: string | null; is_signed_in: boolean }) =>
     posthog.capture('onboarding_completed', props),
 

@@ -1,6 +1,10 @@
 // features/chat/ChatBubble.tsx
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import type { Message, ShlokaData } from '@/features/ask/types';
 
 interface ChatBubbleProps {

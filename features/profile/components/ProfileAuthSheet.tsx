@@ -1,5 +1,9 @@
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import {
+  Pressable,
+  View,
+} from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { X } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { OAuthButton } from '@/features/auth/OAuthButton';

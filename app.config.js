@@ -57,6 +57,7 @@ export default {
     extra: {
       posthogProjectToken: process.env.POSTHOG_PROJECT_TOKEN,
       posthogHost: process.env.POSTHOG_HOST,
+      enableDevButtons: process.env.ENABLE_DEV_BUTTONS === 'true',
     },
   },
 };

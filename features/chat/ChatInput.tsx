@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Pressable } from 'react-native';
+import { View, TextInput, Pressable, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Send } from 'lucide-react-native';
 import { hapticMedium } from '@/lib/haptics';
@@ -52,7 +52,7 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
             colors={gradients.primaryToContainer}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            className="h-10 w-10 items-center justify-center rounded-full"
+            style={styles.sendButton}
           >
             <Send size={18} color={colors.onPrimary} />
           </LinearGradient>
@@ -61,3 +61,14 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  sendButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 999,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+});
