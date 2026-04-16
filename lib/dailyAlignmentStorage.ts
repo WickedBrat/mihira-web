@@ -55,6 +55,14 @@ export async function getCachedDailyAlignment(
   }
 }
 
+export async function clearCachedDailyAlignment(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(KEY);
+  } catch (error) {
+    console.error('[dailyAlignmentStorage] clear error', error);
+  }
+}
+
 export async function saveCachedDailyAlignment(
   profileKey: string,
   payload: DailyAlignmentPayload

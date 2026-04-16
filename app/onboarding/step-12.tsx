@@ -1,6 +1,6 @@
 // Screen 12: The Threshold — Long Press Initiation
 import React, { useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,9 +16,8 @@ import * as Haptics from 'expo-haptics';
 import { getOnboardingData } from '@/lib/onboardingStore';
 import { useProfile } from '@/features/profile/useProfile';
 import { useAuth } from '@clerk/expo';
-import { scaleFont } from '@/lib/typography';
-import { OB } from '@/lib/onboardingStore';
 import { analytics } from '@/lib/analytics';
+import { absoluteFillStyle, hazeScaleStyle } from '@/features/onboarding/onboardingStyles';
 
 const HOLD_DURATION = 2000; // ms to hold for full trigger
 
@@ -132,18 +131,19 @@ export default function Screen12() {
   const name0 = data.userName || 'Seeker';
 
   return (
-    <View style={styles.safe}>
+    <View className="flex-1">
       {/* Full-screen gradient backdrop */}
       <LinearGradient
         colors={['#0D0500', '#14080C', '#07090C']}
         start={{ x: 0.3, y: 0 }}
         end={{ x: 0.7, y: 1 }}
-        style={StyleSheet.absoluteFill}
+        style={absoluteFillStyle}
       />
 
       {/* Ambient saffron haze */}
       <Animated.View
-        style={[styles.hazeTop]}
+        className="absolute -left-[60px] -right-[60px] top-[-80px] h-[300px] rounded-[200px] bg-[rgba(224,122,95,0.06)]"
+        style={hazeScaleStyle}
         pointerEvents="none"
       />
 
@@ -152,51 +152,75 @@ export default function Screen12() {
         <View
           key={i}
           pointerEvents="none"
-          style={[styles.star, { top: s.y, left: s.x, opacity: s.o, width: s.sz, height: s.sz, borderRadius: s.sz / 2 }]}
+          className="absolute bg-ob-gold"
+          style={{ top: s.y, left: s.x, opacity: s.o, width: s.sz, height: s.sz, borderRadius: s.sz / 2 }}
         />
       ))}
 
-      <SafeAreaView style={styles.inner}>
-        <View style={styles.top}>
-          <Animated.Text entering={FadeIn.delay(500).duration(700)} style={styles.headline}>
+      <SafeAreaView className="flex-1 justify-between px-8 pb-[52px]">
+        <View className="gap-4 pt-[60px]">
+          <Animated.Text
+            entering={FadeIn.delay(500).duration(700)}
+            className="font-headline text-[40px] leading-[46px] tracking-[-1.2px] text-ob-text"
+          >
             Your axis is aligned,{'\n'}
-            <Text style={styles.headlineName}>{name0}.</Text>
+            <Text className="text-ob-gold">{name0}.</Text>
           </Animated.Text>
-          <Animated.Text entering={FadeIn.delay(900).duration(700)} style={styles.sub}>
+          <Animated.Text
+            entering={FadeIn.delay(900).duration(700)}
+            className="font-body text-xl tracking-[1px] text-ob-text/60"
+          >
             Enter the current.
           </Animated.Text>
         </View>
 
         {/* Long-press button zone */}
-        <View style={styles.btnZone}>
+        <View className="h-[280px] items-center justify-center">
           {/* Ripple rings */}
-          <Animated.View style={[styles.ring, styles.ringOuter, outerRingStyle]} />
-          <Animated.View style={[styles.ring, styles.ringMid, midRingStyle]} />
+          <Animated.View
+            className="absolute h-[252px] w-[252px] rounded-full border-[1.5px] border-ob-saffron"
+            style={outerRingStyle}
+          />
+          <Animated.View
+            className="absolute h-[212px] w-[212px] rounded-full border-[1.5px] border-ob-gold"
+            style={midRingStyle}
+          />
 
           {/* SVG-free arc: two filled rings that reveal progress via clip */}
-          <Animated.View style={[styles.arcWrap, arcStyle]}>
+          <Animated.View
+            className="absolute h-[180px] w-[180px] overflow-hidden rounded-full border-[3px] border-[rgba(224,122,95,0.25)]"
+            style={arcStyle}
+          >
             {/* We use a rotating gradient conic effect approximation */}
-            <Animated.View style={[styles.progressArc, btnFillStyle]} />
+            <Animated.View className="absolute inset-0 bg-ob-saffron" style={btnFillStyle} />
           </Animated.View>
 
           <Pressable
             onPressIn={startHold}
             onPressOut={cancelHold}
           >
-            <Animated.View style={styles.btnOuter}>
+            <Animated.View className="h-40 w-40 items-center justify-center gap-1 overflow-hidden rounded-full border-[1.5px] border-ob-saffron-border bg-[rgba(224,122,95,0.08)]">
               {/* Fill overlay */}
-              <Animated.View style={[StyleSheet.absoluteFill, styles.btnFill, btnFillStyle]} />
+              <Animated.View className="absolute inset-0 rounded-full bg-ob-saffron" style={btnFillStyle} />
 
-              <Animated.Text style={[styles.btnLabel, labelStyle]}>Hold to Enter</Animated.Text>
-              <Animated.Text style={[styles.btnProgressText, progressTextStyle]}>
+              <Animated.Text
+                className="text-center font-label text-sm tracking-[0.3px] text-ob-text"
+                style={labelStyle}
+              >
+                Hold to Enter
+              </Animated.Text>
+              <Animated.Text
+                className="font-body text-[28px] text-ob-gold"
+                style={progressTextStyle}
+              >
                 ☽
               </Animated.Text>
             </Animated.View>
           </Pressable>
         </View>
 
-        <Animated.View entering={FadeIn.delay(1200).duration(700)} style={styles.bottom}>
-          <Text style={styles.bottomQuote}>
+        <Animated.View entering={FadeIn.delay(1200).duration(700)} className="items-center">
+          <Text className="text-center font-body text-sm italic leading-[22px] tracking-[0.3px] text-ob-text/40">
             "The chariot is ready. The reins are in your hands."
           </Text>
         </Animated.View>
@@ -220,85 +244,3 @@ const STARS = [
   { x: '48%', y: '18%', o: 0.4, sz: 1 },
   { x: '64%', y: '75%', o: 0.3, sz: 1 },
 ] as const;
-
-const BTN_SIZE = 160;
-const RING_BASE = BTN_SIZE + 32;
-
-const styles = StyleSheet.create({
-  safe:  { flex: 1 },
-  inner: { flex: 1, justifyContent: 'space-between', paddingHorizontal: 32, paddingBottom: 52 },
-  hazeTop: {
-    position: 'absolute',
-    top: -80, left: -60, right: -60,
-    height: 300,
-    backgroundColor: 'rgba(224,122,95,0.06)',
-    borderRadius: 200,
-    transform: [{ scaleX: 1.5 }],
-  },
-  star: { position: 'absolute', backgroundColor: OB.gold },
-  top:  { paddingTop: 60, gap: 16 },
-  headline: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(40),
-    color: OB.text, letterSpacing: -1.2, lineHeight: scaleFont(46),
-  },
-  headlineName: { color: OB.gold },
-  sub: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(20),
-    color: 'rgba(240,237,232,0.6)', letterSpacing: 1,
-  },
-  btnZone: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: BTN_SIZE + 120,
-  },
-  ring: {
-    position: 'absolute',
-    borderRadius: 9999,
-    borderWidth: 1.5,
-  },
-  ringOuter: {
-    width: RING_BASE + 60, height: RING_BASE + 60,
-    borderColor: OB.saffron,
-  },
-  ringMid: {
-    width: RING_BASE + 20, height: RING_BASE + 20,
-    borderColor: OB.gold,
-  },
-  arcWrap: {
-    position: 'absolute',
-    width: BTN_SIZE + 20, height: BTN_SIZE + 20,
-    borderRadius: (BTN_SIZE + 20) / 2,
-    borderWidth: 3,
-    borderColor: 'rgba(224,122,95,0.25)',
-    overflow: 'hidden',
-  },
-  progressArc: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: OB.saffron,
-  },
-  btnOuter: {
-    width: BTN_SIZE, height: BTN_SIZE, borderRadius: BTN_SIZE / 2,
-    backgroundColor: 'rgba(224,122,95,0.08)',
-    borderWidth: 1.5, borderColor: OB.saffronBorder,
-    alignItems: 'center', justifyContent: 'center',
-    overflow: 'hidden',
-    gap: 4,
-  },
-  btnFill: {
-    backgroundColor: OB.saffron,
-    borderRadius: BTN_SIZE / 2,
-  },
-  btnLabel: {
-    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(14),
-    color: OB.text, letterSpacing: 0.3, textAlign: 'center',
-  },
-  btnProgressText: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(28), color: OB.gold,
-  },
-  bottom: { alignItems: 'center' },
-  bottomQuote: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
-    color: 'rgba(240,237,232,0.4)', textAlign: 'center',
-    letterSpacing: 0.3, lineHeight: scaleFont(22), fontStyle: 'italic',
-  },
-});

@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
   ScrollView,
-  StyleSheet,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -27,8 +26,8 @@ import { useSignIn } from '@/features/auth/useSignIn';
 import { useSubscription } from '@/lib/subscription';
 import { PlansScreen } from '@/features/billing/PlansScreen';
 import { layout } from '@/lib/theme';
-import { useThemedStyles } from '@/lib/theme-context';
 import { clearCachedProfile } from '@/lib/profileStorage';
+import { clearCachedDailyAlignment } from '@/lib/dailyAlignmentStorage';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { router } from 'expo-router';
 import { analytics } from '@/lib/analytics';
@@ -47,21 +46,6 @@ export default function ProfileScreen() {
   const { clearGuide } = useGuide();
   const { isPro, openCheckout } = useSubscription();
   const [isPlansOpen, setIsPlansOpen] = useState(false);
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      container: { flex: 1, backgroundColor: c.surface },
-      scroll: { flex: 1 },
-      scrollContent: {
-        paddingHorizontal: layout.screenPaddingX,
-        paddingTop: 16,
-        paddingBottom: 176,
-        gap: 16,
-      },
-      debugActions: {
-        gap: 12,
-      },
-    })
-  );
 
   const { signInWithGoogle, signInWithApple, isLoading: isSigningIn } = useSignIn(() => {
     setIsAuthSheetOpen(false);
@@ -84,12 +68,17 @@ export default function ProfileScreen() {
   const identityEmail = user?.primaryEmailAddress?.emailAddress ?? '';
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView className="flex-1 bg-surface" edges={['top']}>
       <PageAmbientBlobs />
 
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        className="flex-1"
+        contentContainerStyle={{
+          paddingHorizontal: layout.screenPaddingX,
+          paddingTop: 16,
+          paddingBottom: 176,
+          gap: 16,
+        }}
         showsVerticalScrollIndicator={false}
       >
         <ProfileHeader onOpenSettings={openSettingsSheet} />
@@ -110,7 +99,7 @@ export default function ProfileScreen() {
         <ProfileFields profile={profile} />
 
         {__DEV__ && (
-          <View style={styles.debugActions}>
+          <View className="gap-3">
             <SacredButton
               label="Reset Ask Tab State"
               onPress={async () => {
@@ -123,6 +112,14 @@ export default function ProfileScreen() {
             <SacredButton
               label="Trigger Onboarding Flow"
               onPress={() => router.push('/onboarding')}
+              variant="secondary"
+            />
+            <SacredButton
+              label="Clear Daily Suggestion"
+              onPress={async () => {
+                await clearCachedDailyAlignment();
+                showToast({ type: 'success', title: 'Cache Cleared', message: 'Daily suggestion will refresh on next load.' });
+              }}
               variant="secondary"
             />
           </View>
@@ -182,7 +179,7 @@ export default function ProfileScreen() {
       />
 
       {isPlansOpen && (
-        <View style={StyleSheet.absoluteFill}>
+        <View className="absolute inset-0">
           <PlansScreen
             isPro={isPro}
             isCheckoutLoading={false}

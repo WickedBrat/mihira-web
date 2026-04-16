@@ -1,6 +1,6 @@
 // Screen 9: The First Alignment — Feature Tease + Notifications
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import {
@@ -13,7 +13,12 @@ import Animated, {
 import * as Haptics from 'expo-haptics';
 import { useWindowDimensions } from 'react-native';
 import { OB } from '@/lib/onboardingStore';
-import { scaleFont } from '@/lib/typography';
+import {
+  absoluteFillStyle,
+  dialGlowShadow,
+  onboardingButtonShadow,
+  pressedButtonStyle,
+} from '@/features/onboarding/onboardingStyles';
 
 export default function Screen9() {
   const { width } = useWindowDimensions();
@@ -42,20 +47,26 @@ export default function Screen9() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.body}>
-        <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.headline}>Your Daily{'\n'}Alignment Dial</Text>
-          <Text style={styles.sub}>
+    <SafeAreaView className="flex-1 bg-ob-bg">
+      <View className="flex-1 gap-6 px-8 pt-6">
+        <Animated.View entering={FadeInDown.duration(500)} className="gap-2.5">
+          <Text className="font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
+            Your Daily{'\n'}Alignment Dial
+          </Text>
+          <Text className="font-body text-sm leading-[22px] text-ob-muted">
             Time is not a clock — it's a cycle. Every day, we find your{' '}
-            <Text style={styles.subAccent}>48-minute Abhijit Muhurat</Text>
+            <Text className="font-label text-ob-gold">48-minute Abhijit Muhurat</Text>
             {' '}— your window of peak grace.
           </Text>
         </Animated.View>
 
         {/* Dial Preview */}
-        <View style={styles.dialContainer}>
-          <Animated.View style={[styles.dialGlow, glowStyle]} pointerEvents="none" />
+        <View className="items-center justify-center">
+          <Animated.View
+            className="absolute h-[180px] w-[180px] rounded-full bg-[rgba(217,160,111,0.1)]"
+            style={[dialGlowShadow, glowStyle]}
+            pointerEvents="none"
+          />
 
           <Canvas style={{ width: width - 64, height: width - 64 }}>
             {/* Background ring */}
@@ -102,93 +113,45 @@ export default function Screen9() {
           </Canvas>
 
           {/* Center text overlay */}
-          <View style={[StyleSheet.absoluteFill, styles.dialCenter]}>
-            <Text style={styles.dialCenterIcon}>☽</Text>
-            <Text style={styles.dialCenterLabel}>Abhijit</Text>
-            <Text style={styles.dialCenterSub}>48 min window</Text>
+          <View className="items-center justify-center" style={absoluteFillStyle}>
+            <Text className="mb-1 text-[30px] text-ob-gold">☽</Text>
+            <Text className="font-headline text-sm text-ob-text">Abhijit</Text>
+            <Text className="font-body text-[11px] text-ob-muted">48 min window</Text>
           </View>
         </View>
 
-        <View style={styles.tagRow}>
-          <View style={styles.tag}>
-            <View style={[styles.tagDot, { backgroundColor: OB.gold }]} />
-            <Text style={styles.tagText}>Abhijit Muhurat — peak grace</Text>
+        <View className="flex-row flex-wrap gap-2.5">
+          <View className="flex-row items-center gap-2">
+            <View className="h-2.5 w-2.5 rounded-full bg-ob-gold" />
+            <Text className="font-body text-xs text-ob-muted">Abhijit Muhurat — peak grace</Text>
           </View>
-          <View style={styles.tag}>
-            <View style={[styles.tagDot, { backgroundColor: OB.saffron, opacity: 0.55 }]} />
-            <Text style={styles.tagText}>Auspicious windows</Text>
+          <View className="flex-row items-center gap-2">
+            <View className="h-2.5 w-2.5 rounded-full bg-ob-saffron opacity-[0.55]" />
+            <Text className="font-body text-xs text-ob-muted">Auspicious windows</Text>
           </View>
         </View>
       </View>
 
-      <Animated.View entering={FadeInUp.delay(800).duration(500)} style={styles.footer}>
+      <Animated.View entering={FadeInUp.delay(800).duration(500)} className="items-end gap-3.5 p-8 pb-11">
         <Pressable
           onPress={requestNotifications}
-          style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}
+          className="items-center rounded-full bg-ob-saffron px-8 py-4"
+          style={({ pressed }) => [
+            onboardingButtonShadow,
+            pressed && pressedButtonStyle,
+          ]}
         >
-          <Text style={styles.btnText}>Allow Daily Reminders →</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">
+            Allow Daily Reminders →
+          </Text>
         </Pressable>
         <Pressable onPress={() => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           router.push('/onboarding/step-10');
         }}>
-          <Text style={styles.skip}>Skip for now</Text>
+          <Text className="font-body text-sm text-ob-muted">Skip for now</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe:       { flex: 1, backgroundColor: OB.bg },
-  body:       { flex: 1, paddingHorizontal: 32, paddingTop: 24, gap: 24 },
-  header:     { gap: 10 },
-  headline: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(34),
-    color: OB.text, letterSpacing: -0.8, lineHeight: scaleFont(40),
-  },
-  sub: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
-    color: OB.muted, lineHeight: scaleFont(22),
-  },
-  subAccent: { color: OB.gold, fontFamily: 'GoogleSans_600SemiBold' },
-  dialContainer: { alignItems: 'center', justifyContent: 'center' },
-  dialGlow: {
-    position: 'absolute',
-    width: 180, height: 180, borderRadius: 90,
-    backgroundColor: 'rgba(217,160,111,0.1)',
-    shadowColor: OB.gold,
-    shadowOpacity: 0.4, shadowRadius: 60, shadowOffset: { width: 0, height: 0 },
-  },
-  dialCenter: { alignItems: 'center', justifyContent: 'center' },
-  dialCenterIcon:  { fontSize: scaleFont(30), color: OB.gold, marginBottom: 4 },
-  dialCenterLabel: { fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(14), color: OB.text },
-  dialCenterSub:   { fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(11), color: OB.muted },
-  tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  tag:    { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  tagDot: { width: 10, height: 10, borderRadius: 5 },
-  tagText: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(12), color: OB.muted,
-  },
-  footer: { padding: 32, paddingBottom: 44, gap: 14, alignItems: 'flex-end' },
-  btn: {
-    backgroundColor: OB.saffron,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 9999,
-    alignItems: 'center',
-    shadowColor: OB.saffron,
-    shadowOpacity: 0.45,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
-  },
-  btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
-  btnText: {
-    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
-    color: '#fff', letterSpacing: 0.3,
-  },
-  skip: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13), color: OB.muted,
-  },
-});

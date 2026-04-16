@@ -1,9 +1,7 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BottomSheet } from '@/components/ui/BottomSheet';
-import { fonts } from '@/lib/theme';
-import { useThemedStyles } from '@/lib/theme-context';
 
 interface ProfileDateTimeSheetProps {
   visible: boolean;
@@ -22,71 +20,26 @@ export function ProfileDateTimeSheet({
   onClose,
   onConfirm,
 }: ProfileDateTimeSheetProps) {
-  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
-    StyleSheet.create({
-      sheet: {
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-      },
-      content: {
-        paddingBottom: 18,
-      },
-      header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 14,
-      },
-      title: {
-        fontFamily: fonts.headline,
-        fontSize: 17,
-        color: c.onSurface,
-        letterSpacing: -0.2,
-      },
-      action: {
-        fontFamily: fonts.label,
-        fontSize: 13,
-        color: c.primaryFixed,
-      },
-      section: {
-        gap: 10,
-      },
-      label: {
-        fontFamily: fonts.label,
-        fontSize: 10,
-        letterSpacing: 1.8,
-        textTransform: 'uppercase',
-        color: c.onSurfaceVariant,
-      },
-      divider: {
-        height: 1,
-        backgroundColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
-        marginVertical: 12,
-      },
-      picker: { alignSelf: 'stretch' },
-    })
-  );
-
   return (
     <BottomSheet
       visible={visible}
       onClose={onClose}
       panEnabled={false}
-      sheetStyle={styles.sheet}
-      contentStyle={styles.content}
+      sheetStyle={{ borderTopLeftRadius: 30, borderTopRightRadius: 30 }}
+      contentStyle={{ paddingBottom: 18 }}
     >
-      <View style={styles.header}>
+      <View className="mb-3.5 flex-row items-center justify-between">
         <Pressable onPress={onClose}>
-          <Text style={styles.action}>Cancel</Text>
+          <Text className="font-label text-sm text-primary-fixed">Cancel</Text>
         </Pressable>
-        <Text style={styles.title}>Birth Details</Text>
+        <Text className="font-headline text-lg tracking-[-0.2px] text-on-surface">Birth Details</Text>
         <Pressable onPress={onConfirm}>
-          <Text style={styles.action}>Done</Text>
+          <Text className="font-label text-sm text-primary-fixed">Done</Text>
         </Pressable>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.label}>Date</Text>
+      <View className="gap-2.5">
+        <Text className="font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">Date</Text>
         <DateTimePicker
           mode="date"
           display="spinner"
@@ -94,14 +47,14 @@ export function ProfileDateTimeSheet({
           onChange={(_, nextValue) => {
             if (nextValue) onChangeDate(nextValue);
           }}
-          style={styles.picker}
+          style={{ alignSelf: 'stretch' }}
         />
       </View>
 
-      <View style={styles.divider} />
+      <View className="my-3 h-px bg-black/[0.06] dark:bg-white/[0.06]" />
 
-      <View style={styles.section}>
-        <Text style={styles.label}>Time</Text>
+      <View className="gap-2.5">
+        <Text className="font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">Time</Text>
         <DateTimePicker
           mode="time"
           display="spinner"
@@ -109,7 +62,7 @@ export function ProfileDateTimeSheet({
           onChange={(_, nextValue) => {
             if (nextValue) onChangeTime(nextValue);
           }}
-          style={styles.picker}
+          style={{ alignSelf: 'stretch' }}
         />
       </View>
     </BottomSheet>

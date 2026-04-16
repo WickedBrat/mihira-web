@@ -1,7 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { fonts } from '@/lib/theme';
-import { useThemedStyles } from '@/lib/theme-context';
+import { View, Text } from 'react-native';
 
 const AREA_META: Record<string, { emoji: string; color: string; bg: string }> = {
   Career:        { emoji: '💼', color: '#f0c060', bg: 'rgba(240,192,96,0.15)' },
@@ -25,56 +23,22 @@ interface Props {
 }
 
 export function FocusAreaChips({ areas }: Props) {
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      container: {
-        gap: 12,
-        marginBottom: 28,
-      },
-      label: {
-        fontFamily: fonts.label,
-        fontSize: 10,
-        textTransform: 'uppercase',
-        letterSpacing: 3,
-        color: c.onSurfaceVariant,
-      },
-      chips: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 10,
-      },
-      chip: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
-        paddingHorizontal: 14,
-        paddingVertical: 9,
-        borderRadius: 100,
-        borderWidth: 1,
-      },
-      chipEmoji: {
-        fontSize: 15,
-      },
-      chipText: {
-        fontFamily: fonts.label,
-        fontSize: 13,
-        letterSpacing: 0.2,
-      },
-    })
-  );
-
   if (!areas.length) return null;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Today's Focus</Text>
-      <View style={styles.chips}>
+    <View className="mb-7 gap-3">
+      <Text className="font-label text-xs uppercase tracking-[3px] text-on-surface-variant">Today's Focus</Text>
+      <View className="flex-row flex-wrap gap-2.5">
         {areas.map((area) => {
           const meta = AREA_META[area] ?? FALLBACK;
           return (
-            <View key={area} style={[styles.chip, { backgroundColor: meta.bg, borderColor: `${meta.color}33` }]}>
-              <Text style={styles.chipEmoji}>{meta.emoji}</Text>
-              <Text style={[styles.chipText, { color: meta.color }]}>{area}</Text>
+            <View
+              key={area}
+              className="flex-row items-center gap-1.5 rounded-full border px-3.5 py-[9px]"
+              style={{ backgroundColor: meta.bg, borderColor: `${meta.color}33` }}
+            >
+              <Text className="text-base">{meta.emoji}</Text>
+              <Text className="font-label text-sm tracking-[0.2px]" style={{ color: meta.color }}>{area}</Text>
             </View>
           );
         })}

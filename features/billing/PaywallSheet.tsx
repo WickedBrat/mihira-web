@@ -1,12 +1,10 @@
 // features/billing/PaywallSheet.tsx
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { Zap, X } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { SacredButton } from '@/components/ui/SacredButton';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
+import { useTheme } from '@/lib/theme-context';
 import type { Feature } from '@/lib/usage';
 import { LIMITS } from '@/lib/usage';
 
@@ -43,173 +41,63 @@ export function PaywallSheet({
   const label = FEATURE_LABEL[feature];
   const labelPlural = FEATURE_LABEL_PLURAL[feature];
   const { colors } = useTheme();
-  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
-    StyleSheet.create({
-      sheet: {
-        borderTopLeftRadius: 34,
-        borderTopRightRadius: 34,
-      },
-      header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-      },
-      iconWrap: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(255, 149, 0, 0.09)',
-        borderWidth: 1,
-        borderColor: 'rgba(255, 149, 0, 0.13)',
-      },
-      closeButton: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: c.surfaceContainerLow,
-        borderWidth: 1,
-        borderColor: `${c.outlineVariant}33`,
-      },
-      title: {
-        fontFamily: fonts.headline,
-        fontSize: scaleFont(22),
-        color: c.onSurface,
-        letterSpacing: -0.3,
-        marginBottom: 10,
-      },
-      body: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(14),
-        color: c.onSurfaceVariant,
-        lineHeight: scaleFont(21),
-        marginBottom: 20,
-      },
-      planRow: {
-        gap: 10,
-        marginBottom: 20,
-      },
-      planFeatureRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 12,
-        padding: 14,
-        borderRadius: 14,
-        backgroundColor: c.surfaceContainerLow,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
-      },
-      planBadge: {
-        paddingHorizontal: 8,
-        paddingVertical: 3,
-        borderRadius: 6,
-      },
-      planBadgeFree: {
-        backgroundColor: `${c.onSurfaceVariant}18`,
-      },
-      planBadgePro: {
-        backgroundColor: `${c.primary}22`,
-      },
-      planBadgeText: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(9),
-        letterSpacing: 1.2,
-      },
-      planBadgeTextFree: {
-        color: c.onSurfaceVariant,
-      },
-      planBadgeTextPro: {
-        color: c.primaryFixed,
-      },
-      planFeatureText: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: scaleFont(14),
-        color: c.onSurface,
-        flex: 1,
-      },
-      featureList: {
-        gap: 12,
-        marginBottom: 24,
-      },
-      featureItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 12,
-      },
-      featureDot: {
-        width: 6,
-        height: 6,
-        borderRadius: 3,
-        backgroundColor: c.primary,
-      },
-      featureItemText: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(14),
-        color: c.onSurfaceVariant,
-      },
-      cta: {
-        marginBottom: 12,
-      },
-      laterButton: {
-        alignItems: 'center',
-        paddingVertical: 10,
-      },
-      laterText: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(13),
-        color: c.onSurfaceVariant,
-      },
-    })
-  );
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} sheetStyle={styles.sheet} panEnabled={mode !== 'blocked'}>
-      <View style={styles.header}>
-        <View style={styles.iconWrap}>
+    <BottomSheet
+      visible={visible}
+      onClose={onClose}
+      sheetStyle={{ borderTopLeftRadius: 34, borderTopRightRadius: 34 }}
+      panEnabled={mode !== 'blocked'}
+    >
+      <View className="mb-5 flex-row items-center justify-between">
+        <View className="h-11 w-11 items-center justify-center rounded-full border border-[rgba(255,149,0,0.13)] bg-[rgba(255,149,0,0.09)]">
           <Zap size={22} color={colors.secondaryFixed} />
         </View>
-        <Pressable style={styles.closeButton} onPress={onClose}>
+        <Pressable
+          className="h-9 w-9 items-center justify-center rounded-full border border-outline-variant/20 bg-surface-container-low"
+          onPress={onClose}
+        >
           <X size={18} color={colors.onSurfaceVariant} />
         </Pressable>
       </View>
 
       {mode === 'warning' ? (
         <>
-          <Text style={styles.title}>1 free {label} remaining</Text>
-          <Text style={styles.body}>
+          <Text className="mb-2.5 font-headline text-2xl tracking-[-0.3px] text-on-surface">
+            1 free {label} remaining
+          </Text>
+          <Text className="mb-5 font-body text-sm leading-[21px] text-on-surface-variant">
             You have 1 free {label} left this month. Upgrade to Pro for unlimited access to all features.
           </Text>
 
-          <View style={styles.planRow}>
-            <PlanFeatureRow label={`${limit} ${labelPlural}/month`} isFree styles={styles} />
-            <PlanFeatureRow label={`Unlimited ${labelPlural}`} isFree={false} styles={styles} />
+          <View className="mb-5 gap-2.5">
+            <PlanFeatureRow label={`${limit} ${labelPlural}/month`} isFree />
+            <PlanFeatureRow label={`Unlimited ${labelPlural}`} isFree={false} />
           </View>
 
-          <SacredButton label="Upgrade to Pro — $19.99/mo" onPress={onUpgrade} style={styles.cta} />
-          <Pressable style={styles.laterButton} onPress={onProceed ?? onClose}>
-            <Text style={styles.laterText}>Use my last free {label}</Text>
+          <SacredButton label="Upgrade to Pro — $19.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
+          <Pressable className="items-center py-2.5" onPress={onProceed ?? onClose}>
+            <Text className="font-body text-sm text-on-surface-variant">Use my last free {label}</Text>
           </Pressable>
         </>
       ) : (
         <>
-          <Text style={styles.title}>You've used all {limit} free {labelPlural}</Text>
-          <Text style={styles.body}>
+          <Text className="mb-2.5 font-headline text-2xl tracking-[-0.3px] text-on-surface">
+            You've used all {limit} free {labelPlural}
+          </Text>
+          <Text className="mb-5 font-body text-sm leading-[21px] text-on-surface-variant">
             Upgrade to Aksha Pro for unlimited {labelPlural} and everything else Aksha has to offer.
           </Text>
 
-          <View style={styles.featureList}>
-            <FeatureItem text={`Unlimited ${labelPlural}`} styles={styles} />
-            <FeatureItem text="All home page content" styles={styles} />
-            <FeatureItem text="Priority access to new features" styles={styles} />
+          <View className="mb-6 gap-3">
+            <FeatureItem text={`Unlimited ${labelPlural}`} />
+            <FeatureItem text="All home page content" />
+            <FeatureItem text="Priority access to new features" />
           </View>
 
-          <SacredButton label="Upgrade to Pro — $19.99/mo" onPress={onUpgrade} style={styles.cta} />
-          <Pressable style={styles.laterButton} onPress={onClose}>
-            <Text style={styles.laterText}>Maybe later</Text>
+          <SacredButton label="Upgrade to Pro — $19.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
+          <Pressable className="items-center py-2.5" onPress={onClose}>
+            <Text className="font-body text-sm text-on-surface-variant">Maybe later</Text>
           </Pressable>
         </>
       )}
@@ -217,26 +105,24 @@ export function PaywallSheet({
   );
 }
 
-type SheetStyles = ReturnType<typeof StyleSheet.create<Record<string, object>>>;
-
-function PlanFeatureRow({ label, isFree, styles }: { label: string; isFree: boolean; styles: any }) {
+function PlanFeatureRow({ label, isFree }: { label: string; isFree: boolean }) {
   return (
-    <View style={styles.planFeatureRow}>
-      <View style={[styles.planBadge, isFree ? styles.planBadgeFree : styles.planBadgePro]}>
-        <Text style={[styles.planBadgeText, isFree ? styles.planBadgeTextFree : styles.planBadgeTextPro]}>
+    <View className="flex-row items-center gap-3 rounded-[14px] border border-black/[0.04] bg-surface-container-low p-3.5 dark:border-white/[0.04]">
+      <View className={`rounded-md px-2 py-[3px] ${isFree ? 'bg-on-surface-variant/10' : 'bg-primary/15'}`}>
+        <Text className={`font-label text-[9px] tracking-[1.2px] ${isFree ? 'text-on-surface-variant' : 'text-primary-fixed'}`}>
           {isFree ? 'FREE' : 'PRO'}
         </Text>
       </View>
-      <Text style={styles.planFeatureText}>{label}</Text>
+      <Text className="flex-1 font-body-medium text-sm text-on-surface">{label}</Text>
     </View>
   );
 }
 
-function FeatureItem({ text, styles }: { text: string; styles: any }) {
+function FeatureItem({ text }: { text: string }) {
   return (
-    <View style={styles.featureItem}>
-      <View style={styles.featureDot} />
-      <Text style={styles.featureItemText}>{text}</Text>
+    <View className="flex-row items-center gap-3">
+      <View className="h-1.5 w-1.5 rounded-full bg-primary" />
+      <Text className="font-body text-sm text-on-surface-variant">{text}</Text>
     </View>
   );
 }

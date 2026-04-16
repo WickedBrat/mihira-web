@@ -1,10 +1,8 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { ChevronRight, BookMarked, Brain } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
+import { useTheme } from '@/lib/theme-context';
 import type { PastInsight } from './types';
 
 interface LessonCardProps {
@@ -14,60 +12,22 @@ interface LessonCardProps {
 
 export function LessonCard({ insight, onPress }: LessonCardProps) {
   const { colors } = useTheme();
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      pressable: {
-        borderRadius: 16,
-        backgroundColor: c.surfaceContainerLow,
-      },
-      card: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 16,
-        padding: 18,
-      },
-      pressed: {
-        backgroundColor: c.surfaceBright,
-      },
-      iconBox: {
-        width: 44,
-        height: 44,
-        borderRadius: 12,
-        backgroundColor: c.surfaceContainerHighest,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      textBlock: {
-        flex: 1,
-      },
-      title: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: scaleFont(15),
-        color: c.onSurface,
-        marginBottom: 2,
-      },
-      meta: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(12),
-        color: c.onSurfaceVariant,
-      },
-    })
-  );
 
   return (
     <Pressable
       onPress={() => { hapticLight(); onPress?.(); }}
-      style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
+      className="rounded-2xl bg-surface-container-low"
+      style={({ pressed }) => pressed && { backgroundColor: colors.surfaceBright }}
     >
-      <View style={styles.card}>
-        <View style={styles.iconBox}>
+      <View className="flex-row items-center gap-4 p-[18px]">
+        <View className="h-11 w-11 items-center justify-center rounded-xl bg-surface-container-highest">
           {insight.iconName === 'history_edu'
             ? <BookMarked size={18} color={colors.secondary} />
             : <Brain size={18} color={colors.primary} />}
         </View>
-        <View style={styles.textBlock}>
-          <Text style={styles.title}>{insight.title}</Text>
-          <Text style={styles.meta}>{insight.date} · {insight.readTime}</Text>
+        <View className="flex-1">
+          <Text className="mb-0.5 font-body-medium text-base text-on-surface">{insight.title}</Text>
+          <Text className="font-body text-xs text-on-surface-variant">{insight.date} · {insight.readTime}</Text>
         </View>
         <ChevronRight size={16} color={colors.onSurfaceVariant} />
       </View>

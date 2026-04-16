@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Platform,
   Pressable,
-  StyleSheet,
   Text,
   View,
   type LayoutChangeEvent,
@@ -23,10 +21,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticLight } from '@/lib/haptics';
-import { fonts } from '@/lib/theme';
-import { scaleFont } from '@/lib/typography';
 import { useGuide } from '@/lib/guideStore';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
+import { useTheme } from '@/lib/theme-context';
 
 const TAB_ICONS = {
   index: Home,
@@ -56,97 +52,26 @@ const SPRING = {
   mass: 0.85,
 };
 
-const staticStyles = StyleSheet.create({
-  wrapper: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    zIndex: 100,
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  tab: {
-    flex: 1,
-    minWidth: 0,
-    zIndex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tabPressed: {
-    opacity: 0.84,
-  },
-  tabContent: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 2,
-    paddingHorizontal: 4,
-    paddingVertical: 4,
-  },
-});
+const barShadow = {
+  shadowColor: '#000',
+  shadowOpacity: 0.22,
+  shadowRadius: 18,
+  shadowOffset: { width: 0, height: 10 },
+  elevation: 12,
+};
+
+const selectorShadow = {
+  shadowColor: '#000',
+  shadowOpacity: 0.08,
+  shadowRadius: 10,
+  shadowOffset: { width: 0, height: 4 },
+};
 
 export function TabBar({ state, navigation }: BottomTabBarProps) {
   const [barWidth, setBarWidth] = useState(0);
   const selectorX = useSharedValue(0);
   const { guide } = useGuide();
-  const { isDark } = useTheme();
-
-  const styles = useThemedStyles((colors, _glass, _gradients, darkMode) =>
-    StyleSheet.create({
-      container: {
-        width: '95%',
-        maxWidth: 620,
-        minHeight: BAR_HEIGHT,
-        borderRadius: 9999,
-        overflow: 'hidden',
-        padding: BAR_PADDING,
-        borderWidth: 1,
-        borderColor: darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-        backgroundColor: darkMode ? 'rgba(18, 18, 22, 0.10)' : 'rgba(250, 247, 242, 0.10)',
-        shadowColor: '#000',
-        shadowOpacity: 0.22,
-        shadowRadius: 18,
-        shadowOffset: { width: 0, height: 10 },
-        elevation: 12,
-      },
-      containerTint: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: darkMode ? 'rgba(255,255,255,0.015)' : 'rgba(0,0,0,0.015)',
-      },
-      selector: {
-        position: 'absolute',
-        borderRadius: 30,
-        overflow: 'hidden',
-        borderWidth: 1,
-        borderColor: darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-        backgroundColor: darkMode ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.04)',
-        shadowColor: '#000',
-        shadowOpacity: 0.08,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 4 },
-      },
-      selectorTint: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: darkMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',
-      },
-      tabLabel: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(10),
-        lineHeight: scaleFont(12),
-        color: darkMode ? 'rgba(255,255,255,0.40)' : 'rgba(0,0,0,0.35)',
-        letterSpacing: 0.2,
-        textAlign: 'center',
-      },
-      tabLabelActive: {
-        color: colors.onSurface,
-      },
-    })
-  );
+  const { colors, isDark } = useTheme();
 
   const tabs = state.routes.filter((route) => route.name in TAB_ICONS);
   const activeRouteKey = state.routes[state.index]?.key;
@@ -179,16 +104,21 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
   const inactiveIconColor = isDark ? 'rgba(255,255,255,0.40)' : 'rgba(0,0,0,0.35)';
 
   return (
-    <View pointerEvents="box-none" style={[staticStyles.wrapper, { bottom: 10 }]}>
-      <View style={styles.container} onLayout={handleLayout}>
-        <BlurView intensity={36} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />
-        <View style={styles.containerTint} />
+    <View pointerEvents="box-none" className="absolute left-0 right-0 z-[100] items-center" style={{ bottom: 10 }}>
+      <View
+        className="w-[95%] max-w-[620px] min-h-[74px] overflow-hidden rounded-full border border-black/[0.08] bg-[rgba(250,247,242,0.10)] p-1 dark:border-white/[0.08] dark:bg-[rgba(18,18,22,0.10)]"
+        style={barShadow}
+        onLayout={handleLayout}
+      >
+        <BlurView intensity={36} tint={isDark ? 'dark' : 'light'} className="absolute inset-0" />
+        <View className="absolute inset-0 bg-black/[0.015] dark:bg-white/[0.015]" />
 
         {selectorWidth > 0 ? (
           <Animated.View
             pointerEvents="none"
+            className="absolute overflow-hidden rounded-[30px] border border-black/[0.08] bg-black/[0.04] dark:border-white/[0.08] dark:bg-white/[0.035]"
             style={[
-              styles.selector,
+              selectorShadow,
               {
                 width: selectorWidth,
                 left: BAR_PADDING,
@@ -199,11 +129,11 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
               selectorStyle,
             ]}
           >
-            <View style={styles.selectorTint} />
+            <View className="absolute inset-0 bg-black/[0.02] dark:bg-white/[0.02]" />
           </Animated.View>
         ) : null}
 
-        <View style={staticStyles.row}>
+        <View className="flex-1 flex-row justify-around">
           {tabs.map((route) => {
             const isFocused = route.key === activeRouteKey;
             const tabName = route.name as TabName;
@@ -211,7 +141,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             const label = getLabel(tabName);
             const iconColor = (tabName === 'gurukul' || tabName === 'muhurat') && isFocused
               ? '#ff9500'
-              : isFocused ? styles.tabLabelActive.color : inactiveIconColor;
+              : isFocused ? colors.onSurface : inactiveIconColor;
 
             return (
               <Pressable
@@ -231,12 +161,13 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                     navigation.navigate(route.name);
                   }
                 }}
-                style={({ pressed }) => [staticStyles.tab, pressed && staticStyles.tabPressed]}
+                className="z-[1] min-w-0 flex-1 items-center justify-center"
+                style={({ pressed }) => pressed && { opacity: 0.84 }}
               >
-                <View style={staticStyles.tabContent}>
+                <View className="w-full flex-1 items-center justify-center gap-0.5 px-1 py-1">
                   {tabName === 'muhurat' ? (
                     <MuhuratIcon
-                      size={isFocused ? 38 : 36}
+                      size={isFocused ? 34 : 34}
                       color={iconColor as string}
                     />
                   ) : tabName === 'gurukul' ? (
@@ -253,7 +184,11 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                     />
                   )}
                   <Text
-                    style={[styles.tabLabel, isFocused && styles.tabLabelActive]}
+                    className={`text-center font-label text-[10px] leading-3 tracking-[0.2px] ${
+                      isFocused
+                        ? 'text-on-surface'
+                        : 'text-black/[0.35] dark:text-white/40'
+                    }`}
                     numberOfLines={1}
                     adjustsFontSizeToFit
                   >

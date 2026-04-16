@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   Pressable,
-  StyleSheet,
   useWindowDimensions,
   View,
   type LayoutChangeEvent,
@@ -20,7 +19,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
-import { useThemedStyles } from '@/lib/theme-context';
+import { useTheme } from '@/lib/theme-context';
 
 interface BottomSheetProps {
   visible: boolean;
@@ -50,50 +49,7 @@ export function BottomSheet({
   const translateY = useSharedValue(windowHeight);
   const measuredHeight = useSharedValue(windowHeight);
   const dragStartY = useSharedValue(0);
-  const { styles, isDark } = useThemedStyles((colors, _glass, _gradients, isDark) => ({
-    isDark,
-    styles: StyleSheet.create<{
-      backdrop: ViewStyle;
-      sheet: ViewStyle;
-      sheetOverlay: ViewStyle;
-      content: ViewStyle;
-      handle: ViewStyle;
-    }>({
-      backdrop: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: isDark ? 'rgba(0, 0, 0, 0.54)' : 'rgba(0, 0, 0, 0.32)',
-      },
-      sheet: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflow: 'hidden',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        borderWidth: 1,
-        borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)',
-      },
-      sheetOverlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: isDark ? 'rgba(19, 19, 19, 0.92)' : 'rgba(250, 247, 242, 0.96)',
-      },
-      content: {
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingTop: 12,
-        paddingBottom: 24,
-      },
-      handle: {
-        alignSelf: 'center',
-        width: 48,
-        height: 5,
-        borderRadius: 9999,
-        backgroundColor: `${colors.onSurfaceVariant}66`,
-        marginBottom: 18,
-      },
-    }),
-  }));
+  const { colors, isDark } = useTheme();
 
   useEffect(() => {
     if (visible) {
@@ -152,21 +108,30 @@ export function BottomSheet({
   const sheet = (
     <Animated.View
       onLayout={onSheetLayout}
-      style={[styles.sheet, { zIndex, maxHeight: windowHeight * 0.82 }, sheetAnimatedStyle, sheetStyle]}
+      className="absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-[30px] border border-black/[0.08] dark:border-white/[0.06]"
+      style={[{ zIndex, maxHeight: windowHeight * 0.82 }, sheetAnimatedStyle, sheetStyle]}
     >
-      <BlurView intensity={50} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />
-      <View style={styles.sheetOverlay} />
-      <SafeAreaView style={[styles.content, contentStyle]} edges={safeAreaEdges}>
-        {showHandle && <View style={styles.handle} />}
+      <BlurView intensity={50} tint={isDark ? 'dark' : 'light'} className="absolute inset-0" />
+      <View className="absolute inset-0 bg-[rgba(250,247,242,0.96)] dark:bg-[rgba(19,19,19,0.92)]" />
+      <SafeAreaView className="flex-1 px-5 pb-6 pt-3" style={contentStyle} edges={safeAreaEdges}>
+        {showHandle && (
+          <View
+            className="mb-[18px] h-[5px] w-12 self-center rounded-full"
+            style={{ backgroundColor: `${colors.onSurfaceVariant}66` }}
+          />
+        )}
         {children}
       </SafeAreaView>
     </Animated.View>
   );
 
   return (
-    <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
-      <Animated.View style={[styles.backdrop, { zIndex: zIndex - 1 }, backdropStyle]}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
+    <View pointerEvents="box-none" className="absolute inset-0">
+      <Animated.View
+        className="absolute inset-0 bg-black/30 dark:bg-black/[0.54]"
+        style={[{ zIndex: zIndex - 1 }, backdropStyle]}
+      >
+        <Pressable className="absolute inset-0" onPress={onClose} />
       </Animated.View>
       {panEnabled ? <GestureDetector gesture={panGesture}>{sheet}</GestureDetector> : sheet}
     </View>

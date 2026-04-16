@@ -1,6 +1,6 @@
 // Screen 1: The Initial Spark
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, {
@@ -12,9 +12,8 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { OB } from '@/lib/onboardingStore';
-import { scaleFont } from '@/lib/typography';
 import { analytics } from '@/lib/analytics';
+import { onboardingButtonShadow, pressedLogoButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 export default function Screen1() {
   const breathe = useSharedValue(1);
@@ -39,39 +38,53 @@ export default function Screen1() {
   }));
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView className="flex-1 bg-ob-bg">
       {/* Ambient star field */}
-      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+      <View pointerEvents="none" className="absolute inset-0">
         {STARS.map((s, i) => (
-          <View key={i} style={[styles.star, { top: s.y, left: s.x, opacity: s.o }]} />
+          <View
+            key={i}
+            className="absolute h-0.5 w-0.5 rounded-full bg-ob-gold"
+            style={{ top: s.y, left: s.x, opacity: s.o }}
+          />
         ))}
       </View>
 
-      <View style={styles.center}>
+      <View className="flex-1 items-center justify-center gap-4 px-8">
         <Animated.View style={logoStyle}>
-          <Text style={styles.crescent}>☽</Text>
+          <Text className="mb-[-8px] text-center text-[52px] text-ob-gold">☽</Text>
         </Animated.View>
 
         <Animated.View entering={FadeIn.delay(400).duration(900)}>
-          <Text style={styles.logo}>Aksha</Text>
+          <Text className="text-center font-headline text-[48px] tracking-[-2px] text-ob-gold">
+            Aksha
+          </Text>
         </Animated.View>
 
-        <Animated.View entering={FadeIn.delay(900).duration(800)} style={styles.copy}>
-          <Text style={styles.headline}>The universe is in motion.</Text>
-          <Text style={styles.sub}>Are you in sync?</Text>
+        <Animated.View entering={FadeIn.delay(900).duration(800)} className="mt-3 items-center gap-2.5">
+          <Text className="text-center font-headline text-[22px] tracking-[-0.4px] text-ob-text">
+            The universe is in motion.
+          </Text>
+          <Text className="text-center font-body text-base text-ob-muted">Are you in sync?</Text>
         </Animated.View>
       </View>
 
-      <Animated.View entering={FadeIn.delay(2200).duration(800)} style={styles.footer}>
+      <Animated.View entering={FadeIn.delay(2200).duration(800)} className="items-end gap-3.5 p-8 pb-11">
         <Pressable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             analytics.onboardingStarted();
             router.push('/onboarding/step-2');
           }}
-          style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}
+          className="items-center rounded-full bg-ob-saffron px-8 py-4"
+          style={({ pressed }) => [
+            onboardingButtonShadow,
+            pressed && pressedLogoButtonStyle,
+          ]}
         >
-          <Text style={styles.btnText}>Begin My Alignment</Text>
+          <Text className="text-right font-label text-base tracking-[0.3px] text-white">
+            Begin My Alignment
+          </Text>
         </Pressable>
 
         <Pressable
@@ -79,9 +92,10 @@ export default function Screen1() {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.replace('/(tabs)');
           }}
-          style={({ pressed }) => [styles.skipBtn, pressed && styles.btnPressed]}
+          className="px-2 py-2"
+          style={({ pressed }) => pressed && pressedLogoButtonStyle}
         >
-          <Text style={styles.skipBtnText}>Skip Onboarding</Text>
+          <Text className="text-right font-body text-sm text-ob-muted">Skip Onboarding</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>
@@ -96,74 +110,3 @@ const STARS = [
   { x: '67%', y: '78%', o: 0.35 }, { x: '44%', y: '15%', o: 0.3 },
   { x: '56%', y: '88%', o: 0.2 }, { x: '3%', y: '62%', o: 0.3 },
 ] as const;
-
-const styles = StyleSheet.create({
-  safe:   { flex: 1, backgroundColor: OB.bg },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16, paddingHorizontal: 32 },
-  crescent: { fontSize: scaleFont(52), color: OB.gold, textAlign: 'center', marginBottom: -8 },
-  logo: {
-    fontFamily: 'GoogleSans_700Bold',
-    fontSize: scaleFont(48),
-    color: OB.gold,
-    letterSpacing: -2,
-    textAlign: 'center',
-  },
-  copy:     { alignItems: 'center', gap: 10, marginTop: 12 },
-  headline: {
-    fontFamily: 'GoogleSans_700Bold',
-    fontSize: scaleFont(22),
-    color: OB.text,
-    letterSpacing: -0.4,
-    textAlign: 'center',
-  },
-  sub: {
-    fontFamily: 'GoogleSans_400Regular',
-    fontSize: scaleFont(16),
-    color: OB.muted,
-    textAlign: 'center',
-  },
-  footer: { padding: 32, paddingBottom: 44, alignItems: 'flex-end', gap: 14 },
-  btn: {
-    backgroundColor: OB.saffron,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 9999,
-    alignItems: 'center',
-    shadowColor: OB.saffron,
-    shadowOpacity: 0.45,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
-  },
-  btnPressed: { opacity: 0.82, transform: [{ scale: 0.97 }] },
-  btnText: {
-    fontFamily: 'GoogleSans_600SemiBold',
-    fontSize: scaleFont(16),
-    color: '#fff',
-    textAlign: 'right',
-    letterSpacing: 0.3,
-  },
-  footNote: {
-    fontFamily: 'GoogleSans_400Regular',
-    fontSize: scaleFont(12),
-    color: OB.muted,
-    letterSpacing: 0.5,
-  },
-  skipBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-  },
-  skipBtnText: {
-    fontFamily: 'GoogleSans_400Regular',
-    fontSize: scaleFont(14),
-    color: OB.muted,
-    textAlign: 'right',
-  },
-  star: {
-    position: 'absolute',
-    width: 2,
-    height: 2,
-    borderRadius: 1,
-    backgroundColor: OB.gold,
-  },
-});

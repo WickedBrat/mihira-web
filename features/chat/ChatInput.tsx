@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, TextInput, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Send } from 'lucide-react-native';
 import { hapticMedium } from '@/lib/haptics';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
+import { useTheme } from '@/lib/theme-context';
 
 interface ChatInputProps {
   value: string;
@@ -15,49 +13,6 @@ interface ChatInputProps {
 
 export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
   const { colors, gradients } = useTheme();
-  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
-    StyleSheet.create({
-      container: {
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-      },
-      inputRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        backgroundColor: dark ? 'rgba(37, 38, 38, 0.7)' : 'rgba(232, 225, 212, 0.7)',
-        borderRadius: 9999,
-        borderWidth: 1,
-        borderColor: `${c.primaryFixedDim}02`,
-        paddingLeft: 26,
-        paddingRight: 10,
-        paddingVertical: 5,
-        shadowColor: c.primary,
-        shadowOpacity: 0.12,
-        shadowRadius: 16,
-        shadowOffset: { width: 0, height: 0 },
-      },
-      input: {
-        flex: 1,
-        fontFamily: fonts.body,
-        fontSize: scaleFont(15),
-        lineHeight: scaleFont(20),
-        color: c.onSurface,
-        paddingVertical: 12,
-        textAlignVertical: 'center',
-        maxHeight: 100,
-      },
-      sendBtn: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      pressed: { opacity: 0.8 },
-      sendBtnWrapper: {},
-    })
-  );
 
   const handleSend = () => {
     hapticMedium();
@@ -65,10 +20,20 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputRow}>
+    <View className="px-2.5 py-2">
+      <View
+        className="flex-row items-center gap-2 rounded-full border bg-[rgba(232,225,212,0.7)] py-[5px] pl-[26px] pr-2.5 dark:bg-[rgba(37,38,38,0.7)]"
+        style={{
+          borderColor: `${colors.primaryFixedDim}02`,
+          shadowColor: colors.primary,
+          shadowOpacity: 0.12,
+          shadowRadius: 16,
+          shadowOffset: { width: 0, height: 0 },
+        }}
+      >
         <TextInput
-          style={styles.input}
+          className="max-h-[100px] flex-1 py-3 font-body text-base leading-5 text-on-surface"
+          style={{ textAlignVertical: 'center' }}
           value={value}
           onChangeText={onChangeText}
           placeholder="Ask for guidance…"
@@ -81,13 +46,13 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
         />
         <Pressable
           onPress={handleSend}
-          style={({ pressed }) => [styles.sendBtnWrapper, pressed && styles.pressed]}
+          style={({ pressed }) => pressed && { opacity: 0.8 }}
         >
           <LinearGradient
             colors={gradients.primaryToContainer}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={styles.sendBtn}
+            className="h-10 w-10 items-center justify-center rounded-full"
           >
             <Send size={18} color={colors.onPrimary} />
           </LinearGradient>

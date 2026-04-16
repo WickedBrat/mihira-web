@@ -1,7 +1,7 @@
 // Screen 10: The Evidence — Social Proof Carousel
 import React, { useState, useRef } from 'react';
 import {
-  View, Text, StyleSheet, Pressable,
+  View, Text, Pressable,
   ScrollView, useWindowDimensions,
   NativeSyntheticEvent, NativeScrollEvent,
 } from 'react-native';
@@ -9,8 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { OB } from '@/lib/onboardingStore';
-import { scaleFont } from '@/lib/typography';
+import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const TESTIMONIALS = [
   {
@@ -55,11 +54,13 @@ export default function Screen10() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.body}>
-        <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.headline}>Thousands have{'\n'}found their axis.</Text>
-          <Text style={styles.sub}>Real people. Real shifts.</Text>
+    <SafeAreaView className="flex-1 bg-ob-bg">
+      <View className="flex-1 gap-7 px-8 pt-6">
+        <Animated.View entering={FadeInDown.duration(500)} className="gap-2">
+          <Text className="font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
+            Thousands have{'\n'}found their axis.
+          </Text>
+          <Text className="font-body text-[15px] text-ob-muted">Real people. Real shifts.</Text>
         </Animated.View>
 
         {/* Carousel */}
@@ -71,30 +72,30 @@ export default function Screen10() {
           onMomentumScrollEnd={onScroll}
           decelerationRate="fast"
           snapToInterval={CARD_W}
-          contentContainerStyle={{ paddingLeft: 0 }}
-          style={{ marginHorizontal: -32 }}
+          className="mx-[-32px]"
         >
           {TESTIMONIALS.map((t, i) => (
             <Animated.View
               key={i}
               entering={FadeInDown.delay(i * 60 + 200).duration(400)}
-              style={[styles.card, { width: CARD_W, marginHorizontal: 32 / 2 }]}
+              className="gap-[18px] rounded-[20px] border border-ob-card-border bg-ob-card p-6"
+              style={{ width: CARD_W, marginHorizontal: 16 }}
             >
               {/* Stars */}
-              <Text style={styles.stars}>★★★★★</Text>
+              <Text className="text-base tracking-[3px] text-ob-gold">★★★★★</Text>
 
-              <Text style={styles.cardQuote}>"{t.quote}"</Text>
+              <Text className="font-body text-[15px] italic leading-6 text-ob-text">"{t.quote}"</Text>
 
-              <View style={styles.cardAuthor}>
-                <View style={styles.avatar}>
-                  <Text style={styles.avatarInitial}>{t.initial}</Text>
+              <View className="flex-row items-center gap-3">
+                <View className="h-[42px] w-[42px] items-center justify-center rounded-full border border-ob-saffron-border bg-ob-saffron-dim">
+                  <Text className="font-headline text-lg text-ob-saffron">{t.initial}</Text>
                 </View>
-                <View style={styles.authorText}>
-                  <Text style={styles.authorName}>{t.name}</Text>
-                  <Text style={styles.authorTitle}>{t.title}</Text>
+                <View className="flex-1 gap-0.5">
+                  <Text className="font-label text-sm text-ob-text">{t.name}</Text>
+                  <Text className="font-body text-[11px] text-ob-muted">{t.title}</Text>
                 </View>
-                <View style={styles.nakshatraPill}>
-                  <Text style={styles.nakshatraText}>{t.nakshatra}</Text>
+                <View className="rounded-[20px] border border-ob-gold-border bg-ob-gold-dim px-2.5 py-1">
+                  <Text className="font-body-medium text-[10px] text-ob-gold">{t.nakshatra}</Text>
                 </View>
               </View>
             </Animated.View>
@@ -102,7 +103,7 @@ export default function Screen10() {
         </ScrollView>
 
         {/* Page dots */}
-        <View style={styles.pageDots}>
+        <View className="flex-row justify-center gap-2">
           {TESTIMONIALS.map((_, i) => (
             <Pressable
               key={i}
@@ -111,94 +112,29 @@ export default function Screen10() {
                 scrollRef.current?.scrollTo({ x: i * CARD_W, animated: true });
                 setActiveIdx(i);
               }}
-              style={[styles.pageDot, i === activeIdx && styles.pageDotActive]}
+              className={`h-1.5 rounded-full ${
+                i === activeIdx ? 'w-[18px] bg-ob-saffron' : 'w-1.5 bg-ob-card-border'
+              }`}
             />
           ))}
         </View>
       </View>
 
-      <Animated.View entering={FadeInUp.delay(600).duration(500)} style={styles.footer}>
+      <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-end p-8 pb-11">
         <Pressable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.push('/onboarding/step-11');
           }}
-          style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}
+          className="items-center rounded-full bg-ob-saffron px-8 py-4"
+          style={({ pressed }) => [
+            onboardingButtonShadow,
+            pressed && pressedButtonStyle,
+          ]}
         >
-          <Text style={styles.btnText}>I'm Ready →</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">I'm Ready →</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe:     { flex: 1, backgroundColor: OB.bg },
-  body:     { flex: 1, paddingHorizontal: 32, paddingTop: 24, gap: 28 },
-  header:   { gap: 8 },
-  headline: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(34),
-    color: OB.text, letterSpacing: -0.8, lineHeight: scaleFont(40),
-  },
-  sub: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15), color: OB.muted,
-  },
-  card: {
-    backgroundColor: OB.card,
-    borderRadius: 20, borderWidth: 1, borderColor: OB.cardBorder,
-    padding: 24, gap: 18,
-  },
-  stars: { fontSize: scaleFont(16), color: OB.gold, letterSpacing: 3 },
-  cardQuote: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
-    color: OB.text, lineHeight: scaleFont(24), fontStyle: 'italic',
-  },
-  cardAuthor: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  avatar: {
-    width: 42, height: 42, borderRadius: 21,
-    backgroundColor: OB.saffronDim,
-    borderWidth: 1, borderColor: OB.saffronBorder,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  avatarInitial: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(17), color: OB.saffron,
-  },
-  authorText: { flex: 1, gap: 2 },
-  authorName: {
-    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(13), color: OB.text,
-  },
-  authorTitle: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(11), color: OB.muted,
-  },
-  nakshatraPill: {
-    backgroundColor: OB.goldDim, borderRadius: 20, borderWidth: 1,
-    borderColor: OB.goldBorder, paddingHorizontal: 10, paddingVertical: 4,
-  },
-  nakshatraText: {
-    fontFamily: 'GoogleSans_500Medium', fontSize: scaleFont(10), color: OB.gold,
-  },
-  pageDots: { flexDirection: 'row', gap: 8, justifyContent: 'center' },
-  pageDot: {
-    width: 6, height: 6, borderRadius: 3,
-    backgroundColor: OB.cardBorder,
-  },
-  pageDotActive: { backgroundColor: OB.saffron, width: 18 },
-  footer: { padding: 32, paddingBottom: 44, alignItems: 'flex-end' },
-  btn: {
-    backgroundColor: OB.saffron,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 9999,
-    alignItems: 'center',
-    shadowColor: OB.saffron,
-    shadowOpacity: 0.45,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
-  },
-  btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
-  btnText: {
-    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
-    color: '#fff', letterSpacing: 0.3,
-  },
-});

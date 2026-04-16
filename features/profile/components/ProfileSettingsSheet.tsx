@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { Check, ChevronDown, LogOut, Settings, X, Zap } from 'lucide-react-native';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { LANGUAGE_OPTIONS } from '@/features/profile/constants';
 import type { ProfileData } from '@/features/profile/useProfile';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles, type ThemePreference } from '@/lib/theme-context';
+import { useTheme, type ThemePreference } from '@/lib/theme-context';
 
 interface ProfileSettingsSheetProps {
   visible: boolean;
@@ -52,318 +51,122 @@ export function ProfileSettingsSheet({
     }
   }, [visible]);
 
-  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
-    StyleSheet.create({
-      sheet: {
-        borderTopLeftRadius: 34,
-        borderTopRightRadius: 34,
-      },
-      header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: 22,
-        gap: 12,
-      },
-      title: {
-        fontFamily: fonts.headline,
-        fontSize: 24,
-        color: c.onSurface,
-        letterSpacing: -0.4,
-        marginBottom: 4,
-      },
-      subtitle: {
-        fontFamily: fonts.body,
-        fontSize: 13,
-        color: c.onSurfaceVariant,
-        lineHeight: 19,
-        maxWidth: 220,
-      },
-      closeButton: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: c.surfaceContainerLow,
-        borderWidth: 1,
-        borderColor: `${c.outlineVariant}33`,
-      },
-      scrollView: {
-        flex: 1,
-        paddingBottom: 20,
-      },
-      scrollContent: {
-        paddingBottom: 6,
-      },
-      identityRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 14,
-        marginBottom: 16,
-        padding: 14,
-        borderRadius: 18,
-        backgroundColor: `${c.primary}12`,
-        borderWidth: 1,
-        borderColor: `${c.primary}22`,
-      },
-      identityAvatar: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: `${c.primary}30`,
-      },
-      identityInitials: {
-        fontFamily: fonts.headline,
-        fontSize: 16,
-        color: c.primaryFixed,
-      },
-      identityText: { flex: 1 },
-      identityName: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: 15,
-        color: c.onSurface,
-        marginBottom: 2,
-      },
-      identityEmail: {
-        fontFamily: fonts.body,
-        fontSize: 12,
-        color: c.onSurfaceVariant,
-      },
-      signInButton: {
-        alignSelf: 'stretch',
-        marginBottom: 20,
-      },
-      upgradeRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-        borderRadius: 16,
-        backgroundColor: 'rgba(255, 149, 0, 0.063)',
-        borderColor: 'rgba(255, 149, 0, 0.102)',
-        borderWidth: 1,
-        marginBottom: 12,
-      },
-      upgradeText: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: 15,
-        color: c.secondaryFixed,
-      },
-      manageAccountRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-        borderRadius: 16,
-        backgroundColor: c.surfaceContainerLow,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-        marginBottom: 12,
-      },
-      manageAccountText: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: 15,
-        color: c.onSurface,
-      },
-      signOutRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10,
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-        borderRadius: 16,
-        backgroundColor: 'rgba(207, 102, 121, 0.08)',
-        borderWidth: 1,
-        borderColor: 'rgba(207, 102, 121, 0.15)',
-        marginBottom: 20,
-      },
-      signOutText: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: 15,
-        color: '#CF6679',
-      },
-      section: { marginBottom: 18 },
-      label: {
-        fontFamily: fonts.label,
-        fontSize: 10,
-        textTransform: 'uppercase',
-        letterSpacing: 1.8,
-        color: c.onSurfaceVariant,
-        marginBottom: 10,
-      },
-      dropdownTrigger: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderRadius: 16,
-        backgroundColor: c.surfaceContainerLow,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-      },
-      dropdownTriggerText: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: 15,
-        color: c.onSurface,
-      },
-      dropdownChevronOpen: { transform: [{ rotate: '180deg' }] },
-      dropdownMenu: {
-        marginTop: 10,
-        borderRadius: 18,
-        backgroundColor: c.surfaceContainer,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-        overflow: 'hidden',
-      },
-      dropdownOption: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-      },
-      dropdownOptionSelected: { backgroundColor: `${c.primary}14` },
-      dropdownOptionText: {
-        fontFamily: fonts.body,
-        fontSize: 15,
-        color: c.onSurface,
-      },
-      dropdownOptionTextSelected: {
-        fontFamily: fonts.bodyMedium,
-        color: c.primaryFixed,
-      },
-      infoRow: {
-        borderRadius: 16,
-        backgroundColor: c.surfaceContainerLow,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-      },
-      infoValue: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: 15,
-        color: c.onSurface,
-      },
-      appearanceRow: {
-        flexDirection: 'row',
-        borderRadius: 16,
-        backgroundColor: c.surfaceContainerLow,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-        padding: 4,
-        gap: 4,
-      },
-      appearanceOption: {
-        flex: 1,
-        paddingVertical: 10,
-        alignItems: 'center',
-        borderRadius: 12,
-      },
-      appearanceOptionActive: {
-        backgroundColor: c.surfaceContainerHigh,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-      },
-      appearanceOptionText: {
-        fontFamily: fonts.body,
-        fontSize: 14,
-        color: c.onSurfaceVariant,
-      },
-      appearanceOptionTextActive: {
-        fontFamily: fonts.bodyMedium,
-        color: c.onSurface,
-      },
-    })
-  );
-
   return (
-    <BottomSheet visible={visible} onClose={onClose} sheetStyle={styles.sheet}>
-      <View style={styles.header}>
+    <BottomSheet
+      visible={visible}
+      onClose={onClose}
+      sheetStyle={{ borderTopLeftRadius: 34, borderTopRightRadius: 34 }}
+    >
+      <View className="mb-[22px] flex-row items-start justify-between gap-3">
         <View>
-          <Text style={styles.title}>Settings</Text>
-          <Text style={styles.subtitle}>Profile controls and content preferences.</Text>
+          <Text className="mb-1 font-headline text-2xl tracking-[-0.4px] text-on-surface">Settings</Text>
+          <Text className="max-w-[220px] font-body text-sm leading-[19px] text-on-surface-variant">
+            Profile controls and content preferences.
+          </Text>
         </View>
-        <Pressable style={styles.closeButton} onPress={onClose}>
+        <Pressable
+          className="h-9 w-9 items-center justify-center rounded-full border border-outline-variant/20 bg-surface-container-low"
+          onPress={onClose}
+        >
           <X size={18} color={colors.onSurfaceVariant} />
         </Pressable>
       </View>
 
       <ScrollView
-        style={styles.scrollView}
+        className="flex-1 pb-5"
         showsVerticalScrollIndicator={false}
         bounces={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={{ paddingBottom: 6 }}
       >
         {isSignedIn ? (
           <>
-            <View style={styles.identityRow}>
-              <View style={styles.identityAvatar}>
-                <Text style={styles.identityInitials}>{initials}</Text>
+            <View
+              className="mb-4 flex-row items-center gap-3.5 rounded-[18px] border p-3.5"
+              style={{ backgroundColor: `${colors.primary}12`, borderColor: `${colors.primary}22` }}
+            >
+              <View
+                className="h-11 w-11 items-center justify-center rounded-full"
+                style={{ backgroundColor: `${colors.primary}30` }}
+              >
+                <Text className="font-headline text-base text-primary-fixed">{initials}</Text>
               </View>
-              <View style={styles.identityText}>
-                <Text style={styles.identityName}>{fullName}</Text>
-                <Text style={styles.identityEmail}>{email}</Text>
+              <View className="flex-1">
+                <Text className="mb-0.5 font-body-medium text-base text-on-surface">{fullName}</Text>
+                <Text className="font-body text-xs text-on-surface-variant">{email}</Text>
               </View>
             </View>
 
-            <Pressable style={styles.manageAccountRow} onPress={onManageAccount}>
+            <Pressable
+              className="mb-3 flex-row items-center gap-2.5 rounded-2xl border border-black/[0.05] bg-surface-container-low px-4 py-3.5 dark:border-white/[0.05]"
+              onPress={onManageAccount}
+            >
               <Settings size={16} color={colors.onSurfaceVariant} />
-              <Text style={styles.manageAccountText}>Manage Account</Text>
+              <Text className="font-body-medium text-base text-on-surface">Manage Account</Text>
             </Pressable>
 
             {!isPro && (
-              <Pressable style={styles.upgradeRow} onPress={onOpenPlans}>
+              <Pressable
+                className="mb-3 flex-row items-center gap-2.5 rounded-2xl border border-[rgba(255,149,0,0.102)] bg-[rgba(255,149,0,0.063)] px-4 py-3.5"
+                onPress={onOpenPlans}
+              >
                 <Zap size={16} color={colors.secondaryFixed} />
-                <Text style={styles.upgradeText}>Upgrade to Pro</Text>
+                <Text className="font-body-medium text-base text-secondary-fixed">Upgrade to Pro</Text>
               </Pressable>
             )}
 
-            <Pressable style={styles.signOutRow} onPress={onSignOut}>
+            <Pressable
+              className="mb-5 flex-row items-center gap-2.5 rounded-2xl border border-[rgba(207,102,121,0.15)] bg-[rgba(207,102,121,0.08)] px-4 py-3.5"
+              onPress={onSignOut}
+            >
               <LogOut size={16} color="#CF6679" />
-              <Text style={styles.signOutText}>Sign Out</Text>
+              <Text className="font-body-medium text-base text-[#CF6679]">Sign Out</Text>
             </Pressable>
           </>
         ) : (
-          <SacredButton label="Sign In" onPress={onOpenAuth} style={styles.signInButton} />
+          <SacredButton
+            label="Sign In"
+            onPress={onOpenAuth}
+            style={{ alignSelf: 'stretch', marginBottom: 20 }}
+          />
         )}
 
-        <View style={styles.section}>
-          <Text style={styles.label}>Content Language</Text>
+        <View className="mb-[18px]">
+          <Text className="mb-2.5 pt-6 font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">
+            Content Language
+          </Text>
           <Pressable
-            style={styles.dropdownTrigger}
+            className="flex-row items-center justify-between rounded-2xl border border-black/[0.05] bg-surface-container-low px-4 py-3.5 dark:border-white/[0.05]"
             onPress={() => setIsLanguageDropdownOpen((current) => !current)}
           >
-            <Text style={styles.dropdownTriggerText}>{language}</Text>
+            <Text className="font-body-medium text-base text-on-surface">{language}</Text>
             <ChevronDown
               size={18}
               color={colors.onSurfaceVariant}
-              style={isLanguageDropdownOpen ? styles.dropdownChevronOpen : undefined}
+              style={isLanguageDropdownOpen ? { transform: [{ rotate: '180deg' }] } : undefined}
             />
           </Pressable>
 
           {isLanguageDropdownOpen && (
-            <View style={styles.dropdownMenu}>
+            <View className="mt-2.5 overflow-hidden rounded-[18px] border border-black/[0.05] bg-surface-container dark:border-white/[0.05]">
               {LANGUAGE_OPTIONS.map((option) => {
                 const isSelected = language === option;
 
                 return (
                   <Pressable
                     key={option}
-                    style={[styles.dropdownOption, isSelected && styles.dropdownOptionSelected]}
+                    className="flex-row items-center justify-between px-4 py-3.5"
+                    style={isSelected ? { backgroundColor: `${colors.primary}14` } : undefined}
                     onPress={() => {
                       onSelectLanguage(option);
                       setIsLanguageDropdownOpen(false);
                     }}
                   >
                     <Text
-                      style={[styles.dropdownOptionText, isSelected && styles.dropdownOptionTextSelected]}
+                      className={`text-base ${
+                        isSelected
+                          ? 'font-body-medium text-primary-fixed'
+                          : 'font-body text-on-surface'
+                      }`}
                     >
                       {option}
                     </Text>
@@ -375,16 +178,26 @@ export function ProfileSettingsSheet({
           )}
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.label}>Appearance</Text>
-          <View style={styles.appearanceRow}>
+        <View className="mb-[18px]">
+          <Text className="mb-2.5 font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">Appearance</Text>
+          <View className="flex-row gap-1 rounded-2xl border border-black/[0.05] bg-surface-container-low p-1 dark:border-white/[0.05]">
             {(['system', 'light', 'dark'] as ThemePreference[]).map((option) => (
               <Pressable
                 key={option}
-                style={[styles.appearanceOption, preference === option && styles.appearanceOptionActive]}
+                className={`flex-1 items-center rounded-xl py-2.5 ${
+                  preference === option
+                    ? 'border border-black/[0.08] bg-surface-container-high dark:border-white/[0.08]'
+                    : ''
+                }`}
                 onPress={() => setPreference(option)}
               >
-                <Text style={[styles.appearanceOptionText, preference === option && styles.appearanceOptionTextActive]}>
+                <Text
+                  className={`text-sm ${
+                    preference === option
+                      ? 'font-body-medium text-on-surface'
+                      : 'font-body text-on-surface-variant'
+                  }`}
+                >
                   {option.charAt(0).toUpperCase() + option.slice(1)}
                 </Text>
               </Pressable>
@@ -392,10 +205,10 @@ export function ProfileSettingsSheet({
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.label}>Region</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoValue}>{region}</Text>
+        <View className="mb-[18px]">
+          <Text className="mb-2.5 font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">Region</Text>
+          <View className="rounded-2xl border border-black/[0.05] bg-surface-container-low px-4 py-3.5 dark:border-white/[0.05]">
+            <Text className="font-body-medium text-base text-on-surface">{region}</Text>
           </View>
         </View>
       </ScrollView>

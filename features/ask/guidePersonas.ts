@@ -2,6 +2,7 @@ const DEFAULT_IMAGE_URL = 'https://raw.githubusercontent.com/WickedBrat/images/r
 
 export interface GuidePersona {
   name: string;
+  emoji: string;
   imageUrl: string;
   essence: string;
   commitmentVerb: string;
@@ -11,6 +12,7 @@ export interface GuidePersona {
 export const GUIDES: GuidePersona[] = [
   {
     name: 'Krishna',
+    emoji: '🦚',
     imageUrl: DEFAULT_IMAGE_URL,
     essence: 'Wisdom & Dharma',
     commitmentVerb: 'Walk with Krishna',
@@ -18,6 +20,7 @@ export const GUIDES: GuidePersona[] = [
   },
   {
     name: 'Shiva',
+    emoji: '🔱',
     imageUrl: "https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/sacred%20days/shiva.webp",
     essence: 'Transformation & Stillness',
     commitmentVerb: 'Surrender to Shiva',
@@ -25,6 +28,7 @@ export const GUIDES: GuidePersona[] = [
   },
   {
     name: 'Ganesha',
+    emoji: '🐘',
     imageUrl: "https://github.com/WickedBrat/images/blob/master/sacred%20days/ganesha.jpg?raw=true",
     essence: 'New Beginnings & Obstacles',
     commitmentVerb: 'Receive Ganesha\'s Blessings',
@@ -32,6 +36,7 @@ export const GUIDES: GuidePersona[] = [
   },
   {
     name: 'Lakshmi',
+    emoji: '🪷',
     imageUrl: DEFAULT_IMAGE_URL,
     essence: 'Abundance & Grace',
     commitmentVerb: 'Invite Lakshmi\'s Grace',
@@ -39,6 +44,7 @@ export const GUIDES: GuidePersona[] = [
   },
   {
     name: 'Durga',
+    emoji: '🦁',
     imageUrl: DEFAULT_IMAGE_URL,
     essence: 'Strength & Protection',
     commitmentVerb: 'Invoke Durga\'s Shakti',
@@ -46,6 +52,7 @@ export const GUIDES: GuidePersona[] = [
   },
   {
     name: 'Saraswati',
+    emoji: '📿',
     imageUrl: DEFAULT_IMAGE_URL,
     essence: 'Knowledge & Creativity',
     commitmentVerb: 'Seek Saraswati\'s Wisdom',
@@ -53,6 +60,7 @@ export const GUIDES: GuidePersona[] = [
   },
   {
     name: 'Ram',
+    emoji: '🏹',
     imageUrl: DEFAULT_IMAGE_URL,
     essence: 'Virtue & Righteousness',
     commitmentVerb: 'Follow Ram\'s Path',
@@ -60,6 +68,7 @@ export const GUIDES: GuidePersona[] = [
   },
   {
     name: 'Hanuman',
+    emoji: '🪔',
     imageUrl: DEFAULT_IMAGE_URL,
     essence: 'Devotion & Courage',
     commitmentVerb: 'Serve with Hanuman',
@@ -67,6 +76,7 @@ export const GUIDES: GuidePersona[] = [
   },
   {
     name: 'Jesus',
+    emoji: '✝️',
     imageUrl: DEFAULT_IMAGE_URL,
     essence: 'Love & Forgiveness',
     commitmentVerb: 'Walk with Jesus',

@@ -1,6 +1,6 @@
 // features/ask/GuideLoader.tsx
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -11,9 +11,6 @@ import Animated, {
   FadeIn,
   runOnJS,
 } from 'react-native-reanimated';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { getGuide } from './guidePersonas';
 
@@ -29,31 +26,6 @@ const ORB_STARTS: { x: number; y: number; size: number }[] = [
   { x: 0.18,  y: 0.82, size: 20 },
   { x: 0.76,  y: 0.78, size: 13 },
 ];
-
-const orbStyles = StyleSheet.create({
-  orb: {
-    position: 'absolute',
-    backgroundColor: 'rgba(255, 240, 200, 0.85)',
-    shadowColor: '#fff8e0',
-    shadowOpacity: 0.9,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 0 },
-  },
-  mergePulse: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: CENTER_Y - 30,
-    left: CENTER_X - 30,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: 'rgba(255, 240, 200, 0.75)',
-    shadowColor: '#fff8e0',
-    shadowOpacity: 1,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 0 },
-  },
-});
 
 interface OrbProps {
   startX: number;
@@ -93,8 +65,14 @@ function Orb({ startX, startY, size, delay, onAllArrived, isLast }: OrbProps) {
 
   return (
     <Animated.View
+      className="absolute bg-[rgba(255,240,200,0.85)]"
       style={[
-        orbStyles.orb,
+        {
+          shadowColor: '#fff8e0',
+          shadowOpacity: 0.9,
+          shadowRadius: 12,
+          shadowOffset: { width: 0, height: 0 },
+        },
         { width: size, height: size, borderRadius: size / 2 },
         orbStyle,
       ]}
@@ -127,7 +105,22 @@ function MergePulse({ onComplete }: MergePulseProps) {
   }));
 
   return (
-    <Animated.View style={[orbStyles.mergePulse, pulseStyle]} />
+    <Animated.View
+      className="absolute self-center rounded-full bg-[rgba(255,240,200,0.75)]"
+      style={[
+        {
+          top: CENTER_Y - 30,
+          left: CENTER_X - 30,
+          width: 60,
+          height: 60,
+          shadowColor: '#fff8e0',
+          shadowOpacity: 1,
+          shadowRadius: 24,
+          shadowOffset: { width: 0, height: 0 },
+        },
+        pulseStyle,
+      ]}
+    />
   );
 }
 
@@ -139,32 +132,6 @@ interface GuideLoaderProps {
 export function GuideLoader({ guideName, onComplete }: GuideLoaderProps) {
   const [showMerge, setShowMerge] = React.useState(false);
   const [showGuide, setShowGuide] = React.useState(false);
-  const { colors } = useTheme();
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      root: {
-        flex: 1,
-        backgroundColor: c.surface,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      guideReveal: {
-        alignItems: 'center',
-        gap: 20,
-      },
-      guideEmoji: {
-        fontSize: 80,
-      },
-      guideText: {
-        fontFamily: fonts.labelLight,
-        fontSize: scaleFont(20),
-        color: c.onSurfaceVariant,
-        letterSpacing: 2,
-        textAlign: 'center',
-      },
-    })
-  );
-
   const guide = getGuide(guideName);
 
   const handleOrbsArrived = () => setShowMerge(true);
@@ -174,13 +141,13 @@ export function GuideLoader({ guideName, onComplete }: GuideLoaderProps) {
   };
 
   return (
-    <View style={styles.root}>
-      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+    <View className="flex-1 items-center justify-center bg-surface">
+      <View pointerEvents="none" className="absolute inset-0">
         <AmbientBlob color="rgba(181, 100, 252, 0.08)" top={-60} left={-80} size={360} />
         <AmbientBlob color="rgba(184, 152, 122, 0.06)" top={380} left={60} size={280} />
       </View>
 
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+      <View className="absolute inset-0" pointerEvents="none">
         {ORB_STARTS.map((orb, i) => (
           <Orb
             key={i}
@@ -196,11 +163,11 @@ export function GuideLoader({ guideName, onComplete }: GuideLoaderProps) {
       </View>
 
       {showGuide && (
-        <Animated.View entering={FadeIn.duration(900)} style={styles.guideReveal}>
-          <Text style={styles.guideEmoji}>{guide.emoji}</Text>
+        <Animated.View entering={FadeIn.duration(900)} className="items-center gap-5">
+          <Text className="text-[80px]">{guide.emoji}</Text>
           <Animated.Text
             entering={FadeIn.delay(400).duration(900)}
-            style={styles.guideText}
+            className="text-center font-label-light text-xl tracking-[2px] text-on-surface-variant"
           >
             {guideName} is with you
           </Animated.Text>

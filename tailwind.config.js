@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './app/**/*.{js,jsx,ts,tsx}',
     './features/**/*.{js,jsx,ts,tsx}',
@@ -42,6 +43,18 @@ module.exports = {
         error: '#ee7d77',
         'error-container': '#7f2927',
         'surface-bright-glass': 'rgba(43,44,44,0.6)',
+        'ob-bg': '#07090C',
+        'ob-saffron': '#E07A5F',
+        'ob-saffron-dim': 'rgba(224,122,95,0.15)',
+        'ob-saffron-border': 'rgba(224,122,95,0.45)',
+        'ob-gold': '#D9A06F',
+        'ob-gold-dim': 'rgba(217,160,111,0.12)',
+        'ob-gold-border': 'rgba(217,160,111,0.4)',
+        'ob-text': '#F0EDE8',
+        'ob-muted': '#8E8880',
+        'ob-card': 'rgba(255,255,255,0.04)',
+        'ob-card-border': 'rgba(255,255,255,0.09)',
+        'ob-divider': 'rgba(255,255,255,0.07)',
       },
       fontFamily: {
         headline: ['GoogleSans_700Bold'],

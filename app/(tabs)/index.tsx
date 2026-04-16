@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { GlowCard } from '@/components/ui/GlowCard';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { PageHero } from '@/components/ui/PageHero';
@@ -8,114 +8,40 @@ import { SacredDayCard } from '@/features/daily/SacredDayCard';
 import { DailyAlignmentCard } from '@/features/horoscope/DailyAlignmentCard';
 import { useDailyAlignment } from '@/features/horoscope/useDailyAlignment';
 import { useCalendarEvents } from '@/features/daily/useCalendarEvents';
-import { fonts, layout } from '@/lib/theme';
-import { useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
+import { layout } from '@/lib/theme';
 
 export default function HomeScreen() {
   const { chart, focusAreas, isLoading, error } = useDailyAlignment();
   const { events: todayEvents } = useCalendarEvents();
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      root: {
-        flex: 1,
-        backgroundColor: c.surface,
-      },
-      scroll: { flex: 1 },
-      scrollContent: {
-        paddingTop: 64,
-        paddingBottom: 176,
-        alignItems: 'center',
-      },
-      header: {
-        paddingBottom: 40,
-        paddingHorizontal: layout.screenPaddingX,
-      },
-      section: {
-        alignSelf: 'stretch',
-        maxWidth: 480,
-        marginHorizontal: layout.screenPaddingX,
-      },
-
-      // Sacred section
-      sacredSection: {
-        marginTop: 52,
-        alignSelf: 'stretch',
-        gap: 20,
-      },
-      sacredHeader: {
-        paddingHorizontal: layout.screenPaddingX,
-        gap: 6,
-      },
-      sacredMeta: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(10),
-        textTransform: 'uppercase',
-        letterSpacing: 3,
-        color: c.secondaryFixed,
-      },
-      cardList: {
-        paddingHorizontal: layout.screenPaddingX,
-        gap: 10,
-      },
-
-      // Alignment
-      alignmentSection: {
-        marginTop: 64,
-        alignSelf: 'stretch',
-        maxWidth: 480,
-        marginBottom: 40,
-        paddingHorizontal: layout.screenPaddingX,
-      },
-      alignmentHeader: {
-        marginBottom: 24,
-        gap: 8,
-      },
-      alignmentMeta: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(10),
-        textTransform: 'uppercase',
-        letterSpacing: 3,
-        color: c.secondaryFixed,
-      },
-      alignmentTitle: {
-        fontFamily: fonts.headlineExtra,
-        fontSize: scaleFont(36),
-        color: c.onSurface,
-        letterSpacing: -0.8,
-        lineHeight: scaleFont(42),
-      },
-    })
-  );
 
   return (
-    <View style={styles.root}>
+    <View className="flex-1 bg-surface">
       <PageAmbientBlobs />
 
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        className="flex-1"
+        contentContainerStyle={{ paddingTop: 64, paddingBottom: 176, alignItems: 'center' }}
         showsVerticalScrollIndicator={false}
       >
         <PageHero
           meta="Mindful Morning"
           title="Daily Aksha"
           subtitle="Finding stillness in the noise."
-          style={styles.header}
+          style={{ paddingBottom: 40, paddingHorizontal: layout.screenPaddingX }}
         />
 
         {/* Glow Hero Quote Card */}
-        <GlowCard style={styles.section}>
+        <GlowCard style={{ alignSelf: 'stretch', maxWidth: 480, marginHorizontal: layout.screenPaddingX }}>
           <DailyArthCard />
         </GlowCard>
 
         {/* What's Special Today */}
         {todayEvents.length > 0 && (
-          <View style={styles.sacredSection}>
-            <View style={styles.sacredHeader}>
-              <Text style={styles.sacredMeta}>✦  Special Today</Text>
+          <View className="mt-[52px] self-stretch gap-5">
+            <View className="gap-1.5" style={{ paddingHorizontal: layout.screenPaddingX }}>
+              <Text className="font-label text-xs uppercase tracking-[3px] text-secondary-fixed">✦  Special Today</Text>
             </View>
-            <View style={styles.cardList}>
+            <View className="gap-2.5" style={{ paddingHorizontal: layout.screenPaddingX }}>
               {todayEvents.map((day) => (
                 <SacredDayCard key={day.id} event={day} />
               ))}
@@ -124,10 +50,12 @@ export default function HomeScreen() {
         )}
 
         {/* Celestial Alignment */}
-        <View style={styles.alignmentSection}>
-          <View style={styles.alignmentHeader}>
-            <Text style={styles.alignmentMeta}>Celestial Alignment</Text>
-            <Text style={styles.alignmentTitle}>Your Top Focus Today</Text>
+        <View className="mb-10 mt-16 max-w-[480px] self-stretch" style={{ paddingHorizontal: layout.screenPaddingX }}>
+          <View className="mb-6 gap-2">
+            <Text className="font-label text-xs uppercase tracking-[3px] text-secondary-fixed">Celestial Alignment</Text>
+            <Text className="font-headline-extra text-[36px] leading-[42px] tracking-[-0.8px] text-on-surface">
+              Your Top Focus Today
+            </Text>
           </View>
 
           <DailyAlignmentCard

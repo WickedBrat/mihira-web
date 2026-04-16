@@ -1,7 +1,7 @@
 // Screen 4: The Sacred Request — Name Input
 import React, { useState, useRef } from 'react';
 import {
-  View, Text, StyleSheet, Pressable,
+  View, Text, Pressable,
   TextInput, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,7 +9,7 @@ import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OB, setOnboardingData } from '@/lib/onboardingStore';
-import { scaleFont } from '@/lib/typography';
+import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 export default function Screen4() {
   const [name, setName] = useState('');
@@ -24,24 +24,26 @@ export default function Screen4() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView className="flex-1 bg-ob-bg">
       <KeyboardAvoidingView
-        style={styles.kav}
+        className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={styles.body}>
-          <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-            <Text style={styles.headline}>What shall we call{'\n'}you in this space?</Text>
-            <Text style={styles.sub}>
+        <View className="flex-1 gap-12 px-8 pt-10">
+          <Animated.View entering={FadeInDown.duration(500)} className="gap-3.5">
+            <Text className="font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
+              What shall we call{'\n'}you in this space?
+            </Text>
+            <Text className="font-body text-[15px] leading-[23px] text-ob-muted">
               A name given to a space becomes sacred.{'\n'}
               Choose yours with care.
             </Text>
           </Animated.View>
 
-          <Animated.View entering={FadeInDown.delay(300).duration(500)} style={styles.inputWrap}>
+          <Animated.View entering={FadeInDown.delay(300).duration(500)} className="gap-4">
             <TextInput
               ref={inputRef}
-              style={styles.input}
+              className="font-headline text-[32px] text-ob-text"
               value={name}
               onChangeText={setName}
               placeholder="Your name…"
@@ -52,25 +54,30 @@ export default function Screen4() {
               onSubmitEditing={proceed}
               maxLength={40}
             />
-            <View style={styles.inputLine} />
+            <View className="h-px bg-ob-gold-border" />
             {name.length > 0 && (
-              <Animated.Text entering={FadeInDown.duration(300)} style={styles.preview}>
+              <Animated.Text
+                entering={FadeInDown.duration(300)}
+                className="mt-1 font-body text-sm tracking-[1px] text-ob-gold"
+              >
                 ☽  {name}
               </Animated.Text>
             )}
           </Animated.View>
         </View>
 
-        <Animated.View entering={FadeInUp.delay(600).duration(500)} style={styles.footer}>
+        <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-end p-8 pb-11">
           <Pressable
             onPress={proceed}
+            className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${
+              !name.trim() ? 'opacity-[0.35]' : ''
+            }`}
             style={({ pressed }) => [
-              styles.btn,
-              !name.trim() && styles.btnDisabled,
-              pressed && styles.btnPressed,
+              onboardingButtonShadow,
+              pressed && pressedButtonStyle,
             ]}
           >
-            <Text style={styles.btnText}>
+            <Text className="font-label text-base tracking-[0.3px] text-white">
               {name.trim() ? `Enter as ${name.trim().split(' ')[0]} →` : 'Enter your name first'}
             </Text>
           </Pressable>
@@ -79,61 +86,3 @@ export default function Screen4() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe:      { flex: 1, backgroundColor: OB.bg },
-  kav:       { flex: 1 },
-  body:      { flex: 1, paddingHorizontal: 32, paddingTop: 40, gap: 48 },
-  header:    { gap: 14 },
-  headline: {
-    fontFamily: 'GoogleSans_700Bold',
-    fontSize: scaleFont(36),
-    color: OB.text,
-    letterSpacing: -1,
-    lineHeight: scaleFont(42),
-  },
-  sub: {
-    fontFamily: 'GoogleSans_400Regular',
-    fontSize: scaleFont(15),
-    color: OB.muted,
-    lineHeight: scaleFont(23),
-  },
-  inputWrap: { gap: 16 },
-  input: {
-    fontFamily: 'GoogleSans_700Bold',
-    fontSize: scaleFont(32),
-    color: OB.text,
-  },
-  inputLine: {
-    height: 1,
-    backgroundColor: OB.goldBorder,
-  },
-  preview: {
-    fontFamily: 'GoogleSans_400Regular',
-    fontSize: scaleFont(14),
-    color: OB.gold,
-    letterSpacing: 1,
-    marginTop: 4,
-  },
-  footer:     { padding: 32, paddingBottom: 44, alignItems: 'flex-end' },
-  btn: {
-    backgroundColor: OB.saffron,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 9999,
-    alignItems: 'center',
-    shadowColor: OB.saffron,
-    shadowOpacity: 0.45,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
-  },
-  btnDisabled: { opacity: 0.35 },
-  btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },
-  btnText: {
-    fontFamily: 'GoogleSans_600SemiBold',
-    fontSize: scaleFont(16),
-    color: '#fff',
-    letterSpacing: 0.3,
-  },
-});

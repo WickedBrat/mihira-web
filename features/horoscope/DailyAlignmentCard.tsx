@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { FocusAreaCard } from './FocusAreaCard';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
+import { useTheme } from '@/lib/theme-context';
 import type { BirthChart } from '@/lib/vedic/types';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
 
@@ -15,70 +14,31 @@ interface Props {
 
 export function DailyAlignmentCard({ chart, focusAreas, isLoading, error }: Props) {
   const { colors } = useTheme();
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      container: {
-        gap: 0,
-      },
-      lagnaLabel: {
-        fontFamily: fonts.label,
-        fontSize: 9,
-        letterSpacing: 2,
-        textTransform: 'uppercase',
-        color: c.secondaryFixed,
-        marginBottom: 20,
-      },
-      center: {
-        alignItems: 'center',
-        gap: 12,
-        paddingVertical: 24,
-      },
-      loadingText: {
-        fontFamily: fonts.body,
-        fontSize: 14,
-        color: c.onSurfaceVariant,
-      },
-      errorText: {
-        fontFamily: fonts.body,
-        fontSize: 14,
-        color: c.error,
-        textAlign: 'center',
-      },
-      emptyText: {
-        fontFamily: fonts.body,
-        fontSize: 14,
-        color: c.onSurfaceVariant,
-        textAlign: 'center',
-        lineHeight: 22,
-      },
-    })
-  );
-
   if (isLoading) {
     return (
-      <View style={styles.center}>
+      <View className="items-center gap-3 py-6">
         <ActivityIndicator color={colors.primary} />
-        <Text style={styles.loadingText}>Reading the cosmos…</Text>
+        <Text className="font-body text-sm text-on-surface-variant">Reading the cosmos…</Text>
       </View>
     );
   }
 
   if (error) {
-    return <Text style={styles.errorText}>{error}</Text>;
+    return <Text className="text-center font-body text-sm text-error">{error}</Text>;
   }
 
   if (focusAreas.length === 0) {
     return (
-      <Text style={styles.emptyText}>
+      <Text className="text-center font-body text-sm leading-[22px] text-on-surface-variant">
         Add your birth details in Profile to unlock your daily alignment.
       </Text>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View>
       {chart && (
-        <Text style={styles.lagnaLabel}>
+        <Text className="mb-5 font-label text-[9px] uppercase tracking-[2px] text-secondary-fixed">
           {chart.lagna} Rising · {chart.nakshatra} Moon · {chart.currentDasha}
         </Text>
       )}

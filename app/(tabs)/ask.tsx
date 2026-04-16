@@ -4,7 +4,6 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   Alert,
@@ -22,49 +21,17 @@ import { useUsage } from '@/lib/usage';
 import { useSubscription } from '@/lib/subscription';
 import { PaywallSheet } from '@/features/billing/PaywallSheet';
 import { analytics } from '@/lib/analytics';
-import { fonts, layout } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
-
-const staticStyles = StyleSheet.create({
-  separator: { height: 0 },
-  bottomSpacer: { height: 96 },
-  loadMoreSpinner: { marginBottom: 12 },
-});
+import { layout } from '@/lib/theme';
+import { useTheme } from '@/lib/theme-context';
 
 function TypingIndicator() {
-  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
-    StyleSheet.create({
-      typingRow: { alignSelf: 'flex-start', marginTop: 8 },
-      typingBubble: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 4,
-        backgroundColor: dark ? 'rgba(37, 38, 38, 0.7)' : 'rgba(232, 225, 212, 0.7)',
-        paddingHorizontal: 14,
-        paddingVertical: 8,
-        borderRadius: 9999,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(72, 72, 72, 0.1)' : 'rgba(0, 0, 0, 0.08)',
-      },
-      typingDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: c.secondaryDim },
-      typingText: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(11),
-        color: c.onSurfaceVariant,
-        fontStyle: 'italic',
-        marginLeft: 4,
-      },
-    }),
-  );
-
   return (
-    <View style={styles.typingRow}>
-      <View style={styles.typingBubble}>
-        <View style={[styles.typingDot, { opacity: 0.6 }]} />
-        <View style={[styles.typingDot, { opacity: 0.4 }]} />
-        <View style={[styles.typingDot, { opacity: 0.2 }]} />
-        <Text style={styles.typingText}>Narad is journeying…</Text>
+    <View className="mt-2 self-start">
+      <View className="flex-row items-center gap-1 rounded-full border border-black/[0.08] bg-[rgba(232,225,212,0.7)] px-3.5 py-2 dark:border-outline-variant/10 dark:bg-[rgba(37,38,38,0.7)]">
+        <View className="h-[5px] w-[5px] rounded-full bg-secondary-dim opacity-60" />
+        <View className="h-[5px] w-[5px] rounded-full bg-secondary-dim opacity-40" />
+        <View className="h-[5px] w-[5px] rounded-full bg-secondary-dim opacity-20" />
+        <Text className="ml-1 font-body text-[11px] italic text-on-surface-variant">Narad is journeying…</Text>
       </View>
     </View>
   );
@@ -100,36 +67,12 @@ export default function AskScreen() {
       if (nativeEvent.contentOffset.y < 80 && hasMoreMessages && !isLoadingMoreRef.current) {
         isLoadingMoreRef.current = true;
         loadMoreMessages();
-        // Debounce: allow another load after 400ms
         setTimeout(() => { isLoadingMoreRef.current = false; }, 400);
       }
     },
     [hasMoreMessages, loadMoreMessages],
   );
   const { colors } = useTheme();
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      root: { flex: 1, backgroundColor: c.surface },
-      flex: { flex: 1 },
-      headerSafeArea: { marginBottom: 20, position: 'relative' },
-      topRightButton: {
-        position: 'absolute',
-        top: Platform.OS === 'ios' ? 0 : 20,
-        right: 16,
-        zIndex: 10,
-        padding: 8,
-      },
-      header: { paddingBottom: 24 },
-      headerTitle: { fontSize: scaleFont(38), lineHeight: scaleFont(44) },
-      headerSub: { maxWidth: 340 },
-      listContent: {
-        paddingTop: 28,
-        paddingHorizontal: layout.screenPaddingX,
-        paddingBottom: 28,
-        gap: 28,
-      },
-    }),
-  );
 
   const doEnter = () => {
     increment();
@@ -154,8 +97,7 @@ export default function AskScreen() {
     doEnter();
   };
 
-  // Show blank while context loads (avoids flicker between intro and chat)
-  if (!isContextLoaded) return <View style={styles.root} />;
+  if (!isContextLoaded) return <View className="flex-1 bg-surface" />;
 
   if (showIntro) {
     return (
@@ -186,9 +128,9 @@ export default function AskScreen() {
   }
 
   return (
-    <View style={styles.root}>
+    <View className="flex-1 bg-surface">
       <KeyboardAvoidingView
-        style={styles.flex}
+        className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={0}
       >
@@ -196,24 +138,28 @@ export default function AskScreen() {
           ref={flatListRef}
           data={messages}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={{
+            paddingTop: 28,
+            paddingHorizontal: layout.screenPaddingX,
+            paddingBottom: 28,
+            gap: 28,
+          }}
           showsVerticalScrollIndicator={false}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
           maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
           onScroll={handleScroll}
           scrollEventThrottle={200}
           renderItem={({ item }) => <ChatBubble message={item} senderName="Narad" />}
-          ItemSeparatorComponent={() => <View style={staticStyles.separator} />}
           ListHeaderComponent={(
-            <SafeAreaView edges={['top']} style={styles.headerSafeArea}>
+            <SafeAreaView edges={['top']} className="relative mb-5">
               {hasMoreMessages && (
                 <ActivityIndicator
                   size="small"
                   color={colors.onSurfaceVariant}
-                  style={staticStyles.loadMoreSpinner}
+                  style={{ marginBottom: 12 }}
                 />
               )}
-              <View style={styles.topRightButton}>
+              <View className="absolute right-4 z-10 p-2" style={{ top: Platform.OS === 'ios' ? 0 : 20 }}>
                 <TouchableOpacity
                   onPress={() => {
                     Alert.alert(
@@ -234,9 +180,9 @@ export default function AskScreen() {
                 meta="Sacred Guidance"
                 title="Ask Narad"
                 subtitle="Bring your question into the sacred space."
-                style={styles.header}
-                titleStyle={styles.headerTitle}
-                subtitleStyle={styles.headerSub}
+                style={{ paddingBottom: 24 }}
+                titleStyle={{ fontSize: 38, lineHeight: 44 }}
+                subtitleStyle={{ maxWidth: 340 }}
               />
             </SafeAreaView>
           )}
@@ -250,7 +196,7 @@ export default function AskScreen() {
         />
       </KeyboardAvoidingView>
 
-      <View style={staticStyles.bottomSpacer} />
+      <View className="h-24" />
     </View>
   );
 }

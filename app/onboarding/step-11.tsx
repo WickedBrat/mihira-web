@@ -1,12 +1,12 @@
 // Screen 11: The Sankalpa — Commitment Tier
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { OB, setOnboardingData } from '@/lib/onboardingStore';
-import { scaleFont } from '@/lib/typography';
+import { setOnboardingData } from '@/lib/onboardingStore';
+import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const TIERS = [
   {
@@ -48,20 +48,22 @@ export default function Screen11() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView className="flex-1 bg-ob-bg">
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.body}
+        className="flex-1"
+        contentContainerClassName="gap-7 p-8 pt-8"
         showsVerticalScrollIndicator={false}
       >
-        <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.headline}>Choose your{'\n'}daily commitment.</Text>
-          <Text style={styles.sub}>
+        <Animated.View entering={FadeInDown.duration(500)} className="gap-2.5">
+          <Text className="font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
+            Choose your{'\n'}daily commitment.
+          </Text>
+          <Text className="font-body text-[15px] leading-[23px] text-ob-muted">
             Meaningful change requires rhythm. You can always change this later.
           </Text>
         </Animated.View>
 
-        <View style={styles.tiers}>
+        <View className="gap-3.5">
           {TIERS.map((tier, i) => {
             const active = selected === tier.id;
             return (
@@ -74,41 +76,48 @@ export default function Screen11() {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     setSelected(tier.id);
                   }}
-                  style={[styles.card, active && styles.cardActive]}
+                  className={`overflow-hidden rounded-[18px] border p-[22px] gap-3.5 ${
+                    active
+                      ? 'border-ob-saffron-border bg-ob-saffron-dim'
+                      : 'border-ob-card-border bg-ob-card'
+                  }`}
                 >
                   {'recommended' in tier && tier.recommended && (
-                    <View style={styles.recommendedBadge}>
-                      <Text style={styles.recommendedText}>MOST POPULAR</Text>
+                    <View className="absolute right-0 top-0 rounded-bl-xl bg-ob-saffron px-3 py-[5px]">
+                      <Text className="font-label text-[9px] tracking-[1.5px] text-white">MOST POPULAR</Text>
                     </View>
                   )}
 
-                  <View style={styles.cardHeader}>
-                    <View style={styles.cardLeft}>
-                      <Text style={styles.tierIcon}>{tier.icon}</Text>
+                  <View className="flex-row items-center justify-between">
+                    <View className="flex-row items-center gap-3.5">
+                      <Text className="text-[28px]">{tier.icon}</Text>
                       <View>
-                        <Text style={[styles.tierName, active && styles.tierNameActive]}>
+                        <Text className={`font-headline text-lg ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
                           {tier.name}
                         </Text>
-                        <Text style={styles.tierDuration}>{tier.duration} / day</Text>
+                        <Text className="font-body text-xs text-ob-muted">{tier.duration} / day</Text>
                       </View>
                     </View>
                     {active && (
-                      <Animated.View entering={ZoomIn.duration(250)} style={styles.checkCircle}>
-                        <Text style={styles.checkMark}>✦</Text>
+                      <Animated.View
+                        entering={ZoomIn.duration(250)}
+                        className="h-[30px] w-[30px] items-center justify-center rounded-full bg-ob-saffron"
+                      >
+                        <Text className="text-sm text-white">✦</Text>
                       </Animated.View>
                     )}
                   </View>
 
-                  <Text style={[styles.tierDesc, active && styles.tierDescActive]}>
+                  <Text className={`font-body text-sm leading-5 ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
                     {tier.desc}
                   </Text>
 
                   {active && (
-                    <Animated.View entering={FadeInDown.duration(300)} style={styles.features}>
+                    <Animated.View entering={FadeInDown.duration(300)} className="gap-1.5 pt-1">
                       {tier.features.map((f) => (
-                        <View key={f} style={styles.featureRow}>
-                          <Text style={styles.featureDot}>·</Text>
-                          <Text style={styles.featureText}>{f}</Text>
+                        <View key={f} className="flex-row items-start gap-1.5">
+                          <Text className="font-headline text-base leading-5 text-ob-gold">·</Text>
+                          <Text className="font-body text-sm leading-5 text-ob-gold">{f}</Text>
                         </View>
                       ))}
                     </Animated.View>
@@ -118,110 +127,26 @@ export default function Screen11() {
             );
           })}
         </View>
-        <View style={{ height: 120 }} />
+        <View className="h-[120px]" />
       </ScrollView>
 
-      <Animated.View entering={FadeInUp.delay(700).duration(500)} style={styles.footer}>
+      <Animated.View
+        entering={FadeInUp.delay(700).duration(500)}
+        className="absolute bottom-0 left-0 right-0 items-end bg-[rgba(7,9,12,0.96)] p-8 pb-11"
+      >
         <Pressable
           onPress={proceed}
-          style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}
+          className="items-center rounded-full bg-ob-saffron px-8 py-4"
+          style={({ pressed }) => [
+            onboardingButtonShadow,
+            pressed && pressedButtonStyle,
+          ]}
         >
-          <Text style={styles.btnText}>Set My Sankalpa →</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">
+            Set My Sankalpa →
+          </Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe:     { flex: 1, backgroundColor: OB.bg },
-  scroll:   { flex: 1 },
-  body:     { padding: 32, paddingTop: 32, gap: 28 },
-  header:   { gap: 10 },
-  headline: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(34),
-    color: OB.text, letterSpacing: -0.8, lineHeight: scaleFont(40),
-  },
-  sub: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
-    color: OB.muted, lineHeight: scaleFont(23),
-  },
-  tiers:    { gap: 14 },
-  card: {
-    padding: 22, borderRadius: 18,
-    borderWidth: 1, borderColor: OB.cardBorder,
-    backgroundColor: OB.card, gap: 14,
-    overflow: 'hidden',
-  },
-  cardActive: {
-    borderColor: OB.saffronBorder,
-    backgroundColor: OB.saffronDim,
-  },
-  recommendedBadge: {
-    position: 'absolute', top: 0, right: 0,
-    backgroundColor: OB.saffron,
-    paddingHorizontal: 12, paddingVertical: 5,
-    borderBottomLeftRadius: 12,
-  },
-  recommendedText: {
-    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(9),
-    color: '#fff', letterSpacing: 1.5,
-  },
-  cardHeader: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-  },
-  cardLeft: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  tierIcon: { fontSize: scaleFont(28) },
-  tierName: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(17), color: OB.muted,
-  },
-  tierNameActive: { color: OB.text },
-  tierDuration: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(12), color: OB.muted,
-  },
-  checkCircle: {
-    width: 30, height: 30, borderRadius: 15,
-    backgroundColor: OB.saffron,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  checkMark: {
-    fontSize: scaleFont(13), color: '#fff',
-  },
-  tierDesc: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13),
-    color: OB.muted, lineHeight: scaleFont(20),
-  },
-  tierDescActive: { color: OB.text },
-  features: { gap: 6, paddingTop: 4 },
-  featureRow: { flexDirection: 'row', gap: 6, alignItems: 'flex-start' },
-  featureDot: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(16), color: OB.gold, lineHeight: scaleFont(20),
-  },
-  featureText: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13),
-    color: OB.gold, lineHeight: scaleFont(20),
-  },
-  footer: {
-    position: 'absolute', bottom: 0, left: 0, right: 0,
-    padding: 32, paddingBottom: 44,
-    backgroundColor: 'rgba(7,9,12,0.96)',
-    alignItems: 'flex-end',
-  },
-  btn: {
-    backgroundColor: OB.saffron,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 9999,
-    alignItems: 'center',
-    shadowColor: OB.saffron,
-    shadowOpacity: 0.45,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
-  },
-  btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
-  btnText: {
-    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
-    color: '#fff', letterSpacing: 0.3,
-  },
-});

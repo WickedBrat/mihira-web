@@ -1,6 +1,6 @@
 // features/ask/NaradIntro.tsx
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,9 +9,6 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fonts } from '@/lib/theme';
-import { useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { SacredButton } from '@/components/ui/SacredButton';
 
@@ -43,69 +40,29 @@ export function NaradIntro({ onEnter }: NaradIntroProps) {
     transform: [{ translateY: contentY.value }],
   }));
 
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      root: { flex: 1, backgroundColor: c.surface },
-      safe: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 32,
-      },
-      imageWrapper: {
-        width: 160,
-        height: 160,
-        borderRadius: 80,
-        overflow: 'hidden',
-        marginBottom: 36,
-        borderWidth: 1,
-        borderColor: 'rgba(212, 175, 55, 0.3)',
-      },
-      image: { width: '100%', height: '100%' },
-      name: {
-        fontFamily: fonts.headlineExtra,
-        fontSize: scaleFont(40),
-        color: c.onSurface,
-        letterSpacing: -1,
-        textAlign: 'center',
-        marginBottom: 6,
-      },
-      essence: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(12),
-        color: 'rgba(212, 175, 55, 0.85)',
-        letterSpacing: 3,
-        textTransform: 'uppercase',
-        textAlign: 'center',
-        marginBottom: 28,
-      },
-      body: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(15),
-        color: c.onSurfaceVariant,
-        textAlign: 'center',
-        lineHeight: scaleFont(24),
-        marginBottom: 48,
-      },
-    }),
-  );
-
   return (
-    <View style={styles.root}>
-      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+    <View className="flex-1 bg-surface">
+      <View pointerEvents="none" className="absolute inset-0">
         <AmbientBlob color="rgba(212, 175, 55, 0.10)" top={-80} left={-60} size={360} />
         <AmbientBlob color="rgba(255, 140, 0, 0.06)" top={400} left={60} size={280} />
       </View>
 
-      <SafeAreaView edges={['top', 'bottom']} style={styles.safe}>
-        <Animated.View style={[styles.imageWrapper, imageStyle]}>
-          <Image source={{ uri: NARAD_IMAGE_URL }} style={styles.image} resizeMode="cover" />
+      <SafeAreaView edges={['top', 'bottom']} className="flex-1 items-center justify-center px-8">
+        <Animated.View
+          className="mb-9 h-40 w-40 overflow-hidden rounded-full border border-[rgba(212,175,55,0.3)]"
+          style={imageStyle}
+        >
+          <Image source={{ uri: NARAD_IMAGE_URL }} className="h-full w-full" resizeMode="cover" />
         </Animated.View>
 
-        <Animated.View style={[{ alignItems: 'center', width: '100%' }, contentStyle]}>
-          <Text style={styles.name}>Narad</Text>
-          <Text style={styles.essence}>Celestial Companion</Text>
-          <Text style={styles.body}>
+        <Animated.View className="w-full items-center" style={contentStyle}>
+          <Text className="mb-1.5 text-center font-headline-extra text-[40px] tracking-[-1px] text-on-surface">
+            Narad
+          </Text>
+          <Text className="mb-7 text-center font-label text-xs uppercase tracking-[3px] text-[rgba(212,175,55,0.85)]">
+            Celestial Companion
+          </Text>
+          <Text className="mb-12 text-center font-body text-base leading-6 text-on-surface-variant">
             Share what is on your mind. Narad will seek the wisest counsel and return with their
             words — a shloka, a truth, a direction.
           </Text>

@@ -1,9 +1,7 @@
 import { PricingTable } from '@clerk/expo/web';
 import { useUser, useClerk } from '@clerk/expo';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { User, LogOut } from 'lucide-react-native';
-import { scaleFont } from '@/lib/typography';
-import { fonts } from '@/lib/theme';
 
 export default function PricingPage() {
   const { user } = useUser();
@@ -12,72 +10,20 @@ export default function PricingPage() {
   const email = user?.primaryEmailAddress?.emailAddress ?? user?.emailAddresses?.[0]?.emailAddress;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.userInfo}>
-          <View style={styles.avatarCircle}>
+    <View className="flex-1 bg-white">
+      <View className="flex-row items-center justify-between border-b border-[#f0f0f0] bg-white px-5 py-3">
+        <View className="mr-4 flex-1 flex-row items-center gap-2.5">
+          <View className="h-8 w-8 items-center justify-center rounded-full bg-[#f0f0f0]">
             <User size={16} color="#555" />
           </View>
-          <Text style={styles.email} numberOfLines={1}>{email}</Text>
+          <Text className="shrink font-body text-sm text-[#444]" numberOfLines={1}>{email}</Text>
         </View>
-        <TouchableOpacity style={styles.logoutBtn} onPress={() => signOut()} activeOpacity={0.7}>
+        <TouchableOpacity className="flex-row items-center gap-1.5 rounded-lg bg-[#f5f5f5] px-3 py-1.5" onPress={() => signOut()} activeOpacity={0.7}>
           <LogOut size={16} color="#888" />
-          <Text style={styles.logoutText}>Sign out</Text>
+          <Text className="font-body text-sm text-[#888]">Sign out</Text>
         </TouchableOpacity>
       </View>
       <PricingTable />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-    backgroundColor: '#ffffff',
-  },
-  userInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    flex: 1,
-    marginRight: 16,
-  },
-  avatarCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#f0f0f0',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  email: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(13),
-    color: '#444',
-    flexShrink: 1,
-  },
-  logoutBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    backgroundColor: '#f5f5f5',
-  },
-  logoutText: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(13),
-    color: '#888',
-  },
-});

@@ -1,9 +1,8 @@
 // Screen 8: The Sarathi's Voice — AI First Question
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  View, Text, StyleSheet, Pressable,
+  View, Text, Pressable,
   TextInput, KeyboardAvoidingView, Platform,
-  Animated as RNAnimated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -13,7 +12,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
-import { scaleFont } from '@/lib/typography';
+import {
+  onboardingButtonShadow,
+  pressedButtonStyle,
+  pressedSendButtonStyle,
+} from '@/features/onboarding/onboardingStyles';
 
 export default function Screen8() {
   const [question, setQuestion]  = useState('');
@@ -49,24 +52,30 @@ export default function Screen8() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView className="flex-1 bg-ob-bg">
       <KeyboardAvoidingView
-        style={styles.kav}
+        className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={styles.body}>
+        <View className="flex-1 gap-5 px-7 pt-6">
           {/* Sarathi avatar */}
-          <Animated.View entering={FadeIn.delay(200).duration(600)} style={styles.avatarWrap}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarIcon}>☽</Text>
-              <Animated.View style={[styles.pulseDot, dotStyle]} />
+          <Animated.View entering={FadeIn.delay(200).duration(600)} className="items-start gap-1.5">
+            <View className="h-[52px] w-[52px] items-center justify-center rounded-full border border-ob-saffron-border bg-ob-saffron-dim">
+              <Text className="text-2xl text-ob-gold">☽</Text>
+              <Animated.View
+                className="absolute bottom-[3px] right-[3px] h-2.5 w-2.5 rounded-full border-[1.5px] border-ob-bg bg-ob-saffron"
+                style={dotStyle}
+              />
             </View>
-            <Text style={styles.avatarLabel}>Your Sarathi</Text>
+            <Text className="font-body text-[11px] tracking-[0.5px] text-ob-muted">Your Sarathi</Text>
           </Animated.View>
 
           {/* Bubble */}
-          <Animated.View entering={FadeInDown.delay(500).duration(500)} style={styles.bubble}>
-            <Text style={styles.bubbleText}>
+          <Animated.View
+            entering={FadeInDown.delay(500).duration(500)}
+            className="max-w-[90%] self-start rounded-[20px] rounded-tl p-[18px] border border-ob-card-border bg-ob-card"
+          >
+            <Text className="font-body text-[15px] leading-6 text-ob-text">
               I am your Sarathi — your Charioteer.{'\n\n'}
               {name}, what is one question weighing on your heart today?
             </Text>
@@ -74,10 +83,13 @@ export default function Screen8() {
 
           {/* Input */}
           {!answered && !loading && (
-            <Animated.View entering={FadeInDown.delay(900).duration(500)} style={styles.inputWrap}>
+            <Animated.View
+              entering={FadeInDown.delay(900).duration(500)}
+              className="flex-row items-end gap-2.5 rounded-2xl border border-ob-card-border bg-ob-card p-3.5"
+            >
               <TextInput
                 ref={inputRef}
-                style={styles.input}
+                className="max-h-[120px] flex-1 font-body text-[15px] leading-[23px] text-ob-text"
                 value={question}
                 onChangeText={setQuestion}
                 placeholder="Ask something real…"
@@ -89,22 +101,21 @@ export default function Screen8() {
               <Pressable
                 onPress={handleSubmit}
                 disabled={!question.trim()}
-                style={({ pressed }) => [
-                  styles.sendBtn,
-                  !question.trim() && styles.sendBtnDisabled,
-                  pressed && styles.sendBtnPressed,
-                ]}
+                className={`h-10 w-10 items-center justify-center rounded-full bg-ob-saffron ${
+                  !question.trim() ? 'opacity-[0.35]' : ''
+                }`}
+                style={({ pressed }) => pressed && pressedSendButtonStyle}
               >
-                <Text style={styles.sendBtnText}>→</Text>
+                <Text className="font-headline text-lg text-white">→</Text>
               </Pressable>
             </Animated.View>
           )}
 
           {/* Loading state */}
           {loading && (
-            <Animated.View entering={FadeIn.duration(300)} style={styles.loadingWrap}>
-              <Text style={styles.loadingText}>Generating Divine Perspective…</Text>
-              <View style={styles.loadingDots}>
+            <Animated.View entering={FadeIn.duration(300)} className="items-start gap-2.5">
+              <Text className="font-body text-sm italic text-ob-muted">Generating Divine Perspective…</Text>
+              <View className="flex-row gap-1.5 pl-1">
                 {[0, 1, 2].map((i) => (
                   <LoadingDot key={i} delay={i * 250} />
                 ))}
@@ -114,12 +125,12 @@ export default function Screen8() {
 
           {/* User bubble + response */}
           {answered && (
-            <Animated.View entering={FadeInDown.duration(400)} style={{ gap: 12 }}>
-              <View style={styles.userBubble}>
-                <Text style={styles.userBubbleText}>{question}</Text>
+            <Animated.View entering={FadeInDown.duration(400)} className="gap-3">
+              <View className="max-w-[85%] self-end rounded-[20px] rounded-br bg-ob-saffron-dim p-4 border border-ob-saffron-border">
+                <Text className="font-body text-sm leading-[22px] text-ob-text">{question}</Text>
               </View>
-              <View style={styles.bubble}>
-                <Text style={styles.bubbleText}>
+              <View className="max-w-[90%] self-start rounded-[20px] rounded-tl p-[18px] border border-ob-card-border bg-ob-card">
+                <Text className="font-body text-[15px] leading-6 text-ob-text">
                   Your question is received. The stars have noted your seeking.{'\n\n'}
                   As we journey together, the patterns will reveal what your mind already knows.
                 </Text>
@@ -129,15 +140,21 @@ export default function Screen8() {
         </View>
 
         {answered && (
-          <Animated.View entering={FadeInUp.delay(400).duration(500)} style={styles.footer}>
+          <Animated.View entering={FadeInUp.delay(400).duration(500)} className="items-end p-8 pb-11">
             <Pressable
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 router.push('/onboarding/step-9');
               }}
-              style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}
+              className="items-center rounded-full bg-ob-saffron px-8 py-4"
+              style={({ pressed }) => [
+                onboardingButtonShadow,
+                pressed && pressedButtonStyle,
+              ]}
             >
-              <Text style={styles.btnText}>Continue My Journey →</Text>
+              <Text className="font-label text-base tracking-[0.3px] text-white">
+                Continue My Journey →
+              </Text>
             </Pressable>
           </Animated.View>
         )}
@@ -156,103 +173,5 @@ function LoadingDot({ delay }: { delay: number }) {
     );
   }, []);
   const style = useAnimatedStyle(() => ({ opacity: opacity.value }));
-  return <Animated.View style={[styles.dot3, style]} />;
+  return <Animated.View className="h-[7px] w-[7px] rounded bg-ob-saffron" style={style} />;
 }
-
-const styles = StyleSheet.create({
-  safe:     { flex: 1, backgroundColor: OB.bg },
-  kav:      { flex: 1 },
-  body:     { flex: 1, paddingHorizontal: 28, paddingTop: 24, gap: 20 },
-  avatarWrap: { alignItems: 'flex-start', gap: 6 },
-  avatar: {
-    width: 52, height: 52, borderRadius: 26,
-    backgroundColor: OB.saffronDim,
-    borderWidth: 1, borderColor: OB.saffronBorder,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  avatarIcon: { fontSize: scaleFont(24), color: OB.gold },
-  pulseDot: {
-    position: 'absolute', bottom: 3, right: 3,
-    width: 10, height: 10, borderRadius: 5,
-    backgroundColor: OB.saffron,
-    borderWidth: 1.5, borderColor: OB.bg,
-  },
-  avatarLabel: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(11),
-    color: OB.muted, letterSpacing: 0.5,
-  },
-  bubble: {
-    backgroundColor: OB.card,
-    borderWidth: 1, borderColor: OB.cardBorder,
-    borderRadius: 20, borderTopLeftRadius: 4,
-    padding: 18,
-    maxWidth: '90%',
-    alignSelf: 'flex-start',
-  },
-  bubbleText: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
-    color: OB.text, lineHeight: scaleFont(24),
-  },
-  userBubble: {
-    backgroundColor: OB.saffronDim,
-    borderWidth: 1, borderColor: OB.saffronBorder,
-    borderRadius: 20, borderBottomRightRadius: 4,
-    padding: 16,
-    maxWidth: '85%',
-    alignSelf: 'flex-end',
-  },
-  userBubbleText: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
-    color: OB.text, lineHeight: scaleFont(22),
-  },
-  inputWrap: {
-    flexDirection: 'row', alignItems: 'flex-end', gap: 10,
-    backgroundColor: OB.card, borderRadius: 16,
-    borderWidth: 1, borderColor: OB.cardBorder,
-    padding: 14,
-  },
-  input: {
-    flex: 1,
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(15),
-    color: OB.text, lineHeight: scaleFont(23),
-    maxHeight: 120,
-  },
-  sendBtn: {
-    width: 40, height: 40, borderRadius: 20,
-    backgroundColor: OB.saffron,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  sendBtnDisabled: { opacity: 0.35 },
-  sendBtnPressed:  { opacity: 0.75, transform: [{ scale: 0.94 }] },
-  sendBtnText: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(18), color: '#fff',
-  },
-  loadingWrap: { alignItems: 'flex-start', gap: 10 },
-  loadingText: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(13),
-    color: OB.muted, fontStyle: 'italic',
-  },
-  loadingDots: { flexDirection: 'row', gap: 6, paddingLeft: 4 },
-  dot3: {
-    width: 7, height: 7, borderRadius: 4,
-    backgroundColor: OB.saffron,
-  },
-  footer: { padding: 32, paddingBottom: 44, alignItems: 'flex-end' },
-  btn: {
-    backgroundColor: OB.saffron,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 9999,
-    alignItems: 'center',
-    shadowColor: OB.saffron,
-    shadowOpacity: 0.45,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
-  },
-  btnPressed: { opacity: 0.82, transform: [{ scale: 0.98 }] },
-  btnText: {
-    fontFamily: 'GoogleSans_600SemiBold', fontSize: scaleFont(16),
-    color: '#fff', letterSpacing: 0.3,
-  },
-});

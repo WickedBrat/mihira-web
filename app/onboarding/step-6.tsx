@@ -1,6 +1,6 @@
 // Screen 6: Telemetric Sync — The "Wait" Ritual
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import {
@@ -23,7 +23,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useWindowDimensions } from 'react-native';
 import { OB, getOnboardingData } from '@/lib/onboardingStore';
-import { scaleFont } from '@/lib/typography';
+import { absoluteFillStyle } from '@/features/onboarding/onboardingStyles';
 
 const STEPS = [
   'Fetching Swiss Ephemeris data…',
@@ -93,10 +93,10 @@ export default function Screen6() {
   const name = data.userName?.split(' ')[0] || '';
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.body}>
-        <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.headline}>
+    <SafeAreaView className="flex-1 bg-ob-bg">
+      <View className="flex-1 items-center gap-4 px-8 pt-7">
+        <Animated.View entering={FadeInDown.duration(500)} className="self-stretch gap-2">
+          <Text className="font-headline text-[28px] tracking-[-0.6px] text-ob-text">
             {name ? `Mapping ${name}'s universe` : 'Mapping your universe'}
           </Text>
         </Animated.View>
@@ -145,7 +145,7 @@ export default function Screen6() {
           </Canvas>
 
           {/* Rotating outer marks */}
-          <Animated.View style={[StyleSheet.absoluteFill, dialStyle]}>
+          <Animated.View style={[absoluteFillStyle, dialStyle]}>
             <Canvas style={{ width, height: width }}>
               <Circle
                 cx={cx} cy={cx + R - 6} r={5}
@@ -159,7 +159,7 @@ export default function Screen6() {
           </Animated.View>
 
           {/* Rotating inner marks */}
-          <Animated.View style={[StyleSheet.absoluteFill, innerStyle]}>
+          <Animated.View style={[absoluteFillStyle, innerStyle]}>
             <Canvas style={{ width, height: width }}>
               <Circle
                 cx={cx + R * 0.72 - 5} cy={cx} r={4}
@@ -169,30 +169,36 @@ export default function Screen6() {
           </Animated.View>
 
           {/* Center moon */}
-          <View style={[StyleSheet.absoluteFill, styles.center]}>
-            <Animated.Text style={[styles.centerMoon, dotStyle]}>☽</Animated.Text>
+          <View className="absolute inset-0 items-center justify-center">
+            <Animated.Text className="text-[36px] text-ob-gold" style={dotStyle}>
+              ☽
+            </Animated.Text>
           </View>
         </View>
 
         {/* Status text */}
-        <View style={styles.statusWrap}>
+        <View className="items-center gap-4 pt-2">
           <Animated.View
             key={stepIndex}
             entering={FadeIn.duration(400)}
             exiting={FadeOut.duration(300)}
           >
-            <Text style={styles.statusText}>{STEPS[stepIndex]}</Text>
+            <Text className="text-center font-body text-sm tracking-[0.2px] text-ob-muted">
+              {STEPS[stepIndex]}
+            </Text>
           </Animated.View>
 
-          <View style={styles.dotsRow}>
+          <View className="flex-row gap-1.5">
             {STEPS.map((_, i) => (
               <View
                 key={i}
-                style={[
-                  styles.stepDot,
-                  i === stepIndex && styles.stepDotActive,
-                  i < stepIndex && styles.stepDotDone,
-                ]}
+                className={`h-[5px] rounded-full ${
+                  i === stepIndex
+                    ? 'w-3.5 bg-ob-saffron'
+                    : i < stepIndex
+                      ? 'w-[5px] bg-ob-gold'
+                      : 'w-[5px] bg-ob-card-border'
+                }`}
               />
             ))}
           </View>
@@ -201,27 +207,3 @@ export default function Screen6() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe:     { flex: 1, backgroundColor: OB.bg },
-  body:     { flex: 1, paddingHorizontal: 32, paddingTop: 28, gap: 16, alignItems: 'center' },
-  header:   { alignSelf: 'stretch', gap: 8 },
-  headline: {
-    fontFamily: 'GoogleSans_700Bold', fontSize: scaleFont(28),
-    color: OB.text, letterSpacing: -0.6,
-  },
-  center: { alignItems: 'center', justifyContent: 'center' },
-  centerMoon: { fontSize: scaleFont(36), color: OB.gold },
-  statusWrap: { alignItems: 'center', gap: 16, paddingTop: 8 },
-  statusText: {
-    fontFamily: 'GoogleSans_400Regular', fontSize: scaleFont(14),
-    color: OB.muted, textAlign: 'center', letterSpacing: 0.2,
-  },
-  dotsRow: { flexDirection: 'row', gap: 6 },
-  stepDot: {
-    width: 5, height: 5, borderRadius: 3,
-    backgroundColor: OB.cardBorder,
-  },
-  stepDotActive: { backgroundColor: OB.saffron, width: 14 },
-  stepDotDone:   { backgroundColor: OB.gold },
-});

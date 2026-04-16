@@ -1,10 +1,8 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Play } from 'lucide-react-native';
 import { hapticLight } from '@/lib/haptics';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
+import { useTheme } from '@/lib/theme-context';
 
 export interface Lesson {
   id: string;
@@ -20,63 +18,20 @@ interface LessonRowProps {
 
 export function LessonRow({ lesson, onPress }: LessonRowProps) {
   const { colors } = useTheme();
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      pressable: {
-        borderRadius: 16,
-      },
-      row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 16,
-        padding: 16,
-      },
-      pressed: {
-        backgroundColor: c.surfaceContainerHighest,
-      },
-      thumbnail: {
-        width: 52,
-        height: 52,
-        borderRadius: 12,
-        backgroundColor: c.surfaceContainerHigh,
-        flexShrink: 0,
-      },
-      text: { flex: 1 },
-      title: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: scaleFont(15),
-        color: c.onSurface,
-        marginBottom: 3,
-      },
-      meta: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(12),
-        color: c.onSurfaceVariant,
-      },
-      playBtn: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        borderWidth: 1,
-        borderColor: `${c.outlineVariant}33`,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-    })
-  );
 
   return (
     <Pressable
       onPress={() => { hapticLight(); onPress?.(); }}
-      style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
+      className="rounded-2xl"
+      style={({ pressed }) => pressed && { backgroundColor: colors.surfaceContainerHighest }}
     >
-      <View style={styles.row}>
-        <View style={styles.thumbnail} />
-        <View style={styles.text}>
-          <Text style={styles.title}>{lesson.title}</Text>
-          <Text style={styles.meta}>{lesson.duration} · {lesson.category}</Text>
+      <View className="flex-row items-center gap-4 p-4">
+        <View className="h-[52px] w-[52px] shrink-0 rounded-xl bg-surface-container-high" />
+        <View className="flex-1">
+          <Text className="mb-[3px] font-body-medium text-base text-on-surface">{lesson.title}</Text>
+          <Text className="font-body text-xs text-on-surface-variant">{lesson.duration} · {lesson.category}</Text>
         </View>
-        <View style={styles.playBtn}>
+        <View className="h-9 w-9 items-center justify-center rounded-full border border-outline-variant/20">
           <Play size={14} color={colors.onSurfaceVariant} fill={colors.onSurfaceVariant} />
         </View>
       </View>

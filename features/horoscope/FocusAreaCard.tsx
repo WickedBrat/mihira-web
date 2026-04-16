@@ -1,10 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BlurView } from 'expo-blur';
 import { VedicReasoningAccordion } from './VedicReasoningAccordion';
-import { fonts } from '@/lib/theme';
-import { useThemedStyles } from '@/lib/theme-context';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
 
 const BASE = 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/daily-prediction';
@@ -81,114 +78,37 @@ interface Props {
 
 export function FocusAreaCard({ focusArea, isLast = false }: Props) {
   const image = IMAGES[focusArea.area] ?? FALLBACK;
-  const styles = useThemedStyles((_c, _glass, _gradients, dark) =>
-    StyleSheet.create({
-      imageBg: {
-        alignSelf: 'stretch',
-        height: 140,
-        borderRadius: 24,
-        overflow: 'hidden',
-      },
-      image: {
-        borderRadius: 24,
-      },
-      imageGradient: {
-        flex: 1,
-        padding: 20,
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
-      },
-      emoji: {
-        fontSize: 32,
-      },
-      areaLabel: {
-        fontFamily: fonts.headlineExtra,
-        fontSize: 24,
-        color: '#fff',
-        letterSpacing: -0.3,
-        textAlign: 'right',
-      },
-      timeRange: {
-        fontFamily: fonts.body,
-        fontSize: 13,
-        color: 'rgba(255,255,255,0.55)',
-        textAlign: 'right',
-        marginTop: 2,
-      },
-      body: {
-        alignSelf: 'stretch',
-        backgroundColor: dark ? 'rgba(37,38,38,0.6)' : 'rgba(232,225,212,0.6)',
-        borderRadius: 20,
-        padding: 20,
-        marginTop: 10,
-        gap: 10,
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)',
-      },
-      action: {
-        fontFamily: fonts.headline,
-        fontSize: 19,
-        color: '#fff',
-        letterSpacing: -0.3,
-        lineHeight: 27,
-      },
-      suggestion: {
-        fontFamily: fonts.body,
-        fontSize: 15,
-        color: 'rgba(255,255,255,0.65)',
-        lineHeight: 23,
-      },
-      connector: {
-        alignItems: 'center',
-        height: 36,
-        gap: 4,
-        paddingVertical: 4,
-      },
-      connectorLine: {
-        flex: 1,
-        width: 1.5,
-        backgroundColor: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-      },
-      connectorDot: {
-        width: 5,
-        height: 5,
-        borderRadius: 3,
-        backgroundColor: dark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)',
-      },
-    })
-  );
 
   return (
     <View>
       <ImageBackground
         source={image}
-        style={styles.imageBg}
-        imageStyle={styles.image}
+        className="h-[140px] self-stretch overflow-hidden rounded-3xl"
+        imageStyle={{ borderRadius: 24 }}
         resizeMode="cover"
       >
         <LinearGradient
           colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,0.5)']}
-          style={styles.imageGradient}
+          className="flex-1 flex-row items-end justify-end p-5"
         >
           <View>
-            <Text style={styles.areaLabel}>{focusArea.area}</Text>
-            <Text style={styles.timeRange}>{focusArea.timeRange}</Text>
+            <Text className="text-right font-headline-extra text-2xl tracking-[-0.3px] text-white">{focusArea.area}</Text>
+            <Text className="mt-0.5 text-right font-body text-sm text-white/55">{focusArea.timeRange}</Text>
           </View>
         </LinearGradient>
       </ImageBackground>
 
-      <View style={styles.body}>
-        <Text style={styles.action}>{focusArea.action}</Text>
-        <Text style={styles.suggestion}>{focusArea.suggestion}</Text>
+      <View className="mt-2.5 gap-2.5 self-stretch rounded-[20px] border border-black/[0.06] bg-[rgba(232,225,212,0.6)] p-5 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.6)]">
+        <Text className="font-headline text-xl leading-[27px] tracking-[-0.3px] text-white">{focusArea.action}</Text>
+        <Text className="font-body text-base leading-[23px] text-white/65">{focusArea.suggestion}</Text>
         <VedicReasoningAccordion reasoning={focusArea.reasoning} />
       </View>
 
       {!isLast && (
-        <View style={styles.connector}>
-          <View style={styles.connectorLine} />
-          <View style={styles.connectorDot} />
-          <View style={styles.connectorLine} />
+        <View className="h-9 items-center gap-1 py-1">
+          <View className="w-[1.5px] flex-1 bg-black/10 dark:bg-white/10" />
+          <View className="h-[5px] w-[5px] rounded-full bg-black/15 dark:bg-white/20" />
+          <View className="w-[1.5px] flex-1 bg-black/10 dark:bg-white/10" />
         </View>
       )}
     </View>

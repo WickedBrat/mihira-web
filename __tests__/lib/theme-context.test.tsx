@@ -1,13 +1,18 @@
 import React from 'react';
 import { renderHook, act } from '@testing-library/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ThemeProvider, useTheme, useThemedStyles } from '@/lib/theme-context';
+import { ThemeProvider, useTheme } from '@/lib/theme-context';
 import { darkColors, lightColors } from '@/lib/theme';
-import { StyleSheet } from 'react-native';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
+
+jest.mock('nativewind', () => ({
+  useColorScheme: () => ({
+    setColorScheme: jest.fn(),
+  }),
+}));
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <ThemeProvider>{children}</ThemeProvider>
@@ -53,15 +58,5 @@ describe('useTheme', () => {
       'useTheme must be used inside ThemeProvider'
     );
     spy.mockRestore();
-  });
-});
-
-describe('useThemedStyles', () => {
-  it('returns memoized styles', () => {
-    const { result } = renderHook(
-      () => useThemedStyles((c) => StyleSheet.create({ box: { backgroundColor: c.surface } })),
-      { wrapper }
-    );
-    expect(result.current.box).toBeDefined();
   });
 });

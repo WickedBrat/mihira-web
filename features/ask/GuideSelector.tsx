@@ -5,7 +5,6 @@ import {
   Text,
   FlatList,
   Pressable,
-  StyleSheet,
   Dimensions,
   Image,
 } from 'react-native';
@@ -20,9 +19,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
-import { fonts } from '@/lib/theme';
-import { useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
 import { GUIDES, type GuidePersona } from './guidePersonas';
 import { analytics } from '@/lib/analytics';
@@ -49,49 +45,6 @@ function CarouselCard({
   const scale = useSharedValue(isActive ? 1 : 0.88);
   const opacity = useSharedValue(isActive ? 1 : 0.38);
   const glowOpacity = useSharedValue(isActive ? 1 : 0);
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      card: {
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        borderRadius: 28,
-        borderWidth: 1,
-        borderColor: 'rgba(72, 72, 72, 0.25)',
-        paddingVertical: 48,
-        paddingHorizontal: 28,
-        alignItems: 'center',
-        gap: 12,
-        overflow: 'hidden',
-        height: SH * 0.48,
-        justifyContent: 'flex-end',
-      },
-      cardBgImage: {
-        borderRadius: 28,
-      },
-      cardScrim: {
-        borderRadius: 28,
-        backgroundColor: 'rgba(0, 0, 0, 0.52)',
-      },
-      cardGlow: {
-        borderRadius: 28,
-        borderWidth: 1.5,
-        borderColor: `${c.secondaryFixedDim}55`,
-        backgroundColor: `${c.onSecondary}0d`,
-      },
-      cardName: {
-        fontFamily: fonts.headline,
-        fontSize: scaleFont(28),
-        color: '#ffffff',
-        textAlign: 'center',
-      },
-      cardEssence: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(14),
-        color: 'rgba(255,255,255,0.75)',
-        textAlign: 'center',
-        lineHeight: scaleFont(21),
-      },
-    })
-  );
 
   useEffect(() => {
     scale.value = withTiming(isActive ? 1 : 0.88, {
@@ -116,17 +69,23 @@ function CarouselCard({
       onLongPress={isActive ? onLongPress : undefined}
       delayLongPress={400}
     >
-      <Animated.View style={[styles.card, cardStyle]}>
+      <Animated.View
+        className="items-center justify-end gap-3 overflow-hidden rounded-[28px] border border-outline-variant/25 bg-black/70 px-7 py-12"
+        style={[{ height: SH * 0.48 }, cardStyle]}
+      >
         <Image
           source={{ uri: guide.imageUrl }}
-          style={[StyleSheet.absoluteFill, styles.cardBgImage]}
+          className="absolute inset-0 rounded-[28px]"
           resizeMode="cover"
         />
-        <View style={[StyleSheet.absoluteFill, styles.cardScrim]} />
-        <Animated.View style={[StyleSheet.absoluteFill, styles.cardGlow, glowStyle]} />
+        <View className="absolute inset-0 rounded-[28px] bg-black/[0.52]" />
+        <Animated.View
+          className="absolute inset-0 rounded-[28px] border-[1.5px] border-secondary-fixed-dim/30 bg-on-secondary/[0.05]"
+          style={glowStyle}
+        />
 
-        <Text style={styles.cardName}>{guide.name}</Text>
-        <Text style={styles.cardEssence}>{guide.essence}</Text>
+        <Text className="text-center font-headline text-[28px] text-white">{guide.name}</Text>
+        <Text className="text-center font-body text-sm leading-[21px] text-white/75">{guide.essence}</Text>
       </Animated.View>
     </Pressable>
   );
@@ -135,78 +94,6 @@ function CarouselCard({
 export function GuideSelector({ onCommit }: GuideSelectorProps) {
   const [activeIndex, _setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      root: {
-        flex: 1,
-        backgroundColor: c.surface,
-        paddingTop: 40,
-      },
-      safe: { flex: 1 },
-      header: {
-        alignItems: 'center',
-        paddingHorizontal: 32,
-        paddingTop: 20,
-        paddingBottom: 28,
-      },
-      title: {
-        fontFamily: fonts.headlineExtra,
-        fontSize: scaleFont(36),
-        color: c.onSurface,
-        letterSpacing: -0.8,
-        lineHeight: scaleFont(44),
-        textAlign: 'center',
-        marginBottom: 12,
-      },
-      subtitle: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(15),
-        color: c.onSurfaceVariant,
-        textAlign: 'center',
-        letterSpacing: 0.3,
-      },
-      carouselWrapper: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingBottom: 12,
-      },
-      carouselContent: {
-        paddingHorizontal: CONTENT_PADDING,
-      },
-      cardSlot: {
-        width: CARD_W,
-        marginHorizontal: CARD_GAP / 2,
-      },
-      hintRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 4,
-        gap: 6,
-        marginBottom: 8,
-        paddingHorizontal: 32,
-      },
-      commitVerb: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(14),
-        color: c.primary,
-      },
-      holdHint: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(13),
-        color: c.onSurfaceVariant,
-      },
-      permanentNote: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(11),
-        color: c.outline,
-        textAlign: 'center',
-        marginTop: 8,
-        marginBottom: 8,
-      },
-    })
-  );
-
   const headerOffsetY = useSharedValue(SH * 0.27);
   const carouselOpacity = useSharedValue(0);
   const carouselOffsetY = useSharedValue(48);
@@ -264,23 +151,29 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
   const activeGuide = GUIDES[activeIndex];
 
   return (
-    <View style={styles.root}>
-      <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+    <View className="flex-1 bg-surface pt-10">
+      <View pointerEvents="none" className="absolute inset-0">
         <AmbientBlob color="rgba(181, 100, 252, 0.10)" top={-80} left={-60} size={340} />
         <AmbientBlob color="rgba(184, 152, 122, 0.07)" top={400} left={20} size={300} />
       </View>
 
-      <SafeAreaView edges={['top', 'bottom']} style={styles.safe}>
-        <Animated.View style={[styles.header, headerStyle]}>
-          <Animated.Text entering={FadeInDown.duration(600)} style={styles.title}>
+      <SafeAreaView edges={['top', 'bottom']} className="flex-1">
+        <Animated.View className="items-center px-8 pb-7 pt-5" style={headerStyle}>
+          <Animated.Text
+            entering={FadeInDown.duration(600)}
+            className="mb-3 text-center font-headline-extra text-[36px] leading-[44px] tracking-[-0.8px] text-on-surface"
+          >
             Who calls to your soul?
           </Animated.Text>
-          <Animated.Text entering={FadeInDown.delay(350).duration(600)} style={styles.subtitle}>
+          <Animated.Text
+            entering={FadeInDown.delay(350).duration(600)}
+            className="text-center font-body text-base tracking-[0.3px] text-on-surface-variant"
+          >
             You commit to your Guru for life. Take your time to choose.
           </Animated.Text>
         </Animated.View>
 
-        <Animated.View style={[styles.carouselWrapper, carouselStyle]}>
+        <Animated.View className="flex-1 justify-center pb-3" style={carouselStyle}>
           <FlatList
             data={GUIDES}
             keyExtractor={g => g.name}
@@ -288,11 +181,11 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
             showsHorizontalScrollIndicator={false}
             snapToInterval={SNAP}
             decelerationRate="fast"
-            contentContainerStyle={styles.carouselContent}
+            contentContainerStyle={{ paddingHorizontal: CONTENT_PADDING }}
             viewabilityConfig={viewabilityConfig.current}
             onViewableItemsChanged={onViewableItemsChanged.current}
             renderItem={({ item, index }) => (
-              <View style={styles.cardSlot}>
+              <View style={{ width: CARD_W, marginHorizontal: CARD_GAP / 2 }}>
                 <CarouselCard
                   guide={item}
                   isActive={index === activeIndex}
@@ -302,13 +195,13 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
             )}
           />
 
-          <View style={styles.hintRow}>
-            <Text style={styles.commitVerb} numberOfLines={1}>
+          <View className="mb-2 mt-1 flex-row items-center justify-center gap-1.5 px-8">
+            <Text className="font-label text-sm text-primary" numberOfLines={1}>
               {activeGuide?.commitmentVerb}
             </Text>
-            <Text style={styles.holdHint}>— hold to commit</Text>
+            <Text className="font-body text-sm text-on-surface-variant">— hold to commit</Text>
           </View>
-          <Text style={styles.permanentNote}>You cannot change this later</Text>
+          <Text className="mb-2 mt-2 text-center font-body text-[11px] text-outline">You cannot change this later</Text>
         </Animated.View>
       </SafeAreaView>
     </View>

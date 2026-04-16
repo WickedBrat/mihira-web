@@ -5,7 +5,6 @@ import {
   Text,
   ScrollView,
   Pressable,
-  StyleSheet,
   TextInput,
   Keyboard,
   Platform,
@@ -19,10 +18,8 @@ import { SacredButton } from '@/components/ui/SacredButton';
 import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { useToast } from '@/components/ui/ToastProvider';
 import { PageHero } from '@/components/ui/PageHero';
-// import { MuhuratSvg } from '@/components/ui/MuhuratSvg';
-import { fonts, layout } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
+import { layout } from '@/lib/theme';
+import { useTheme } from '@/lib/theme-context';
 import { useUsage } from '@/lib/usage';
 import { useSubscription } from '@/lib/subscription';
 import { PaywallSheet } from '@/features/billing/PaywallSheet';
@@ -68,102 +65,6 @@ export default function MuhuratScreen() {
   const { rankedWindows, recommendation, confidence, suggestion, reasoning, warnings, festivalNote, isLoading, error } = useMuhurat(request);
 
   const { colors } = useTheme();
-  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
-    StyleSheet.create({
-      root: { flex: 1, backgroundColor: c.surface },
-      scroll: { flex: 1 },
-      content: { paddingTop: 64, paddingHorizontal: layout.screenPaddingX, paddingBottom: 176, gap: 24 },
-      banner: { paddingBottom: 24 },
-      title: {
-        fontSize: scaleFont(38),
-        lineHeight: scaleFont(44),
-      },
-      sub: { lineHeight: scaleFont(22) },
-      svgBackdrop: {
-        position: 'absolute',
-        top: 0,
-        width: 100,
-        height: 100,
-        left: -100, // Adjust so it peeks from the left side
-        opacity: dark ? 1 : 0.25, // Increased visibility
-      },
-      formCard: {
-        padding: 24,
-        borderRadius: 24,
-        backgroundColor: dark ? 'rgba(37, 38, 38, 0.62)' : 'rgba(232, 225, 212, 0.62)',
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-        gap: 16,
-      },
-      inputHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-      },
-      inputMeta: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(10),
-        textTransform: 'uppercase',
-        letterSpacing: 2,
-        color: c.secondaryFixed,
-      },
-      textArea: {
-        minHeight: 126,
-        borderRadius: 18,
-        borderWidth: 1,
-        borderColor: `${c.outlineVariant}40`,
-        backgroundColor: dark ? 'rgba(14, 14, 14, 0.45)' : 'rgba(240, 234, 222, 0.55)',
-        paddingHorizontal: 20,
-        paddingVertical: 16,
-        fontFamily: fonts.body,
-        fontSize: scaleFont(15),
-        color: c.onSurface,
-        lineHeight: scaleFont(22),
-      },
-      rangeLabel: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(10),
-        textTransform: 'uppercase',
-        letterSpacing: 2,
-        color: c.onSurfaceVariant,
-      },
-      dateRow: {
-        flexDirection: 'row',
-        gap: 14,
-      },
-      dateField: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        gap: 10,
-        borderRadius: 18,
-        borderWidth: 1,
-        borderColor: `${c.outlineVariant}40`,
-        backgroundColor: dark ? 'rgba(14, 14, 14, 0.45)' : 'rgba(240, 234, 222, 0.55)',
-        paddingHorizontal: 10,
-        paddingVertical: 14,
-      },
-      dateCopy: {
-        flex: 1,
-        gap: 3,
-      },
-      dateCaption: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(9),
-        textTransform: 'uppercase',
-        letterSpacing: 1.5,
-        color: c.onSurfaceVariant,
-      },
-      dateValue: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: scaleFont(14),
-        color: c.onSurface,
-      },
-      cta: {
-        marginTop: 4,
-      },
-    })
-  );
 
   const applyDateSelection = (field: DateField, nextValue: Date) => {
     const normalized = normalizeDate(nextValue);
@@ -251,36 +152,33 @@ export default function MuhuratScreen() {
   };
 
   return (
-    <View style={styles.root}>
+    <View className="flex-1 bg-surface">
       <PageAmbientBlobs />
 
-      {/* <MuhuratSvg
-        width={4000}
-        height={4000}
-        // fill={colors.primary}
-        style={styles.svgBackdrop}
-        pointerEvents="none"
-      /> */}
-
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
+        className="flex-1"
+        contentContainerStyle={{
+          paddingTop: 64,
+          paddingHorizontal: layout.screenPaddingX,
+          paddingBottom: 176,
+          gap: 24,
+        }}
         showsVerticalScrollIndicator={false}
       >
         <PageHero
           meta="Auspicious Timing"
           title="Muhurat Finder"
           subtitle="Describe your situation and scan a chosen date range for auspicious windows."
-          style={styles.banner}
-          titleStyle={styles.title}
-          subtitleStyle={styles.sub}
+          style={{ paddingBottom: 24 }}
+          titleStyle={{ fontSize: 38, lineHeight: 44 }}
+          subtitleStyle={{ lineHeight: 22 }}
           subtitleMaxWidth={360}
         />
 
-        <View style={styles.formCard}>
-          <View style={styles.inputHeader}>
+        <View className="gap-4 rounded-3xl border border-black/[0.05] bg-[rgba(232,225,212,0.62)] p-6 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]">
+          <View className="flex-row items-center gap-2">
             <Sparkles size={16} color={colors.secondaryFixed} />
-            <Text style={styles.inputMeta}>Your Intention</Text>
+            <Text className="font-label text-xs uppercase tracking-[2px] text-secondary-fixed">Your Intention</Text>
           </View>
 
           <TextInput
@@ -291,30 +189,30 @@ export default function MuhuratScreen() {
             multiline
             textAlignVertical="top"
             selectionColor={colors.primary}
-            style={styles.textArea}
+            className="min-h-[126px] rounded-[18px] border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-5 py-4 font-body text-base leading-[22px] text-on-surface dark:bg-[rgba(14,14,14,0.45)]"
           />
 
-          <Text style={styles.rangeLabel}>Date Range</Text>
-          <View style={styles.dateRow}>
+          <Text className="font-label text-xs uppercase tracking-[2px] text-on-surface-variant">Date Range</Text>
+          <View className="flex-row gap-3.5">
             <Pressable
               onPress={() => openDatePicker('start')}
-              style={styles.dateField}
+              className="flex-1 flex-row items-start gap-2.5 rounded-[18px] border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-2.5 py-3.5 dark:bg-[rgba(14,14,14,0.45)]"
             >
               <CalendarDays size={16} color={colors.secondaryFixed} />
-              <View style={styles.dateCopy}>
-                <Text style={styles.dateCaption}>Start</Text>
-                <Text style={styles.dateValue}>{formatDateLabel(startDate)}</Text>
+              <View className="flex-1 gap-[3px]">
+                <Text className="font-label text-[9px] uppercase tracking-[1.5px] text-on-surface-variant">Start</Text>
+                <Text className="font-body-medium text-sm text-on-surface">{formatDateLabel(startDate)}</Text>
               </View>
             </Pressable>
 
             <Pressable
               onPress={() => openDatePicker('end')}
-              style={styles.dateField}
+              className="flex-1 flex-row items-start gap-2.5 rounded-[18px] border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-2.5 py-3.5 dark:bg-[rgba(14,14,14,0.45)]"
             >
               <CalendarDays size={16} color={colors.secondaryFixed} />
-              <View style={styles.dateCopy}>
-                <Text style={styles.dateCaption}>End</Text>
-                <Text style={styles.dateValue}>{formatDateLabel(endDate)}</Text>
+              <View className="flex-1 gap-[3px]">
+                <Text className="font-label text-[9px] uppercase tracking-[1.5px] text-on-surface-variant">End</Text>
+                <Text className="font-body-medium text-sm text-on-surface">{formatDateLabel(endDate)}</Text>
               </View>
             </Pressable>
           </View>
@@ -322,7 +220,7 @@ export default function MuhuratScreen() {
           <SacredButton
             label="Find Auspicious Windows"
             onPress={(!isSubscriptionLoaded || !isUsageLoaded) ? () => {} : handleFindMuhurat}
-            style={styles.cta}
+            style={{ marginTop: 4 }}
           />
         </View>
 

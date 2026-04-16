@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Image, Platform, useWindowDimensions, View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 
 const yogiAsset = Platform.OS !== 'web'
@@ -19,10 +19,10 @@ export function GurukulYogiBackdrop() {
   }
 
   return (
-    <View pointerEvents="none" style={styles.container}>
+    <View pointerEvents="none" className="absolute inset-0">
       <View
+        className="absolute overflow-visible"
         style={[
-          styles.artFrame,
           {
             width: canvasWidth,
             height: canvasHeight,
@@ -37,9 +37,8 @@ export function GurukulYogiBackdrop() {
       >
         <View
           pointerEvents="none"
+          className="absolute inset-0 opacity-[0.05]"
           style={[
-            styles.layer,
-            styles.spreadLayer,
             { transform: [{ scale: 1.08 }] },
           ]}
         >
@@ -47,9 +46,8 @@ export function GurukulYogiBackdrop() {
         </View>
         <View
           pointerEvents="none"
+          className="absolute inset-0 opacity-[0.05]"
           style={[
-            styles.layer,
-            styles.spreadLayer,
             { transform: [{ scale: 1.04 }] },
           ]}
         >
@@ -57,37 +55,17 @@ export function GurukulYogiBackdrop() {
         </View>
         <View
           pointerEvents="none"
+          className="absolute inset-0 opacity-[0.05]"
           style={[
-            styles.layer,
-            styles.spreadLayer,
             { transform: [{ scale: 1.01 }] },
           ]}
         >
           <SvgUri uri={yogiAsset.uri} width="100%" height="100%" />
         </View>
-        <View pointerEvents="none" style={[styles.layer, styles.coreLayer]}>
+        <View pointerEvents="none" className="absolute inset-0 opacity-[0.12]">
           <SvgUri uri={yogiAsset.uri} width="100%" height="100%" />
         </View>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  artFrame: {
-    position: 'absolute',
-    overflow: 'visible',
-  },
-  layer: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  spreadLayer: {
-    opacity: 0.05,
-  },
-  coreLayer: {
-    opacity: 0.12,
-  },
-});

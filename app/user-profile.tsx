@@ -1,73 +1,17 @@
 import React, { useState } from 'react';
-import { Platform, View, Text, StyleSheet, Pressable, Alert } from 'react-native';
+import { Platform, View, Text, Pressable, Alert } from 'react-native';
 import { UserProfile } from '@clerk/expo/web';
 import { useUser, useAuth } from '@clerk/expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
 import { router } from 'expo-router';
-import { scaleFont } from '@/lib/typography';
-import { fonts } from '@/lib/theme';
 import { SacredButton } from '@/components/ui/SacredButton';
-import { useThemedStyles } from '@/lib/theme-context';
+import { useTheme } from '@/lib/theme-context';
 
 function NativeManageAccount() {
   const { user } = useUser();
   const { signOut } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const styles = useThemedStyles((c, _glass, gradients) =>
-    StyleSheet.create({
-      container: {
-        flex: 1,
-        padding: 24,
-      },
-      section: {
-        backgroundColor: c.surfaceContainerLow,
-        borderRadius: 16,
-        padding: 20,
-        marginBottom: 24,
-        borderWidth: 1,
-        borderColor: `${c.outlineVariant}33`,
-      },
-      label: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(12),
-        color: c.onSurfaceVariant,
-        textTransform: 'uppercase',
-        letterSpacing: 1.2,
-        marginBottom: 8,
-      },
-      value: {
-        fontFamily: fonts.bodyMedium,
-        fontSize: scaleFont(16),
-        color: c.onSurface,
-        marginBottom: 16,
-      },
-      dangerSection: {
-        marginTop: 32,
-      },
-      dangerTitle: {
-        fontFamily: fonts.headline,
-        fontSize: scaleFont(18),
-        color: c.error,
-        marginBottom: 8,
-      },
-      dangerText: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(14),
-        color: c.onSurfaceVariant,
-        marginBottom: 16,
-        lineHeight: 20,
-      },
-      deleteButton: {
-        borderColor: c.error,
-        backgroundColor: `${c.error}14`,
-      },
-      deleteButtonText: {
-        color: c.error,
-      }
-    })
-  );
 
   const handleDeleteAccount = () => {
     Alert.alert(
@@ -98,24 +42,22 @@ function NativeManageAccount() {
   const name = user?.fullName ?? 'No name provided';
 
   return (
-    <View style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.label}>Name</Text>
-        <Text style={styles.value}>{name}</Text>
+    <View className="flex-1 p-6">
+      <View className="mb-6 rounded-2xl border border-outline-variant/20 bg-surface-container-low p-5">
+        <Text className="mb-2 font-label text-xs uppercase tracking-[1.2px] text-on-surface-variant">Name</Text>
+        <Text className="mb-4 font-body-medium text-base text-on-surface">{name}</Text>
 
-        <Text style={styles.label}>Email Address</Text>
-        <Text style={styles.value}>{email}</Text>
+        <Text className="mb-2 font-label text-xs uppercase tracking-[1.2px] text-on-surface-variant">Email Address</Text>
+        <Text className="mb-4 font-body-medium text-base text-on-surface">{email}</Text>
       </View>
 
-      <View style={styles.dangerSection}>
-        <Text style={styles.dangerTitle}>Danger Zone</Text>
-        <Text style={styles.dangerText}>Once you delete your account, there is no going back. Please be certain.</Text>
+      <View className="mt-8">
+        <Text className="mb-2 font-headline text-lg text-error">Danger Zone</Text>
+        <Text className="mb-4 font-body text-sm leading-5 text-on-surface-variant">Once you delete your account, there is no going back. Please be certain.</Text>
         <SacredButton 
           label={isDeleting ? "Deleting..." : "Delete Account"} 
           onPress={handleDeleteAccount} 
           variant="secondary"
-          style={styles.deleteButton}
-          textStyle={styles.deleteButtonText}
         />
       </View>
     </View>
@@ -127,73 +69,22 @@ export default function UserProfilePage() {
   const email =
     user?.primaryEmailAddress?.emailAddress ??
     user?.emailAddresses?.[0]?.emailAddress ?? '';
-
-  const styles = useThemedStyles((c) =>
-    StyleSheet.create({
-      page: {
-        flex: 1,
-        backgroundColor: c.background,
-      },
-      header: {
-        paddingHorizontal: 24,
-        paddingTop: 16,
-        paddingBottom: 20,
-        backgroundColor: c.surface,
-        borderBottomWidth: 1,
-        borderBottomColor: `${c.outlineVariant}33`,
-      },
-      headerTop: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 4,
-      },
-      backButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: c.surfaceContainer,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 16,
-      },
-      title: {
-        fontFamily: fonts.headline,
-        fontSize: scaleFont(24),
-        color: c.onSurface,
-      },
-      email: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(14),
-        color: c.onSurfaceVariant,
-      },
-      headerTextContainer: {
-        flex: 1,
-      },
-      content: {
-        flex: 1,
-        backgroundColor: c.background,
-      },
-      webContent: {
-        alignItems: 'center',
-        paddingTop: 24,
-      }
-    })
-  );
+  const { colors } = useTheme();
 
   return (
-    <SafeAreaView style={styles.page} edges={['top', 'bottom']}>
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <ChevronLeft size={24} color={styles.title.color} />
+    <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
+      <View className="border-b border-outline-variant/20 bg-surface px-6 pb-5 pt-4">
+        <View className="mb-1 flex-row items-center">
+          <Pressable className="mr-4 h-10 w-10 items-center justify-center rounded-full bg-surface-container" onPress={() => router.back()}>
+            <ChevronLeft size={24} color={colors.onSurface} />
           </Pressable>
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.title}>Account</Text>
-            {email ? <Text style={styles.email}>{email}</Text> : null}
+          <View className="flex-1">
+            <Text className="font-headline text-2xl text-on-surface">Account</Text>
+            {email ? <Text className="font-body text-sm text-on-surface-variant">{email}</Text> : null}
           </View>
         </View>
       </View>
-      <View style={Platform.OS === 'web' ? [styles.content, styles.webContent] : styles.content}>
+      <View className={`flex-1 bg-background ${Platform.OS === 'web' ? 'items-center pt-6' : ''}`}>
         {Platform.OS === 'web' ? (
           <UserProfile routing="hash" />
         ) : (

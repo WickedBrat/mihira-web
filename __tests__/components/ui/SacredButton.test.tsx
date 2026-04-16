@@ -11,6 +11,19 @@ jest.mock('expo-linear-gradient', () => ({
   LinearGradient: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+jest.mock('@/lib/theme-context', () => ({
+  useTheme: () => ({
+    colors: {
+      onPrimary: '#fff',
+      primary: '#7c3aed',
+    },
+    gradients: {
+      primaryToContainer: ['#7c3aed', '#4c1d95'],
+      secondaryToContainer: ['#92722a', '#5c3f00'],
+    },
+  }),
+}));
+
 describe('SacredButton', () => {
   it('renders label text', () => {
     const { getByText } = render(<SacredButton label="Reflect" onPress={() => {}} />);

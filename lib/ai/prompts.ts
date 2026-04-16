@@ -18,9 +18,12 @@ Based on this chart, pick exactly 3 individual focus areas for today from this l
 Work, Focus, Decisions, Ambition, Art, Writing, Making, Problem-solving, Romance, Partnership, Social bonds, Home, Lineage, Domestic matters, Networking, Community, Public presence, Rest, Health, Body, Routines, Meditation, Ritual, Inner work, Money, Investments, Material decisions, Study, Reading, Knowledge, Movement, Change of place, Speaking, Correspondence, Negotiations, Exercise, Healing, Physical vitality
 
 Pick the 3 single items most strongly activated by the chart today. For each, produce:
-- One concrete, actionable suggestion (no mention of planets, stars, or astrology)
+- A sharp, specific micro-action — one sentence, verb-first, no astrology. Name a real object, person, place, or measurable output. NOT a generic instruction like "set aside time for X" or "schedule a session". NOT a restatement of the area name.
+  Good examples: "Write the first two paragraphs of that overdue report before checking messages." / "Call one person you've been meaning to reconnect with — keep it under 15 minutes." / "Cook and eat your meals at home today; skip the delivery apps."
+  Bad examples: "Focus on your work today." / "Spend time on creative pursuits." / "Take care of your health."
+- No two actions should start with the same verb or follow the same sentence structure.
 - The best time window for it today (e.g. "8:00 AM – 10:00 AM")
-- 1–2 plain sentences explaining why this matters today (no astrology jargon)
+- 1–2 plain sentences explaining why this particular action matters today — be specific, not generic (no astrology jargon)
 - 1–2 sentences of Jyotish reasoning explaining the astrological basis
 
 Return ONLY this JSON:
@@ -28,9 +31,9 @@ Return ONLY this JSON:
   "focusAreas": [
     {
       "area": "<area name from the fixed list above>",
-      "action": "<one concrete action, no astrology>",
+      "action": "<sharp, specific, verb-first micro-action — no astrology, no generic phrasing>",
       "timeRange": "<best time window>",
-      "suggestion": "<1-2 plain sentences, no planet/star mentions>",
+      "suggestion": "<1-2 plain sentences, specific to why this action matters today, no planet/star mentions>",
       "reasoning": "<1-2 sentences in Jyotish terms>"
     }
   ]

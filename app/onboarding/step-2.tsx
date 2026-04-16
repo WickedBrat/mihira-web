@@ -1,12 +1,12 @@
 // Screen 2: The Modern Mirror — Pain Point Intake
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated as RNAnimated } from 'react-native';
+import { View, Text, Pressable, Animated as RNAnimated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { OB, setOnboardingData } from '@/lib/onboardingStore';
-import { scaleFont } from '@/lib/typography';
+import { setOnboardingData } from '@/lib/onboardingStore';
+import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const PILLS = [
   'Decision Fatigue',
@@ -48,26 +48,36 @@ export default function Screen2() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.body}>
-        <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-          <Text style={styles.headline}>What brings you{'\n'}to Aksha today?</Text>
-          <Text style={styles.sub}>Select all that resonate.</Text>
+    <SafeAreaView className="flex-1 bg-ob-bg">
+      <View className="flex-1 gap-9 px-8 pt-8">
+        <Animated.View entering={FadeInDown.duration(500)} className="gap-2.5">
+          <Text className="font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
+            What brings you{'\n'}to Aksha today?
+          </Text>
+          <Text className="font-body text-[15px] text-ob-muted">Select all that resonate.</Text>
         </Animated.View>
 
-        <View style={styles.pills}>
+        <View className="gap-3">
           {PILLS.map((pill, i) => {
             const active = selected.includes(pill);
             return (
               <Animated.View key={pill} entering={FadeInDown.delay(i * 80 + 200).duration(400)}>
                 <Pressable
                   onPress={() => toggle(pill)}
-                  style={[styles.pill, active && styles.pillActive]}
+                  className={`flex-row items-center gap-2.5 rounded-[14px] border px-[22px] py-4 ${
+                    active
+                      ? 'border-ob-saffron-border bg-ob-saffron-dim'
+                      : 'border-ob-card-border bg-ob-card'
+                  }`}
                 >
                   {active && (
-                    <Animated.Text entering={ZoomIn.duration(200)} style={styles.pillCheck}>✦</Animated.Text>
+                    <Animated.Text entering={ZoomIn.duration(200)} className="text-xs text-ob-saffron">
+                      ✦
+                    </Animated.Text>
                   )}
-                  <Text style={[styles.pillText, active && styles.pillTextActive]}>{pill}</Text>
+                  <Text className={`font-body-medium text-[15px] ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
+                    {pill}
+                  </Text>
                 </Pressable>
               </Animated.View>
             );
@@ -75,23 +85,28 @@ export default function Screen2() {
         </View>
       </View>
 
-      <Animated.View entering={FadeInUp.delay(600).duration(500)} style={styles.footer}>
+      <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-end p-8 pb-11">
         <Pressable
           onPress={proceed}
+          className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${
+            selected.length === 0 ? 'opacity-[0.35]' : ''
+          }`}
           style={({ pressed }) => [
-            styles.btn,
-            selected.length === 0 && styles.btnDisabled,
-            pressed && styles.btnPressed,
+            onboardingButtonShadow,
+            pressed && pressedButtonStyle,
           ]}
         >
-          <Text style={styles.btnText}>Continue →</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">Continue →</Text>
         </Pressable>
       </Animated.View>
 
       {/* Validation toast */}
       {toastVisible && (
-        <RNAnimated.View style={[styles.toast, { opacity: toastOpacity }]}>
-          <Text style={styles.toastText}>
+        <RNAnimated.View
+          className="absolute bottom-[120px] left-6 right-6 rounded-[14px] border border-ob-gold-border bg-[rgba(217,160,111,0.15)] p-4"
+          style={{ opacity: toastOpacity }}
+        >
+          <Text className="text-center font-body text-sm leading-5 text-ob-gold">
             ✦ We hear you. You are entering a space of clarity.
           </Text>
         </RNAnimated.View>
@@ -99,90 +114,3 @@ export default function Screen2() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe:        { flex: 1, backgroundColor: OB.bg },
-  body:        { flex: 1, paddingHorizontal: 32, paddingTop: 32, gap: 36 },
-  header:      { gap: 10 },
-  headline: {
-    fontFamily: 'GoogleSans_700Bold',
-    fontSize: scaleFont(36),
-    color: OB.text,
-    letterSpacing: -1,
-    lineHeight: scaleFont(42),
-  },
-  sub: {
-    fontFamily: 'GoogleSans_400Regular',
-    fontSize: scaleFont(15),
-    color: OB.muted,
-  },
-  pills:       { gap: 12 },
-  pill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 22,
-    paddingVertical: 16,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: OB.cardBorder,
-    backgroundColor: OB.card,
-  },
-  pillActive: {
-    borderColor: OB.saffronBorder,
-    backgroundColor: OB.saffronDim,
-  },
-  pillCheck: {
-    fontSize: scaleFont(12),
-    color: OB.saffron,
-  },
-  pillText: {
-    fontFamily: 'GoogleSans_500Medium',
-    fontSize: scaleFont(15),
-    color: OB.muted,
-  },
-  pillTextActive: { color: OB.text },
-  footer: {
-    padding: 32,
-    paddingBottom: 44,
-    alignItems: 'flex-end',
-  },
-  btn: {
-    backgroundColor: OB.saffron,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 9999,
-    alignItems: 'center',
-    shadowColor: OB.saffron,
-    shadowOpacity: 0.45,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
-  },
-  btnDisabled: { opacity: 0.35 },
-  btnPressed:  { opacity: 0.82, transform: [{ scale: 0.98 }] },
-  btnText: {
-    fontFamily: 'GoogleSans_600SemiBold',
-    fontSize: scaleFont(16),
-    color: '#fff',
-    letterSpacing: 0.3,
-  },
-  toast: {
-    position: 'absolute',
-    bottom: 120,
-    left: 24,
-    right: 24,
-    backgroundColor: 'rgba(217,160,111,0.15)',
-    borderWidth: 1,
-    borderColor: OB.goldBorder,
-    borderRadius: 14,
-    padding: 16,
-  },
-  toastText: {
-    fontFamily: 'GoogleSans_400Regular',
-    fontSize: scaleFont(13),
-    color: OB.gold,
-    textAlign: 'center',
-    lineHeight: scaleFont(20),
-  },
-});

@@ -1,9 +1,6 @@
 import React from 'react';
-import { ImageBackground, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, Pressable, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { fonts } from '@/lib/theme';
-import { useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
 
 interface PremiumCardProps {
   isPro: boolean;
@@ -11,52 +8,13 @@ interface PremiumCardProps {
 }
 
 export function PremiumCard({ isPro, onPress }: PremiumCardProps) {
-  const styles = useThemedStyles(() =>
-    StyleSheet.create({
-      card: {
-        borderRadius: 22,
-        overflow: 'hidden',
-        marginBottom: 4,
-      },
-      bg: {
-        borderRadius: 22,
-        overflow: 'hidden',
-      },
-      overlay: {
-        backgroundColor: 'rgba(0,0,0,0.18)',
-        borderRadius: 22,
-        paddingVertical: 30,
-        paddingHorizontal: 30,
-        minHeight: 88,
-        justifyContent: 'center',
-        display: 'flex',
-        alignItems: 'center',
-      },
-      title: {
-        fontFamily: fonts.headline,
-        fontSize: scaleFont(24),
-        color: '#fff',
-        letterSpacing: -0.3,
-        marginBottom: 5,
-      },
-      subtitle: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(12),
-        textAlign: 'center',
-        color: 'rgba(255,255,255,0.78)',
-        lineHeight: scaleFont(18),
-        maxWidth: 220,
-      },
-    })
-  );
-
-  // if (isPro) return null;
+  if (isPro) return null;
 
   return (
-    <Pressable style={styles.card} onPress={onPress}>
+    <Pressable className="mb-1 overflow-hidden rounded-[22px]" onPress={onPress}>
       <LinearGradient
         colors={['#cd792cff', '#51301c']}
-        style={styles.bg}
+        className="overflow-hidden rounded-[22px]"
       >
         <ImageBackground
           // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -65,9 +23,9 @@ export function PremiumCard({ isPro, onPress }: PremiumCardProps) {
           imageStyle={{ opacity: 0.3 }}
           resizeMode="cover"
         >
-        <View style={styles.overlay}>
-          <Text style={styles.title}>Get Premium</Text>
-          <Text style={styles.subtitle}>
+        <View className="min-h-[88px] items-center justify-center rounded-[22px] bg-black/[0.18] px-[30px] py-[30px]">
+          <Text className="mb-[5px] font-headline text-2xl tracking-[-0.3px] text-white">Get Premium</Text>
+          <Text className="max-w-[220px] text-center font-body text-xs leading-[18px] text-white/80">
             Unlimited Ask Aksha, No Ads &amp; Exclusive Spiritual Insights
           </Text>
         </View>

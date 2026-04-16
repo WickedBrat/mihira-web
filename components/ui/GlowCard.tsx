@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useThemedStyles } from '@/lib/theme-context';
+import { useTheme } from '@/lib/theme-context';
 
 interface GlowCardProps {
   children: React.ReactNode;
@@ -11,46 +11,25 @@ interface GlowCardProps {
 }
 
 export function GlowCard({ children, style, glowColor, glowIntensity = 0.2 }: GlowCardProps) {
+  const { colors } = useTheme();
   const hexOpacity = Math.round(glowIntensity * 255).toString(16).padStart(2, '0');
-
-  const { resolvedGlowColor, styles } = useThemedStyles((colors) => {
-    const glow = glowColor ?? colors.primaryFixedDim;
-    return {
-      resolvedGlowColor: glow,
-      styles: StyleSheet.create({
-        container: { position: 'relative' as const },
-        glowCanvas: {
-          position: 'absolute' as const,
-          top: -40,
-          left: 0,
-          right: 0,
-          zIndex: 0,
-          alignItems: 'center' as const,
-        },
-        card: {
-          backgroundColor: colors.surfaceContainerLow,
-          borderRadius: 24,
-          borderWidth: 1,
-          overflow: 'hidden' as const,
-          zIndex: 1,
-          borderColor: `${glow}33`,
-        },
-      }),
-    };
-  });
-
+  const resolvedGlowColor = glowColor ?? colors.primaryFixedDim;
   const glowColorWithAlpha = `${resolvedGlowColor}${hexOpacity}`;
   const glowColorTransparent = `${resolvedGlowColor}00`;
 
   return (
-    <View style={[styles.container, style]}>
+    <View className="relative" style={style}>
       <LinearGradient
+        pointerEvents="none"
         colors={[glowColorWithAlpha, glowColorTransparent]}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 0.5, y: 1 }}
-        style={[styles.glowCanvas, { pointerEvents: 'none' }]}
+        className="absolute -top-10 left-0 right-0 z-0 items-center"
       />
-      <View style={[styles.card, { borderColor: `${resolvedGlowColor}33` }]}>
+      <View
+        className="z-[1] overflow-hidden rounded-3xl border bg-surface-container-low"
+        style={{ borderColor: `${resolvedGlowColor}33` }}
+      >
         {children}
       </View>
     </View>

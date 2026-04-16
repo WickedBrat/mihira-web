@@ -11,15 +11,13 @@ import {
   Animated,
   Easing,
   Pressable,
-  StyleSheet,
   Text,
   View,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { AlertCircle, CheckCircle2, Info } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
+import { useTheme } from '@/lib/theme-context';
 
 type ToastType = 'success' | 'error' | 'info';
 
@@ -48,58 +46,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(-18)).current;
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { isDark } = useTheme();
-
-  const { styles, toastAccents } = useThemedStyles((c, _glass, _gradients, darkMode) => ({
-    toastAccents: {
-      success: c.primaryFixed,
-      error: c.error,
-      info: c.secondaryFixed,
-    } as Record<ToastType, string>,
-    styles: StyleSheet.create({
-      host: {
-        position: 'absolute',
-        left: 16,
-        right: 16,
-        zIndex: 300,
-      },
-      pressable: {
-        borderRadius: 22,
-        overflow: 'hidden',
-      },
-      toast: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        gap: 12,
-        paddingHorizontal: 16,
-        paddingVertical: 14,
-        backgroundColor: darkMode ? 'rgba(25, 26, 26, 0.9)' : 'rgba(250, 247, 242, 0.95)',
-        borderWidth: 1,
-      },
-      iconWrap: {
-        width: 32,
-        height: 32,
-        borderRadius: 16,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      copy: {
-        flex: 1,
-        gap: 3,
-      },
-      title: {
-        fontFamily: fonts.label,
-        fontSize: 13,
-        color: c.onSurface,
-      },
-      message: {
-        fontFamily: fonts.body,
-        fontSize: 12,
-        color: c.onSurfaceVariant,
-        lineHeight: 18,
-      },
-    }),
-  }));
+  const { colors, isDark } = useTheme();
+  const toastAccents: Record<ToastType, string> = {
+    success: colors.primaryFixed,
+    error: colors.error,
+    info: colors.secondaryFixed,
+  };
 
   const hideToast = useCallback(() => {
     if (hideTimeoutRef.current) {
@@ -189,42 +141,36 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
 
       {toast ? (
-        <View pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        <View pointerEvents="box-none" className="absolute inset-0">
           <Animated.View
             pointerEvents="box-none"
-            style={[
-              styles.host,
-              {
-                top: insets.top + 12,
-                opacity,
-                transform: [{ translateY }],
-              },
-            ]}
+            className="absolute left-4 right-4 z-[300]"
+            style={{
+              top: insets.top + 12,
+              opacity,
+              transform: [{ translateY }],
+            }}
           >
-            <Pressable onPress={hideToast} style={styles.pressable}>
-              <BlurView intensity={42} tint={isDark ? 'dark' : 'light'} style={StyleSheet.absoluteFill} />
+            <Pressable onPress={hideToast} className="overflow-hidden rounded-[22px]">
+              <BlurView intensity={42} tint={isDark ? 'dark' : 'light'} className="absolute inset-0" />
               <View
-                style={[
-                  styles.toast,
-                  {
-                    borderColor: `${toastAccents[toast.type]}55`,
-                  },
-                ]}
+                className="flex-row items-start gap-3 border bg-[rgba(250,247,242,0.95)] px-4 py-3.5 dark:bg-[rgba(25,26,26,0.9)]"
+                style={{ borderColor: `${toastAccents[toast.type]}55` }}
               >
                 <View
-                  style={[
-                    styles.iconWrap,
-                    {
-                      backgroundColor: `${toastAccents[toast.type]}22`,
-                    },
-                  ]}
+                  className="h-8 w-8 items-center justify-center rounded-full"
+                  style={{ backgroundColor: `${toastAccents[toast.type]}22` }}
                 >
                   <Icon size={18} color={toastAccents[toast.type]} />
                 </View>
 
-                <View style={styles.copy}>
-                  <Text style={styles.title}>{toast.title}</Text>
-                  {toast.message ? <Text style={styles.message}>{toast.message}</Text> : null}
+                <View className="flex-1 gap-[3px]">
+                  <Text className="font-label text-sm text-on-surface">{toast.title}</Text>
+                  {toast.message ? (
+                    <Text className="font-body text-xs leading-[18px] text-on-surface-variant">
+                      {toast.message}
+                    </Text>
+                  ) : null}
                 </View>
               </View>
             </Pressable>

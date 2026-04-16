@@ -1,8 +1,6 @@
 import { useUser } from '@clerk/expo';
-import { View, Text, Image, TouchableOpacity, StyleSheet, Linking, Platform } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Linking, Platform } from 'react-native';
 import { CheckCircle, Sparkles } from 'lucide-react-native';
-import { scaleFont } from '@/lib/typography';
-import { fonts } from '@/lib/theme';
 
 const DEEP_LINK = 'aksha://';
 
@@ -24,198 +22,70 @@ export default function PaymentSuccessPage() {
   };
 
   return (
-    <View style={styles.page}>
-      <View style={styles.card}>
+    <View className="flex-1 items-center justify-center bg-[#f9f7ff] p-6">
+      <View
+        className="w-full max-w-[420px] items-center rounded-3xl bg-white p-10"
+        style={{
+          shadowColor: '#7c3aed',
+          shadowOpacity: 0.08,
+          shadowRadius: 40,
+          shadowOffset: { width: 0, height: 8 },
+          elevation: 6,
+        }}
+      >
         {/* Success icon */}
-        <View style={styles.successRing}>
+        <View className="mb-5 h-[72px] w-[72px] items-center justify-center rounded-full bg-[#f3eeff]">
           <CheckCircle size={36} color="#7c3aed" strokeWidth={1.8} />
         </View>
 
-        <Text style={styles.heading}>Payment Successful</Text>
-        <Text style={styles.subheading}>Welcome to Aksha Pro</Text>
+        <Text className="mb-1 font-headline text-2xl text-[#1a1a1a]">Payment Successful</Text>
+        <Text className="mb-8 font-body text-sm text-[#888]">Welcome to Aksha Pro</Text>
 
         {/* User identity */}
-        <View style={styles.userBlock}>
-          <View style={styles.avatarWrapper}>
+        <View className="mb-8 w-full items-center">
+          <View className="relative mb-3.5">
             {avatarUrl ? (
-              <Image source={{ uri: avatarUrl }} style={styles.avatar} />
+              <Image source={{ uri: avatarUrl }} className="h-20 w-20 rounded-full border-[3px] border-[#e9d5ff]" />
             ) : (
-              <View style={styles.avatarFallback}>
-                <Text style={styles.avatarInitial}>
+              <View className="h-20 w-20 items-center justify-center rounded-full border-[3px] border-[#e9d5ff] bg-[#ede9fe]">
+                <Text className="font-headline text-[28px] text-[#7c3aed]">
                   {name.charAt(0).toUpperCase()}
                 </Text>
               </View>
             )}
             {/* Pro badge dot */}
-            <View style={styles.badgeDot} />
+            <View className="absolute bottom-0.5 right-0.5 h-[18px] w-[18px] rounded-full border-2 border-white bg-[#7c3aed]" />
           </View>
 
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.email}>{email}</Text>
+          <Text className="mb-1 font-label text-lg text-[#1a1a1a]">{name}</Text>
+          <Text className="mb-3 font-body text-sm text-[#888]">{email}</Text>
 
           {/* Aksha Pro badge */}
-          <View style={styles.proBadge}>
+          <View className="flex-row items-center gap-[5px] rounded-[20px] border border-[#e9d5ff] bg-[#f3eeff] px-3 py-[5px]">
             <Sparkles size={12} color="#7c3aed" strokeWidth={2} />
-            <Text style={styles.proBadgeText}>Aksha Pro</Text>
+            <Text className="font-label text-[11px] tracking-[0.5px] text-[#7c3aed]">Aksha Pro</Text>
           </View>
         </View>
 
         {/* CTA */}
-        <TouchableOpacity style={styles.ctaButton} onPress={handleOpenApp} activeOpacity={0.85}>
-          <Text style={styles.ctaText}>Head to the App</Text>
+        <TouchableOpacity
+          className="mb-4 w-full items-center rounded-[14px] bg-[#7c3aed] px-10 py-[15px]"
+          style={{
+            shadowColor: '#7c3aed',
+            shadowOpacity: 0.3,
+            shadowRadius: 12,
+            shadowOffset: { width: 0, height: 4 },
+          }}
+          onPress={handleOpenApp}
+          activeOpacity={0.85}
+        >
+          <Text className="font-label text-base tracking-[0.3px] text-white">Head to the App</Text>
         </TouchableOpacity>
 
-        <Text style={styles.hint}>
+        <Text className="text-center font-body text-[11px] leading-[17px] text-[#bbb]">
           If the app doesn't open automatically,{'\n'}make sure Aksha is installed on your device.
         </Text>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    backgroundColor: '#f9f7ff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    borderRadius: 24,
-    padding: 40,
-    alignItems: 'center',
-    width: '100%',
-    maxWidth: 420,
-    shadowColor: '#7c3aed',
-    shadowOpacity: 0.08,
-    shadowRadius: 40,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 6,
-  },
-
-  // Success icon
-  successRing: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: '#f3eeff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  heading: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(22),
-    color: '#1a1a1a',
-    marginBottom: 4,
-  },
-  subheading: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(14),
-    color: '#888',
-    marginBottom: 32,
-  },
-
-  // User block
-  userBlock: {
-    alignItems: 'center',
-    marginBottom: 32,
-    width: '100%',
-  },
-  avatarWrapper: {
-    position: 'relative',
-    marginBottom: 14,
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    borderWidth: 3,
-    borderColor: '#e9d5ff',
-  },
-  avatarFallback: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#ede9fe',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 3,
-    borderColor: '#e9d5ff',
-  },
-  avatarInitial: {
-    fontFamily: fonts.headline,
-    fontSize: scaleFont(28),
-    color: '#7c3aed',
-  },
-  badgeDot: {
-    position: 'absolute',
-    bottom: 2,
-    right: 2,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: '#7c3aed',
-    borderWidth: 2,
-    borderColor: '#ffffff',
-  },
-  name: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(17),
-    color: '#1a1a1a',
-    marginBottom: 4,
-  },
-  email: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(13),
-    color: '#888',
-    marginBottom: 12,
-  },
-  proBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    backgroundColor: '#f3eeff',
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderWidth: 1,
-    borderColor: '#e9d5ff',
-  },
-  proBadgeText: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(11),
-    color: '#7c3aed',
-    letterSpacing: 0.5,
-  },
-
-  // CTA
-  ctaButton: {
-    backgroundColor: '#7c3aed',
-    borderRadius: 14,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 16,
-    shadowColor: '#7c3aed',
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
-  },
-  ctaText: {
-    fontFamily: fonts.label,
-    fontSize: scaleFont(15),
-    color: '#ffffff',
-    letterSpacing: 0.3,
-  },
-  hint: {
-    fontFamily: fonts.body,
-    fontSize: scaleFont(11),
-    color: '#bbb',
-    textAlign: 'center',
-    lineHeight: scaleFont(17),
-  },
-});

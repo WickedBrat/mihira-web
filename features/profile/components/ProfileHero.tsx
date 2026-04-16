@@ -1,10 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Image, Text, View } from 'react-native';
 import { UserRound, type LucideIcon } from 'lucide-react-native';
-import { fonts } from '@/lib/theme';
-import { useTheme, useThemedStyles } from '@/lib/theme-context';
-import { scaleFont } from '@/lib/typography';
+import { useTheme } from '@/lib/theme-context';
 import ProfileBg from '@/assets/profile_bg.svg';
 
 interface ProfileHeroProps {
@@ -24,100 +21,31 @@ export function ProfileHero({
 }: ProfileHeroProps) {
   const hasAvatar = Boolean(avatarUrl);
   const { colors } = useTheme();
-  const styles = useThemedStyles((c, _glass, _gradients, dark) =>
-    StyleSheet.create({
-      hero: { alignItems: 'center', paddingTop: 12, paddingBottom: 20 },
-      avatarContainer: {
-        position: 'relative',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 16,
-      },
-      avatarBg: {
-        position: 'absolute',
-        opacity: 0.5,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 160,
-        height: 160,
-        top: -20,
-        left: -22
-      },
-      avatarGlow: {
-        position: 'absolute',
-        width: 70,
-        height: 70,
-        borderRadius: 9999,
-        shadowColor: c.primary,
-        shadowOpacity: 0.3,
-        shadowRadius: 36,
-        shadowOffset: { width: 0, height: 0 },
-      },
-      avatarCore: {
-        width: 130,
-        height: 130,
-        borderRadius: 999,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: dark ? 'rgba(19, 19, 19, 0.94)' : 'rgba(250, 247, 242, 0.94)',
-        borderWidth: 1,
-        borderColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
-        overflow: 'hidden',
-      },
-      avatarImage: {
-        width: '100%',
-        height: '100%',
-      },
-      avatarInitials: {
-        fontFamily: fonts.headline,
-        fontSize: scaleFont(30),
-        color: c.onSurface,
-        letterSpacing: -0.5,
-      },
-      heroName: {
-        fontFamily: fonts.headline,
-        fontSize: scaleFont(30),
-        color: c.onSurface,
-        letterSpacing: -0.4,
-        marginBottom: 6,
-      },
-      zodiacRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 5,
-      },
-      zodiacLabel: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(15),
-        color: c.onSurfaceVariant,
-      },
-    })
-  );
 
   return (
-    <View style={styles.hero}>
-      <View style={styles.avatarContainer}>
-        <View style={styles.avatarBg}>
+    <View className="items-center pb-5 pt-3">
+      <View className="relative mb-4 items-center justify-center">
+        <View className="absolute left-[-22px] top-[-20px] h-40 w-40 items-center justify-center opacity-50">
           <ProfileBg width={270} height={270} fill="#4b3d32" />
         </View>
         
-        <View style={styles.avatarCore}>
+        <View className="h-[130px] w-[130px] items-center justify-center overflow-hidden rounded-full border border-black/[0.06] bg-[rgba(250,247,242,0.94)] dark:border-white/[0.06] dark:bg-[rgba(19,19,19,0.94)]">
           {isSignedIn && hasAvatar ? (
-            <Image source={{ uri: avatarUrl ?? undefined }} style={styles.avatarImage} />
+            <Image source={{ uri: avatarUrl ?? undefined }} className="h-full w-full" />
           ) : isSignedIn ? (
-            <Text style={styles.avatarInitials}>{initials}</Text>
+            <Text className="font-headline text-[30px] tracking-[-0.5px] text-on-surface">{initials}</Text>
           ) : (
             <UserRound size={36} color={colors.onSurface} strokeWidth={1.7} />
           )}
         </View>
       </View>
 
-      <Text style={styles.heroName}>{displayName}</Text>
+      <Text className="mb-1.5 font-headline text-[30px] tracking-[-0.4px] text-on-surface">{displayName}</Text>
 
       {zodiacSign && (
-        <View style={styles.zodiacRow}>
+        <View className="flex-row items-center gap-[5px]">
           <zodiacSign.icon size={16} color={colors.onSurfaceVariant} strokeWidth={2} />
-          <Text style={styles.zodiacLabel}>{zodiacSign.sign}</Text>
+          <Text className="font-body text-base text-on-surface-variant">{zodiacSign.sign}</Text>
         </View>
       )}
     </View>
