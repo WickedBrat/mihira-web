@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import { Appearance } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useColorScheme } from 'nativewind';
 import {
   darkColors,
   lightColors,
@@ -41,21 +42,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [osScheme, setOsScheme] = useState(Appearance.getColorScheme());
   const isMounted = useRef(true);
   const userSetRef = useRef(false);
+  const { setColorScheme } = useColorScheme();
 
   // Load persisted preference on mount
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY).then((stored) => {
       if (!isMounted.current) return;
-      // Don't override if the user explicitly set a preference after mount
       if (userSetRef.current) return;
       if (stored === 'light' || stored === 'dark' || stored === 'system') {
         setPreferenceState(stored);
+        setColorScheme(stored === 'system' ? 'system' : stored);
       }
     });
     return () => {
       isMounted.current = false;
     };
-  }, []);
+  }, [setColorScheme]);
 
   // Listen for OS colour scheme changes
   useEffect(() => {
@@ -69,7 +71,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     userSetRef.current = true;
     setPreferenceState(p);
     AsyncStorage.setItem(STORAGE_KEY, p);
-  }, []);
+    setColorScheme(p === 'system' ? 'system' : p);
+  }, [setColorScheme]);
 
   const isDark = useMemo(() => {
     if (preference === 'light') return false;
@@ -99,17 +102,4 @@ export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext);
   if (!ctx) throw new Error('useTheme must be used inside ThemeProvider');
   return ctx;
-}
-
-export function useThemedStyles<T>(
-  factory: (colors: Colors, glassMorphism: GlassMorphism, gradients: Gradients, isDark: boolean) => T
-): T {
-  const { colors, glassMorphism, gradients, isDark } = useTheme();
-  return useMemo(
-    () => factory(colors, glassMorphism, gradients, isDark),
-    // Factory is expected to be stable (module-level const or useCallback).
-    // isDark is the theme toggle — styles recompute only on theme change.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isDark]
-  );
 }
