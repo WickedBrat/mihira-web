@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import Svg, { RadialGradient, Defs, Rect, Stop } from 'react-native-svg';
 
 interface AmbientBlobProps {
@@ -36,7 +36,8 @@ export function AmbientBlob({
 
   return (
     <View
-      style={[styles.blob, { top, left, width: size, height: size }]}
+      className="absolute -z-10"
+      style={{ top, left, width: size, height: size }}
       pointerEvents="none"
     >
       <Svg width={size} height={size}>
@@ -51,10 +52,3 @@ export function AmbientBlob({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  blob: {
-    position: 'absolute',
-    zIndex: -1,
-  },
-});
