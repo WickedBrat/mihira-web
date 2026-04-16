@@ -1,8 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { fonts } from '@/lib/theme';
-import { scaleFont } from '@/lib/typography';
-import { useThemedStyles } from '@/lib/theme-context';
+import { Text, View, ViewStyle, TextStyle } from 'react-native';
 
 interface PageHeroProps {
   meta?: React.ReactNode;
@@ -18,43 +15,27 @@ interface PageHeroProps {
 export function PageHero({
   meta, title, subtitle, style, metaStyle, titleStyle, subtitleStyle, subtitleMaxWidth = 340,
 }: PageHeroProps) {
-  const styles = useThemedStyles((colors) =>
-    StyleSheet.create({
-      container: { alignSelf: 'stretch', alignItems: 'center', paddingTop: 28, paddingBottom: 40 },
-      meta: {
-        fontFamily: fonts.label,
-        fontSize: scaleFont(10),
-        textTransform: 'uppercase',
-        letterSpacing: 3,
-        color: colors.secondaryFixed,
-        marginBottom: 12,
-        textAlign: 'center',
-      },
-      title: {
-        fontFamily: fonts.headlineExtra,
-        fontSize: scaleFont(42),
-        color: colors.onSurface,
-        letterSpacing: -1,
-        lineHeight: scaleFont(46),
-        marginBottom: 8,
-        textAlign: 'center',
-      },
-      subtitle: {
-        fontFamily: fonts.body,
-        fontSize: scaleFont(16),
-        lineHeight: scaleFont(24),
-        color: colors.onSurfaceVariant,
-        textAlign: 'center',
-      },
-    })
-  );
-
   return (
-    <View style={[styles.container, style]}>
-      {meta ? <Text style={[styles.meta, metaStyle]}>{meta}</Text> : null}
-      <Text style={[styles.title, titleStyle]}>{title}</Text>
+    <View className="self-stretch items-center pt-7 pb-10" style={style}>
+      {meta ? (
+        <Text
+          className="font-label text-xs uppercase tracking-[3px] text-secondary-fixed mb-3 text-center"
+          style={metaStyle}
+        >
+          {meta}
+        </Text>
+      ) : null}
+      <Text
+        className="font-headline-extra text-[42px] text-on-surface tracking-[-1px] leading-[46px] mb-2 text-center"
+        style={titleStyle}
+      >
+        {title}
+      </Text>
       {subtitle ? (
-        <Text style={[styles.subtitle, subtitleStyle, { maxWidth: subtitleMaxWidth }]}>
+        <Text
+          className="font-body text-base leading-6 text-on-surface-variant text-center"
+          style={[subtitleStyle, { maxWidth: subtitleMaxWidth }]}
+        >
           {subtitle}
         </Text>
       ) : null}
