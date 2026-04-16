@@ -209,7 +209,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             const tabName = route.name as TabName;
             const Icon = TAB_ICONS[tabName];
             const label = getLabel(tabName);
-            const iconColor = tabName === 'gurukul' && isFocused
+            const iconColor = (tabName === 'gurukul' || tabName === 'muhurat') && isFocused
               ? '#ff9500'
               : isFocused ? styles.tabLabelActive.color : inactiveIconColor;
 
@@ -236,7 +236,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                 <View style={staticStyles.tabContent}>
                   {tabName === 'muhurat' ? (
                     <MuhuratIcon
-                      size={isFocused ? 23 : 21}
+                      size={isFocused ? 38 : 36}
                       color={iconColor as string}
                     />
                   ) : tabName === 'gurukul' ? (

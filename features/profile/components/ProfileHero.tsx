@@ -38,13 +38,15 @@ export function ProfileHero({
         opacity: 0.5,
         alignItems: 'center',
         justifyContent: 'center',
-        width: 280,
-        height: 280,
+        width: 160,
+        height: 160,
+        top: -20,
+        left: -22
       },
       avatarGlow: {
         position: 'absolute',
-        width: 120,
-        height: 120,
+        width: 70,
+        height: 70,
         borderRadius: 9999,
         shadowColor: c.primary,
         shadowOpacity: 0.3,
@@ -52,8 +54,8 @@ export function ProfileHero({
         shadowOffset: { width: 0, height: 0 },
       },
       avatarCore: {
-        width: 200,
-        height: 200,
+        width: 130,
+        height: 130,
         borderRadius: 999,
         alignItems: 'center',
         justifyContent: 'center',
@@ -92,18 +94,12 @@ export function ProfileHero({
     })
   );
 
-  const gradientColors: [string, string] = [
-    `${colors.primary}99`,
-    `${colors.primaryFixedDim}66`,
-  ];
-
   return (
     <View style={styles.hero}>
       <View style={styles.avatarContainer}>
         <View style={styles.avatarBg}>
-          <ProfileBg width={280} height={280} fill="#F5F5DC" />
+          <ProfileBg width={270} height={270} fill="#4b3d32" />
         </View>
-        <View style={styles.avatarGlow} />
         
         <View style={styles.avatarCore}>
           {isSignedIn && hasAvatar ? (

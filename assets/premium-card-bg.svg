@@ -1,0 +1,23 @@
+<svg width="1000" height="400" viewBox="0 0 1000 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.3">
+    <circle cx="100" cy="100" r="45" stroke="white" stroke-width="1.5"/>
+    <path d="M100 55C124.853 55 145 75.1472 145 100C145 124.853 124.853 145 100 145" fill="white" fill-opacity="0.2"/>
+    <circle cx="100" cy="100" r="80" stroke="white" stroke-width="0.5" stroke-dasharray="2 2"/>
+  </g>
+
+  <g opacity="0.3">
+    <circle cx="850" cy="300" r="50" stroke="white" stroke-width="1.5"/>
+    <path d="M850 250C877.614 250 900 272.386 900 300C900 327.614 877.614 350 850 350" fill="white" fill-opacity="0.2"/>
+    <circle cx="850" cy="300" r="90" stroke="white" stroke-width="0.5" stroke-dasharray="2 2"/>
+  </g>
+
+  <g opacity="0.3">
+    <circle cx="150" cy="350" r="40" stroke="white" stroke-width="1.5"/>
+    <path d="M150 310C172.091 310 190 327.909 190 350C190 372.091 172.091 390 150 390" fill="white" fill-opacity="0.2"/>
+  </g>
+
+  <path d="M300 -50 Q 500 150 700 -50" stroke="white" stroke-width="0.5" opacity="0.2"/>
+  <path d="M200 450 Q 500 250 800 450" stroke="white" stroke-width="0.5" opacity="0.2"/>
+  
+  <circle cx="500" cy="200" r="250" stroke="white" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.1"/>
+</svg>

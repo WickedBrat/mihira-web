@@ -1,13 +1,10 @@
 // features/chat/ChatBubble.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Animated, { FadeIn, SlideInRight, FadeInDown } from 'react-native-reanimated';
-
-const AI_FADE_IN = FadeIn.duration(700);
 import { fonts } from '@/lib/theme';
 import { useThemedStyles } from '@/lib/theme-context';
 import { scaleFont } from '@/lib/typography';
-import type { Message, ShlokaData } from './useChatState';
+import type { Message, ShlokaData } from '@/features/ask/types';
 
 interface ChatBubbleProps {
   message: Message;
@@ -113,34 +110,15 @@ function VaniCard({
         </TouchableOpacity>
       ) : null}
       {expanded && shloka ? (
-        <Animated.View entering={FadeInDown.duration(300)} style={styles.panel}>
+        <View style={styles.panel}>
           <Text style={styles.panelDevanagari}>{shloka.devanagari}</Text>
           <Text style={styles.panelTranslit}>{shloka.transliteration}</Text>
           <View style={styles.panelDivider} />
           <Text style={styles.panelMeaning}>{shloka.meaning}</Text>
-        </Animated.View>
+        </View>
       ) : null}
     </View>
   );
-}
-
-function StaggerWrapper({
-  visibleAfterMs,
-  children,
-}: {
-  visibleAfterMs: number;
-  children: React.ReactNode;
-}) {
-  const [visible, setVisible] = useState(visibleAfterMs === 0);
-
-  useEffect(() => {
-    if (visibleAfterMs === 0) return;
-    const timer = setTimeout(() => setVisible(true), visibleAfterMs);
-    return () => clearTimeout(timer);
-  }, [visibleAfterMs]);
-
-  if (!visible) return null;
-  return <Animated.View entering={AI_FADE_IN}>{children}</Animated.View>;
 }
 
 export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
@@ -251,11 +229,9 @@ export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
   // ── narad_journey: stage direction, no bubble ────────────────────────────
   if (bubbleType === 'narad_journey') {
     return (
-      <StaggerWrapper visibleAfterMs={message.visibleAfterMs ?? 0}>
-        <View style={styles.journeyWrapper}>
-          <Text style={styles.journeyText}>{message.text}</Text>
-        </View>
-      </StaggerWrapper>
+      <View style={styles.journeyWrapper}>
+        <Text style={styles.journeyText}>{message.text}</Text>
+      </View>
     );
   }
 
@@ -263,53 +239,43 @@ export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
   if (bubbleType === 'shloka') {
     const borderColor = accentColor ?? 'rgba(212, 175, 55, 0.5)';
     return (
-      <StaggerWrapper visibleAfterMs={message.visibleAfterMs ?? 0}>
-        <View style={[styles.shlokaCard, { borderColor }]}>
-          <Text style={styles.shlokaDevanagari}>{message.text}</Text>
-          {subtitle ? <Text style={styles.shlokaTranslit}>{subtitle}</Text> : null}
-          {deityLabel ? <Text style={styles.shlokaSource}>{deityLabel}</Text> : null}
-        </View>
-      </StaggerWrapper>
+      <View style={[styles.shlokaCard, { borderColor }]}>
+        <Text style={styles.shlokaDevanagari}>{message.text}</Text>
+        {subtitle ? <Text style={styles.shlokaTranslit}>{subtitle}</Text> : null}
+        {deityLabel ? <Text style={styles.shlokaSource}>{deityLabel}</Text> : null}
+      </View>
     );
   }
 
   // ── vani card ────────────────────────────────────────────────────────────
   if (bubbleType === 'vani') {
     const borderColor = accentColor ?? 'rgba(255,255,255,0.2)';
-    const shloka = message.shlokaData;
     return (
-      <StaggerWrapper visibleAfterMs={message.visibleAfterMs ?? 0}>
-        <VaniCard
-          text={message.text}
-          borderColor={borderColor}
-          shloka={shloka}
-        />
-      </StaggerWrapper>
+      <VaniCard
+        text={message.text}
+        borderColor={borderColor}
+        shloka={message.shlokaData}
+      />
     );
   }
 
   // ── narad_greeting / narad_closing: italic narrative bubble ─────────────
   if (bubbleType === 'narad_greeting' || bubbleType === 'narad_closing') {
     return (
-      <StaggerWrapper visibleAfterMs={message.visibleAfterMs ?? 0}>
-        <View style={[styles.row, styles.rowAI]}>
-          <View style={styles.senderRow}>
-            <Text style={styles.senderLabel}>{senderName}</Text>
-          </View>
-          <View style={[styles.bubble, styles.bubbleAI]}>
-            <Text style={styles.naradText}>{message.text}</Text>
-          </View>
+      <View style={[styles.row, styles.rowAI]}>
+        <View style={styles.senderRow}>
+          <Text style={styles.senderLabel}>{senderName}</Text>
         </View>
-      </StaggerWrapper>
+        <View style={[styles.bubble, styles.bubbleAI]}>
+          <Text style={styles.naradText}>{message.text}</Text>
+        </View>
+      </View>
     );
   }
 
   // ── Default (user messages + any legacy AI messages) ─────────────────────
   return (
-    <Animated.View
-      entering={isAI ? AI_FADE_IN : SlideInRight.duration(400)}
-      style={[styles.row, isAI ? styles.rowAI : styles.rowUser]}
-    >
+    <View style={[styles.row, isAI ? styles.rowAI : styles.rowUser]}>
       {isAI && (
         <View style={styles.senderRow}>
           <Text style={styles.senderLabel}>{senderName}</Text>
@@ -324,6 +290,6 @@ export function ChatBubble({ message, senderName = 'Narad' }: ChatBubbleProps) {
           {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </Text>
       )}
-    </Animated.View>
+    </View>
   );
 }

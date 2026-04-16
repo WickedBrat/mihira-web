@@ -72,7 +72,7 @@ export default function GurukulScreen() {
 
       <View style={styles.imagePortalContainer}>
         <Image
-          source={{uri: "https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/gurukul_coming_soon.webp"}}
+          source={{uri: "https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/gurukul_coming_soon.jpg"}}
           style={styles.heroImage}
           resizeMode="cover"
         />

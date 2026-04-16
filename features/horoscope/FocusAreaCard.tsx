@@ -8,7 +8,7 @@ import { useThemedStyles } from '@/lib/theme-context';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
 
 const BASE = 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/daily-prediction';
-const img = (filename: string) => ({ uri: `${BASE}/${filename}.webp` });
+const img = (filename: string) => ({ uri: `${BASE}/${filename}.jpg` });
 
 const IMAGES: Record<string, { uri: string }> = {
   // Ambition / Career

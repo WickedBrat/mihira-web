@@ -2,7 +2,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getSupabaseClient } from '@/lib/supabase';
 import type { NaradContext, NaradHistoryEntry } from '@/features/ask/types';
-import type { Message } from '@/features/chat/useChatState';
+import type { Message } from '@/features/ask/types';
 
 const CONTEXT_KEY = 'narad_context';
 const HISTORY_KEY = 'narad_history';

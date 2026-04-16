@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { Message } from '@/features/chat/useChatState';
+import type { Message } from '@/features/ask/types';
 
 const KEY = 'aksha_chat_history';
 

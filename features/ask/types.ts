@@ -1,5 +1,25 @@
 // features/ask/types.ts
 
+export interface ShlokaData {
+  devanagari: string;
+  transliteration: string;
+  meaning: string;
+  source: string;
+}
+
+export interface Message {
+  id: string;
+  role: 'ai' | 'user';
+  text: string;
+  timestamp: Date;
+  bubbleType?: BubbleType;
+  visibleAfterMs?: number;
+  accentColor?: string;
+  deityLabel?: string;
+  subtitle?: string;
+  shlokaData?: ShlokaData;
+}
+
 export type DeityName = 'Krishna' | 'Shiva' | 'Lakshmi' | 'Ram';
 
 export type RealmPhase = 'idle' | 'journeying' | 'deity_reveal' | 'settled';

@@ -41,7 +41,7 @@ export function AmbientBlob({
     >
       <Svg width={size} height={size}>
         <Defs>
-          <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="50%">
+          <RadialGradient id="grad" cx="50%" cy="50%" rx="50%" ry="40%">
             <Stop offset="0%" stopColor={stopColor} stopOpacity={stopOpacity} />
             <Stop offset="100%" stopColor={stopColor} stopOpacity="0" />
           </RadialGradient>

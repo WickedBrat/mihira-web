@@ -5,9 +5,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
 import { OB, setOnboardingData } from '@/lib/onboardingStore';
 import { analytics } from '@/lib/analytics';
 import { scaleFont } from '@/lib/typography';
+
+const IMAGE_HEIGHT = 120;
+const IMAGE_WIDTH = 88;
+const OVERFLOW = Math.round(IMAGE_HEIGHT * 0.4); // 40% above card
 
 const PERSONAS = [
   {
@@ -68,18 +73,30 @@ export default function Screen3() {
           {PERSONAS.map((p, i) => {
             const active = selected === p.id;
             return (
-              <Animated.View key={p.id} entering={FadeInDown.delay(i * 100 + 200).duration(450)}>
+              <Animated.View
+                key={p.id}
+                entering={FadeInDown.delay(i * 100 + 200).duration(450)}
+                style={styles.cardWrapper}
+              >
+                {/* Card */}
                 <Pressable
                   onPress={() => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                     setSelected(p.id);
                   }}
-                  style={[styles.card, active && styles.cardActive]}
+                  style={styles.cardPressable}
                 >
-                  <View style={styles.cardLeft}>
-                    <Image source={{ uri: p.image }} style={styles.cardIcon} />
+                  <LinearGradient
+                    colors={['#253b7a', '#22214f']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={[styles.card, active && styles.cardActive]}
+                  >
                     <View style={styles.cardText}>
-                      <Text style={[styles.cardName, active && styles.cardNameActive]}>{p.name}</Text>
+                      <View style={styles.cardNameRow}>
+                        <Text style={[styles.cardName, active && styles.cardNameActive]}>{p.name}</Text>
+                        {active && <Text style={styles.check}>✦</Text>}
+                      </View>
                       <Text style={styles.cardTagline}>{p.tagline}</Text>
                       {active && (
                         <Animated.Text
@@ -90,9 +107,14 @@ export default function Screen3() {
                         </Animated.Text>
                       )}
                     </View>
-                  </View>
-                  {active && <Text style={styles.check}>✦</Text>}
+                  </LinearGradient>
                 </Pressable>
+
+                {/* Image — 40% above card, 60% inside */}
+                <Image
+                  source={{ uri: p.image }}
+                  style={styles.cardImage}
+                />
               </Animated.View>
             );
           })}
@@ -129,35 +151,48 @@ const styles = StyleSheet.create({
     letterSpacing: -0.8,
     lineHeight: scaleFont(40),
   },
-  cards:    { gap: 12 },
+  cards: { gap: 2 },
+
+  // Wrapper holds both card + overflowing image
+  cardWrapper: {
+    paddingTop: OVERFLOW,
+    position: 'relative',
+  },
+  cardPressable: {
+    overflow: 'visible',
+  },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 22,
+    paddingVertical: 20,
+    paddingLeft: 22,
+    paddingRight: IMAGE_WIDTH + 16, // leave room for the image
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: OB.cardBorder,
-    backgroundColor: OB.card,
-    gap: 12,
+    borderColor: 'rgba(255,255,255,0.08)',
+    minHeight: 80,
   },
   cardActive: {
     borderColor: OB.saffronBorder,
-    backgroundColor: OB.saffronDim,
   },
-  cardLeft:  { flexDirection: 'row', alignItems: 'flex-start', gap: 16, flex: 1 },
-  cardIcon:  { width: 56, height: 56, borderRadius: 12, marginTop: 2 },
-  cardText:  { flex: 1, gap: 4 },
+  cardText: { flex: 1, gap: 4 },
+  cardNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
   cardName: {
     fontFamily: 'GoogleSans_700Bold',
     fontSize: scaleFont(17),
-    color: OB.muted,
+    color: 'rgba(240,237,232,0.55)',
   },
   cardNameActive: { color: OB.text },
   cardTagline: {
     fontFamily: 'GoogleSans_400Regular',
     fontSize: scaleFont(12),
-    color: OB.muted,
+    color: 'rgba(240,237,232,0.45)',
   },
   cardDesc: {
     fontFamily: 'GoogleSans_400Regular',
@@ -169,6 +204,21 @@ const styles = StyleSheet.create({
   check: {
     fontSize: scaleFont(14),
     color: OB.saffron,
+  },
+
+  // Image: 40% above card top, 60% inside
+  cardImage: {
+    position: 'absolute',
+    right: 14,
+    top: 0, // top of wrapper = overflow area, so image starts there
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
+    borderRadius: 14,
+    shadowColor: '#000',
+    shadowOpacity: 0.45,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 10,
   },
   footer: {
     position: 'absolute',

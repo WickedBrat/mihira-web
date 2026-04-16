@@ -13,11 +13,9 @@ import {
 } from 'react-native';
 import { MoreVertical } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Animated, { FadeIn } from 'react-native-reanimated';
 import { ChatBubble } from '@/features/chat/ChatBubble';
 import { ChatInput } from '@/features/chat/ChatInput';
 import { PageHero } from '@/components/ui/PageHero';
-import { RealmBackdrop } from '@/components/ui/RealmBackdrop';
 import { NaradIntro } from '@/features/ask/NaradIntro';
 import { useNaradState } from '@/features/ask/useNaradState';
 import { useUsage } from '@/lib/usage';
@@ -61,14 +59,14 @@ function TypingIndicator() {
   );
 
   return (
-    <Animated.View entering={FadeIn.duration(300)} style={styles.typingRow}>
+    <View style={styles.typingRow}>
       <View style={styles.typingBubble}>
         <View style={[styles.typingDot, { opacity: 0.6 }]} />
         <View style={[styles.typingDot, { opacity: 0.4 }]} />
         <View style={[styles.typingDot, { opacity: 0.2 }]} />
         <Text style={styles.typingText}>Narad is journeying…</Text>
       </View>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -89,9 +87,6 @@ export default function AskScreen() {
     clearChat,
     naradContext,
     isContextLoaded,
-    realmPhase,
-    currentDeity,
-    accentColor,
   } = useNaradState();
 
   const [hasEnteredChat, setHasEnteredChat] = React.useState(false);
@@ -192,8 +187,6 @@ export default function AskScreen() {
 
   return (
     <View style={styles.root}>
-      <RealmBackdrop phase={realmPhase} deityName={currentDeity} accentColor={accentColor} />
-
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

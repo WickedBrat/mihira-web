@@ -3,8 +3,8 @@ import { fetch } from 'expo/fetch';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth, useUser } from '@clerk/expo';
 import { apiUrl } from '@/lib/apiUrl';
-import type { Message } from '@/features/chat/useChatState';
-import type { DeityName, NaradContext, NaradResponse, RealmPhase } from './types';
+import type { Message } from '@/features/ask/types';
+import type { NaradContext, NaradResponse } from './types';
 import {
   DEFAULT_NARAD_CONTEXT,
   loadNaradContext,
@@ -41,12 +41,8 @@ export function useNaradState() {
   const [inputText, setInputText] = useState('');
   const [naradContext, setNaradContext] = useState<NaradContext>({ ...DEFAULT_NARAD_CONTEXT });
   const [isContextLoaded, setIsContextLoaded] = useState(false);
-  const [realmPhase, setRealmPhase] = useState<RealmPhase>('idle');
-  const [currentDeity, setCurrentDeity] = useState<DeityName | null>(null);
-  const [accentColor, setAccentColor] = useState<string | null>(null);
 
   const naradContextRef = useRef<NaradContext>({ ...DEFAULT_NARAD_CONTEXT });
-  const settledTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Effect 1: runs ONCE on mount — load context and messages from storage
   useEffect(() => {
@@ -79,13 +75,6 @@ export function useNaradState() {
     naradContextRef.current = naradContext;
   }, [naradContext]);
 
-  // Cleanup settled timer on unmount
-  useEffect(() => {
-    return () => {
-      if (settledTimerRef.current) clearTimeout(settledTimerRef.current);
-    };
-  }, []);
-
   // Prepend an older page of messages (called when user scrolls to top)
   const loadMoreMessages = useCallback(() => {
     const all = allMessagesRef.current;
@@ -113,7 +102,6 @@ export function useNaradState() {
       setMessages(prev => [...prev, userMsg]);
       setIsTyping(true);
       setInputText('');
-      setRealmPhase('journeying');
 
       try {
         const history = await loadNaradHistory();
@@ -139,9 +127,6 @@ export function useNaradState() {
         const accentHex = interaction_metadata.ui_vibration_color;
         const deity = interaction_metadata.consulted_deity;
 
-        setCurrentDeity(deity);
-        setAccentColor(accentHex);
-        setRealmPhase('deity_reveal');
         setIsTyping(false);
 
         const now = Date.now();
@@ -194,9 +179,6 @@ export function useNaradState() {
         if (userId) {
           syncNaradContextToSupabase(newContext, userId, getToken).catch(() => {});
         }
-
-        if (settledTimerRef.current) clearTimeout(settledTimerRef.current);
-        settledTimerRef.current = setTimeout(() => setRealmPhase('settled'), 1400);
       } catch (err) {
         console.error('[narad] sendMessage error:', err);
         const errMsg = err instanceof Error ? err.message : 'Connection error';
@@ -208,7 +190,6 @@ export function useNaradState() {
         };
         allMessagesRef.current = [...allMessagesRef.current, errMsg2];
         setMessages(prev => [...prev, errMsg2]);
-        setRealmPhase('idle');
         setIsTyping(false);
       }
     },
@@ -219,9 +200,6 @@ export function useNaradState() {
     allMessagesRef.current = [NARAD_WELCOME];
     setMessages([NARAD_WELCOME]);
     setHasMoreMessages(false);
-    setRealmPhase('idle');
-    setCurrentDeity(null);
-    setAccentColor(null);
     setNaradContext(prev => ({ ...prev, lastDeity: null, lastTheme: null }));
     await clearNaradMessages();
   }, []);
@@ -237,8 +215,5 @@ export function useNaradState() {
     clearChat,
     naradContext,
     isContextLoaded,
-    realmPhase,
-    currentDeity,
-    accentColor,
   };
 }
