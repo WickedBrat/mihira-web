@@ -9,9 +9,10 @@ interface ChatInputProps {
   value: string;
   onChangeText: (text: string) => void;
   onSend: () => void;
+  placeholder?: string;
 }
 
-export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
+export function ChatInput({ value, onChangeText, onSend, placeholder = 'Ask for guidance…' }: ChatInputProps) {
   const { colors, gradients } = useTheme();
 
   const handleSend = () => {
@@ -36,7 +37,7 @@ export function ChatInput({ value, onChangeText, onSend }: ChatInputProps) {
           style={{ textAlignVertical: 'center' }}
           value={value}
           onChangeText={onChangeText}
-          placeholder="Ask for guidance…"
+          placeholder={placeholder}
           placeholderTextColor={colors.outline}
           selectionColor={colors.primary}
           multiline

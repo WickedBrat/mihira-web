@@ -1,5 +1,13 @@
 import type { BirthChart, SignName } from '@/lib/vedic/types';
-import type { NaradContext, NaradHistoryEntry } from '@/features/ask/types';
+import type {
+  AskContextV2,
+  AskHistoryTurn,
+  AskResponseMode,
+  AskTopic,
+  NaradContext,
+  NaradHistoryEntry,
+} from '@/features/ask/types';
+import type { RetrievalCandidate } from '@/lib/ai/scriptureRetrieval';
 
 export const DAILY_SYSTEM = `You are a master Jyotish pandit. You receive Ground Truth planetary data computed by a precise ephemeris engine. You NEVER move planets from the houses provided. You speak directly to the user in the second person using dharma-focused language — no fortune-teller clichés. Respond ONLY in valid JSON. Do not add markdown fences, commentary, or any text before or after the JSON object.`;
 
@@ -282,4 +290,153 @@ export function buildNaradUserMessage(
   }
   lines.push('[USER QUERY]');
   return `${lines.join('\n')}\n${userQuery}`;
+}
+
+export const ASK_CLASSIFICATION_SYSTEM = `You classify life questions for a scripture-grounded guidance product. Return ONLY valid JSON. Do not answer the question itself.
+
+Valid primary_topic values:
+- career_dharma
+- relationships
+- family
+- grief
+- anger
+- fear
+- discipline
+- self_worth
+- purpose
+- wealth
+- devotion
+- general
+
+Return this shape only:
+{
+  "primary_topic": "<one valid value>",
+  "secondary_topics": ["<zero to three valid values>"],
+  "emotional_tone": "steady" | "anxious" | "grieving" | "angry" | "searching"
+}`;
+
+export const ASK_GUIDANCE_SYSTEM = `You are the scripture-grounded synthesis engine for Aksha. You do NOT invent verses or claims. You are given a fixed set of retrieved passages from Hindu texts. Your task is to interpret them carefully for the user's real-life question.
+
+RULES:
+- Answer in calm, direct, modern English.
+- Use only the retrieved sources provided in the prompt.
+- Never invent a citation, verse number, or scripture source.
+- Do not quote large passages. Summarize and apply them.
+- Distinguish translation-level meaning from interpretation.
+- Keep the answer practical, humane, and specific.
+- No prophecy, magic certainty, or absolute claims.
+- If the user question is emotionally heavy, sound steady without becoming clinical.
+- Return ONLY valid JSON.
+
+Return this JSON shape:
+{
+  "answer": {
+    "title": "optional short title",
+    "summary": "2-4 sentence direct answer",
+    "practical_guidance": "1-3 sentence bridge from text to action"
+  },
+  "source_reasons": [
+    {
+      "source_id": "one of the retrieved source ids",
+      "relevance_reason": "one sentence on why this source matters here"
+    }
+  ],
+  "interpretation": {
+    "synthesis": "2-4 sentence explanation of how the sources fit this situation",
+    "alternate_view": "optional alternate reading, required only when asked to compare texts"
+  },
+  "action_steps": [
+    "specific action step",
+    "specific action step"
+  ],
+  "follow_up_prompts": [
+    "useful follow-up prompt",
+    "useful follow-up prompt"
+  ]
+}`;
+
+function formatAskHistory(history: AskHistoryTurn[]): string {
+  if (history.length === 0) return 'No prior turns.';
+
+  return history
+    .slice(-4)
+    .map((turn, index) => [
+      `Turn ${index + 1}:`,
+      `Question: ${turn.question}`,
+      `Mode: ${turn.mode}`,
+      `Topic: ${turn.topic}`,
+      `Summary: ${turn.summary}`,
+      `Sources: ${turn.sourceIds.join(', ') || 'none'}`,
+    ].join('\n'))
+    .join('\n\n');
+}
+
+function formatRetrievedSources(sources: RetrievalCandidate[]): string {
+  return sources.map((source) => [
+    `- source_id: ${source.id}`,
+    `  citation_label: ${source.citation_label}`,
+    `  scripture: ${source.scripture_name}`,
+    `  translation: ${source.translation}`,
+    `  themes: ${source.themes.join(', ')}`,
+    `  life_topics: ${source.life_topics.join(', ')}`,
+    `  commentary_summary: ${source.commentary_summary ?? 'n/a'}`,
+  ].join('\n')).join('\n');
+}
+
+export function buildAskClassificationPrompt(question: string, mode: AskResponseMode): string {
+  return `Mode: ${mode}\nQuestion: ${question}`;
+}
+
+export function buildAskSynthesisPrompt(params: {
+  question: string;
+  mode: AskResponseMode;
+  topic: AskTopic;
+  userContext: AskContextV2;
+  history: AskHistoryTurn[];
+  sources: RetrievalCandidate[];
+}): string {
+  const safeName = params.userContext.userName.replace(/[\r\n]/g, ' ');
+  return `USER CONTEXT
+Name: ${safeName}
+Interaction count: ${params.userContext.interactionCount}
+Last mode: ${params.userContext.lastMode}
+Last topic: ${params.userContext.lastTopic ?? 'none'}
+Last question: ${params.userContext.lastQuestion ?? 'none'}
+
+REQUEST
+Mode: ${params.mode}
+Topic: ${params.topic}
+Question: ${params.question}
+
+RECENT HISTORY
+${formatAskHistory(params.history)}
+
+RETRIEVED SOURCES
+${formatRetrievedSources(params.sources)}
+
+RESPONSE GUIDANCE
+- Mode "quick": concise, focused, no more than 3 source_reasons.
+- Mode "deep": richer interpretation, may use up to 5 source_reasons.
+- If the sources are narrow, do not pretend they cover more than they do.
+- Keep action_steps concrete and immediate.
+- Keep follow_up_prompts naturally related to the cited texts.`;
+}
+
+export function buildAskComparePrompt(params: {
+  question: string;
+  topic: AskTopic;
+  userContext: AskContextV2;
+  history: AskHistoryTurn[];
+  sources: RetrievalCandidate[];
+}): string {
+  return `${buildAskSynthesisPrompt({
+    ...params,
+    mode: 'compare',
+  })}
+
+COMPARISON REQUIREMENTS
+- Use at least 2 different scriptures if available in the retrieved set.
+- interpretation.alternate_view is required.
+- Show where the texts place emphasis differently without claiming contradiction unless the sources actually conflict.
+- Keep the final guidance usable, not academic.`;
 }

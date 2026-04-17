@@ -1,0 +1,58 @@
+[
+  {
+    "id": "ramayana-ayodhya-duty",
+    "scripture_name": "Ramayana",
+    "tradition": "Itihasa",
+    "book": "Ayodhya Kanda",
+    "section_title": "Rama accepts exile to preserve dharma",
+    "original_language": "sanskrit",
+    "translation": "Rama chooses exile without bitterness, holding that a hard duty remains duty even when it wounds personal desire.",
+    "commentary_summary": "A key Ramayana pattern: integrity is measured by steadiness under pressure, not comfort.",
+    "themes": ["duty", "integrity", "sacrifice", "steadiness"],
+    "life_topics": ["family", "career", "ethics", "pressure"],
+    "source_edition": "Curated app summary based on public-domain translations",
+    "editorial_confidence": "medium"
+  },
+  {
+    "id": "ramayana-ayodhya-bharata",
+    "scripture_name": "Ramayana",
+    "tradition": "Itihasa",
+    "book": "Ayodhya Kanda",
+    "section_title": "Bharata refuses to take what is not rightfully his",
+    "original_language": "sanskrit",
+    "translation": "Bharata rejects power obtained through wrongdoing, choosing loyalty to righteousness over personal gain.",
+    "commentary_summary": "Useful where ambition, inheritance, politics, or advantage conflict with conscience.",
+    "themes": ["integrity", "loyalty", "restraint", "leadership"],
+    "life_topics": ["career", "family", "wealth", "conflict"],
+    "source_edition": "Curated app summary based on public-domain translations",
+    "editorial_confidence": "medium"
+  },
+  {
+    "id": "ramayana-sundara-courage",
+    "scripture_name": "Ramayana",
+    "tradition": "Itihasa",
+    "book": "Sundara Kanda",
+    "section_title": "Hanuman remembers his strength and crosses the ocean",
+    "original_language": "sanskrit",
+    "translation": "When reminded of his true strength, Hanuman stops shrinking before the task and moves with courage in service of something higher.",
+    "commentary_summary": "A powerful pattern for fear, underconfidence, and action in the face of overwhelm.",
+    "themes": ["courage", "service", "devotion", "self-trust"],
+    "life_topics": ["fear", "discipline", "purpose", "self-worth"],
+    "source_edition": "Curated app summary based on public-domain translations",
+    "editorial_confidence": "medium"
+  },
+  {
+    "id": "ramayana-ayodhya-grief",
+    "scripture_name": "Ramayana",
+    "tradition": "Itihasa",
+    "book": "Ayodhya Kanda",
+    "section_title": "Grief is honored, but duty still remains",
+    "original_language": "sanskrit",
+    "translation": "The Ramayana does not deny sorrow; it shows people grieving deeply while still remembering obligation, love, and restraint.",
+    "commentary_summary": "Useful when loss, disappointment, and responsibility have become tangled together.",
+    "themes": ["grief", "duty", "family", "steadiness"],
+    "life_topics": ["grief", "family", "loss", "responsibility"],
+    "source_edition": "Curated app summary based on public-domain translations",
+    "editorial_confidence": "medium"
+  }
+]

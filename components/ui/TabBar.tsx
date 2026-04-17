@@ -21,7 +21,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticLight } from '@/lib/haptics';
-import { useGuide } from '@/lib/guideStore';
 import { useTheme } from '@/lib/theme-context';
 
 const TAB_ICONS = {
@@ -70,7 +69,6 @@ const selectorShadow = {
 export function TabBar({ state, navigation }: BottomTabBarProps) {
   const [barWidth, setBarWidth] = useState(0);
   const selectorX = useSharedValue(0);
-  const { guide } = useGuide();
   const { colors, isDark } = useTheme();
 
   const tabs = state.routes.filter((route) => route.name in TAB_ICONS);
@@ -94,11 +92,6 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
 
   const handleLayout = (event: LayoutChangeEvent) => {
     setBarWidth(event.nativeEvent.layout.width);
-  };
-
-  const getLabel = (tabName: TabName): string => {
-    if (tabName === 'ask' && guide) return `Ask ${guide}`;
-    return STATIC_LABELS[tabName];
   };
 
   const inactiveIconColor = isDark ? 'rgba(255,255,255,0.40)' : 'rgba(0,0,0,0.35)';
@@ -138,7 +131,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             const isFocused = route.key === activeRouteKey;
             const tabName = route.name as TabName;
             const Icon = TAB_ICONS[tabName];
-            const label = getLabel(tabName);
+            const label = STATIC_LABELS[tabName];
             const iconColor = (tabName === 'gurukul' || tabName === 'muhurat') && isFocused
               ? '#ff9500'
               : isFocused ? colors.onSurface : inactiveIconColor;

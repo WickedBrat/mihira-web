@@ -1,0 +1,61 @@
+[
+  {
+    "id": "vasistha-mind-world",
+    "scripture_name": "Yoga Vasistha",
+    "tradition": "Vedanta",
+    "book": "Yoga Vasistha",
+    "section_title": "The coloring of the world by the mind",
+    "original_language": "sanskrit",
+    "translation": "The agitated mind makes the world feel agitated; the clarified mind sees more truthfully.",
+    "commentary_summary": "Useful where perception has become fused with fear, despair, or exhaustion.",
+    "themes": ["mind", "clarity", "perception", "self-knowledge"],
+    "life_topics": ["anxiety", "grief", "burnout", "mental_health"],
+    "source_edition": "Curated app summary based on public-domain translations",
+    "editorial_confidence": "medium"
+  },
+  {
+    "id": "bhaja-govindam-1",
+    "scripture_name": "Bhaja Govindam",
+    "tradition": "Advaita",
+    "book": "Bhaja Govindam",
+    "verse": "1",
+    "section_title": "Turn from sterile cleverness toward what saves",
+    "original_language": "sanskrit",
+    "original_text": "bhaja govindam bhaja govindam",
+    "transliteration": "bhaja govindam bhaja govindam govindam bhaja mudha-mate",
+    "translation": "Turn toward the Divine, for mere intellectual display will not rescue you at the crucial hour.",
+    "commentary_summary": "Cuts through overthinking that has become avoidance of the real work of living.",
+    "themes": ["devotion", "humility", "clarity", "purpose"],
+    "life_topics": ["purpose", "burnout", "ego", "overthinking"],
+    "source_edition": "Curated app adaptation from public-domain translations",
+    "editorial_confidence": "high"
+  },
+  {
+    "id": "vivekachudamani-discernment",
+    "scripture_name": "Vivekachudamani",
+    "tradition": "Advaita",
+    "book": "Vivekachudamani",
+    "section_title": "Discrimination between the lasting and the passing",
+    "original_language": "sanskrit",
+    "translation": "Discernment begins with seeing clearly what is permanent and what is passing.",
+    "commentary_summary": "Useful for comparison, attachment, and crises of misplaced identity.",
+    "themes": ["discernment", "detachment", "self-knowledge", "clarity"],
+    "life_topics": ["self-worth", "comparison", "fear", "purpose"],
+    "source_edition": "Curated app summary based on public-domain translations",
+    "editorial_confidence": "medium"
+  },
+  {
+    "id": "sri-suktam-abundance",
+    "scripture_name": "Sri Suktam",
+    "tradition": "Vedic hymn",
+    "book": "Sri Suktam",
+    "section_title": "Prosperity joined to radiance and nourishment",
+    "original_language": "sanskrit",
+    "translation": "Prosperity is invoked not as hoarding but as radiance, nourishment, beauty, and right flourishing.",
+    "commentary_summary": "Frames abundance as healthy flow and worthiness rather than greed.",
+    "themes": ["wealth", "abundance", "grace", "contentment"],
+    "life_topics": ["wealth", "self-worth", "work", "home"],
+    "source_edition": "Curated app summary based on public-domain translations",
+    "editorial_confidence": "medium"
+  }
+]

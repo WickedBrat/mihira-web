@@ -64,13 +64,13 @@ export function NaradIntro({ onEnter }: NaradIntroProps) {
             Narad
           </Text>
           <Text className="mb-7 text-center font-label text-xs uppercase tracking-[3px] text-[rgba(212,175,55,0.85)]">
-            Celestial Companion
+            Keeper Of The Listening Path
           </Text>
           <Text className="mb-12 text-center font-body text-base leading-6 text-on-surface-variant">
-            Share what is on your mind. Narad will seek the wisest counsel and return with their
-            words — a shloka, a truth, a direction.
+            Bring a real question. Narad opens the path, and Aksha answers through a curated
+            library of sacred texts, careful interpretation, and grounded practice.
           </Text>
-          <SacredButton label="Seek Counsel" onPress={onEnter} />
+          <SacredButton label="Enter The Texts" onPress={onEnter} />
         </Animated.View>
       </SafeAreaView>
     </View>

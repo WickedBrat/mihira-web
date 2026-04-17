@@ -29,6 +29,21 @@ export const analytics = {
   chatMessageSent: (props: { guide: string | null; message_length: number; conversation_length: number }) =>
     posthog.capture('chat_message_sent', props),
 
+  askModeSelected: (props: { mode: 'quick' | 'deep' | 'compare' }) =>
+    posthog.capture('ask_mode_selected', props),
+
+  askSubmitted: (props: { mode: 'quick' | 'deep' | 'compare'; message_length: number; conversation_length: number }) =>
+    posthog.capture('ask_submitted', props),
+
+  askSourceExpanded: (props: { source_id: string; scripture: string }) =>
+    posthog.capture('ask_source_expanded', props),
+
+  askPassageSaved: (props: { source_id: string; scripture: string; saved: boolean }) =>
+    posthog.capture('ask_passage_saved', props),
+
+  askFollowUpPromptTapped: (props: { prompt_length: number }) =>
+    posthog.capture('ask_follow_up_prompt_tapped', props),
+
   // Muhurat
   muhuratQueried: (props: { event_description_length: number; date_range_days: number }) =>
     posthog.capture('muhurat_queried', props),

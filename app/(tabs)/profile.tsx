@@ -33,6 +33,8 @@ import { router } from 'expo-router';
 import { analytics } from '@/lib/analytics';
 import { posthog } from '@/lib/posthog';
 import { deriveMoonProfileFromBirthDt } from '@/lib/vedic/moonProfile';
+import { clearAskState } from '@/lib/askStorage';
+import { clearNaradState } from '@/lib/naradStorage';
 
 const ENABLE_DEV_BUTTONS = Constants.expoConfig?.extra?.enableDevButtons === true;
 
@@ -108,6 +110,8 @@ export default function ProfileScreen() {
               label="Reset Ask Tab State"
               onPress={async () => {
                 await clearGuide();
+                await clearNaradState();
+                await clearAskState();
                 analytics.guideReset();
                 showToast({ type: 'success', title: 'Guide Reset', message: 'The ask tab state has been cleared.' });
               }}

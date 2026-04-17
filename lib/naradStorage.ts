@@ -87,6 +87,14 @@ export async function clearNaradMessages(): Promise<void> {
   }
 }
 
+export async function clearNaradState(): Promise<void> {
+  try {
+    await AsyncStorage.multiRemove([CONTEXT_KEY, HISTORY_KEY, MESSAGES_KEY]);
+  } catch (err) {
+    console.error('[naradStorage] clearNaradState error', err);
+  }
+}
+
 // ── Supabase background sync ──────────────────────────────────────────────────
 
 export async function syncNaradContextToSupabase(
