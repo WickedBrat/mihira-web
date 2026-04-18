@@ -5,7 +5,6 @@ import type {
   AskChatItem,
   AskContextV2,
   AskHistoryTurn,
-  AskResponseMode,
   AskSavedPassage,
   AskTopic,
   ScriptureGuideResponse,
@@ -19,12 +18,10 @@ import {
   loadAskContext,
   loadAskHistory,
   loadAskMessages,
-  loadAskMode,
   loadSavedPassages,
   saveAskContext,
   saveAskHistory,
   saveAskMessages,
-  saveAskMode,
   saveSavedPassages,
 } from '@/lib/askStorage';
 
@@ -38,24 +35,22 @@ export function useAskState() {
   const [hasMoreMessages, setHasMoreMessages] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [inputText, setInputText] = useState('');
-  const [mode, setModeState] = useState<AskResponseMode>('quick');
   const [savedPassages, setSavedPassages] = useState<AskSavedPassage[]>([]);
   const [askContext, setAskContext] = useState<AskContextV2>({ ...DEFAULT_ASK_CONTEXT });
   const [isContextLoaded, setIsContextLoaded] = useState(false);
   const askContextRef = useRef<AskContextV2>({ ...DEFAULT_ASK_CONTEXT });
+  const mode = 'quick' as const;
 
   useEffect(() => {
     const load = async () => {
-      const [context, storedMessages, storedMode, storedPassages] = await Promise.all([
+      const [context, storedMessages, storedPassages] = await Promise.all([
         loadAskContext(),
         loadAskMessages(),
-        loadAskMode(),
         loadSavedPassages(),
       ]);
 
       setAskContext(context);
       askContextRef.current = context;
-      setModeState(storedMode);
       setSavedPassages(storedPassages);
       allMessagesRef.current = storedMessages;
       const slice = storedMessages.slice(Math.max(0, storedMessages.length - PAGE_SIZE));
@@ -87,12 +82,6 @@ export function useAskState() {
       setHasMoreMessages(newStart > 0);
       return all.slice(newStart);
     });
-  }, []);
-
-  const setMode = useCallback(async (nextMode: AskResponseMode) => {
-    setModeState(nextMode);
-    await saveAskMode(nextMode);
-    analytics.askModeSelected({ mode: nextMode });
   }, []);
 
   const toggleSavedPassage = useCallback(async (source: ScriptureSource) => {
@@ -227,11 +216,11 @@ export function useAskState() {
     }
   }, [isTyping, mode]);
 
-  const clearChat = useCallback(async () => {
+  const clearChat = useCallback(async (options?: { clearHistory?: boolean }) => {
     allMessagesRef.current = [];
     setMessages([]);
     setHasMoreMessages(false);
-    await clearAskConversation();
+    await clearAskConversation(options);
   }, []);
 
   const setFollowUpPrompt = useCallback((prompt: string) => {
@@ -250,8 +239,6 @@ export function useAskState() {
     clearChat,
     askContext,
     isContextLoaded,
-    mode,
-    setMode,
     savedPassages,
     toggleSavedPassage,
     setFollowUpPrompt,

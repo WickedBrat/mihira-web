@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
+import Animated, {
+  Easing,
+  FadeInDown,
+  FadeOutUp,
+  LinearTransition,
+} from 'react-native-reanimated';
 import { Text } from '@/components/ui/Text';
 import type { ScriptureSource } from '@/features/ask/types';
 import { SavedPassageButton } from '@/features/ask/SavedPassageButton';
 import { analytics } from '@/lib/analytics';
+
+const SOURCE_LAYOUT_TRANSITION = LinearTransition
+  .duration(220)
+  .easing(Easing.out(Easing.cubic));
 
 interface SourceCardProps {
   source: ScriptureSource;
@@ -15,7 +25,10 @@ export function SourceCard({ source, isSaved, onToggleSaved }: SourceCardProps) 
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <View className="rounded-[22px] border border-black/[0.06] bg-black/[0.03] p-4 dark:border-white/[0.06] dark:bg-white/[0.04]">
+    <Animated.View
+      layout={SOURCE_LAYOUT_TRANSITION}
+      className="rounded-[22px] border border-black/[0.06] bg-black/[0.03] p-4 dark:border-white/[0.06] dark:bg-white/[0.04]"
+    >
       <Pressable
         onPress={() => {
           const next = !expanded;
@@ -35,7 +48,12 @@ export function SourceCard({ source, isSaved, onToggleSaved }: SourceCardProps) 
       </Pressable>
 
       {expanded ? (
-        <View className="mt-4 gap-3">
+        <Animated.View
+          layout={SOURCE_LAYOUT_TRANSITION}
+          entering={FadeInDown.duration(220)}
+          exiting={FadeOutUp.duration(180)}
+          className="mt-4 gap-3"
+        >
           {source.original_text ? (
             <Text className="font-body text-sm italic leading-5 text-on-surface">{source.original_text}</Text>
           ) : null}
@@ -51,8 +69,8 @@ export function SourceCard({ source, isSaved, onToggleSaved }: SourceCardProps) 
             </Text>
             <SavedPassageButton isSaved={isSaved} onPress={() => onToggleSaved(source)} />
           </View>
-        </View>
+        </Animated.View>
       ) : null}
-    </View>
+    </Animated.View>
   );
 }

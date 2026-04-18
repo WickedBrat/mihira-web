@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -12,9 +11,9 @@ import { MoreVertical } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@/components/ui/Text';
 import { PageHero } from '@/components/ui/PageHero';
+import { ClearChatSheet } from '@/features/ask/ClearChatSheet';
 import { EmptyAskState } from '@/features/ask/EmptyAskState';
 import { NaradIntro } from '@/features/ask/NaradIntro';
-import { ResponseModeSwitcher } from '@/features/ask/ResponseModeSwitcher';
 import { ScriptureAnswerCard } from '@/features/ask/ScriptureAnswerCard';
 import { useAskState } from '@/features/ask/useAskState';
 import { ChatInput } from '@/features/chat/ChatInput';
@@ -43,6 +42,8 @@ export default function AskScreen() {
   const { isPro, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
   const { isAtLimit, isNearLimit, isLoaded: isUsageLoaded, increment } = useUsage('ask');
   const [paywallMode, setPaywallMode] = React.useState<'warning' | 'blocked' | null>(null);
+  const [isClearSheetOpen, setIsClearSheetOpen] = React.useState(false);
+  const [shouldClearHistory, setShouldClearHistory] = React.useState(true);
   const pendingEnterRef = React.useRef(false);
   const {
     messages,
@@ -55,8 +56,6 @@ export default function AskScreen() {
     clearChat,
     askContext,
     isContextLoaded,
-    mode,
-    setMode,
     savedPassages,
     toggleSavedPassage,
     setFollowUpPrompt,
@@ -84,6 +83,16 @@ export default function AskScreen() {
   const doEnter = () => {
     increment();
     setHasEnteredChat(true);
+  };
+
+  const openClearSheet = () => {
+    setShouldClearHistory(true);
+    setIsClearSheetOpen(true);
+  };
+
+  const handleConfirmClear = async () => {
+    await clearChat({ clearHistory: shouldClearHistory });
+    setIsClearSheetOpen(false);
   };
 
   const handleEnter = () => {
@@ -197,16 +206,7 @@ export default function AskScreen() {
               )}
               <View className="absolute right-4 z-10 p-2" style={{ top: Platform.OS === 'ios' ? 0 : 20 }}>
                 <TouchableOpacity
-                  onPress={() => {
-                    Alert.alert(
-                      'Clear Chat',
-                      'Are you sure you want to clear your scripture guidance history?',
-                      [
-                        { text: 'Cancel', style: 'cancel' },
-                        { text: 'Clear', style: 'destructive', onPress: clearChat },
-                      ],
-                    );
-                  }}
+                  onPress={openClearSheet}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
                   <MoreVertical color={colors.onSurfaceVariant} size={24} />
@@ -225,8 +225,6 @@ export default function AskScreen() {
           ListFooterComponent={isTyping ? <TypingIndicator /> : null}
         />
 
-        <ResponseModeSwitcher mode={mode} onChange={setMode} />
-
         <ChatInput
           value={inputText}
           onChangeText={setInputText}
@@ -236,6 +234,14 @@ export default function AskScreen() {
       </KeyboardAvoidingView>
 
       <View className="h-24" />
+
+      <ClearChatSheet
+        visible={isClearSheetOpen}
+        clearHistory={shouldClearHistory}
+        onClose={() => setIsClearSheetOpen(false)}
+        onToggleClearHistory={() => setShouldClearHistory((value) => !value)}
+        onConfirm={handleConfirmClear}
+      />
     </View>
   );
 }

@@ -7,12 +7,12 @@ jest.mock('@/lib/analytics', () => ({
 }));
 
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import { ScriptureAnswerCard } from '@/features/ask/ScriptureAnswerCard';
 import type { ScriptureGuideResponse } from '@/features/ask/types';
 
 const response: ScriptureGuideResponse = {
-  mode: 'compare',
+  mode: 'quick',
   topic: 'career_dharma',
   answer: {
     title: 'Act Without Clinging',
@@ -43,7 +43,7 @@ const response: ScriptureGuideResponse = {
 };
 
 describe('ScriptureAnswerCard', () => {
-  it('renders core sections and compare view', () => {
+  it('shows answer by default and reveals the other sections on demand', () => {
     const screen = render(
       <ScriptureAnswerCard
         response={response}
@@ -54,7 +54,15 @@ describe('ScriptureAnswerCard', () => {
     );
 
     expect(screen.getByText('Act Without Clinging')).toBeTruthy();
-    expect(screen.getByText('From The Scriptures')).toBeTruthy();
-    expect(screen.getByText('Alternate Reading')).toBeTruthy();
+    expect(screen.queryByText('Bhagavad Gita 2.47')).toBeNull();
+
+    fireEvent.press(screen.getByText('From the scriptures'));
+    expect(screen.getByText('Bhagavad Gita 2.47')).toBeTruthy();
+
+    fireEvent.press(screen.getByText('Practice for today'));
+    expect(screen.getByText(/Finish one concrete task today\./)).toBeTruthy();
+
+    fireEvent.press(screen.getByText('Next questions'));
+    expect(screen.getByText('What does the Gita say about fear?')).toBeTruthy();
   });
 });

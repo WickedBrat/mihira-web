@@ -118,9 +118,28 @@ export async function saveAskHistory(history: AskHistoryTurn[]): Promise<void> {
   }
 }
 
-export async function clearAskConversation(): Promise<void> {
+export async function clearAskMessages(): Promise<void> {
   try {
-    await AsyncStorage.multiRemove([ASK_MESSAGES_KEY, ASK_HISTORY_KEY]);
+    await AsyncStorage.removeItem(ASK_MESSAGES_KEY);
+  } catch (err) {
+    console.error('[askStorage] clearAskMessages error', err);
+  }
+}
+
+export async function clearAskHistory(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(ASK_HISTORY_KEY);
+  } catch (err) {
+    console.error('[askStorage] clearAskHistory error', err);
+  }
+}
+
+export async function clearAskConversation(options: { clearHistory?: boolean } = {}): Promise<void> {
+  try {
+    await clearAskMessages();
+    if (options.clearHistory ?? true) {
+      await clearAskHistory();
+    }
   } catch (err) {
     console.error('[askStorage] clearAskConversation error', err);
   }
