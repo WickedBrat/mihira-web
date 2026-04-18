@@ -12,28 +12,35 @@ interface ChatInputProps {
   placeholder?: string;
 }
 
-export function ChatInput({ value, onChangeText, onSend, placeholder = 'Ask for guidance…' }: ChatInputProps) {
+export function ChatInput({
+  value,
+  onChangeText,
+  onSend,
+  placeholder = 'Ask for guidance…',
+}: ChatInputProps) {
   const { colors, gradients } = useTheme();
+  const isSendDisabled = value.trim().length === 0;
 
   const handleSend = () => {
+    if (isSendDisabled) return;
     hapticMedium();
     onSend();
   };
 
   return (
-    <View className="px-2.5 py-2">
+    <View className="p-3 pt-2">
       <View
-        className="flex-row items-center gap-2 rounded-full border bg-[rgba(232,225,212,0.7)] py-[5px] pl-[26px] pr-2.5 dark:bg-[rgba(37,38,38,0.7)]"
+        className="flex-row items-end gap-2 rounded-[28px] border bg-[rgba(255,255,255,0.12)] pl-5 pr-2.5 dark:bg-[rgba(255,255,255,0.05)]"
         style={{
-          borderColor: `${colors.primaryFixedDim}02`,
+          borderColor: 'rgba(255,255,255,0.10)',
           shadowColor: colors.primary,
-          shadowOpacity: 0.12,
-          shadowRadius: 16,
-          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 0.08,
+          shadowRadius: 14,
+          shadowOffset: { width: 0, height: 4 },
         }}
       >
         <TextInput
-          className="max-h-[100px] flex-1 py-3 font-body text-base leading-5 text-on-surface"
+          className="flex-1 py-3 font-body text-lg leading-7 text-on-surface"
           style={{ textAlignVertical: 'center' }}
           value={value}
           onChangeText={onChangeText}
@@ -47,7 +54,8 @@ export function ChatInput({ value, onChangeText, onSend, placeholder = 'Ask for 
         />
         <Pressable
           onPress={handleSend}
-          style={({ pressed }) => pressed && { opacity: 0.8 }}
+          disabled={isSendDisabled}
+          style={({ pressed }) => [{ opacity: isSendDisabled ? 0.45 : 1 }, pressed && !isSendDisabled && { opacity: 0.8 }]}
         >
           <LinearGradient
             colors={gradients.primaryToContainer}

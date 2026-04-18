@@ -28,7 +28,6 @@ import { PlansScreen } from '@/features/billing/PlansScreen';
 import { layout } from '@/lib/theme';
 import { clearCachedProfile } from '@/lib/profileStorage';
 import { clearCachedDailyAlignment } from '@/lib/dailyAlignmentStorage';
-import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { router } from 'expo-router';
 import { analytics } from '@/lib/analytics';
 import { posthog } from '@/lib/posthog';
@@ -74,9 +73,7 @@ export default function ProfileScreen() {
   const identityEmail = user?.primaryEmailAddress?.emailAddress ?? '';
 
   return (
-    <SafeAreaView className="flex-1 bg-surface" edges={['top']}>
-      <PageAmbientBlobs />
-
+    <SafeAreaView className="flex-1" edges={['top']}>
       <ScrollView
         className="flex-1"
         contentContainerStyle={{

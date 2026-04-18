@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { GlowCard } from '@/components/ui/GlowCard';
-import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { PageHero } from '@/components/ui/PageHero';
 import { DailyArthCard } from '@/features/daily/DailyArthCard';
 import { SacredDayCard } from '@/features/daily/SacredDayCard';
@@ -19,9 +18,7 @@ export default function HomeScreen() {
   const { events: todayEvents } = useCalendarEvents();
 
   return (
-    <View className="flex-1 bg-surface">
-      <PageAmbientBlobs />
-
+    <View className="flex-1">
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingTop: 64, paddingBottom: 176, alignItems: 'center' }}

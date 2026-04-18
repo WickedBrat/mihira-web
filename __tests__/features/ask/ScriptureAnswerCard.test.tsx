@@ -43,7 +43,7 @@ const response: ScriptureGuideResponse = {
 };
 
 describe('ScriptureAnswerCard', () => {
-  it('shows answer by default and reveals the other sections on demand', () => {
+  it('shows guidance, visible sources, and expandable interpretation', () => {
     const screen = render(
       <ScriptureAnswerCard
         response={response}
@@ -54,15 +54,13 @@ describe('ScriptureAnswerCard', () => {
     );
 
     expect(screen.getByText('Act Without Clinging')).toBeTruthy();
-    expect(screen.queryByText('Bhagavad Gita 2.47')).toBeNull();
-
-    fireEvent.press(screen.getByText('From the scriptures'));
     expect(screen.getByText('Bhagavad Gita 2.47')).toBeTruthy();
-
-    fireEvent.press(screen.getByText('Practice for today'));
     expect(screen.getByText(/Finish one concrete task today\./)).toBeTruthy();
+    expect(screen.queryByText('The cited texts turn the focus from control to dharmic action.')).toBeNull();
 
-    fireEvent.press(screen.getByText('Next questions'));
+    fireEvent.press(screen.getByText('Why these apply'));
+    expect(screen.getByText('The cited texts turn the focus from control to dharmic action.')).toBeTruthy();
+
     expect(screen.getByText('What does the Gita say about fear?')).toBeTruthy();
   });
 });

@@ -32,7 +32,9 @@ function TypingIndicator() {
         <View className="h-[5px] w-[5px] rounded-full bg-secondary-dim opacity-60" />
         <View className="h-[5px] w-[5px] rounded-full bg-secondary-dim opacity-40" />
         <View className="h-[5px] w-[5px] rounded-full bg-secondary-dim opacity-20" />
-        <Text className="ml-1 font-body text-[11px] italic text-on-surface-variant">Searching the texts…</Text>
+        <Text className="ml-1 font-body text-[11px] italic text-on-surface-variant">
+          Searching the texts…
+        </Text>
       </View>
     </View>
   );
@@ -66,6 +68,7 @@ export default function AskScreen() {
   const isLoadingMoreRef = useRef(false);
   const { colors } = useTheme();
   const savedSourceIds = useMemo(() => new Set(savedPassages.map((entry) => entry.source.id)), [savedPassages]);
+  const hasMessages = messages.length > 0;
 
   const handleScroll = useCallback(
     ({ nativeEvent }: { nativeEvent: { contentOffset: { y: number } } }) => {
@@ -115,7 +118,7 @@ export default function AskScreen() {
     doEnter();
   };
 
-  if (!isContextLoaded) return <View className="flex-1 bg-surface" />;
+  if (!isContextLoaded) return <View className="flex-1" />;
 
   if (showIntro) {
     return (
@@ -149,7 +152,7 @@ export default function AskScreen() {
   }
 
   return (
-    <View className="flex-1 bg-surface">
+    <View className="flex-1">
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -197,29 +200,55 @@ export default function AskScreen() {
           ListEmptyComponent={!isTyping ? <EmptyAskState onSelectPrompt={setInputText} /> : null}
           ListHeaderComponent={(
             <SafeAreaView edges={['top']} className="relative mb-5">
-              {hasMoreMessages && (
+              {hasMoreMessages ? (
                 <ActivityIndicator
                   size="small"
                   color={colors.onSurfaceVariant}
                   style={{ marginBottom: 12 }}
                 />
+              ) : null}
+
+              {hasMessages ? (
+                <>
+                  <View className="mb-4 flex-row items-start justify-between gap-4">
+                    <View className="flex-1">
+                      <Text className="font-label text-[11px] uppercase tracking-[1.5px] text-secondary-dim">
+                        Scripture Grounded
+                      </Text>
+                      <Text className="mt-1 font-headline text-4xl leading-9 text-on-surface">
+                        Ask Aksha
+                      </Text>
+                      <Text className="mt-1 font-body leading-5 text-on-surface-variant">
+                        Guidance, citations, interpretation, and practice in one flow.
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={openClearSheet}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      className="rounded-full border border-black/[0.06] bg-black/[0.03] p-3 dark:border-white/[0.06] dark:bg-white/[0.03]"
+                    >
+                      <MoreVertical color={colors.onSurfaceVariant} size={20} />
+                    </TouchableOpacity>
+                  </View>
+                </>
+              ) : (
+                <View className="gap-5">
+                  <PageHero
+                    meta="Scripture Grounded"
+                    title="Ask Aksha"
+                    subtitle="Bring a real life question. Receive guidance rooted in Hindu sacred texts."
+                    style={{ paddingBottom: 8 }}
+                    titleStyle={{ fontSize: 38, lineHeight: 44 }}
+                    subtitleStyle={{ maxWidth: 340 }}
+                  />
+
+                  <View className="flex-row flex-wrap gap-2 px-1">
+                    <TrustChip label="Cited passages" />
+                    <TrustChip label="Interpretation, not verse dump" />
+                    <TrustChip label="Practical next step" />
+                  </View>
+                </View>
               )}
-              <View className="absolute right-4 z-10 p-2" style={{ top: Platform.OS === 'ios' ? 0 : 20 }}>
-                <TouchableOpacity
-                  onPress={openClearSheet}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                  <MoreVertical color={colors.onSurfaceVariant} size={24} />
-                </TouchableOpacity>
-              </View>
-              <PageHero
-                meta="Scripture Grounded"
-                title="Ask Aksha"
-                subtitle="Guidance rooted in Hindu sacred texts."
-                style={{ paddingBottom: 16 }}
-                titleStyle={{ fontSize: 38, lineHeight: 44 }}
-                subtitleStyle={{ maxWidth: 340 }}
-              />
             </SafeAreaView>
           )}
           ListFooterComponent={isTyping ? <TypingIndicator /> : null}
@@ -242,6 +271,16 @@ export default function AskScreen() {
         onToggleClearHistory={() => setShouldClearHistory((value) => !value)}
         onConfirm={handleConfirmClear}
       />
+    </View>
+  );
+}
+
+function TrustChip({ label }: { label: string }) {
+  return (
+    <View className="rounded-full border border-black/[0.06] bg-black/[0.03] px-3 py-2 dark:border-white/[0.06] dark:bg-white/[0.04]">
+      <Text className="font-label text-[11px] uppercase tracking-[1px] text-secondary-dim">
+        {label}
+      </Text>
     </View>
   );
 }

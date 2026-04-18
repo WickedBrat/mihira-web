@@ -18,6 +18,7 @@ interface SacredButtonProps {
   icon?: React.ReactNode;
   variant?: 'primary' | 'secondary';
   fullWidth?: boolean;
+  className?: string;
 }
 
 export function SacredButton({
@@ -27,6 +28,7 @@ export function SacredButton({
   icon,
   variant = 'primary',
   fullWidth = false,
+  className,
 }: SacredButtonProps) {
   const { colors, gradients } = useTheme();
   const gradientColors = variant === 'primary'
@@ -41,6 +43,7 @@ export function SacredButton({
     <Pressable
       onPress={handlePress}
       accessibilityRole="button"
+      className={className}
       style={({ pressed }) => [
         {
           shadowColor,

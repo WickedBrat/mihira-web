@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Stack, SplashScreen, usePathname, useGlobalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -12,11 +12,13 @@ import {
   GoogleSans_700Bold,
 } from '@expo-google-fonts/google-sans';
 import { PostHogProvider } from 'posthog-react-native';
+import { vars } from 'nativewind';
 import { tokenCache } from '@/lib/clerk';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { posthog } from '@/lib/posthog';
 import { analytics } from '@/lib/analytics';
 import { ThemeProvider, useTheme } from '@/lib/theme-context';
+import { getThemeColorVariables } from '@/lib/theme';
 import '../global.css';
 
 SplashScreen.preventAutoHideAsync();
@@ -102,6 +104,22 @@ function ThemedStack() {
   );
 }
 
+function ThemedAppShell({ children }: { children: React.ReactNode }) {
+  const { colors } = useTheme();
+  const themeVars = useMemo(() => vars(getThemeColorVariables(colors)), [colors]);
+
+  return (
+    <GestureHandlerRootView
+      style={[
+        { flex: 1, backgroundColor: colors.background },
+        themeVars,
+      ]}
+    >
+      {children}
+    </GestureHandlerRootView>
+  );
+}
+
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     GoogleSans_400Regular,
@@ -125,7 +143,7 @@ export default function RootLayout() {
           publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? ''}
           urlScheme="aksha"
         >
-          <GestureHandlerRootView style={{ flex: 1 }}>
+          <ThemedAppShell>
             <SafeAreaProvider>
               <PostHogProvider
                 client={posthog}
@@ -142,7 +160,7 @@ export default function RootLayout() {
                 </ToastProvider>
               </PostHogProvider>
             </SafeAreaProvider>
-          </GestureHandlerRootView>
+          </ThemedAppShell>
         </StripeProvider>
       </ThemeProvider>
     </ClerkProvider>

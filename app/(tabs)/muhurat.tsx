@@ -15,7 +15,6 @@ import { MuhuratCard } from '@/features/muhurat/MuhuratCard';
 import { MuhuratDateSheet } from '@/features/muhurat/components/MuhuratDateSheet';
 import { useMuhurat, type MuhuratRequest } from '@/features/muhurat/useMuhurat';
 import { SacredButton } from '@/components/ui/SacredButton';
-import { PageAmbientBlobs } from '@/components/ui/PageAmbientBlobs';
 import { useToast } from '@/components/ui/ToastProvider';
 import { PageHero } from '@/components/ui/PageHero';
 import { layout } from '@/lib/theme';
@@ -152,9 +151,7 @@ export default function MuhuratScreen() {
   };
 
   return (
-    <View className="flex-1 bg-surface">
-      <PageAmbientBlobs />
-
+    <View className="flex-1">
       <ScrollView
         className="flex-1"
         contentContainerStyle={{

@@ -182,3 +182,68 @@ export const layout = {
 } as const;
 
 export type ColorKey = keyof Colors;
+
+const tailwindColorKeys = [
+  'surface',
+  'surfaceDim',
+  'surfaceContainerLowest',
+  'surfaceContainerLow',
+  'surfaceContainer',
+  'surfaceContainerHigh',
+  'surfaceContainerHighest',
+  'surfaceBright',
+  'surfaceVariant',
+  'primary',
+  'primaryDim',
+  'primaryFixed',
+  'primaryFixedDim',
+  'primaryContainer',
+  'onPrimary',
+  'onPrimaryFixed',
+  'secondary',
+  'secondaryDim',
+  'secondaryFixed',
+  'secondaryFixedDim',
+  'secondaryContainer',
+  'onSecondary',
+  'onSecondaryContainer',
+  'onSurface',
+  'onSurfaceVariant',
+  'onBackground',
+  'background',
+  'outline',
+  'outlineVariant',
+  'error',
+  'errorContainer',
+] as const satisfies readonly (keyof Colors)[];
+
+function toKebabCase(value: string) {
+  return value.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+}
+
+export function hexToRgbChannels(hex: string) {
+  const normalized = hex.replace('#', '');
+  const expanded = normalized.length === 3 || normalized.length === 4
+    ? normalized
+        .split('')
+        .map((char) => `${char}${char}`)
+        .join('')
+    : normalized;
+  const rgbOnly = expanded.length === 8 ? expanded.slice(0, 6) : expanded;
+
+  if (rgbOnly.length !== 6 || /[^0-9a-f]/i.test(rgbOnly)) {
+    throw new Error(`Expected a 3-, 4-, 6-, or 8-digit hex color, received "${hex}"`);
+  }
+
+  const red = Number.parseInt(rgbOnly.slice(0, 2), 16);
+  const green = Number.parseInt(rgbOnly.slice(2, 4), 16);
+  const blue = Number.parseInt(rgbOnly.slice(4, 6), 16);
+
+  return `${red} ${green} ${blue}`;
+}
+
+export function getThemeColorVariables(colors: Colors) {
+  return Object.fromEntries(
+    tailwindColorKeys.map((key) => [`--color-${toKebabCase(key)}`, hexToRgbChannels(colors[key])])
+  ) as Record<`--color-${string}`, string>;
+}

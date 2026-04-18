@@ -7,6 +7,8 @@ import {
   lightGradients,
   fonts,
   layout,
+  getThemeColorVariables,
+  hexToRgbChannels,
   type Colors,
   type GlassMorphism,
   type Gradients,
@@ -34,5 +36,15 @@ describe('theme — shared', () => {
   it('Colors type has surface token', () => {
     const c: Colors = darkColors;
     expect(c.surface).toBeTruthy();
+  });
+  it('converts hex colors to rgb channel strings', () => {
+    expect(hexToRgbChannels('#fff')).toBe('255 255 255');
+    expect(hexToRgbChannels('#1a1410')).toBe('26 20 16');
+  });
+  it('builds NativeWind theme variables from the active palette', () => {
+    const variables = getThemeColorVariables(lightColors);
+    expect(variables['--color-background']).toBe('250 247 242');
+    expect(variables['--color-on-surface']).toBe('26 20 16');
+    expect(variables['--color-primary-fixed-dim']).toBe('109 40 217');
   });
 });

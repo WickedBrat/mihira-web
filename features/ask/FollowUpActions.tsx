@@ -24,7 +24,7 @@ export function FollowUpActions({
             onPress={() => onUsePrompt(prompt)}
             className="rounded-full border border-black/[0.06] bg-black/[0.04] px-3.5 py-2 dark:border-white/[0.06] dark:bg-white/[0.04]"
           >
-            <Text className="font-body text-xs leading-4 text-on-surface">{prompt}</Text>
+            <Text className="font-body text-sm leading-5 text-on-surface">{prompt}</Text>
           </Pressable>
         ))}
       </View>

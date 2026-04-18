@@ -13,6 +13,7 @@ const source = {
   id: 'gita-2-47',
   scripture: 'Bhagavad Gita',
   citation_label: 'Bhagavad Gita 2.47',
+  transliteration: 'karmany evadhikaras te ma phalesu kadacana',
   translation: 'You have a claim on action alone.',
   relevance_reason: 'It addresses action without attachment.',
   confidence: 'high' as const,
@@ -21,7 +22,7 @@ const source = {
 };
 
 describe('SourceCard', () => {
-  it('expands to reveal relevance details', () => {
+  it('shows the relevance summary and expands to reveal the full passage', () => {
     const screen = render(
       <SourceCard
         source={source}
@@ -30,7 +31,12 @@ describe('SourceCard', () => {
       />,
     );
 
-    fireEvent.press(screen.getByText('Bhagavad Gita 2.47'));
     expect(screen.getByText('It addresses action without attachment.')).toBeTruthy();
+    expect(screen.queryByText('Retrieval Confidence high')).toBeNull();
+
+    fireEvent.press(screen.getByText('Read Full Passage'));
+    expect(screen.getByText('Retrieval Confidence high')).toBeTruthy();
+    expect(screen.getByText(/कर्म/)).toBeTruthy();
+    expect(screen.getByText('karmany evadhikaras te ma phalesu kadacana')).toBeTruthy();
   });
 });
