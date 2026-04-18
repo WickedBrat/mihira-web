@@ -20,16 +20,16 @@ const TIERS = [
     icon: '🌱',
     name: 'The Seed',
     duration: '3 min',
-    desc: 'Daily Alignment check. A quiet moment of cosmic orientation each morning.',
-    features: ['Daily muhurat window', 'Nakshatra energy briefing'],
+    desc: 'A short daily check-in to ground your day.',
+    features: ['Daily alignment window', 'Nakshatra energy snapshot'],
   },
   {
     id: 'growth',
     icon: '🌿',
     name: 'The Growth',
     duration: '10 min',
-    desc: 'Daily Wisdom + AI guidance. Deep alignment for the intentional practitioner.',
-    features: ['Everything in Seed', 'Daily Wisdom lesson', 'Ask Krishna AI sessions'],
+    desc: 'A deeper daily ritual with wisdom and guided reflection.',
+    features: ['Everything in Seed', 'Daily wisdom reading', 'Guidance sessions'],
     recommended: true,
   },
   {
@@ -37,8 +37,8 @@ const TIERS = [
     icon: '🪷',
     name: 'The Mastery',
     duration: '20 min',
-    desc: 'Full Gurukul practice. Complete immersion in the Vedic framework.',
-    features: ['Everything in Growth', 'Full Gurukul curriculum', 'Deep muhurat analysis'],
+    desc: 'A fuller Vedic practice for people who want sustained depth.',
+    features: ['Everything in Growth', 'Gurukul lessons', 'Deeper Sacred Timing guidance'],
   },
 ] as const;
 
@@ -64,10 +64,10 @@ export default function Screen11() {
       >
         <Animated.View entering={FadeInDown.duration(500)} className="max-w-[360px] items-center gap-2.5">
           <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
-            Choose your{'\n'}daily commitment.
+            Choose the rhythm{'\n'}you can keep.
           </Text>
           <Text className="text-center font-body text-[15px] leading-[23px] text-ob-muted">
-            Meaningful change requires rhythm. You can always change this later.
+            Consistency matters more than intensity. You can change this anytime.
           </Text>
         </Animated.View>
 
@@ -149,12 +149,12 @@ export default function Screen11() {
             onboardingButtonShadow,
             pressed && pressedButtonStyle,
           ]}
-        >
-          <Text className="font-label text-base tracking-[0.3px] text-white">
-            Set My Sankalpa →
-          </Text>
-        </Pressable>
-      </Animated.View>
+          >
+            <Text className="font-label text-base tracking-[0.3px] text-white">
+              Set my daily rhythm →
+            </Text>
+          </Pressable>
+        </Animated.View>
     </SafeAreaView>
   );
 }

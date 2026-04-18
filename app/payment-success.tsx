@@ -45,8 +45,8 @@ export default function PaymentSuccessPage() {
           <CheckCircle size={36} color="#7c3aed" strokeWidth={1.8} />
         </View>
 
-        <Text className="mb-1 font-headline text-2xl text-[#1a1a1a]">Payment Successful</Text>
-        <Text className="mb-8 font-body text-sm text-[#888]">Welcome to Aksha Pro</Text>
+        <Text className="mb-1 font-headline text-2xl text-[#1a1a1a]">You’re all set</Text>
+        <Text className="mb-8 font-body text-sm text-[#888]">Aksha Pro is now active</Text>
 
         {/* User identity */}
         <View className="mb-8 w-full items-center">
@@ -86,11 +86,11 @@ export default function PaymentSuccessPage() {
           onPress={handleOpenApp}
           activeOpacity={0.85}
         >
-          <Text className="font-label text-base tracking-[0.3px] text-white">Head to the App</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">Open Aksha</Text>
         </TouchableOpacity>
 
         <Text className="text-center font-body text-[11px] leading-[17px] text-[#bbb]">
-          If the app doesn't open automatically,{'\n'}make sure Aksha is installed on your device.
+          If the app doesn’t open automatically,{'\n'}make sure Aksha is installed on this device.
         </Text>
       </View>
     </View>

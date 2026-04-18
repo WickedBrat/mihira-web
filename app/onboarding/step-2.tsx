@@ -62,7 +62,7 @@ export default function Screen2() {
           <Text className="text-center font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
             What brings you{'\n'}to Aksha today?
           </Text>
-          <Text className="text-center font-body text-[15px] text-ob-muted">Select all that resonate.</Text>
+          <Text className="text-center font-body text-[15px] text-ob-muted">Choose everything that feels true right now.</Text>
         </Animated.View>
 
         <View className="w-full max-w-[360px] gap-3">
@@ -115,7 +115,7 @@ export default function Screen2() {
           style={{ opacity: toastOpacity }}
         >
           <Text className="text-center font-body text-sm leading-5 text-ob-gold">
-            ✦ We hear you. You are entering a space of clarity.
+            ✦ Noted. We’ll shape your guidance around what you’re carrying.
           </Text>
         </RNAnimated.View>
       )}

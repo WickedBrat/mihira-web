@@ -70,9 +70,9 @@ export default function Screen1() {
 
         <Animated.View entering={FadeIn.delay(900).duration(800)} className="mt-3 items-center gap-2.5">
           <Text className="text-center font-headline text-[22px] tracking-[-0.4px] text-ob-text">
-            The universe is in motion.
+            The universe is always moving.
           </Text>
-          <Text className="text-center font-body text-base text-ob-muted">Are you in sync?</Text>
+          <Text className="text-center font-body text-base text-ob-muted">Find your rhythm within it.</Text>
         </Animated.View>
       </View>
 
@@ -90,7 +90,7 @@ export default function Screen1() {
           ]}
         >
           <Text className="text-center font-label text-base tracking-[0.3px] text-white">
-            Begin My Alignment
+            Start My Alignment
           </Text>
         </Pressable>
 
@@ -102,7 +102,7 @@ export default function Screen1() {
           className="px-2 py-2"
           style={({ pressed }) => pressed && pressedLogoButtonStyle}
         >
-          <Text className="text-center font-body text-sm text-ob-muted">Skip Onboarding</Text>
+          <Text className="text-center font-body text-sm text-ob-muted">Skip for now</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>

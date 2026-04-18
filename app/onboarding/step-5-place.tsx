@@ -68,7 +68,7 @@ export default function Screen5Place() {
   return (
     <BirthDataScaffold
       title={`Where were${'\n'}you born?`}
-      description="Your birthplace sets the sky, timezone, and coordinates we use to calculate your chart precisely."
+      description="Your birthplace gives us the sky, timezone, and coordinates needed to calculate your chart accurately."
       ctaLabel="Continue"
       canProceed={birthPlace.trim().length > 0}
       onProceed={proceed}
@@ -76,7 +76,7 @@ export default function Screen5Place() {
         <View className="w-full max-w-[360px] items-center gap-2.5 rounded-xl border border-ob-card-border bg-ob-card p-4">
           <Text className="text-sm"><LockKeyholeIcon size={20} color={OB.saffron} /></Text>
           <Text className="text-center font-body text-xs leading-[18px] text-ob-muted">
-            Your birth data is encrypted and used only for your personal alignment. It is never shared.
+            Your birth details are encrypted and used only to personalize your chart. They are never shared.
           </Text>
         </View>
       )}
@@ -95,7 +95,7 @@ export default function Screen5Place() {
             onChangeText={(value) => {
               setBirthPlace(value);
             }}
-            placeholder="Start typing your city…"
+            placeholder="Start typing your birth city…"
             placeholderTextColor={OB.muted}
             autoCapitalize="words"
             autoCorrect={false}

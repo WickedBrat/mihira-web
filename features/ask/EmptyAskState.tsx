@@ -8,7 +8,7 @@ const TOPIC_CARDS = [
   { title: 'Family', prompt: 'How do I respond to tension with my parents without hardening?' },
   { title: 'Purpose', prompt: 'I feel useful but empty. How do I find purpose again?' },
   { title: 'Money', prompt: 'How do I hold ambition without becoming consumed by it?' },
-  { title: 'Mind', prompt: 'Why do I keep comparing my life to others?' },
+  { title: 'Mind', prompt: 'How do I stop comparing my life to everyone else?' },
 ];
 
 interface EmptyAskStateProps {
@@ -17,14 +17,14 @@ interface EmptyAskStateProps {
 
 export function EmptyAskState({ onSelectPrompt }: EmptyAskStateProps) {
   return (
-    <View className="gap-5 rounded-[30px] border border-black/[0.06] bg-black/[0.03] p-6 dark:border-white/[0.06] dark:bg-white/[0.04]">
+    <View className="gap-5 rounded-[30px] border border-black/[0.06] bg-black/[0.03] p-4 dark:border-white/[0.06] dark:bg-white/[0.04]">
       <View className="gap-2">
         <Text className="font-headline text-3xl leading-10 text-on-surface">
           Start with what is actually weighing on you.
         </Text>
         <Text className="font-body text-lg leading-8 text-on-surface-variant">
-          Ask plainly. Aksha will interpret the texts, cite the passages, and turn them into usable
-          guidance for the next 24 hours.
+          Ask plainly. Aksha will interpret the texts, cite the passages, and turn them into clear
+          guidance you can use today.
         </Text>
       </View>
 

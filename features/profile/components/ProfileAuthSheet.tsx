@@ -34,9 +34,9 @@ export function ProfileAuthSheet({
     >
       <View className="mb-[22px] flex-row items-start justify-between gap-3">
         <View>
-          <Text className="mb-1 font-headline text-2xl tracking-[-0.4px] text-on-surface">Welcome</Text>
+          <Text className="mb-1 font-headline text-2xl tracking-[-0.4px] text-on-surface">Sign in</Text>
           <Text className="max-w-[220px] font-body text-sm leading-[19px] text-on-surface-variant">
-            Sign in to save your spiritual profile.
+            Save your profile, sync your chart, and keep your guidance across devices.
           </Text>
         </View>
         <Pressable

@@ -35,11 +35,10 @@ export default function Screen4() {
         <View className="flex-1 items-center justify-center gap-12 px-8 pt-10">
           <Animated.View entering={FadeInDown.duration(500)} className="max-w-[360px] items-center gap-3.5">
             <Text className="text-center font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
-              What shall we call{'\n'}you in this space?
+              What should we{'\n'}call you?
             </Text>
             <Text className="text-center font-body text-[15px] leading-[23px] text-ob-muted">
-              A name given to a space becomes sacred.{'\n'}
-              Choose yours with care.
+              We’ll use this to personalize your chart and guidance.
             </Text>
           </Animated.View>
 
@@ -49,7 +48,7 @@ export default function Screen4() {
               className="w-full text-center font-headline text-[32px] text-ob-text"
               value={name}
               onChangeText={setName}
-              placeholder="Your name…"
+              placeholder="Your name"
               placeholderTextColor={OB.muted}
               autoFocus
               autoCapitalize="words"
@@ -81,7 +80,7 @@ export default function Screen4() {
             ]}
           >
             <Text className="font-label text-base tracking-[0.3px] text-white">
-              {name.trim() ? `Enter as ${name.trim().split(' ')[0]} →` : 'Enter your name first'}
+              {name.trim() ? `Continue as ${name.trim().split(' ')[0]} →` : 'Enter your name first'}
             </Text>
           </Pressable>
         </Animated.View>

@@ -24,13 +24,13 @@ interface PaywallSheetProps {
 }
 
 const FEATURE_LABEL: Record<Feature, string> = {
-  muhurat: 'Muhurat query',
-  ask: 'Ask conversation',
+  muhurat: 'Sacred Timing reading',
+  ask: 'Guidance session',
 };
 
 const FEATURE_LABEL_PLURAL: Record<Feature, string> = {
-  muhurat: 'Muhurat queries',
-  ask: 'Ask conversations',
+  muhurat: 'Sacred Timing readings',
+  ask: 'Guidance sessions',
 };
 
 export function PaywallSheet({
@@ -68,10 +68,10 @@ export function PaywallSheet({
       {mode === 'warning' ? (
         <>
           <Text className="mb-2.5 font-headline text-2xl tracking-[-0.3px] text-on-surface">
-            1 free {label} remaining
+            1 free {label} left this month
           </Text>
           <Text className="mb-5 font-body text-sm leading-[21px] text-on-surface-variant">
-            You have 1 free {label} left this month. Upgrade to Pro for unlimited access to all features.
+            Use your last free {label} now, or upgrade to Pro for unlimited access across Aksha.
           </Text>
 
           <View className="mb-5 gap-2.5">
@@ -79,7 +79,7 @@ export function PaywallSheet({
             <PlanFeatureRow label={`Unlimited ${labelPlural}`} isFree={false} />
           </View>
 
-          <SacredButton label="Upgrade to Pro — $19.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
+          <SacredButton label="Upgrade to Pro for $19.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
           <Pressable className="items-center py-2.5" onPress={onProceed ?? onClose}>
             <Text className="font-body text-sm text-on-surface-variant">Use my last free {label}</Text>
           </Pressable>
@@ -87,19 +87,19 @@ export function PaywallSheet({
       ) : (
         <>
           <Text className="mb-2.5 font-headline text-2xl tracking-[-0.3px] text-on-surface">
-            You've used all {limit} free {labelPlural}
+            You’ve reached your monthly free limit
           </Text>
           <Text className="mb-5 font-body text-sm leading-[21px] text-on-surface-variant">
-            Upgrade to Aksha Pro for unlimited {labelPlural} and everything else Aksha has to offer.
+            Upgrade to Aksha Pro for unlimited {labelPlural} and deeper guidance across the app.
           </Text>
 
           <View className="mb-6 gap-3">
             <FeatureItem text={`Unlimited ${labelPlural}`} />
-            <FeatureItem text="All home page content" />
-            <FeatureItem text="Priority access to new features" />
+            <FeatureItem text="Daily alignment and sacred-day guidance" />
+            <FeatureItem text="Early access to new features" />
           </View>
 
-          <SacredButton label="Upgrade to Pro — $19.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
+          <SacredButton label="Upgrade to Pro for $19.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
           <Pressable className="items-center py-2.5" onPress={onClose}>
             <Text className="font-body text-sm text-on-surface-variant">Maybe later</Text>
           </Pressable>

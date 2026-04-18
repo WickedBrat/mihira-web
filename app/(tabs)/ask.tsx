@@ -33,7 +33,7 @@ function TypingIndicator() {
         <View className="h-[5px] w-[5px] rounded-full bg-secondary-dim opacity-40" />
         <View className="h-[5px] w-[5px] rounded-full bg-secondary-dim opacity-20" />
         <Text className="ml-1 font-body text-[11px] italic text-on-surface-variant">
-          Searching the texts…
+          Tracing the texts…
         </Text>
       </View>
     </View>
@@ -213,13 +213,13 @@ export default function AskScreen() {
                   <View className="mb-4 flex-row items-start justify-between gap-4">
                     <View className="flex-1">
                       <Text className="font-label text-[11px] uppercase tracking-[1.5px] text-secondary-dim">
-                        Scripture Grounded
+                        Grounded in Scripture
                       </Text>
                       <Text className="mt-1 font-headline text-4xl leading-9 text-on-surface">
-                        Ask Aksha
+                        Guidance
                       </Text>
                       <Text className="mt-1 font-body leading-5 text-on-surface-variant">
-                        Guidance, citations, interpretation, and practice in one flow.
+                        Guidance, citations, interpretation, and practice in one clear flow.
                       </Text>
                     </View>
                     <TouchableOpacity
@@ -234,9 +234,9 @@ export default function AskScreen() {
               ) : (
                 <View className="gap-5">
                   <PageHero
-                    meta="Scripture Grounded"
-                    title="Ask Aksha"
-                    subtitle="Bring a real life question. Receive guidance rooted in Hindu sacred texts."
+                    meta="Grounded in Scripture"
+                    title="Guidance"
+                    subtitle="Bring a real-life question. Receive guidance rooted in sacred texts and made usable today."
                     style={{ paddingBottom: 8 }}
                     titleStyle={{ fontSize: 38, lineHeight: 44 }}
                     subtitleStyle={{ maxWidth: 340 }}
@@ -244,7 +244,7 @@ export default function AskScreen() {
 
                   <View className="flex-row flex-wrap gap-2 px-1">
                     <TrustChip label="Cited passages" />
-                    <TrustChip label="Interpretation, not verse dump" />
+                    <TrustChip label="Interpretation, not overload" />
                     <TrustChip label="Practical next step" />
                   </View>
                 </View>
@@ -258,7 +258,7 @@ export default function AskScreen() {
           value={inputText}
           onChangeText={setInputText}
           onSend={() => sendMessage(inputText)}
-          placeholder="Ask about duty, grief, family, fear, work, or purpose…"
+          placeholder="Ask about duty, grief, relationships, fear, work, or purpose…"
         />
       </KeyboardAvoidingView>
 

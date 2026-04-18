@@ -69,7 +69,7 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
       <PageAmbientBlobs />
 
       <View className="flex-row items-center justify-between py-3.5" style={{ paddingHorizontal: layout.screenPaddingX }}>
-        <Text className="font-headline text-xl tracking-[-0.3px] text-on-surface">Plans</Text>
+        <Text className="font-headline text-xl tracking-[-0.3px] text-on-surface">Choose a plan</Text>
         <Pressable
           className="h-9 w-9 items-center justify-center rounded-full border border-outline-variant/20 bg-surface-container-low"
           onPress={onClose}
@@ -136,15 +136,15 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
             </View>
           </View>
 
-          <FeatureRow label="Home page" freeValue={true} proValue={true} />
-          <FeatureRow label="Muhurat queries" freeValue="5/mo" proValue="Unlimited" />
-          <FeatureRow label="Ask conversations" freeValue="20/mo" proValue="Unlimited" />
-          <FeatureRow label="Priority features" freeValue={false} proValue={true} />
+          <FeatureRow label="Daily alignment" freeValue={true} proValue={true} />
+          <FeatureRow label="Sacred Timing" freeValue="5/mo" proValue="Unlimited" />
+          <FeatureRow label="Guidance" freeValue="20/mo" proValue="Unlimited" />
+          <FeatureRow label="Early access to new features" freeValue={false} proValue={true} />
         </View>
 
         {!isPro && (
           <SacredButton
-            label={isCheckoutLoading ? 'Opening checkout…' : 'Upgrade to Pro — $19.99/mo'}
+            label={isCheckoutLoading ? 'Opening checkout…' : 'Upgrade to Pro for $19.99/mo'}
             onPress={isCheckoutLoading ? () => {} : onUpgrade}
             style={{ marginTop: 4 }}
           />
@@ -157,7 +157,7 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
           >
             <Check size={18} color={colors.primary} />
             <Text className="flex-1 font-body text-sm leading-5 text-on-surface-variant">
-              You're on Aksha Pro. Manage your subscription from your Clerk account.
+              You’re on Aksha Pro. You can manage your subscription from your Clerk account.
             </Text>
           </View>
         )}

@@ -7,44 +7,37 @@ import {
 } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
-import {
-  Home,
-  MessageCircle,
-  User,
-} from 'lucide-react-native';
+import { DailyIcon } from '@/components/ui/DailyIcon';
+import { GuidanceIcon } from '@/components/ui/GuidanceIcon';
 import { MuhuratIcon } from '@/components/ui/MuhuratIcon';
 import { GurukulIcon } from '@/components/ui/GurukulIcon';
+import { ProfileIcon } from '@/components/ui/ProfileIcon';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { hapticLight } from '@/lib/haptics';
 import { useTheme } from '@/lib/theme-context';
 
-const TAB_ICONS = {
-  index: Home,
-  ask: MessageCircle,
-  gurukul: GurukulIcon,
-  muhurat: MuhuratIcon,
-  profile: User,
-} as const;
-
-type TabName = keyof typeof TAB_ICONS;
-
-const STATIC_LABELS: Record<TabName, string> = {
-  index: 'Home',
-  ask: 'Ask',
-  gurukul: 'Gurukul',
-  muhurat: 'Muhurat',
-  profile: 'You',
+type TabName = 'index' | 'ask' | 'gurukul' | 'muhurat' | 'profile';
+type IconRenderer = (options: { color: string; isFocused: boolean }) => React.ReactNode;
+type TabConfig = {
+  iconOffsetY?: number;
+  label: string;
+  renderIcon: IconRenderer;
 };
 
 const BAR_PADDING = 4;
-const BAR_HEIGHT = 74;
 const SELECTOR_HORIZONTAL_INSET = 0;
 const SELECTOR_VERTICAL_INSET = 5;
+const ACCENT_ICON_COLOR = '#ff9500';
+const TAB_HORIZONTAL_PADDING = 6;
+const TAB_CONTENT_TOP_PADDING = 6;
+const TAB_CONTENT_BOTTOM_PADDING = 8;
+const ICON_RAIL_HEIGHT = 26;
+const LABEL_RAIL_HEIGHT = 12;
+const ICON_LABEL_GAP = 4;
 const SPRING = {
   damping: 22,
   stiffness: 240,
@@ -66,12 +59,50 @@ const selectorShadow = {
   shadowOffset: { width: 0, height: 4 },
 };
 
+const TAB_CONFIG: Record<TabName, TabConfig> = {
+  index: {
+    iconOffsetY: 0,
+    label: 'Daily',
+    renderIcon: ({ color }) => (
+      <DailyIcon size={20} color={color} />
+    ),
+  },
+  ask: {
+    iconOffsetY: -0.5,
+    label: 'Guidance',
+    renderIcon: ({ color }) => (
+      <GuidanceIcon size={26} color={color} />
+    ),
+  },
+  gurukul: {
+    iconOffsetY: 0,
+    label: 'Gurukul',
+    renderIcon: ({ color }) => (
+      <GurukulIcon size={34} color={color} />
+    ),
+  },
+  muhurat: {
+    iconOffsetY: -0.5,
+    label: 'Sacred Timing',
+    renderIcon: ({ color }) => <MuhuratIcon size={32} color={color} />,
+  },
+  profile: {
+    iconOffsetY: 0,
+    label: 'You',
+    renderIcon: ({ color }) => (
+      <ProfileIcon size={20} color={color} />
+    ),
+  },
+};
+
 export function TabBar({ state, navigation }: BottomTabBarProps) {
   const [barWidth, setBarWidth] = useState(0);
   const selectorX = useSharedValue(0);
   const { colors, isDark } = useTheme();
 
-  const tabs = state.routes.filter((route) => route.name in TAB_ICONS);
+  const tabs = state.routes.filter(
+    (route): route is typeof route & { name: TabName } => route.name in TAB_CONFIG,
+  );
   const activeRouteKey = state.routes[state.index]?.key;
   const activeIndex = Math.max(
     tabs.findIndex((route) => route.key === activeRouteKey),
@@ -99,7 +130,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
   return (
     <View pointerEvents="box-none" className="absolute left-0 right-0 z-[100] items-center" style={{ bottom: 10 }}>
       <View
-        className="w-[95%] max-w-[620px] min-h-[74px] overflow-hidden rounded-full border border-black/[0.08] bg-[rgba(250,247,242,0.10)] p-1 dark:border-white/[0.08] dark:bg-[rgba(18,18,22,0.10)]"
+        className="w-[95%] max-w-[620px] min-h-[76px] overflow-hidden rounded-full border border-black/[0.08] bg-[rgba(250,247,242,0.10)] p-1 dark:border-white/[0.08] dark:bg-[rgba(18,18,22,0.10)]"
         style={barShadow}
         onLayout={handleLayout}
       >
@@ -126,15 +157,15 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
           </Animated.View>
         ) : null}
 
-        <View className="flex-1 flex-row justify-around">
+        <View className="flex-1 flex-row px-1">
           {tabs.map((route) => {
             const isFocused = route.key === activeRouteKey;
-            const tabName = route.name as TabName;
-            const Icon = TAB_ICONS[tabName];
-            const label = STATIC_LABELS[tabName];
-            const iconColor = (tabName === 'gurukul' || tabName === 'muhurat') && isFocused
-              ? '#ff9500'
-              : isFocused ? colors.onSurface : inactiveIconColor;
+            const tabConfig = TAB_CONFIG[route.name];
+            const iconColor = isFocused
+              ? ACCENT_ICON_COLOR
+              : isFocused
+                ? colors.onSurface
+                : inactiveIconColor;
 
             return (
               <Pressable
@@ -157,36 +188,38 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                 className="z-[1] min-w-0 flex-1 items-center justify-center"
                 style={({ pressed }) => pressed && { opacity: 0.84 }}
               >
-                <View className="w-full flex-1 items-center justify-center gap-0.5 px-1 py-1">
-                  {tabName === 'muhurat' ? (
-                    <MuhuratIcon
-                      size={isFocused ? 34 : 34}
-                      color={iconColor as string}
-                    />
-                  ) : tabName === 'gurukul' ? (
-                    <GurukulIcon
-                      size={isFocused ? 38 : 36}
-                      color={iconColor as string}
-                    />
-                  ) : (
-                    <Icon
-                      size={isFocused ? 21 : 20}
-                      color={iconColor}
-                      fill={iconColor}
-                      strokeWidth={isFocused ? 2.15 : 1.7}
-                    />
-                  )}
-                  <Text
-                    className={`text-center font-label text-[10px] leading-3 tracking-[0.2px] ${
-                      isFocused
-                        ? 'text-on-surface'
-                        : 'text-black/[0.35] dark:text-white/40'
-                    }`}
-                    numberOfLines={1}
-                    adjustsFontSizeToFit
+                <View
+                  className="w-full flex-1 items-center justify-center"
+                  style={{
+                    paddingBottom: TAB_CONTENT_BOTTOM_PADDING,
+                    paddingHorizontal: TAB_HORIZONTAL_PADDING,
+                    paddingTop: TAB_CONTENT_TOP_PADDING,
+                  }}
+                >
+                  <View
+                    className="w-full items-center justify-center"
+                    style={{ height: ICON_RAIL_HEIGHT }}
                   >
-                    {label}
-                  </Text>
+                    <View style={{ transform: [{ translateY: tabConfig.iconOffsetY ?? 0 }] }}>
+                      {tabConfig.renderIcon({ color: iconColor, isFocused })}
+                    </View>
+                  </View>
+                  <View
+                    className="w-full items-center justify-center"
+                    style={{ height: LABEL_RAIL_HEIGHT, marginTop: ICON_LABEL_GAP }}
+                  >
+                    <Text
+                      className={`text-center font-label text-[10px] leading-3 tracking-[0.2px] ${
+                        isFocused
+                          ? 'text-on-surface'
+                          : 'text-black/[0.35] dark:text-white/40'
+                      }`}
+                      numberOfLines={1}
+                      adjustsFontSizeToFit
+                    >
+                      {tabConfig.label}
+                    </Text>
+                  </View>
                 </View>
               </Pressable>
             );

@@ -29,9 +29,9 @@ export function PremiumCard({ isPro, onPress }: PremiumCardProps) {
           resizeMode="cover"
         >
         <View className="min-h-[88px] items-center justify-center rounded-[22px] bg-black/[0.18] px-10 py-12">
-          <Text className="mb-[5px] font-headline text-4xl tracking-[-0.3px] text-white">Get Premium</Text>
+          <Text className="mb-[5px] font-headline text-4xl tracking-[-0.3px] text-white">Unlock Aksha Pro</Text>
           <Text className="pt-2 text-center font-body leading-[18px] text-white/80">
-            Unlimited Ask Aksha, No Ads &amp; Exclusive Spiritual Insights
+            Unlimited Guidance, unlimited Sacred Timing, and deeper support across the app
           </Text>
         </View>
         </ImageBackground>

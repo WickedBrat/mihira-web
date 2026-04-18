@@ -30,11 +30,11 @@ import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBack
 import { absoluteFillStyle } from '@/features/onboarding/onboardingStyles';
 
 const STEPS = [
-  'Fetching Swiss Ephemeris data…',
-  'Calculating Lagna precision…',
-  'Mapping the Chariot to the Stars…',
-  'Calibrating your Nakshatra arc…',
-  'Aligning the celestial dial…',
+  'Gathering your birth details…',
+  'Mapping your planetary placements…',
+  'Calculating your rising sign…',
+  'Tracing your lunar pattern…',
+  'Preparing your daily alignment…',
 ];
 
 export default function Screen6() {
@@ -103,7 +103,7 @@ export default function Screen6() {
       <View className="flex-1 items-center justify-center gap-4 px-8 pt-7">
         <Animated.View entering={FadeInDown.duration(500)} className="self-stretch items-center gap-2">
           <Text className="text-center font-headline text-[28px] tracking-[-0.6px] text-ob-text">
-            {name ? `Mapping ${name}'s universe` : 'Mapping your universe'}
+            {name ? `Mapping ${name}'s chart` : 'Mapping your chart'}
           </Text>
         </Animated.View>
 

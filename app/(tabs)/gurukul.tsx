@@ -105,7 +105,7 @@ export default function GurukulScreen() {
                 className="mt-3 max-w-[292px] text-center font-label text-base leading-[24px]"
                 style={{ color: bodyColor }}
               >
-                Your sacred digital library of wisdom, breathwork & philosophy is being prepared.
+                A guided library of wisdom, breathwork, and philosophy is on the way.
               </Text>
             </View>
           </View>

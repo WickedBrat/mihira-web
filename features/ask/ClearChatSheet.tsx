@@ -36,7 +36,7 @@ export function ClearChatSheet({
             Clear chat
           </Text>
           <Text className="font-body text-sm leading-[21px] text-on-surface-variant">
-            Remove the visible conversation and choose whether past Ask memory should be wiped too.
+            Remove the visible conversation and choose whether past Guidance memory should be wiped too.
           </Text>
         </View>
         <Pressable
@@ -59,7 +59,7 @@ export function ClearChatSheet({
         <View className="flex-1 gap-1">
           <Text className="font-body-medium text-sm text-on-surface">Clear history</Text>
           <Text className="font-body text-sm leading-5 text-on-surface-variant">
-            When checked, Aksha also forgets the stored Ask history used as short-term context for future replies.
+            When checked, Aksha also forgets the stored Guidance history used as short-term context for future replies.
           </Text>
         </View>
       </Pressable>

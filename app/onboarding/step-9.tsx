@@ -58,12 +58,12 @@ export default function Screen9() {
       <View className="flex-1 items-center justify-center gap-6 px-8 pt-6">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
           <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
-            Your Daily{'\n'}Alignment Dial
+            Your daily{'\n'}alignment, timed
           </Text>
           <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
-            Time is not a clock — it's a cycle. Every day, we find your{' '}
+            Every day carries a different current. Aksha highlights your{' '}
             <Text className="font-label text-ob-gold">48-minute Abhijit Muhurat</Text>
-            {' '}— your window of peak grace.
+            {' '}and other supportive windows for action.
           </Text>
         </Animated.View>
 
@@ -123,18 +123,18 @@ export default function Screen9() {
           <View className="items-center justify-center" style={absoluteFillStyle}>
             <Text className="mb-1 text-[30px] text-ob-gold">☽</Text>
             <Text className="font-headline text-sm text-ob-text">Abhijit</Text>
-            <Text className="font-body text-[11px] text-ob-muted">48 min window</Text>
+            <Text className="font-body text-[11px] text-ob-muted">48-minute window</Text>
           </View>
         </View>
 
         <View className="items-center gap-2.5">
           <View className="flex-row items-center gap-2">
             <View className="h-2.5 w-2.5 rounded-full bg-ob-gold" />
-            <Text className="font-body text-xs text-ob-muted">Abhijit Muhurat — peak grace</Text>
+            <Text className="font-body text-xs text-ob-muted">Abhijit Muhurat — your strongest midday window</Text>
           </View>
           <View className="flex-row items-center gap-2">
             <View className="h-2.5 w-2.5 rounded-full bg-ob-saffron opacity-[0.55]" />
-            <Text className="font-body text-xs text-ob-muted">Auspicious windows</Text>
+            <Text className="font-body text-xs text-ob-muted">Other auspicious windows</Text>
           </View>
         </View>
       </View>
@@ -149,7 +149,7 @@ export default function Screen9() {
           ]}
         >
           <Text className="font-label text-base tracking-[0.3px] text-white">
-            Allow Daily Reminders →
+            Turn on daily reminders →
           </Text>
         </Pressable>
         <Pressable onPress={() => {

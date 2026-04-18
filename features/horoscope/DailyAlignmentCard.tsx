@@ -41,11 +41,6 @@ export function DailyAlignmentCard({ chart, focusAreas, isLoading, error }: Prop
 
   return (
     <View>
-      {chart && (
-        <Text className="mb-5 font-label text-[9px] uppercase tracking-[2px] text-secondary-fixed">
-          {chart.lagna} Rising · {chart.nakshatra} Moon · {chart.currentDasha}
-        </Text>
-      )}
       {focusAreas.map((area, index) => (
         <FocusAreaCard
           key={area.area}

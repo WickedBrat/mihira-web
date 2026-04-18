@@ -123,8 +123,8 @@ export default function MuhuratScreen() {
     if (!trimmedEvent) {
       showToast({
         type: 'error',
-        title: 'Describe your event',
-        message: 'Add the situation or issue you want guidance for.',
+        title: 'Describe the event',
+        message: 'Tell Aksha what you’re trying to time.',
       });
       return;
     }
@@ -164,8 +164,8 @@ export default function MuhuratScreen() {
       >
         <PageHero
           meta="Auspicious Timing"
-          title="Muhurat Finder"
-          subtitle="Describe your situation and scan a chosen date range for auspicious windows."
+          title="Sacred Timing"
+          subtitle="Describe what you’re planning and scan a date range for the most supportive windows."
           style={{ paddingBottom: 24 }}
           titleStyle={{ fontSize: 38, lineHeight: 44 }}
           subtitleStyle={{ lineHeight: 22 }}
@@ -181,7 +181,7 @@ export default function MuhuratScreen() {
           <TextInput
             value={eventDescription}
             onChangeText={setEventDescription}
-            placeholder="Describe your issue or event. For example: I want to schedule a difficult financial conversation with my co-founder."
+            placeholder="Describe the event or decision you want help timing. Example: I need the best window for a difficult conversation with my co-founder."
             placeholderTextColor={colors.outline}
             multiline
             textAlignVertical="top"
@@ -215,7 +215,7 @@ export default function MuhuratScreen() {
           </View>
 
           <SacredButton
-            label="Find Auspicious Windows"
+            label="Find Best Windows"
             onPress={(!isSubscriptionLoaded || !isUsageLoaded) ? () => {} : handleFindMuhurat}
             fullWidth
             style={{ marginTop: 4 }}

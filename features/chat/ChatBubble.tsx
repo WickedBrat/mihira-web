@@ -25,7 +25,7 @@ function VaniCard({
 
   return (
     <View
-      className="gap-2 rounded-[20px] border border-black/[0.05] border-l-[3px] bg-black/[0.03] px-[22px] py-[18px] dark:border-white/[0.06] dark:bg-white/[0.04]"
+      className="gap-2 rounded-[20px] border border-black/[0.05] border-l-[3px] bg-black/[0.03] px-[2px] py-[18px] dark:border-white/[0.06] dark:bg-white/[0.04]"
       style={{ borderLeftColor: borderColor }}
     >
       <Text className="font-body text-lg leading-8 text-on-surface">{text}</Text>
@@ -42,7 +42,7 @@ function VaniCard({
       ) : null}
       {expanded && shloka ? (
         <View className="mt-1 gap-2.5 rounded-[14px] border border-[rgba(212,175,55,0.22)] bg-[rgba(212,175,55,0.09)] px-[18px] py-4 dark:border-[rgba(212,175,55,0.15)] dark:bg-[rgba(212,175,55,0.06)]">
-          <Text className="text-center font-headline text-2xl leading-9 text-[rgba(212,175,55,0.95)]">{shloka.devanagari}</Text>
+          <Text className="text-center font-headline text-lg leading-9 text-[rgba(212,175,55,0.95)]">{shloka.devanagari}</Text>
           <Text className="text-center font-body text-base italic leading-7 text-on-surface-variant">
             {shloka.transliteration}
           </Text>

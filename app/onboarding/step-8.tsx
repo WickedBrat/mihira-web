@@ -79,8 +79,8 @@ export default function Screen8() {
             className="max-w-[90%] self-start rounded-[20px] rounded-tl border border-ob-card-border bg-ob-card p-[18px]"
           >
             <Text className="font-body text-[15px] leading-6 text-ob-text">
-              I am your Sarathi — your Charioteer.{'\n\n'}
-              {name}, what is one question weighing on your heart today?
+              I’m your Sarathi, your steady guide through the texts.{'\n\n'}
+              {name}, what question is sitting heaviest on your heart right now?
             </Text>
           </Animated.View>
 
@@ -95,7 +95,7 @@ export default function Screen8() {
                 className="max-h-[120px] flex-1 font-body text-[15px] leading-[23px] text-ob-text"
                 value={question}
                 onChangeText={setQuestion}
-                placeholder="Ask something real…"
+                placeholder="Ask something real"
                 placeholderTextColor={OB.muted}
                 multiline
                 maxLength={280}
@@ -117,7 +117,7 @@ export default function Screen8() {
           {/* Loading state */}
           {loading && (
             <Animated.View entering={FadeIn.duration(300)} className="items-start gap-2.5">
-              <Text className="font-body text-sm italic text-ob-muted">Generating Divine Perspective…</Text>
+              <Text className="font-body text-sm italic text-ob-muted">Listening for the right thread…</Text>
               <View className="flex-row gap-1.5 pl-1">
                 {[0, 1, 2].map((i) => (
                   <LoadingDot key={i} delay={i * 250} />
@@ -134,8 +134,8 @@ export default function Screen8() {
               </View>
               <View className="max-w-[90%] self-start rounded-[20px] rounded-tl border border-ob-card-border bg-ob-card p-[18px]">
                 <Text className="font-body text-[15px] leading-6 text-ob-text">
-                  Your question is received. The stars have noted your seeking.{'\n\n'}
-                  As we journey together, the patterns will reveal what your mind already knows.
+                  Your question is received.{'\n\n'}
+                  We’ll keep returning to questions like this as your path unfolds. Often the pattern becomes clear just before the answer does.
                 </Text>
               </View>
             </Animated.View>
@@ -156,7 +156,7 @@ export default function Screen8() {
               ]}
             >
               <Text className="font-label text-base tracking-[0.3px] text-white">
-                Continue My Journey →
+                Continue →
               </Text>
             </Pressable>
           </Animated.View>

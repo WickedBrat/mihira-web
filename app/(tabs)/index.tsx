@@ -25,9 +25,9 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <PageHero
-          meta="Mindful Morning"
-          title="Daily Aksha"
-          subtitle="Finding stillness in the noise."
+          meta="Daily Alignment"
+          title="Your Daily Alignment"
+          subtitle="A grounded reading for the day ahead."
           style={{ paddingBottom: 40, paddingHorizontal: layout.screenPaddingX }}
         />
 
@@ -40,7 +40,7 @@ export default function HomeScreen() {
         {todayEvents.length > 0 && (
           <View className="mt-[52px] self-stretch gap-5">
             <View className="gap-1.5" style={{ paddingHorizontal: layout.screenPaddingX }}>
-              <Text className="font-label text-xs uppercase tracking-[3px] text-secondary-fixed">✦  Special Today</Text>
+              <Text className="font-label text-xs uppercase tracking-[3px] text-secondary-fixed">✦  Sacred Today</Text>
             </View>
             <View className="gap-2.5" style={{ paddingHorizontal: layout.screenPaddingX }}>
               {todayEvents.map((day) => (
@@ -53,9 +53,9 @@ export default function HomeScreen() {
         {/* Celestial Alignment */}
         <View className="mb-10 mt-16 max-w-[480px] self-stretch" style={{ paddingHorizontal: layout.screenPaddingX }}>
           <View className="mb-6 gap-2">
-            <Text className="font-label text-xs uppercase tracking-[3px] text-secondary-fixed">Celestial Alignment</Text>
+            <Text className="font-label text-xs uppercase tracking-[3px] text-secondary-fixed">Based on your horoscope</Text>
             <Text className="font-headline-extra text-[36px] leading-[42px] tracking-[-0.8px] text-on-surface">
-              Your Top Focus Today
+              Where to place your energy
             </Text>
           </View>
 

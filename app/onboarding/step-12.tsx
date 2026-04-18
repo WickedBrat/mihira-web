@@ -1,6 +1,7 @@
 // Screen 12: The Threshold — Long Press Initiation
 import React, { useEffect, useRef, useCallback } from 'react';
 import {
+  Platform,
   View,
   Pressable,
 } from 'react-native';
@@ -25,7 +26,7 @@ import { formatBirthDateTime, mergeDateAndTime } from '@/features/profile/utils'
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { absoluteFillStyle, hazeScaleStyle } from '@/features/onboarding/onboardingStyles';
 
-const HOLD_DURATION = 2000; // ms to hold for full trigger
+const HOLD_DURATION = 8000; // ms to hold for full trigger
 
 export default function Screen12() {
   const data = getOnboardingData();
@@ -35,9 +36,36 @@ export default function Screen12() {
 
   const progress = useSharedValue(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const hapticTimeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const startedRef  = useRef(false);
   // Track milestones so haptics only fire once per threshold
   const hapticFiredRef = useRef({ q1: false, q2: false, q3: false });
+
+  const clearHapticTimeouts = useCallback(() => {
+    hapticTimeoutsRef.current.forEach(clearTimeout);
+    hapticTimeoutsRef.current = [];
+  }, []);
+
+  const fireHardImpact = useCallback(() => {
+    clearHapticTimeouts();
+
+    if (Platform.OS === 'android') {
+      void Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Long_Press);
+      hapticTimeoutsRef.current.push(
+        setTimeout(() => {
+          void Haptics.performAndroidHapticsAsync(Haptics.AndroidHaptics.Confirm);
+        }, 90),
+      );
+      return;
+    }
+
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    hapticTimeoutsRef.current.push(
+      setTimeout(() => {
+        void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+      }, 90),
+    );
+  }, [clearHapticTimeouts]);
 
   const navigate = useCallback(() => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -64,24 +92,24 @@ export default function Screen12() {
     if (startedRef.current) return;
     startedRef.current = true;
     hapticFiredRef.current = { q1: false, q2: false, q3: false };
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    fireHardImpact();
 
     const startTime = Date.now();
     intervalRef.current = setInterval(() => {
       const p = Math.min((Date.now() - startTime) / HOLD_DURATION, 1);
       progress.value = p;
 
-      if (p >= 0.25 && !hapticFiredRef.current.q1) {
+      if (p >= 0.05 && !hapticFiredRef.current.q1) {
         hapticFiredRef.current.q1 = true;
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        fireHardImpact();
       }
       if (p >= 0.55 && !hapticFiredRef.current.q2) {
         hapticFiredRef.current.q2 = true;
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        fireHardImpact();
       }
       if (p >= 0.80 && !hapticFiredRef.current.q3) {
         hapticFiredRef.current.q3 = true;
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        fireHardImpact();
       }
       if (p >= 1) {
         clearInterval(intervalRef.current!);
@@ -96,6 +124,7 @@ export default function Screen12() {
     startedRef.current = false;
     clearInterval(intervalRef.current!);
     intervalRef.current = null;
+    clearHapticTimeouts();
     progress.value = withTiming(0, { duration: 500, easing: Easing.out(Easing.cubic) });
   }
 
@@ -136,8 +165,9 @@ export default function Screen12() {
   useEffect(() => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      clearHapticTimeouts();
     };
-  }, []);
+  }, [clearHapticTimeouts]);
 
   const name0 = data.userName || 'Seeker';
 
@@ -176,14 +206,14 @@ export default function Screen12() {
             entering={FadeIn.delay(500).duration(700)}
             className="text-center font-headline text-[40px] leading-[46px] tracking-[-1.2px] text-ob-text"
           >
-            Your axis is aligned,{'\n'}
+            You’re ready,{'\n'}
             <Text className="text-ob-gold">{name0}.</Text>
           </Animated.Text>
           <Animated.Text
             entering={FadeIn.delay(900).duration(700)}
             className="text-center font-body text-xl tracking-[1px] text-ob-text/60"
           >
-            Enter the current.
+            Step into your practice.
           </Animated.Text>
         </View>
 
@@ -220,7 +250,7 @@ export default function Screen12() {
                 className="text-center font-label text-sm tracking-[0.3px] text-ob-text"
                 style={labelStyle}
               >
-                Hold to Enter
+                Press and hold to enter
               </Animated.Text>
               <Animated.Text
                 className="font-body text-[28px] text-ob-gold"
@@ -234,7 +264,7 @@ export default function Screen12() {
 
         <Animated.View entering={FadeIn.delay(1200).duration(700)} className="items-center">
           <Text className="text-center font-body text-sm italic leading-[22px] tracking-[0.3px] text-ob-text/40">
-            "The chariot is ready. The reins are in your hands."
+            "A steady practice changes the way the path appears."
           </Text>
         </Animated.View>
       </SafeAreaView>

@@ -25,7 +25,7 @@ export default function Screen5Tob() {
   return (
     <BirthDataScaffold
       title={`What time were${'\n'}you born?`}
-      description="Exact birth time sharpens your Lagna and house placements. If you do not know it, we will build a solar chart instead."
+      description="Your birth time sharpens the rising sign and house placements. If you don’t know it, we’ll build a reliable solar chart instead."
       ctaLabel="Continue"
       onProceed={proceed}
     >
@@ -46,7 +46,7 @@ export default function Screen5Tob() {
         >
           <Text className={`text-center font-body-medium ${unknownTime ? 'text-[16px] leading-7 text-ob-muted' : 'text-[21px] text-ob-text'}`}>
             {unknownTime
-              ? "Don't worry - Aksha will use a gentle midday reference to build a reliable solar chart for you."
+              ? 'No problem. Aksha will use a midday reference to build a reliable solar chart for you.'
               : fmtTime(birthTime)}
           </Text>
         </Pressable>
@@ -79,7 +79,7 @@ export default function Screen5Tob() {
           <View className="w-full items-center gap-3">
             <View className="w-full flex-row items-center justify-center gap-3">
               <Text className="text-center font-body-medium text-[14px] text-ob-text">
-                I do not know my exact time
+                I don’t know my exact birth time
               </Text>
               <Switch
                 value={unknownTime}

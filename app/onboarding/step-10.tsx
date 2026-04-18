@@ -14,28 +14,28 @@ import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboardin
 
 const TESTIMONIALS = [
   {
-    quote: 'Aksha gave me the stability I lacked in the NYC hustle. I finally stopped making decisions from fear.',
+    quote: 'Aksha gave me a calmer way to make decisions in the middle of New York chaos. I stopped leading from fear.',
     name: 'Ananya M.',
     title: 'VP, Product · New York',
     initial: 'A',
     nakshatra: 'Rohini',
   },
   {
-    quote: 'I finally understood my Sade Sati and stopped fighting the current. The surrender itself became the strategy.',
+    quote: 'I finally understood my Sade Sati and stopped resisting every hard season. That shift changed how I work.',
     name: 'Rohan K.',
     title: 'Founder · Bangalore',
     initial: 'R',
     nakshatra: 'Ashwini',
   },
   {
-    quote: 'For the first time, my calendar and my cosmic rhythm were aligned. The fog lifted immediately.',
+    quote: 'For the first time, my calendar felt aligned with my energy instead of fighting it. The fog lifted fast.',
     name: 'Priya S.',
     title: 'Creative Director · London',
     initial: 'P',
     nakshatra: 'Pushya',
   },
   {
-    quote: 'I was sceptical, but the accuracy of my birth chart reading was startling. This is not horoscope fluff.',
+    quote: 'I was sceptical, but my chart felt uncannily specific. This went far beyond generic horoscope advice.',
     name: 'Arjun V.',
     title: 'Surgeon · Mumbai',
     initial: 'A',
@@ -61,7 +61,7 @@ export default function Screen10() {
       <View className="flex-1 items-center justify-center gap-7 px-8 pt-6">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2">
           <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
-            Thousands have{'\n'}found their axis.
+            People use Aksha{'\n'}to move with clarity.
           </Text>
           <Text className="text-center font-body text-[15px] text-ob-muted">Real people. Real shifts.</Text>
         </Animated.View>
@@ -135,7 +135,7 @@ export default function Screen10() {
             pressed && pressedButtonStyle,
           ]}
         >
-          <Text className="font-label text-base tracking-[0.3px] text-white">I'm Ready →</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">Choose my rhythm →</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>

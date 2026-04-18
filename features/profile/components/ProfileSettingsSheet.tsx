@@ -66,7 +66,7 @@ export function ProfileSettingsSheet({
         <View>
           <Text className="mb-1 font-headline text-2xl tracking-[-0.4px] text-on-surface">Settings</Text>
           <Text className="max-w-[220px] font-body text-sm leading-[19px] text-on-surface-variant">
-            Profile controls and content preferences.
+            Account, preferences, and reading settings.
           </Text>
         </View>
         <Pressable
@@ -106,7 +106,7 @@ export function ProfileSettingsSheet({
               onPress={onManageAccount}
             >
               <Settings size={16} color={colors.onSurfaceVariant} />
-              <Text className="font-body-medium text-base text-on-surface">Manage Account</Text>
+              <Text className="font-body-medium text-base text-on-surface">Manage account</Text>
             </Pressable>
 
             {!isPro && (
@@ -115,7 +115,7 @@ export function ProfileSettingsSheet({
                 onPress={onOpenPlans}
               >
                 <Zap size={16} color={colors.secondaryFixed} />
-                <Text className="font-body-medium text-base text-secondary-fixed">Upgrade to Pro</Text>
+                <Text className="font-body-medium text-base text-secondary-fixed">Upgrade to Aksha Pro</Text>
               </Pressable>
             )}
 
@@ -124,12 +124,12 @@ export function ProfileSettingsSheet({
               onPress={onSignOut}
             >
               <LogOut size={16} color="#CF6679" />
-              <Text className="font-body-medium text-base text-[#CF6679]">Sign Out</Text>
+              <Text className="font-body-medium text-base text-[#CF6679]">Sign out</Text>
             </Pressable>
           </>
         ) : (
           <SacredButton
-            label="Sign In"
+            label="Sign in"
             onPress={onOpenAuth}
             style={{ alignSelf: 'stretch', marginBottom: 20 }}
           />

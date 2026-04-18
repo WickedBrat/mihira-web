@@ -326,7 +326,7 @@ export default function Screen7() {
             Your cosmic{'\n'}signature
           </Text>
           <Text className="max-w-[250px] text-center font-body text-sm leading-5 text-ob-muted">
-            Your lunar imprint is ready.
+            We’ve mapped the lunar pattern you were born into.
           </Text>
         </Animated.View>
 
@@ -458,7 +458,7 @@ export default function Screen7() {
             style={styles.ctaGradient}
           >
             <Text className="font-label text-base tracking-[0.3px] text-white">
-              Meet Your Sarathi →
+              Meet your Sarathi →
             </Text>
           </LinearGradient>
         </Pressable>
