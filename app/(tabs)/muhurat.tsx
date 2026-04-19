@@ -1,5 +1,5 @@
 // app/(tabs)/muhurat.tsx
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { useMuhurat, type MuhuratRequest } from '@/features/muhurat/useMuhurat';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { useToast } from '@/components/ui/ToastProvider';
 import { PageHero } from '@/components/ui/PageHero';
+import { useFocusEffect } from 'expo-router';
 import { layout } from '@/lib/theme';
 import { useTheme } from '@/lib/theme-context';
 import { useUsage } from '@/lib/usage';
@@ -50,10 +51,9 @@ export default function MuhuratScreen() {
     return normalizeDate(next);
   }, [today]);
   const { showToast } = useToast();
-  const { isPlus, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
-  const { isAtLimit, isNearLimit, isLoaded: isUsageLoaded, increment } = useUsage('muhurat');
-  const [paywallMode, setPaywallMode] = useState<'warning' | 'blocked' | null>(null);
-  const pendingQueryRef = useRef<(() => void) | null>(null);
+  const { isPlus, isLoaded: isSubscriptionLoaded, openCheckout, refreshSubscription } = useSubscription();
+  const { isAtLimit, isLoaded: isUsageLoaded, increment } = useUsage('muhurat');
+  const [paywallMode, setPaywallMode] = useState<'blocked' | null>(null);
   const [eventDescription, setEventDescription] = useState('');
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(defaultEndDate);
@@ -64,6 +64,12 @@ export default function MuhuratScreen() {
   const { rankedWindows, recommendation, confidence, suggestion, reasoning, warnings, festivalNote, isLoading, error } = useMuhurat(request);
 
   const { colors } = useTheme();
+
+  useFocusEffect(
+    useCallback(() => {
+      void refreshSubscription();
+    }, [refreshSubscription])
+  );
 
   const applyDateSelection = (field: DateField, nextValue: Date) => {
     const normalized = normalizeDate(nextValue);
@@ -109,7 +115,6 @@ export default function MuhuratScreen() {
     if (!trimmedEvent) return;
     const dateRangeDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     analytics.muhuratQueried({ event_description_length: trimmedEvent.length, date_range_days: dateRangeDays });
-    increment();
     setRequest({
       eventDescription: trimmedEvent,
       startDate: toApiDate(startDate),
@@ -117,7 +122,7 @@ export default function MuhuratScreen() {
     });
   };
 
-  const handleFindMuhurat = () => {
+  const handleFindMuhurat = async () => {
     const trimmedEvent = eventDescription.trim();
 
     if (!trimmedEvent) {
@@ -129,22 +134,14 @@ export default function MuhuratScreen() {
       return;
     }
 
-    if (isPlus) {
-      runQuery();
-      return;
-    }
+    if (!isPlus) {
+      if (isAtLimit) {
+        analytics.paywallShown({ feature: 'muhurat', mode: 'blocked' });
+        setPaywallMode('blocked');
+        return;
+      }
 
-    if (isAtLimit) {
-      analytics.paywallShown({ feature: 'muhurat', mode: 'blocked' });
-      setPaywallMode('blocked');
-      return;
-    }
-
-    if (isNearLimit) {
-      analytics.paywallShown({ feature: 'muhurat', mode: 'warning' });
-      pendingQueryRef.current = runQuery;
-      setPaywallMode('warning');
-      return;
+      await increment();
     }
 
     runQuery();
@@ -216,7 +213,13 @@ export default function MuhuratScreen() {
 
           <SacredButton
             label="Find Best Windows"
-            onPress={(!isSubscriptionLoaded || !isUsageLoaded) ? () => {} : handleFindMuhurat}
+            onPress={
+              (!isSubscriptionLoaded || !isUsageLoaded)
+                ? () => {}
+                : () => {
+                    void handleFindMuhurat();
+                  }
+            }
             fullWidth
             style={{ marginTop: 4 }}
           />
@@ -252,23 +255,15 @@ export default function MuhuratScreen() {
       <PaywallSheet
         visible={paywallMode !== null}
         feature="muhurat"
-        mode={paywallMode ?? 'warning'}
+        mode="blocked"
         onClose={() => {
-          analytics.paywallDismissed({ feature: 'muhurat', mode: paywallMode ?? 'warning' });
+          analytics.paywallDismissed({ feature: 'muhurat', mode: 'blocked' });
           setPaywallMode(null);
-          pendingQueryRef.current = null;
         }}
         onUpgrade={() => {
           analytics.paywallUpgradeTapped({ feature: 'muhurat' });
           setPaywallMode(null);
           openCheckout();
-        }}
-        onProceed={() => {
-          analytics.paywallProceedTapped({ feature: 'muhurat' });
-          const fn = pendingQueryRef.current;
-          pendingQueryRef.current = null;
-          setPaywallMode(null);
-          fn?.();
         }}
       />
     </View>

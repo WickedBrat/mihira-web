@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/Users/Apple/projects/mihira/web/app/layout":["static/media/7b89a4fd5e90ede0-s.p.woff2","static/media/26d0ba92e140f0dc-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';

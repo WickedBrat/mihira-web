@@ -6,8 +6,8 @@ import { getSupabaseClient } from '@/lib/supabase';
 export type Feature = 'muhurat' | 'ask';
 
 export const LIMITS: Record<Feature, number> = {
-  muhurat: 5,
-  ask: 20,
+  muhurat: 3,
+  ask: 5,
 };
 
 interface UsageRow {

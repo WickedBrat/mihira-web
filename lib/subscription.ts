@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Platform } from 'react-native';
-import { useAuth } from '@clerk/expo';
+import { AppState, Platform } from 'react-native';
+import { useAuth, useSession } from '@clerk/expo';
 import { useToast } from '@/components/ui/ToastProvider';
 import { analytics } from '@/lib/analytics';
+import { getSupabaseClient } from '@/lib/supabase';
 import {
   getRevenueCatUiUnavailableMessage,
   getPaywallResult,
@@ -15,11 +16,17 @@ import {
 } from '@/lib/revenuecat';
 
 export type Plan = 'free' | 'plus';
+type SubscriptionSource = 'revenuecat' | 'supabase' | 'none';
+type MirroredSubscriptionRecord = {
+  subscription_plan?: string | null;
+  subscription_status?: string | null;
+} | null;
 
 interface UseSubscriptionReturn {
   isPlus: boolean;
   plan: Plan;
   isLoaded: boolean;
+  source: SubscriptionSource;
   openCheckout: () => Promise<void>;
   openCustomerCenter: () => Promise<void>;
   refreshSubscription: () => Promise<void>;
@@ -27,31 +34,129 @@ interface UseSubscriptionReturn {
 
 const BILLING_UNAVAILABLE_MESSAGE = 'Subscriptions are not configured yet for this build.';
 
+export function getSubscriptionProfilePatch(
+  userId: string,
+  plan: Plan,
+  source: Exclude<SubscriptionSource, 'none'> = 'revenuecat',
+  now = new Date().toISOString()
+) {
+  return {
+    id: userId,
+    subscription_plan: plan,
+    subscription_status: plan === 'plus' ? 'active' : 'inactive',
+    subscription_source: source,
+    subscription_updated_at: now,
+    updated_at: now,
+  };
+}
+
+export function isMirroredPlus(record: MirroredSubscriptionRecord): boolean {
+  return record?.subscription_plan === 'plus' && record?.subscription_status === 'active';
+}
+
 export function useSubscription(): UseSubscriptionReturn {
   const { isLoaded: isAuthLoaded, isSignedIn, userId } = useAuth();
+  const { isLoaded: isSessionLoaded, session } = useSession();
   const { showToast } = useToast();
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPlus, setIsPlus] = useState(false);
+  const [source, setSource] = useState<SubscriptionSource>('none');
 
   const isInitializingRef = useRef(false);
   const isOpeningPaywallRef = useRef(false);
   const configuredRef = useRef(false);
   const configuredUserIdRef = useRef<string | null>(null);
+  const lastMirroredPlanKeyRef = useRef<string | null>(null);
 
   const apiKey = useMemo(() => getRevenueCatApiKey(), []);
   const entitlementId = useMemo(() => getRevenueCatEntitlementId(), []);
   const modules = useMemo(() => loadRevenueCatModules(), []);
+  const hasResolvedPlanState = !isSignedIn || isSessionLoaded || source === 'revenuecat';
+
+  const getClient = useCallback(async () => {
+    if (!isSignedIn || !userId || !isSessionLoaded) return null;
+
+    try {
+      const token = await session?.getToken();
+      if (!token) return null;
+      return getSupabaseClient(async () => token);
+    } catch (error) {
+      console.error('[useSubscription] supabase client error', error);
+      return null;
+    }
+  }, [isSessionLoaded, isSignedIn, session, userId]);
+
+  const mirrorPlanToSupabase = useCallback(async (nextIsPlus: boolean) => {
+    if (!isSignedIn || !userId) return;
+
+    const planKey = `${userId}:${nextIsPlus ? 'plus' : 'free'}`;
+    if (lastMirroredPlanKeyRef.current === planKey) return;
+
+    const client = await getClient();
+    if (!client) return;
+
+    const now = new Date().toISOString();
+    const { error } = await client
+      .from('profiles')
+      .upsert(getSubscriptionProfilePatch(userId, nextIsPlus ? 'plus' : 'free', 'revenuecat', now), { onConflict: 'id' });
+
+    if (error) {
+      console.error('[useSubscription] mirror error', error);
+      return;
+    }
+
+    lastMirroredPlanKeyRef.current = planKey;
+  }, [getClient, isSignedIn, userId]);
+
+  const loadMirroredPlan = useCallback(async () => {
+    if (!isSignedIn || !userId) {
+      setIsPlus(false);
+      setSource('none');
+      return false;
+    }
+
+    const client = await getClient();
+    if (!client) return false;
+
+    const { data, error } = await client
+      .from('profiles')
+      .select('subscription_plan, subscription_status')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (error) {
+      console.error('[useSubscription] mirrored load error', error);
+      return false;
+    }
+
+    const nextIsPlus = isMirroredPlus(data as MirroredSubscriptionRecord);
+    setIsPlus(nextIsPlus);
+    setSource('supabase');
+    lastMirroredPlanKeyRef.current = `${userId}:${nextIsPlus ? 'plus' : 'free'}`;
+    return true;
+  }, [getClient, isSignedIn, userId]);
+
+  const applyRevenueCatCustomerInfo = useCallback(async (customerInfo: unknown) => {
+    const nextIsPlus = hasActiveEntitlement(customerInfo, entitlementId);
+    setIsPlus(nextIsPlus);
+    setSource('revenuecat');
+    await mirrorPlanToSupabase(nextIsPlus);
+  }, [entitlementId, mirrorPlanToSupabase]);
 
   const syncCustomerInfo = useCallback(async () => {
     if (!modules.purchases || !apiKey || Platform.OS === 'web') {
-      setIsPlus(false);
+      const loadedFromMirror = await loadMirroredPlan();
+      if (!loadedFromMirror) {
+        setIsPlus(false);
+        setSource('none');
+      }
       return;
     }
 
     const customerInfo = await modules.purchases.getCustomerInfo();
-    setIsPlus(hasActiveEntitlement(customerInfo, entitlementId));
-  }, [apiKey, entitlementId, modules.purchases]);
+    await applyRevenueCatCustomerInfo(customerInfo);
+  }, [apiKey, applyRevenueCatCustomerInfo, loadMirroredPlan, modules.purchases]);
 
   useEffect(() => {
     let cancelled = false;
@@ -64,18 +169,14 @@ export function useSubscription(): UseSubscriptionReturn {
 
       try {
         if (Platform.OS === 'web') {
-          if (!cancelled) {
-            setIsPlus(false);
-            setIsLoaded(true);
-          }
+          await syncCustomerInfo();
+          if (!cancelled) setIsLoaded(true);
           return;
         }
 
         if (!apiKey || !modules.purchases) {
-          if (!cancelled) {
-            setIsPlus(false);
-            setIsLoaded(true);
-          }
+          await syncCustomerInfo();
+          if (!cancelled) setIsLoaded(true);
           return;
         }
 
@@ -111,7 +212,11 @@ export function useSubscription(): UseSubscriptionReturn {
       } catch (error) {
         console.error('[useSubscription] init error', error);
         if (!cancelled) {
-          setIsPlus(false);
+          const loadedFromMirror = await loadMirroredPlan();
+          if (!loadedFromMirror) {
+            setIsPlus(false);
+            setSource('none');
+          }
           setIsLoaded(true);
         }
       } finally {
@@ -133,6 +238,37 @@ export function useSubscription(): UseSubscriptionReturn {
       console.error('[useSubscription] refresh error', error);
     }
   }, [syncCustomerInfo]);
+
+  useEffect(() => {
+    if (Platform.OS === 'web' || !apiKey || !modules.purchases) return;
+
+    let disposed = false;
+    const purchases = modules.purchases;
+
+    const handleCustomerInfoUpdate = (customerInfo: unknown) => {
+      if (disposed) return;
+      void applyRevenueCatCustomerInfo(customerInfo);
+    };
+
+    if (typeof purchases.addCustomerInfoUpdateListener === 'function') {
+      purchases.addCustomerInfoUpdateListener(handleCustomerInfoUpdate);
+    }
+
+    const appStateSubscription = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') {
+        void refreshSubscription();
+      }
+    });
+
+    return () => {
+      disposed = true;
+      appStateSubscription.remove();
+
+      if (typeof purchases.removeCustomerInfoUpdateListener === 'function') {
+        purchases.removeCustomerInfoUpdateListener(handleCustomerInfoUpdate);
+      }
+    };
+  }, [apiKey, applyRevenueCatCustomerInfo, modules.purchases, refreshSubscription]);
 
   const openCheckout = useCallback(async () => {
     if (!isSignedIn) {
@@ -183,6 +319,9 @@ export function useSubscription(): UseSubscriptionReturn {
       await refreshSubscription();
 
       if (isRevenueCatResultSuccessful(result)) {
+        setIsPlus(true);
+        setSource('revenuecat');
+        await mirrorPlanToSupabase(true);
         analytics.subscriptionUpgraded({ plan: 'plus' });
         showToast({
           type: 'success',
@@ -246,7 +385,8 @@ export function useSubscription(): UseSubscriptionReturn {
   return {
     isPlus,
     plan: isPlus ? 'plus' : 'free',
-    isLoaded: isAuthLoaded && isLoaded,
+    isLoaded: isAuthLoaded && isLoaded && hasResolvedPlanState,
+    source,
     openCheckout,
     openCustomerCenter,
     refreshSubscription,

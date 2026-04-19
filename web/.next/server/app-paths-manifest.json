@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/v1/api/ask/route": "app/v1/api/ask/route.js",
+  "/v1/api/wisdom/daily/route": "app/v1/api/wisdom/daily/route.js",
+  "/v1/api/narad/route": "app/v1/api/narad/route.js",
+  "/v1/api/chat/route": "app/v1/api/chat/route.js",
+  "/v1/api/wisdom/muhurat/route": "app/v1/api/wisdom/muhurat/route.js",
+  "/page": "app/page.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/terms/page": "app/terms/page.js"
+}

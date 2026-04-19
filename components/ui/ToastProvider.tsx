@@ -154,7 +154,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <Pressable onPress={hideToast} className="overflow-hidden rounded-[22px]">
               <BlurView intensity={42} tint={isDark ? 'dark' : 'light'} className="absolute inset-0" />
               <View
-                className="flex-row items-start gap-3 border bg-[rgba(250,247,242,0.95)] px-4 py-3.5 dark:bg-[rgba(25,26,26,0.9)]"
+                className="flex-row items-start gap-3 border rounded-[22px] bg-[rgba(250,247,242,0.95)] px-4 py-3.5 dark:bg-[rgba(25,26,26,0.9)]"
                 style={{ borderColor: `${toastAccents[toast.type]}55` }}
               >
                 <View

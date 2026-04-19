@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/v1/api/ask/route": "/v1/api/ask",
+  "/v1/api/wisdom/daily/route": "/v1/api/wisdom/daily",
+  "/v1/api/narad/route": "/v1/api/narad",
+  "/v1/api/chat/route": "/v1/api/chat",
+  "/v1/api/wisdom/muhurat/route": "/v1/api/wisdom/muhurat",
+  "/page": "/",
+  "/privacy/page": "/privacy",
+  "/terms/page": "/terms"
+}

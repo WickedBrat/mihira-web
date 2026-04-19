@@ -4,6 +4,8 @@ type ReactNativeMockOptions = {
   expoGo?: boolean;
 };
 
+const originalEntitlementId = process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID;
+
 function loadRevenueCatModule({
   nativeModules = {},
   platform = 'ios',
@@ -31,6 +33,11 @@ describe('revenuecat native UI availability', () => {
     jest.dontMock('react-native');
     jest.resetModules();
     delete (globalThis as { expo?: unknown }).expo;
+    if (originalEntitlementId === undefined) {
+      delete process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID;
+    } else {
+      process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID = originalEntitlementId;
+    }
   });
 
   it('reports native UI support when both RevenueCat UI modules are available', () => {
@@ -73,5 +80,63 @@ describe('revenuecat native UI availability', () => {
     expect(revenuecat.getRevenueCatUiUnavailableMessage()).toContain(
       'Rebuild the app after linking the RevenueCat native modules.'
     );
+  });
+});
+
+describe('RevenueCat entitlement configuration', () => {
+  afterEach(() => {
+    jest.dontMock('react-native');
+    jest.resetModules();
+    if (originalEntitlementId === undefined) {
+      delete process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID;
+    } else {
+      process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID = originalEntitlementId;
+    }
+  });
+
+  it('defaults the entitlement id to default', () => {
+    delete process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID;
+
+    const revenuecat = loadRevenueCatModule({ platform: 'ios' });
+
+    expect(revenuecat.getRevenueCatEntitlementId()).toBe('default');
+  });
+
+  it('prefers the entitlement id from the environment when provided', () => {
+    process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID = 'plus';
+
+    const revenuecat = loadRevenueCatModule({ platform: 'ios' });
+
+    expect(revenuecat.getRevenueCatEntitlementId()).toBe('plus');
+  });
+
+  it('treats any active entitlement as subscribed when the specific key is absent', () => {
+    const revenuecat = loadRevenueCatModule({ platform: 'ios' });
+
+    expect(
+      revenuecat.hasActiveEntitlement(
+        {
+          entitlements: {
+            active: {
+              premium: { isActive: true },
+            },
+          },
+        },
+        'plus'
+      )
+    ).toBe(true);
+  });
+
+  it('treats active subscriptions as subscribed when entitlements are unavailable', () => {
+    const revenuecat = loadRevenueCatModule({ platform: 'ios' });
+
+    expect(
+      revenuecat.hasActiveEntitlement(
+        {
+          activeSubscriptions: ['mihira_plus_monthly'],
+        },
+        'plus'
+      )
+    ).toBe(true);
   });
 });

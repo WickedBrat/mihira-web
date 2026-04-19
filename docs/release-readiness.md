@@ -4,7 +4,7 @@
 
 Mihira is not release-ready yet.
 
-The app already has a real product inside it. The core user experience exists, the main features are visible, and the monetization shape is in place. What is missing is the production layer required to ship to the App Store and Play Store without review, billing, or trust problems.
+The app already has a real product inside it. The core user experience exists, the main features are visible, and the monetization shape is materially in place. What is still missing is the production layer required to ship to the App Store and Play Store without review, billing, backend, or trust problems.
 
 ## What Is Already Built
 
@@ -20,6 +20,9 @@ These areas are materially in place:
 - analytics hooks with PostHog
 - Supabase-backed usage tracking
 - paywall and plans UI
+- Expo server API routes for AI-backed features
+- initial release docs, env docs, and QA checklist
+- draft legal/support copy in `docs/`
 
 This is enough to justify a release push. It is not enough to submit safely yet.
 
@@ -29,41 +32,38 @@ This is enough to justify a release push. It is not enough to submit safely yet.
 |---|---|---|
 | Product UX | Mostly built | Main user flows exist |
 | Core feature logic | Mostly built | Daily, ask, sacred timing all present |
-| Commerce UX | Partial | Paywall and plans exist, but billing architecture is not launch-safe |
+| Commerce UX | Partial | RevenueCat-native direction is in code, but live store products and end-to-end purchase validation are still missing |
 | Notifications | Deferred | No longer promised in onboarding, not implemented for v1 |
 | Analytics | Partial | Instrumentation exists, production config still needs cleanup |
 | Auth and profile | Mostly built | Includes account management and delete-account entry |
-| Release config | Partial | `eas.json` and identifiers now exist, release process still needs validation |
-| Store readiness | Missing | Legal, assets, metadata, privacy disclosures still needed |
-| QA | Missing | No visible release QA checklist or release build verification |
+| Release config | Mostly built | `eas.json`, app identifiers, and versioning are present; release process still needs validation |
+| Backend deployment | Partial | Expo API routes exist, but production hosting and mobile API base URL strategy are not finalized |
+| Store readiness | Partial | Draft legal docs exist in-repo, but hosted URLs, assets, metadata, and privacy disclosures are still needed |
+| QA | Partial | A release QA checklist exists, but there is no visible real-device signoff or release-build verification yet |
 
 ## Critical Blockers
 
-## 1. Billing Needs a Launch-Safe Mobile Strategy
+## 1. Billing Needs Store Configuration and End-to-End Validation
 
 This is the biggest blocker.
 
 Current state:
 
 - mobile plans UI exists
-- `lib/subscription.ts` is now prepared for RevenueCat/store-native billing
+- `lib/subscription.ts` is prepared for RevenueCat/store-native billing
 - `app/pricing.tsx` no longer exposes Clerk web pricing
-- mobile upgrade paths are being redirected toward RevenueCat paywalls instead of browser checkout
+- `react-native-purchases` and `react-native-purchases-ui` are installed
+- mobile upgrade paths now target RevenueCat paywalls instead of browser checkout
 
 Why this is risky:
 
 - for iOS, digital subscriptions sold in the app generally need StoreKit / App Store In-App Purchase
-- the RevenueCat wiring still depends on real store products, app-specific API keys, and installed SDK packages
+- the RevenueCat wiring still depends on real store products, app-specific API keys, offerings, and entitlement setup
 - until that is configured and tested, Plus billing is still incomplete
-
-Required decision:
-
-- implement native in-app subscriptions for iOS and likely Play billing for Android
-- launch initially under individual developer accounts unless seller-name concerns materially hurt conversion
 
 Recommended action:
 
-1. decide the final billing architecture before doing any store submission work
+1. configure App Store Connect, Play Console, and RevenueCat products/offering/entitlement
 2. unify pricing copy, entitlement logic, and subscriber source of truth
 3. test upgrade, restore, cancellation, and entitlement refresh end to end
 
@@ -83,14 +83,15 @@ Recommended action:
 
 - keep notifications out of the v1 promise unless they are implemented and tested properly
 
-## 3. Release Configuration Is Partially In Place
+## 3. Release Configuration Exists, but the Release Path Still Needs Validation
 
-This is no longer fully missing, but it is still incomplete.
+This is no longer a structural blocker, but it is not fully validated.
 
 Current state:
 
 - `eas.json` is now present
 - development, preview, and production profiles are defined
+- app identifiers, version, build number, and version code exist in Expo config
 - there is still no visible CI or release automation
 
 Why this matters:
@@ -100,9 +101,8 @@ Why this matters:
 
 Recommended action:
 
-- add `eas.json`
-- define development, preview, and production profiles
 - document build and submission commands
+- produce preview and production candidate builds before any store submission
 
 ## 4. App Identifiers Are Set, but Store Setup Is Still Incomplete
 
@@ -119,17 +119,17 @@ Why this matters:
 
 Recommended action:
 
-- set `ios.bundleIdentifier`
-- set `android.package`
-- define build number and version code rules
+- reserve the App Store and Play app records against the existing identifiers
+- define the human release process for version bumps, build submission, and rollback
 
 ## 5. Environment and Production Config Are Incomplete
 
 Current state:
 
 - `.env.example` now includes Clerk, Supabase, RevenueCat, PostHog, and Perplexity placeholders
+- `docs/env-setup.md` now documents dev, preview, and production expectations
 - the release path has moved away from Stripe and toward RevenueCat
-- there is no visible production environment separation strategy
+- actual production secrets and callback URLs are still not visible in this repo, which is expected but still blocking launch
 
 Why this matters:
 
@@ -138,42 +138,57 @@ Why this matters:
 
 Recommended action:
 
-- expand `.env.example`
-- document required secrets for dev, preview, and prod
-- ensure all production URLs and callbacks are finalized
+- provision production Clerk, Supabase, RevenueCat, PostHog, and Perplexity credentials
+- finalize production URLs and callbacks
+- verify that preview and production builds consume the right environment values
 
-## 6. Android Permissions Need Review
+## 6. Backend Deployment Still Needs a Production Plan
 
 Current state:
 
-The Android manifest still declares:
-
-- `READ_EXTERNAL_STORAGE`
-- `WRITE_EXTERNAL_STORAGE`
-- `SYSTEM_ALERT_WINDOW`
+- the app includes Expo server API routes under `app/api/`
+- AI-backed flows depend on those routes to call Perplexity using the server-side `PERPLEXITY_API_KEY`
+- the repo also includes Supabase migrations under `supabase/migrations/`
+- the current mobile route resolution is still development-oriented in places and does not show a finalized production API host strategy
 
 Why this matters:
 
-- these permissions can trigger unnecessary scrutiny
-- if they are not required, they should not ship
+- this is not a pure client-only mobile app
+- the managed services alone are not enough; the API routes also need a real production runtime
+- if the mobile app does not know where production API routes live, the AI features will break outside local/dev conditions
 
 Recommended action:
 
-- audit each permission
-- remove anything not strictly needed
+- choose the production home for the API routes
+- define a production API base URL strategy for mobile builds
+- deploy the server runtime and provision `PERPLEXITY_API_KEY`
+- apply Supabase migrations in the target environment
 
-## 7. Legal, Policy, and Store Answers Are Still Missing
+## 7. Android Permissions Look Safer Now, but Should Still Be Kept Lean
 
 Current state:
 
-There is no visible evidence yet of:
+- the main Android manifest now shows `INTERNET`, `com.android.vending.BILLING`, and `VIBRATE`
+- the earlier storage-permission concern no longer appears to apply to the main release manifest
+- `SYSTEM_ALERT_WINDOW` still appears in debug manifests, which is expected for development tooling
 
-- privacy policy
-- terms of service
-- support URL
-- data retention explanation
-- App Store privacy answers
-- Play Data Safety submission content
+Why this matters:
+
+- unnecessary release permissions can trigger avoidable review scrutiny
+- the current state looks much better than earlier drafts of this document implied
+
+Recommended action:
+
+- keep release permissions minimal
+- verify the final generated release manifest before submission
+
+## 8. Legal, Policy, and Store Answers Are Still Incomplete
+
+Current state:
+
+- draft privacy policy, terms of service, and support copy now exist in `docs/`
+- there is still no visible evidence of hosted public URLs for those documents
+- App Store privacy answers and Play Data Safety submission content are still not prepared
 
 Why this matters:
 
@@ -182,10 +197,10 @@ Why this matters:
 
 Recommended action:
 
-- create the legal documents and hosted URLs
+- publish the legal/support documents to stable public URLs
 - map data collection and processors before filling platform disclosures
 
-## 8. Account Deletion Needs End-to-End Verification
+## 9. Account Deletion Needs End-to-End Verification
 
 Current state:
 
@@ -201,11 +216,13 @@ Recommended action:
 - verify end-to-end deletion behavior
 - if needed, add backend cleanup jobs or database policies
 
-## 9. QA and Release Testing Are Not Yet Visible
+## 10. QA and Release Testing Need Execution, Not Just Documentation
 
 Current state:
 
-- there is no visible release checklist, real-device signoff, or release validation pipeline
+- `docs/release-qa-checklist.md` now exists
+- the automated baseline is healthy; the current Jest suite passes
+- there is still no visible real-device signoff, release-build verification, or release validation pipeline
 
 Why this matters:
 
@@ -225,6 +242,7 @@ These gaps do not have to block a careful beta, but they should be handled inten
 - production crash reporting is not clearly visible
 - store screenshots, metadata, and support flows are not prepared yet
 - pricing needs a clearer annual-plan story for subscription conversion
+- some release docs still need freshness review so they match the current repo state
 
 ## Recommended Release Scope
 
@@ -251,12 +269,13 @@ Ship Gurukul only as a clearly labeled teaser, or hide it from launch builds if 
 ## Phase 2: Production Infrastructure
 
 1. Set up production Clerk, Supabase, RevenueCat, and PostHog
-2. Expand env documentation and secret handling
-3. Add `eas.json` and build profiles
+2. Deploy the Expo API routes and production runtime for AI-backed flows
+3. Expand env documentation and secret handling
+4. apply Supabase migrations and validate production callbacks
 
 ## Phase 3: App Compliance
 
-1. Remove unused Android permissions
+1. Verify final release permissions
 2. Verify account deletion and privacy posture
 3. Prepare privacy policy, terms, and support site
 4. Draft App Store and Play data disclosures
@@ -272,16 +291,16 @@ Ship Gurukul only as a clearly labeled teaser, or hide it from launch builds if 
 
 If the team wants the fastest path to a real release, do these next:
 
-1. Add `eas.json`
-2. decide iOS billing architecture
+1. configure RevenueCat and store products end to end
+2. choose and deploy the production host for Expo API routes
 3. leave notifications out of the v1 promise unless they are implemented
-4. set bundle IDs and Android package name in `app.json`
-5. expand `.env.example` to include RevenueCat and PostHog requirements
-6. audit Android permissions
-7. create legal URLs and store submission assets
+4. set production env values and callbacks for Clerk, Supabase, RevenueCat, PostHog, and Perplexity
+5. publish legal URLs and prepare store submission assets
+6. run real-device QA on preview builds
+7. verify account deletion and data cleanup behavior
 
 ## Working Release Assessment
 
 Mihira is beyond prototype stage but still short of launch discipline.
 
-The app already has enough product value to justify a beta or soft launch after the blockers above are addressed. The main work left is not inventing more features. It is making the current product shippable, review-safe, and trustworthy.
+The app already has enough product value to justify a beta or soft launch after the blockers above are addressed. The main work left is not inventing more features. It is making the current product shippable, review-safe, trustworthy, and deployable in production across both its managed services and its server-side API routes.

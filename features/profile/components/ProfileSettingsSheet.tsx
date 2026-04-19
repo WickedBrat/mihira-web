@@ -109,15 +109,15 @@ export function ProfileSettingsSheet({
               <Text className="font-body-medium text-base text-on-surface">Manage account</Text>
             </Pressable>
 
-            {!isPlus && (
-              <Pressable
-                className="mb-3 flex-row items-center gap-2.5 rounded-2xl border border-[rgba(255,149,0,0.102)] bg-[rgba(255,149,0,0.063)] px-4 py-3.5"
-                onPress={onOpenPlans}
-              >
-                <Zap size={16} color={colors.secondaryFixed} />
-                <Text className="font-body-medium text-base text-secondary-fixed">Upgrade to Mihira Plus</Text>
-              </Pressable>
-            )}
+            <Pressable
+              className="mb-3 flex-row items-center gap-2.5 rounded-2xl border border-[rgba(255,149,0,0.102)] bg-[rgba(255,149,0,0.063)] px-4 py-3.5"
+              onPress={onOpenPlans}
+            >
+              <Zap size={16} color={colors.secondaryFixed} />
+              <Text className="font-body-medium text-base text-secondary-fixed">
+                {isPlus ? 'Current plan: Mihira Plus' : 'Upgrade to Mihira Plus'}
+              </Text>
+            </Pressable>
 
             <Pressable
               className="mb-5 flex-row items-center gap-2.5 rounded-2xl border border-[rgba(207,102,121,0.15)] bg-[rgba(207,102,121,0.08)] px-4 py-3.5"

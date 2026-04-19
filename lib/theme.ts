@@ -63,7 +63,7 @@ export const darkColors = {
   onSecondaryContainer: '#dcb99a',
 
   onSurface: '#fff',
-  onSurfaceVariant: '#aee3ffff',
+  onSurfaceVariant: '#aee3ff',
   onBackground: '#fff',
   background: '#0e0e0e',
 

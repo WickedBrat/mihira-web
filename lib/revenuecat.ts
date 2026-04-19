@@ -17,7 +17,7 @@ export function getRevenueCatApiKey(): string | undefined {
 }
 
 export function getRevenueCatEntitlementId(): string {
-  return readEnv('EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID') ?? 'plus';
+  return readEnv('EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID') ?? 'default';
 }
 
 export function getRevenueCatOfferingId(): string | undefined {
@@ -75,16 +75,28 @@ export function getPaywallResult(response: any): string | undefined {
 }
 
 export function hasActiveEntitlement(customerInfo: any, entitlementId: string): boolean {
-  if (!customerInfo || !entitlementId) return false;
+  if (!customerInfo) return false;
 
-  const direct = customerInfo?.entitlements?.[entitlementId];
-  if (direct?.isActive === true) return true;
+  if (entitlementId) {
+    const direct = customerInfo?.entitlements?.[entitlementId];
+    if (direct?.isActive === true) return true;
 
-  const active = customerInfo?.entitlements?.active?.[entitlementId];
-  if (active?.isActive === true) return true;
+    const active = customerInfo?.entitlements?.active?.[entitlementId];
+    if (active?.isActive === true) return true;
 
-  const all = customerInfo?.entitlements?.all?.[entitlementId];
-  if (all?.isActive === true) return true;
+    const all = customerInfo?.entitlements?.all?.[entitlementId];
+    if (all?.isActive === true) return true;
+  }
+
+  const activeEntitlements = customerInfo?.entitlements?.active;
+  if (activeEntitlements && typeof activeEntitlements === 'object' && Object.keys(activeEntitlements).length > 0) {
+    return true;
+  }
+
+  const activeSubscriptions = customerInfo?.activeSubscriptions;
+  if (Array.isArray(activeSubscriptions) && activeSubscriptions.length > 0) {
+    return true;
+  }
 
   return false;
 }

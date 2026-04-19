@@ -28,6 +28,7 @@ import { layout } from '@/lib/theme';
 import { clearCachedProfile } from '@/lib/profileStorage';
 import { clearCachedDailyAlignment } from '@/lib/dailyAlignmentStorage';
 import { router } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import { analytics } from '@/lib/analytics';
 import { posthog } from '@/lib/posthog';
 import { deriveMoonProfileFromBirthDt } from '@/lib/vedic/moonProfile';
@@ -47,8 +48,14 @@ export default function ProfileScreen() {
   const authSheetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { clearGuide } = useGuide();
-  const { isPlus, openCheckout, openCustomerCenter } = useSubscription();
+  const { isPlus, openCheckout, openCustomerCenter, refreshSubscription } = useSubscription();
   const [isPlansOpen, setIsPlansOpen] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      void refreshSubscription();
+    }, [refreshSubscription])
+  );
 
   const { signInWithGoogle, signInWithApple, isLoading: isSigningIn } = useSignIn(() => {
     setIsAuthSheetOpen(false);
@@ -91,6 +98,7 @@ export default function ProfileScreen() {
           avatarUrl={user?.imageUrl ?? null}
           isSignedIn={signedIn}
           zodiacSign={zodiacSign}
+          planLabel={isPlus ? 'Mihira Plus' : 'Free Plan'}
         />
 
         <PremiumCard

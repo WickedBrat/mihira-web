@@ -4,7 +4,7 @@ import {
   View,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
-import { UserRound, type LucideIcon } from 'lucide-react-native';
+import { Sparkles, UserRound, type LucideIcon } from 'lucide-react-native';
 import { useTheme } from '@/lib/theme-context';
 import ProfileBg from '@/assets/profile_bg.svg';
 
@@ -14,6 +14,7 @@ interface ProfileHeroProps {
   avatarUrl?: string | null;
   isSignedIn: boolean;
   zodiacSign?: { sign: string; icon: LucideIcon } | null;
+  planLabel?: string | null;
 }
 
 export function ProfileHero({
@@ -22,6 +23,7 @@ export function ProfileHero({
   avatarUrl,
   isSignedIn,
   zodiacSign,
+  planLabel,
 }: ProfileHeroProps) {
   const hasAvatar = Boolean(avatarUrl);
   const { colors } = useTheme();
@@ -45,6 +47,16 @@ export function ProfileHero({
       </View>
 
       <Text className="mb-1.5 font-headline text-[30px] tracking-[-0.4px] text-on-surface">{displayName}</Text>
+
+      {planLabel ? (
+        <View
+          className="mb-2.5 flex-row items-center gap-[6px] rounded-full px-3 py-1.5"
+          style={{ backgroundColor: `${colors.primary}12` }}
+        >
+          <Sparkles size={13} color={colors.primary} strokeWidth={2} />
+          <Text className="font-label text-[11px] uppercase tracking-[1px] text-primary-fixed">{planLabel}</Text>
+        </View>
+      ) : null}
 
       {zodiacSign && (
         <View className="flex-row items-center gap-[5px]">

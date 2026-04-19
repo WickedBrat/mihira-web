@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { MoreVertical } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from 'expo-router';
 import { Text } from '@/components/ui/Text';
 import { PageHero } from '@/components/ui/PageHero';
 import { ClearChatSheet } from '@/features/ask/ClearChatSheet';
@@ -41,12 +42,11 @@ function TypingIndicator() {
 }
 
 export default function AskScreen() {
-  const { isPlus, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
-  const { isAtLimit, isNearLimit, isLoaded: isUsageLoaded, increment } = useUsage('ask');
-  const [paywallMode, setPaywallMode] = React.useState<'warning' | 'blocked' | null>(null);
+  const { isPlus, isLoaded: isSubscriptionLoaded, openCheckout, refreshSubscription } = useSubscription();
+  const { isAtLimit, isLoaded: isUsageLoaded, increment } = useUsage('ask');
+  const [paywallMode, setPaywallMode] = React.useState<'blocked' | null>(null);
   const [isClearSheetOpen, setIsClearSheetOpen] = React.useState(false);
   const [shouldClearHistory, setShouldClearHistory] = React.useState(true);
-  const pendingEnterRef = React.useRef(false);
   const {
     messages,
     hasMoreMessages,
@@ -70,6 +70,12 @@ export default function AskScreen() {
   const savedSourceIds = useMemo(() => new Set(savedPassages.map((entry) => entry.source.id)), [savedPassages]);
   const hasMessages = messages.length > 0;
 
+  useFocusEffect(
+    useCallback(() => {
+      void refreshSubscription();
+    }, [refreshSubscription])
+  );
+
   const handleScroll = useCallback(
     ({ nativeEvent }: { nativeEvent: { contentOffset: { y: number } } }) => {
       if (nativeEvent.contentOffset.y < 80 && hasMoreMessages && !isLoadingMoreRef.current) {
@@ -83,11 +89,6 @@ export default function AskScreen() {
     [hasMoreMessages, loadMoreMessages],
   );
 
-  const doEnter = () => {
-    increment();
-    setHasEnteredChat(true);
-  };
-
   const openClearSheet = () => {
     setShouldClearHistory(true);
     setIsClearSheetOpen(true);
@@ -99,24 +100,25 @@ export default function AskScreen() {
   };
 
   const handleEnter = () => {
-    if (!isSubscriptionLoaded || !isUsageLoaded) return;
-    if (isPlus) {
-      doEnter();
-      return;
-    }
-    if (isAtLimit) {
-      analytics.paywallShown({ feature: 'ask', mode: 'blocked' });
-      setPaywallMode('blocked');
-      return;
-    }
-    if (isNearLimit) {
-      analytics.paywallShown({ feature: 'ask', mode: 'warning' });
-      pendingEnterRef.current = true;
-      setPaywallMode('warning');
-      return;
-    }
-    doEnter();
+    setHasEnteredChat(true);
   };
+
+  const handleSend = useCallback(async () => {
+    const trimmed = inputText.trim();
+    if (!trimmed || !isSubscriptionLoaded || !isUsageLoaded) return;
+
+    if (!isPlus) {
+      if (isAtLimit) {
+        analytics.paywallShown({ feature: 'ask', mode: 'blocked' });
+        setPaywallMode('blocked');
+        return;
+      }
+
+      await increment();
+    }
+
+    await sendMessage(trimmed);
+  }, [increment, inputText, isAtLimit, isPlus, isSubscriptionLoaded, isUsageLoaded, sendMessage]);
 
   if (!isContextLoaded) return <View className="flex-1" />;
 
@@ -124,29 +126,6 @@ export default function AskScreen() {
     return (
       <>
         <NaradIntro onEnter={handleEnter} />
-        <PaywallSheet
-          visible={paywallMode !== null}
-          feature="ask"
-          mode={paywallMode ?? 'warning'}
-          onClose={() => {
-            analytics.paywallDismissed({ feature: 'ask', mode: paywallMode ?? 'warning' });
-            setPaywallMode(null);
-            pendingEnterRef.current = false;
-          }}
-          onUpgrade={() => {
-            analytics.paywallUpgradeTapped({ feature: 'ask' });
-            setPaywallMode(null);
-            openCheckout();
-          }}
-          onProceed={() => {
-            analytics.paywallProceedTapped({ feature: 'ask' });
-            setPaywallMode(null);
-            if (pendingEnterRef.current) {
-              pendingEnterRef.current = false;
-              doEnter();
-            }
-          }}
-        />
       </>
     );
   }
@@ -257,7 +236,9 @@ export default function AskScreen() {
         <ChatInput
           value={inputText}
           onChangeText={setInputText}
-          onSend={() => sendMessage(inputText)}
+          onSend={() => {
+            void handleSend();
+          }}
           placeholder="Ask about duty, grief, relationships, fear, work, or purpose…"
         />
       </KeyboardAvoidingView>
@@ -270,6 +251,21 @@ export default function AskScreen() {
         onClose={() => setIsClearSheetOpen(false)}
         onToggleClearHistory={() => setShouldClearHistory((value) => !value)}
         onConfirm={handleConfirmClear}
+      />
+
+      <PaywallSheet
+        visible={paywallMode !== null}
+        feature="ask"
+        mode="blocked"
+        onClose={() => {
+          analytics.paywallDismissed({ feature: 'ask', mode: 'blocked' });
+          setPaywallMode(null);
+        }}
+        onUpgrade={() => {
+          analytics.paywallUpgradeTapped({ feature: 'ask' });
+          setPaywallMode(null);
+          openCheckout();
+        }}
       />
     </View>
   );

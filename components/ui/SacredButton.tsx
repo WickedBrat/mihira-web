@@ -15,6 +15,7 @@ interface SacredButtonProps {
   label: string;
   onPress: () => void;
   style?: ViewStyle;
+  labelStyle?: TextStyle;
   icon?: React.ReactNode;
   variant?: 'primary' | 'secondary';
   fullWidth?: boolean;
@@ -25,6 +26,7 @@ export function SacredButton({
   label,
   onPress,
   style,
+  labelStyle,
   icon,
   variant = 'primary',
   fullWidth = false,
@@ -65,7 +67,7 @@ export function SacredButton({
       >
         <View style={styles.inner}>
           {icon}
-          <Text style={[styles.label, { color: labelColor } as TextStyle]}>{label}</Text>
+          <Text style={[styles.label, { color: labelColor } as TextStyle, labelStyle]}>{label}</Text>
         </View>
       </LinearGradient>
     </Pressable>
