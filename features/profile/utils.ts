@@ -45,7 +45,7 @@ export function getProfileDisplayName(
   if (trimmedName) return trimmedName;
   if (firstName) return `${firstName}${lastName ? ` ${lastName}` : ''}`;
 
-  return 'Your Aksha Profile';
+  return 'Your Mihira Profile';
 }
 
 const ZODIAC_SIGNS = [

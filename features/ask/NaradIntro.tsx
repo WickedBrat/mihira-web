@@ -96,7 +96,7 @@ export function NaradIntro({ onEnter }: NaradIntroProps) {
             Bring a life question.
           </Text>
           <Text className="mt-3 text-center font-body text-base leading-7 text-on-surface-variant">
-            Aksha responds with scripture-backed guidance, grounded interpretation, and one clear
+            Mihira responds with scripture-backed guidance, grounded interpretation, and one clear
             practice you can use today.
           </Text>
 

@@ -60,7 +60,7 @@ export default function Screen2() {
       <View className="flex-1 items-center gap-9 px-8 pt-8">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
           <Text className="text-center font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
-            What brings you{'\n'}to Aksha today?
+            What brings you{'\n'}to Mihira today?
           </Text>
           <Text className="text-center font-body text-[15px] text-ob-muted">Choose everything that feels true right now.</Text>
         </Animated.View>

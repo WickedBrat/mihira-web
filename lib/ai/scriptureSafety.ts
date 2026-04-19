@@ -21,7 +21,7 @@ const SAFETY_RULES: SafetyRule[] = [
     escalationType: 'self_harm',
     topic: 'general',
     pattern: /\b(kill myself|suicide|end my life|self harm|hurt myself|die tonight|don't want to live)\b/i,
-    note: 'This needs immediate human support. Aksha can offer spiritual steadiness, but it cannot safely handle a crisis like this alone.',
+    note: 'This needs immediate human support. Mihira can offer spiritual steadiness, but it cannot safely handle a crisis like this alone.',
     summary: 'You deserve immediate human help right now, not solitary spiritual interpretation.',
     guidance: 'Please contact local emergency services or a crisis line now, and tell a trusted person nearby what is happening.',
     actionSteps: [
@@ -47,9 +47,9 @@ const SAFETY_RULES: SafetyRule[] = [
     escalationType: 'medical',
     topic: 'general',
     pattern: /\b(diagnose|diagnosis|medical advice|treatment|tumor|stroke|heart attack|pregnant|pregnancy complication|medicine dosage)\b/i,
-    note: 'Aksha can offer spiritual grounding, but medical decisions need a licensed clinician.',
+    note: 'Mihira can offer spiritual grounding, but medical decisions need a licensed clinician.',
     summary: 'This question needs medical care, not scripture-based decision making alone.',
-    guidance: 'Please speak with a licensed medical professional as soon as possible and use Aksha only for emotional or spiritual support around the situation.',
+    guidance: 'Please speak with a licensed medical professional as soon as possible and use Mihira only for emotional or spiritual support around the situation.',
     actionSteps: [
       'Contact a licensed clinician or urgent care provider.',
       'Write down your symptoms and timeline before that conversation.',
@@ -62,7 +62,7 @@ const SAFETY_RULES: SafetyRule[] = [
     pattern: /\b(panic attack|psychosis|hearing voices|manic|manic episode|severe depression|can't function)\b/i,
     note: 'Severe mental health symptoms need qualified care alongside any spiritual grounding.',
     summary: 'This sounds like a mental health situation that needs real clinical support.',
-    guidance: 'Please reach out to a licensed mental health professional or urgent care support, and lean on Aksha only for gentle grounding while you seek that help.',
+    guidance: 'Please reach out to a licensed mental health professional or urgent care support, and lean on Mihira only for gentle grounding while you seek that help.',
     actionSteps: [
       'Tell a trusted person what is happening today.',
       'Contact a mental health professional, urgent care line, or emergency service if the situation is acute.',
@@ -73,9 +73,9 @@ const SAFETY_RULES: SafetyRule[] = [
     escalationType: 'legal',
     topic: 'family',
     pattern: /\b(lawsuit|legal advice|custody|divorce settlement|crime|illegal|sue|court case|visa issue)\b/i,
-    note: 'Aksha can help you reflect on values and steadiness, but legal decisions require qualified counsel.',
+    note: 'Mihira can help you reflect on values and steadiness, but legal decisions require qualified counsel.',
     summary: 'This question needs legal advice from a qualified professional.',
-    guidance: 'Please speak to a licensed lawyer or legal aid service, and use Aksha only to reflect on ethics, steadiness, and inner clarity.',
+    guidance: 'Please speak to a licensed lawyer or legal aid service, and use Mihira only to reflect on ethics, steadiness, and inner clarity.',
     actionSteps: [
       'Gather your documents and timeline before speaking to counsel.',
       'Contact a qualified lawyer or legal aid service.',
@@ -86,9 +86,9 @@ const SAFETY_RULES: SafetyRule[] = [
     escalationType: 'financial',
     topic: 'wealth',
     pattern: /\b(should i invest|stock pick|crypto|loan default|bankruptcy|trading advice|mortgage decision|financial advice)\b/i,
-    note: 'Aksha can speak to fear, greed, restraint, and values, but not provide financial advice.',
+    note: 'Mihira can speak to fear, greed, restraint, and values, but not provide financial advice.',
     summary: 'This needs qualified financial guidance, not a scripture-based recommendation alone.',
-    guidance: 'Please speak with a licensed financial professional and use Aksha only for clarity about your motives, restraint, and priorities.',
+    guidance: 'Please speak with a licensed financial professional and use Mihira only for clarity about your motives, restraint, and priorities.',
     actionSteps: [
       'Write down the decision, risks, and your time horizon.',
       'Speak with a qualified financial advisor before acting.',
@@ -117,8 +117,8 @@ export function buildSafetyResponse(
   boundary: AskSafetyBoundary,
 ): ScriptureGuideResponse {
   const matchingRule = SAFETY_RULES.find((rule) => rule.escalationType === boundary.escalation_type);
-  const fallbackSummary = 'This needs human support beyond what Aksha can safely provide.';
-  const fallbackGuidance = 'Please seek qualified real-world help first, and use Aksha only for gentle reflection once you are supported.';
+  const fallbackSummary = 'This needs human support beyond what Mihira can safely provide.';
+  const fallbackGuidance = 'Please seek qualified real-world help first, and use Mihira only for gentle reflection once you are supported.';
 
   return {
     mode,
@@ -130,7 +130,7 @@ export function buildSafetyResponse(
     },
     sources: [],
     interpretation: {
-      synthesis: 'Aksha is intentionally withholding a scripture-grounded interpretation here because the safest next step is qualified human help.',
+      synthesis: 'Mihira is intentionally withholding a scripture-grounded interpretation here because the safest next step is qualified human help.',
     },
     action_steps: matchingRule?.actionSteps ?? [],
     follow_up_prompts: question

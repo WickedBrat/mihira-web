@@ -15,19 +15,20 @@ import { layout } from '@/lib/theme';
 import { useTheme } from '@/lib/theme-context';
 
 interface PlansScreenProps {
-  isPro: boolean;
+  isPlus: boolean;
   isCheckoutLoading?: boolean;
   onUpgrade: () => void;
   onClose: () => void;
+  onManageSubscription?: () => void;
 }
 
 interface FeatureRowProps {
   label: string;
   freeValue: string | boolean;
-  proValue: string | boolean;
+  plusValue: string | boolean;
 }
 
-function FeatureRow({ label, freeValue, proValue }: FeatureRowProps) {
+function FeatureRow({ label, freeValue, plusValue }: FeatureRowProps) {
   const { colors } = useTheme();
 
   return (
@@ -44,12 +45,12 @@ function FeatureRow({ label, freeValue, proValue }: FeatureRowProps) {
           )}
         </View>
         <View className="w-[72px] items-center justify-center">
-          {typeof proValue === 'boolean' ? (
-            proValue
+          {typeof plusValue === 'boolean' ? (
+            plusValue
               ? <Check size={16} color={colors.primary} />
               : <X size={16} color={`${colors.onSurfaceVariant}44`} />
           ) : (
-            <Text className="text-center font-body-medium text-xs text-primary-fixed">{proValue}</Text>
+            <Text className="text-center font-body-medium text-xs text-primary-fixed">{plusValue}</Text>
           )}
         </View>
       </View>
@@ -57,7 +58,7 @@ function FeatureRow({ label, freeValue, proValue }: FeatureRowProps) {
   );
 }
 
-export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClose }: PlansScreenProps) {
+export function PlansScreen({ isPlus, isCheckoutLoading = false, onUpgrade, onClose, onManageSubscription }: PlansScreenProps) {
   const { colors } = useTheme();
   const gradientColors: [string, string] = [
     `${colors.primary}30`,
@@ -93,7 +94,7 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
             <Text className="mb-1 font-body-medium text-base text-on-surface-variant">Free</Text>
             <Text className="font-headline text-[28px] tracking-[-0.5px] text-on-surface">$0</Text>
             <Text className="font-body text-[11px] text-on-surface-variant">forever</Text>
-            {!isPro && (
+            {!isPlus && (
               <View className="mt-2 rounded-[20px] bg-on-surface-variant/10 px-2.5 py-1">
                 <Text className="font-label text-[9px] tracking-[0.8px] text-on-surface-variant">Current plan</Text>
               </View>
@@ -109,11 +110,11 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
           >
             <View className="mb-0.5 flex-row items-center gap-[5px]">
               <Zap size={14} color={colors.secondaryFixed} />
-              <Text className="font-headline text-base tracking-[0.5px] text-secondary-fixed">Pro</Text>
+              <Text className="font-headline text-base tracking-[0.5px] text-secondary-fixed">Plus</Text>
             </View>
-            <Text className="font-headline text-[28px] tracking-[-0.5px] text-primary-fixed">$19.99</Text>
+            <Text className="font-headline text-[28px] tracking-[-0.5px] text-primary-fixed">$9.99</Text>
             <Text className="font-body text-[11px] text-on-surface-variant">per month</Text>
-            {isPro && (
+            {isPlus && (
               <View className="mt-2 rounded-[20px] bg-primary/15 px-2.5 py-1">
                 <Text className="font-label text-[9px] tracking-[0.8px] text-primary-fixed">Active</Text>
               </View>
@@ -131,34 +132,44 @@ export function PlansScreen({ isPro, isCheckoutLoading = false, onUpgrade, onClo
                 Free
               </Text>
               <Text className="w-[72px] text-center font-label text-[9px] uppercase tracking-[1.2px] text-primary-fixed">
-                Pro
+                Plus
               </Text>
             </View>
           </View>
 
-          <FeatureRow label="Daily alignment" freeValue={true} proValue={true} />
-          <FeatureRow label="Sacred Timing" freeValue="5/mo" proValue="Unlimited" />
-          <FeatureRow label="Guidance" freeValue="20/mo" proValue="Unlimited" />
-          <FeatureRow label="Early access to new features" freeValue={false} proValue={true} />
+          <FeatureRow label="Daily alignment" freeValue={true} plusValue={true} />
+          <FeatureRow label="Sacred Timing" freeValue="5/mo" plusValue="Unlimited" />
+          <FeatureRow label="Guidance" freeValue="20/mo" plusValue="Unlimited" />
+          <FeatureRow label="Early access to new features" freeValue={false} plusValue={true} />
         </View>
 
-        {!isPro && (
+        {!isPlus && (
           <SacredButton
-            label={isCheckoutLoading ? 'Opening checkout…' : 'Upgrade to Pro for $19.99/mo'}
+            label={isCheckoutLoading ? 'Opening checkout…' : 'Upgrade to Plus for $9.99/mo'}
             onPress={isCheckoutLoading ? () => {} : onUpgrade}
             style={{ marginTop: 4 }}
           />
         )}
 
-        {isPro && (
-          <View
-            className="flex-row items-start gap-3 rounded-2xl border p-4"
-            style={{ backgroundColor: `${colors.primary}10`, borderColor: `${colors.primary}20` }}
-          >
-            <Check size={18} color={colors.primary} />
-            <Text className="flex-1 font-body text-sm leading-5 text-on-surface-variant">
-              You’re on Aksha Pro. You can manage your subscription from your Clerk account.
-            </Text>
+        {isPlus && (
+          <View className="gap-3">
+            <View
+              className="flex-row items-start gap-3 rounded-2xl border p-4"
+              style={{ backgroundColor: `${colors.primary}10`, borderColor: `${colors.primary}20` }}
+            >
+              <Check size={18} color={colors.primary} />
+              <Text className="flex-1 font-body text-sm leading-5 text-on-surface-variant">
+                You’re on Mihira Plus. Manage your subscription from RevenueCat Customer Center once store billing is configured for this build.
+              </Text>
+            </View>
+
+            {onManageSubscription ? (
+              <SacredButton
+                label="Manage subscription"
+                onPress={onManageSubscription}
+                variant="secondary"
+              />
+            ) : null}
           </View>
         )}
       </ScrollView>

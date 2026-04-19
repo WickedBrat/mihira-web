@@ -1,10 +1,10 @@
 export default {
   expo: {
-    name: 'Aksha',
-    slug: 'aksha',
+    name: 'Mihira',
+    slug: 'mihira',
     version: '1.0.0',
     orientation: 'portrait',
-    scheme: 'aksha',
+    scheme: 'mihira',
     userInterfaceStyle: 'dark',
     icon: './assets/icon.png',
     splash: {
@@ -13,11 +13,13 @@ export default {
       backgroundColor: '#0e0e0e',
     },
     ios: {
-      bundleIdentifier: 'com.aksha.app',
+      bundleIdentifier: 'com.mihira.app',
+      buildNumber: '1',
       supportsTablet: false,
     },
     android: {
-      package: 'com.aksha.app',
+      package: 'com.mihira.app',
+      versionCode: 1,
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#0e0e0e',
@@ -29,13 +31,6 @@ export default {
     },
     plugins: [
       'expo-router',
-      [
-        '@stripe/stripe-react-native',
-        {
-          merchantIdentifier: 'merchant.com.aksha',
-          enableGooglePay: false,
-        },
-      ],
       [
         'expo-font',
         {

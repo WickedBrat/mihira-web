@@ -1,8 +1,8 @@
-# Aksha Business Strategy and GTM
+# Mihira Business Strategy and GTM
 
 ## Snapshot
 
-Aksha is best positioned as a premium spiritual guidance app for the Indian diaspora, not as a mass-market astrology app for India.
+Mihira is best positioned as a premium spiritual guidance app for the Indian diaspora, not as a mass-market astrology app for India.
 
 The strongest initial wedge is:
 
@@ -15,7 +15,7 @@ The product is not trying to win by offering the cheapest horoscope. It wins by 
 
 ## Business Thesis
 
-Most astrology and devotional products aimed at Indians compete on volume, live consultations, or ritual commerce. Aksha is different. It combines:
+Most astrology and devotional products aimed at Indians compete on volume, live consultations, or ritual commerce. Mihira is different. It combines:
 
 - daily personalized alignment
 - sacred timing for real decisions
@@ -50,13 +50,13 @@ This can become a second wave, but it should not be the main paid acquisition fo
 - Users looking for free horoscopes only
 - Broad global wellness audiences with no connection to Indian spiritual language
 
-That positioning would dilute the product and put Aksha into larger, noisier categories where it has less advantage.
+That positioning would dilute the product and put Mihira into larger, noisier categories where it has less advantage.
 
 ## Why Diaspora First
 
 ### Stronger Willingness to Pay
 
-Diaspora users are more likely to pay for software that helps them stay connected to tradition in a modern way. Aksha is a premium subscription product, not a mass utility app.
+Diaspora users are more likely to pay for software that helps them stay connected to tradition in a modern way. Mihira is a premium subscription product, not a mass utility app.
 
 ### Better Product Fit
 
@@ -73,7 +73,7 @@ India produces huge download volume, but consumer spend per user is much lower t
 
 ### Better Category Positioning
 
-India's astrology market already has strong incumbents built around live astrologers, high-frequency consults, and transaction-led behavior. Aksha is stronger as a calm, premium, product-led alternative.
+India's astrology market already has strong incumbents built around live astrologers, high-frequency consults, and transaction-led behavior. Mihira is stronger as a calm, premium, product-led alternative.
 
 ## Core Customer Jobs
 
@@ -91,7 +91,7 @@ Top jobs-to-be-done:
 
 ### Positioning Statement
 
-Aksha is a private Vedic guidance app for Indians abroad who want spiritual clarity, sacred timing, and daily grounding in a form that fits modern life.
+Mihira is a private Vedic guidance app for Indians abroad who want spiritual clarity, sacred timing, and daily grounding in a form that fits modern life.
 
 ### Category
 
@@ -179,7 +179,7 @@ Suggested free promise:
 - limited guidance sessions
 - limited sacred timing queries
 
-### Pro Tier
+### Plus Tier
 
 Use paid to unlock depth, repetition, and ritual consistency.
 
@@ -192,15 +192,20 @@ Suggested paid promise:
 
 ### Pricing Direction
 
-The current app copy uses `$19.99/mo`. That is a plausible premium anchor, but it is high for first adoption without stronger proof and a yearly plan.
+The launch pricing should be lower than the original `$19.99/mo` concept.
 
-Recommended test structure:
+Recommended launch structure:
 
-- monthly: `$9.99-$14.99`
-- yearly: `$79-$119`
-- optional founding annual plan during beta
+- monthly: `$9.99`
+- yearly: add later after the purchase flow is stable
 
-If the product continues to center premium guidance and sacred timing, pricing can move upward later. At launch, habit formation matters more than extracting maximum ARPU.
+Why:
+
+- it lowers first-purchase friction while the product is still proving retention
+- it better matches an early diaspora subscription launch
+- it gives Mihira room to move upmarket later if engagement and renewal are strong
+
+At launch, habit formation matters more than extracting maximum ARPU.
 
 ## Go-To-Market Strategy
 
@@ -314,7 +319,7 @@ The strongest launch narrative is not "AI astrology."
 
 The strongest narrative is:
 
-"Aksha helps Indians abroad stay connected to Vedic wisdom through daily alignment, sacred timing, and scripture-grounded guidance."
+"Mihira helps Indians abroad stay connected to Vedic wisdom through daily alignment, sacred timing, and scripture-grounded guidance."
 
 That framing is more defensible, more premium, and more emotionally resonant.
 
@@ -339,7 +344,7 @@ Users who complete onboarding, use daily alignment at least three times in week 
 
 ### Risk 1: Too Spiritual for Mainstream, Too Soft for Astrology Buyers
 
-If the positioning gets vague, Aksha can fall between categories.
+If the positioning gets vague, Mihira can fall between categories.
 
 Response:
 
@@ -371,7 +376,7 @@ Response:
 If resources are limited, do this:
 
 1. Launch to diaspora users first
-2. Position Aksha as a premium Vedic guidance app
+2. Position Mihira as a premium Vedic guidance app
 3. Lead with daily alignment and sacred timing
 4. Use scripture-grounded guidance as the retention engine
 5. Treat India as a secondary expansion market, not the first paid acquisition focus
@@ -386,4 +391,4 @@ These external signals informed the audience recommendation:
 - AppsForBharat has reported meaningful diaspora demand for digital faith products
 - Astrotalk's scale in India shows the domestic market exists, but it also highlights how crowded and transaction-led that category is
 
-Use those signals as market guidance, not as proof that Aksha will win automatically.
+Use those signals as market guidance, not as proof that Mihira will win automatically.

@@ -23,7 +23,7 @@ export function EmptyAskState({ onSelectPrompt }: EmptyAskStateProps) {
           Start with what is actually weighing on you.
         </Text>
         <Text className="font-body text-lg leading-8 text-on-surface-variant">
-          Ask plainly. Aksha will interpret the texts, cite the passages, and turn them into clear
+          Ask plainly. Mihira will interpret the texts, cite the passages, and turn them into clear
           guidance you can use today.
         </Text>
       </View>

@@ -9,7 +9,7 @@ import { View,
 import { Text } from '@/components/ui/Text';
 import { CheckCircle, Sparkles } from 'lucide-react-native';
 
-const DEEP_LINK = 'aksha://';
+const DEEP_LINK = 'mihira://';
 
 export default function PaymentSuccessPage() {
   const { user } = useUser();
@@ -46,7 +46,7 @@ export default function PaymentSuccessPage() {
         </View>
 
         <Text className="mb-1 font-headline text-2xl text-[#1a1a1a]">You’re all set</Text>
-        <Text className="mb-8 font-body text-sm text-[#888]">Aksha Pro is now active</Text>
+        <Text className="mb-8 font-body text-sm text-[#888]">Mihira Plus is now active</Text>
 
         {/* User identity */}
         <View className="mb-8 w-full items-center">
@@ -60,17 +60,17 @@ export default function PaymentSuccessPage() {
                 </Text>
               </View>
             )}
-            {/* Pro badge dot */}
+            {/* Plus badge dot */}
             <View className="absolute bottom-0.5 right-0.5 h-[18px] w-[18px] rounded-full border-2 border-white bg-[#7c3aed]" />
           </View>
 
           <Text className="mb-1 font-label text-lg text-[#1a1a1a]">{name}</Text>
           <Text className="mb-3 font-body text-sm text-[#888]">{email}</Text>
 
-          {/* Aksha Pro badge */}
+          {/* Mihira Plus badge */}
           <View className="flex-row items-center gap-[5px] rounded-[20px] border border-[#e9d5ff] bg-[#f3eeff] px-3 py-[5px]">
             <Sparkles size={12} color="#7c3aed" strokeWidth={2} />
-            <Text className="font-label text-[11px] tracking-[0.5px] text-[#7c3aed]">Aksha Pro</Text>
+            <Text className="font-label text-[11px] tracking-[0.5px] text-[#7c3aed]">Mihira Plus</Text>
           </View>
         </View>
 
@@ -86,11 +86,11 @@ export default function PaymentSuccessPage() {
           onPress={handleOpenApp}
           activeOpacity={0.85}
         >
-          <Text className="font-label text-base tracking-[0.3px] text-white">Open Aksha</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">Open Mihira</Text>
         </TouchableOpacity>
 
         <Text className="text-center font-body text-[11px] leading-[17px] text-[#bbb]">
-          If the app doesn’t open automatically,{'\n'}make sure Aksha is installed on this device.
+          If the app doesn’t open automatically,{'\n'}make sure Mihira is installed on this device.
         </Text>
       </View>
     </View>

@@ -46,7 +46,7 @@ export default function Screen5Tob() {
         >
           <Text className={`text-center font-body-medium ${unknownTime ? 'text-[16px] leading-7 text-ob-muted' : 'text-[21px] text-ob-text'}`}>
             {unknownTime
-              ? 'No problem. Aksha will use a midday reference to build a reliable solar chart for you.'
+              ? 'No problem. Mihira will use a midday reference to build a reliable solar chart for you.'
               : fmtTime(birthTime)}
           </Text>
         </Pressable>

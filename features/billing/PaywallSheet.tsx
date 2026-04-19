@@ -71,7 +71,7 @@ export function PaywallSheet({
             1 free {label} left this month
           </Text>
           <Text className="mb-5 font-body text-sm leading-[21px] text-on-surface-variant">
-            Use your last free {label} now, or upgrade to Pro for unlimited access across Aksha.
+            Use your last free {label} now, or upgrade to Plus for unlimited access across Mihira.
           </Text>
 
           <View className="mb-5 gap-2.5">
@@ -79,7 +79,7 @@ export function PaywallSheet({
             <PlanFeatureRow label={`Unlimited ${labelPlural}`} isFree={false} />
           </View>
 
-          <SacredButton label="Upgrade to Pro for $19.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
+          <SacredButton label="Upgrade to Plus for $9.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
           <Pressable className="items-center py-2.5" onPress={onProceed ?? onClose}>
             <Text className="font-body text-sm text-on-surface-variant">Use my last free {label}</Text>
           </Pressable>
@@ -90,7 +90,7 @@ export function PaywallSheet({
             You’ve reached your monthly free limit
           </Text>
           <Text className="mb-5 font-body text-sm leading-[21px] text-on-surface-variant">
-            Upgrade to Aksha Pro for unlimited {labelPlural} and deeper guidance across the app.
+            Upgrade to Mihira Plus for unlimited {labelPlural} and deeper guidance across the app.
           </Text>
 
           <View className="mb-6 gap-3">
@@ -99,7 +99,7 @@ export function PaywallSheet({
             <FeatureItem text="Early access to new features" />
           </View>
 
-          <SacredButton label="Upgrade to Pro for $19.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
+          <SacredButton label="Upgrade to Plus for $9.99/mo" onPress={onUpgrade} style={{ marginBottom: 12 }} />
           <Pressable className="items-center py-2.5" onPress={onClose}>
             <Text className="font-body text-sm text-on-surface-variant">Maybe later</Text>
           </Pressable>
@@ -114,7 +114,7 @@ function PlanFeatureRow({ label, isFree }: { label: string; isFree: boolean }) {
     <View className="flex-row items-center gap-3 rounded-[14px] border border-black/[0.04] bg-surface-container-low p-3.5 dark:border-white/[0.04]">
       <View className={`rounded-md px-2 py-[3px] ${isFree ? 'bg-on-surface-variant/10' : 'bg-primary/15'}`}>
         <Text className={`font-label text-[9px] tracking-[1.2px] ${isFree ? 'text-on-surface-variant' : 'text-primary-fixed'}`}>
-          {isFree ? 'FREE' : 'PRO'}
+          {isFree ? 'FREE' : 'PLUS'}
         </Text>
       </View>
       <Text className="flex-1 font-body-medium text-sm text-on-surface">{label}</Text>

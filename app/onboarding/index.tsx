@@ -64,7 +64,7 @@ export default function Screen1() {
 
         <Animated.View entering={FadeIn.delay(400).duration(900)}>
           <Text className="text-center font-headline text-[48px] tracking-[-2px] text-ob-gold">
-            Aksha
+            Mihira
           </Text>
         </Animated.View>
 

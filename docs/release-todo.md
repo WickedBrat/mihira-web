@@ -1,40 +1,45 @@
-# Aksha Release TODO
+# Mihira Release TODO
 
 Based on [release-readiness.md](/Users/Apple/projects/aksha/docs/release-readiness.md)
 
 ## P0: Blockers
 
-- [ ] Decide final mobile billing model
+- [x] Decide final mobile billing direction: RevenueCat plus App Store and Play billing
+- [x] Decide initial developer account path: individual accounts first
 - [ ] Replace or remove browser-based subscription checkout for mobile release
-- [ ] Unify entitlement logic for free vs Pro across mobile and backend
-- [ ] Decide whether notifications are in v1
-- [ ] If notifications are not in v1, remove reminder promises from onboarding
+- [x] Replace or remove browser-based subscription checkout for mobile release
+- [ ] Unify entitlement logic for free vs Plus across mobile and backend
+- [ ] Decide whether notifications should be added back after v1
+- [x] If notifications are not in v1, remove reminder promises from onboarding
 - [ ] If notifications are in v1, implement and test reminder permissions and delivery
-- [ ] Add `eas.json`
-- [ ] Define `development`, `preview`, and `production` build profiles
-- [ ] Set `ios.bundleIdentifier` in [app.json](/Users/Apple/projects/aksha/app.json)
-- [ ] Set `android.package` in [app.json](/Users/Apple/projects/aksha/app.json)
-- [ ] Define iOS build number strategy
-- [ ] Define Android version code strategy
+- [x] Add `eas.json`
+- [x] Define `development`, `preview`, and `production` build profiles
+- [x] Set `ios.bundleIdentifier` in [app.json](/Users/Apple/projects/aksha/app.json)
+- [x] Set `android.package` in [app.json](/Users/Apple/projects/aksha/app.json)
+- [x] Define iOS build number strategy
+- [x] Define Android version code strategy
 
 ## P1: Production Infrastructure
 
 - [ ] Create production Clerk project and keys
 - [ ] Create production Supabase project and keys
-- [ ] Create production Stripe setup and keys
+- [ ] Create RevenueCat project and app-specific API keys
 - [ ] Create production PostHog project and keys
 - [ ] Finalize production domain and callback URLs
-- [ ] Expand [.env.example](/Users/Apple/projects/aksha/.env.example) to include all required variables
-- [ ] Document dev, preview, and production env setup
-- [ ] Verify `EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY` handling
+- [x] Expand [.env.example](/Users/Apple/projects/aksha/.env.example) to include all required variables
+- [x] Document dev, preview, and production env setup
+- [x] Install `react-native-purchases` and `react-native-purchases-ui`
+- [ ] Configure Apple App Store app in RevenueCat
+- [ ] Configure Google Play app in RevenueCat
+- [ ] Create `plus` entitlement and offerings in RevenueCat
 - [ ] Verify PostHog config requirements and document them
 
 ## P1: App Compliance and Review Safety
 
-- [ ] Audit Android permissions in [AndroidManifest.xml](/Users/Apple/projects/aksha/android/app/src/main/AndroidManifest.xml)
-- [ ] Remove unused `READ_EXTERNAL_STORAGE`
-- [ ] Remove unused `WRITE_EXTERNAL_STORAGE`
-- [ ] Remove unused `SYSTEM_ALERT_WINDOW`
+- [x] Audit Android permissions in [AndroidManifest.xml](/Users/Apple/projects/aksha/android/app/src/main/AndroidManifest.xml)
+- [x] Remove unused `READ_EXTERNAL_STORAGE`
+- [x] Remove unused `WRITE_EXTERNAL_STORAGE`
+- [x] Remove unused `SYSTEM_ALERT_WINDOW`
 - [ ] Verify account deletion works end to end
 - [ ] Confirm deleted users are cleaned up from Clerk
 - [ ] Confirm deleted users are cleaned up from Supabase profile data
@@ -48,8 +53,8 @@ Based on [release-readiness.md](/Users/Apple/projects/aksha/docs/release-readine
 
 ## P1: Product Scope and UX Cleanup
 
-- [ ] Decide whether Gurukul stays visible for v1
-- [ ] If Gurukul stays, keep it clearly labeled as coming soon
+- [x] Decide whether Gurukul stays visible for v1
+- [x] If Gurukul stays, keep it clearly labeled as coming soon
 - [ ] Review all onboarding promises for features not fully shipped
 - [ ] Review paywall copy and pricing copy for launch consistency
 - [ ] Add annual pricing option or explicitly defer it
@@ -77,6 +82,7 @@ Based on [release-readiness.md](/Users/Apple/projects/aksha/docs/release-readine
 - [ ] Finalize app name for store submission
 - [ ] Reserve Apple App Store app record
 - [ ] Reserve Google Play app record
+- [ ] Confirm acceptable seller-name tradeoff for Apple individual enrollment
 - [ ] Prepare app subtitle and short description
 - [ ] Prepare full store description
 - [ ] Prepare keywords and metadata
@@ -107,10 +113,10 @@ Based on [release-readiness.md](/Users/Apple/projects/aksha/docs/release-readine
 
 ## Suggested First 7 Tasks
 
-- [ ] Add `eas.json`
-- [ ] Decide iOS and Android billing architecture
-- [ ] Remove or implement onboarding reminder promise
-- [ ] Set bundle ID and Android package
-- [ ] Expand env documentation
-- [ ] Audit Android permissions
+- [x] Add `eas.json`
+- [x] Decide iOS and Android billing architecture
+- [x] Remove or implement onboarding reminder promise
+- [x] Set bundle ID and Android package
+- [x] Expand env documentation
+- [x] Audit Android permissions
 - [ ] Create legal URLs

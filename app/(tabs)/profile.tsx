@@ -4,7 +4,6 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as WebBrowser from 'expo-web-browser';
 import Constants from 'expo-constants';
 import { useAuth, useUser } from '@clerk/expo';
 import { SacredButton } from '@/components/ui/SacredButton';
@@ -48,7 +47,7 @@ export default function ProfileScreen() {
   const authSheetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { clearGuide } = useGuide();
-  const { isPro, openCheckout } = useSubscription();
+  const { isPlus, openCheckout, openCustomerCenter } = useSubscription();
   const [isPlansOpen, setIsPlansOpen] = useState(false);
 
   const { signInWithGoogle, signInWithApple, isLoading: isSigningIn } = useSignIn(() => {
@@ -95,7 +94,7 @@ export default function ProfileScreen() {
         />
 
         <PremiumCard
-          isPro={isPro}
+          isPlus={isPlus}
           onPress={() => setIsPlansOpen(true)}
         />
 
@@ -145,7 +144,7 @@ export default function ProfileScreen() {
         region={profile.region}
         userIdLabel={userIdLabel}
         onSelectLanguage={(language) => updateField('language', language)}
-        isPro={isPro}
+        isPlus={isPlus}
         onOpenPlans={() => {
           closeSettingsSheet();
           setTimeout(() => setIsPlansOpen(true), 240);
@@ -189,11 +188,15 @@ export default function ProfileScreen() {
       {isPlansOpen && (
         <View className="absolute inset-0">
           <PlansScreen
-            isPro={isPro}
+            isPlus={isPlus}
             isCheckoutLoading={false}
             onUpgrade={() => {
               setIsPlansOpen(false);
               openCheckout();
+            }}
+            onManageSubscription={() => {
+              setIsPlansOpen(false);
+              openCustomerCenter();
             }}
             onClose={() => setIsPlansOpen(false)}
           />

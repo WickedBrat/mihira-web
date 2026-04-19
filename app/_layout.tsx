@@ -26,15 +26,6 @@ SplashScreen.preventAutoHideAsync();
 const CLERK_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 if (!CLERK_KEY) throw new Error('Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY');
 
-// Safe conditionally load Stripe to avoid crash in Expo Go without dev clients
-let StripeProvider: React.FC<any> = ({ children }) => <>{children}</>;
-try {
-  const StripeModule = require('@stripe/stripe-react-native');
-  if (StripeModule.StripeProvider) StripeProvider = StripeModule.StripeProvider;
-} catch (e: any) {
-  console.warn('Fallback: StripeProvider not found or failed to load. Are you in Expo Go?');
-}
-
 function AnalyticsIdentity() {
   const { isSignedIn, userId } = useAuth();
   const { user } = useUser();
@@ -139,29 +130,24 @@ export default function RootLayout() {
   return (
     <ClerkProvider publishableKey={CLERK_KEY!} tokenCache={tokenCache}>
       <ThemeProvider>
-        <StripeProvider
-          publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? ''}
-          urlScheme="aksha"
-        >
-          <ThemedAppShell>
-            <SafeAreaProvider>
-              <PostHogProvider
-                client={posthog}
-                autocapture={{
-                  captureScreens: false,
-                  captureTouches: true,
-                  propsToCapture: ['testID'],
-                }}
-              >
-                <ToastProvider>
-                  <AnalyticsIdentity />
-                  <ScreenTracker />
-                  <ThemedStack />
-                </ToastProvider>
-              </PostHogProvider>
-            </SafeAreaProvider>
-          </ThemedAppShell>
-        </StripeProvider>
+        <ThemedAppShell>
+          <SafeAreaProvider>
+            <PostHogProvider
+              client={posthog}
+              autocapture={{
+                captureScreens: false,
+                captureTouches: true,
+                propsToCapture: ['testID'],
+              }}
+            >
+              <ToastProvider>
+                <AnalyticsIdentity />
+                <ScreenTracker />
+                <ThemedStack />
+              </ToastProvider>
+            </PostHogProvider>
+          </SafeAreaProvider>
+        </ThemedAppShell>
       </ThemeProvider>
     </ClerkProvider>
   );

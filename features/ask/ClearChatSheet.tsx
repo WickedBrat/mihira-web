@@ -59,7 +59,7 @@ export function ClearChatSheet({
         <View className="flex-1 gap-1">
           <Text className="font-body-medium text-sm text-on-surface">Clear history</Text>
           <Text className="font-body text-sm leading-5 text-on-surface-variant">
-            When checked, Aksha also forgets the stored Guidance history used as short-term context for future replies.
+            When checked, Mihira also forgets the stored Guidance history used as short-term context for future replies.
           </Text>
         </View>
       </Pressable>

@@ -1,8 +1,8 @@
-# Aksha Release Readiness
+# Mihira Release Readiness
 
 ## Current Verdict
 
-Aksha is not release-ready yet.
+Mihira is not release-ready yet.
 
 The app already has a real product inside it. The core user experience exists, the main features are visible, and the monetization shape is in place. What is missing is the production layer required to ship to the App Store and Play Store without review, billing, or trust problems.
 
@@ -30,10 +30,10 @@ This is enough to justify a release push. It is not enough to submit safely yet.
 | Product UX | Mostly built | Main user flows exist |
 | Core feature logic | Mostly built | Daily, ask, sacred timing all present |
 | Commerce UX | Partial | Paywall and plans exist, but billing architecture is not launch-safe |
-| Notifications | Missing | Onboarding promises reminders, implementation is absent |
+| Notifications | Deferred | No longer promised in onboarding, not implemented for v1 |
 | Analytics | Partial | Instrumentation exists, production config still needs cleanup |
 | Auth and profile | Mostly built | Includes account management and delete-account entry |
-| Release config | Missing | No `eas.json`, no build pipeline, no versioning strategy |
+| Release config | Partial | `eas.json` and identifiers now exist, release process still needs validation |
 | Store readiness | Missing | Legal, assets, metadata, privacy disclosures still needed |
 | QA | Missing | No visible release QA checklist or release build verification |
 
@@ -46,20 +46,20 @@ This is the biggest blocker.
 Current state:
 
 - mobile plans UI exists
-- `lib/subscription.ts` opens a web checkout
-- `app/pricing.tsx` relies on Clerk web pricing
-- mobile upgrade paths route users to browser-based checkout
+- `lib/subscription.ts` is now prepared for RevenueCat/store-native billing
+- `app/pricing.tsx` no longer exposes Clerk web pricing
+- mobile upgrade paths are being redirected toward RevenueCat paywalls instead of browser checkout
 
 Why this is risky:
 
 - for iOS, digital subscriptions sold in the app generally need StoreKit / App Store In-App Purchase
-- a browser checkout for digital app features is a serious review risk
-- the current setup also creates a fragmented commerce story across mobile and web
+- the RevenueCat wiring still depends on real store products, app-specific API keys, and installed SDK packages
+- until that is configured and tested, Plus billing is still incomplete
 
 Required decision:
 
-- either implement native in-app subscriptions for iOS and likely Play billing for Android
-- or change product packaging and distribution strategy so the app is not violating store commerce rules
+- implement native in-app subscriptions for iOS and likely Play billing for Android
+- launch initially under individual developer accounts unless seller-name concerns materially hurt conversion
 
 Recommended action:
 
@@ -67,30 +67,31 @@ Recommended action:
 2. unify pricing copy, entitlement logic, and subscriber source of truth
 3. test upgrade, restore, cancellation, and entitlement refresh end to end
 
-## 2. Notifications Are Promised but Not Implemented
+## 2. Notifications Are Not in Scope for v1
 
 Current state:
 
-- onboarding step 9 invites users to "Turn on daily reminders"
-- the code explicitly notes that `expo-notifications` is not installed and simply proceeds
+- onboarding no longer promises reminders
+- notifications are still not implemented in the app
 
-Why this is risky:
+Why this matters:
 
-- users are being promised a capability the app does not deliver
-- this creates trust damage even before store review concerns
+- this is acceptable for v1 as long as reminder language stays out of the product
+- it becomes a launch problem again only if reminder promises return before implementation
 
 Recommended action:
 
-- either implement push and local reminders properly
-- or remove all reminder language from onboarding before launch
+- keep notifications out of the v1 promise unless they are implemented and tested properly
 
-## 3. Release Configuration Is Missing
+## 3. Release Configuration Is Partially In Place
+
+This is no longer fully missing, but it is still incomplete.
 
 Current state:
 
-- no `eas.json`
-- no visible CI or release automation
-- no build profile strategy
+- `eas.json` is now present
+- development, preview, and production profiles are defined
+- there is still no visible CI or release automation
 
 Why this matters:
 
@@ -103,14 +104,13 @@ Recommended action:
 - define development, preview, and production profiles
 - document build and submission commands
 
-## 4. App Identifiers and Store Config Are Incomplete
+## 4. App Identifiers Are Set, but Store Setup Is Still Incomplete
 
 Current state:
 
-- `app.json` includes name, slug, scheme, icon, splash, and orientation
-- it does not show an iOS bundle identifier
-- it does not show an Android package name
-- there is no visible build number or version code strategy
+- Expo config now includes app name, slug, scheme, icon, splash, bundle identifier, Android package, and initial build numbering
+- native identifiers have been updated to the Mihira naming scheme
+- store records, signing setup, and release credentials are still not prepared
 
 Why this matters:
 
@@ -127,8 +127,8 @@ Recommended action:
 
 Current state:
 
-- `.env.example` only includes Clerk, Supabase, and Perplexity keys
-- app code also references Stripe and PostHog configuration
+- `.env.example` now includes Clerk, Supabase, RevenueCat, PostHog, and Perplexity placeholders
+- the release path has moved away from Stripe and toward RevenueCat
 - there is no visible production environment separation strategy
 
 Why this matters:
@@ -246,11 +246,11 @@ Ship Gurukul only as a clearly labeled teaser, or hide it from launch builds if 
 
 1. Finalize app name, bundle IDs, package name, support email, and production URLs
 2. Decide the final mobile billing model
-3. Decide whether notifications are included in v1 or removed from the promise
+3. Keep notifications out of the v1 promise unless they are implemented
 
 ## Phase 2: Production Infrastructure
 
-1. Set up production Clerk, Supabase, Stripe, and PostHog
+1. Set up production Clerk, Supabase, RevenueCat, and PostHog
 2. Expand env documentation and secret handling
 3. Add `eas.json` and build profiles
 
@@ -274,14 +274,14 @@ If the team wants the fastest path to a real release, do these next:
 
 1. Add `eas.json`
 2. decide iOS billing architecture
-3. either implement notifications or remove the promise from onboarding
+3. leave notifications out of the v1 promise unless they are implemented
 4. set bundle IDs and Android package name in `app.json`
-5. expand `.env.example` to include Stripe and PostHog requirements
+5. expand `.env.example` to include RevenueCat and PostHog requirements
 6. audit Android permissions
 7. create legal URLs and store submission assets
 
 ## Working Release Assessment
 
-Aksha is beyond prototype stage but still short of launch discipline.
+Mihira is beyond prototype stage but still short of launch discipline.
 
 The app already has enough product value to justify a beta or soft launch after the blockers above are addressed. The main work left is not inventing more features. It is making the current product shippable, review-safe, and trustworthy.

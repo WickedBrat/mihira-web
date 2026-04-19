@@ -41,7 +41,7 @@ function TypingIndicator() {
 }
 
 export default function AskScreen() {
-  const { isPro, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
+  const { isPlus, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
   const { isAtLimit, isNearLimit, isLoaded: isUsageLoaded, increment } = useUsage('ask');
   const [paywallMode, setPaywallMode] = React.useState<'warning' | 'blocked' | null>(null);
   const [isClearSheetOpen, setIsClearSheetOpen] = React.useState(false);
@@ -100,7 +100,7 @@ export default function AskScreen() {
 
   const handleEnter = () => {
     if (!isSubscriptionLoaded || !isUsageLoaded) return;
-    if (isPro) {
+    if (isPlus) {
       doEnter();
       return;
     }
@@ -183,7 +183,7 @@ export default function AskScreen() {
                     text: item.text,
                     timestamp: item.timestamp,
                   }}
-                  senderName="Aksha"
+                  senderName="Mihira"
                 />
               );
             }

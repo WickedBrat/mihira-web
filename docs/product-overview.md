@@ -1,8 +1,8 @@
-# Aksha Product Overview
+# Mihira Product Overview
 
 ## Product Summary
 
-Aksha is a mobile app that combines Vedic astrology, sacred timing, scripture-grounded guidance, and spiritual habit-building into one premium experience.
+Mihira is a mobile app that combines Vedic astrology, sacred timing, scripture-grounded guidance, and spiritual habit-building into one premium experience.
 
 Today, the product is organized around four pillars:
 
@@ -123,8 +123,8 @@ The free tier creates habit and trust. Paid unlocks higher usage and eventually 
 
 | Route | Purpose | Current State |
 |---|---|---|
-| `app/pricing.tsx` | Web pricing screen using Clerk pricing table | Live on web |
-| `app/payment-success.tsx` | Post-checkout confirmation | Live |
+| `app/pricing.tsx` | Placeholder page noting subscriptions are moving in-app | Transitional |
+| `app/payment-success.tsx` | Legacy post-checkout confirmation route | Transitional |
 | `app/user-profile.tsx` | Account management and delete-account flow | Live |
 | `app/sacred-day/[id].tsx` | Sacred day detail page with context and rituals | Live |
 
@@ -195,7 +195,7 @@ Why it matters:
 Status:
 
 - implemented
-- already tied to free-versus-pro usage limits
+- already tied to free-versus-plus usage limits
 
 ## 4. Sacred Days
 
@@ -234,7 +234,7 @@ Status:
 
 What it does today:
 
-- exposes a free-versus-pro structure
+- exposes a free-versus-plus structure
 - applies usage limits to guidance and sacred timing
 - shows a plans screen on mobile
 - opens a web checkout flow
@@ -325,4 +325,4 @@ Gurukul can remain clearly marked as coming soon if everything else is stable.
 
 ## One-Sentence Product Description
 
-Aksha is a premium Vedic guidance app that helps Indians abroad navigate daily life through personalized alignment, sacred timing, and scripture-grounded clarity.
+Mihira is a premium Vedic guidance app that helps Indians abroad navigate daily life through personalized alignment, sacred timing, and scripture-grounded clarity.

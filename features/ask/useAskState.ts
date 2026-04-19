@@ -195,7 +195,7 @@ export function useAskState() {
           topic: 'general',
           answer: {
             title: 'Something Went Wrong',
-            summary: 'Aksha could not complete this request.',
+            summary: 'Mihira could not complete this request.',
             practical_guidance: `Please try again in a moment. Details: ${message}`,
           },
           sources: [],

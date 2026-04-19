@@ -1,4 +1,4 @@
-// Screen 9: The First Alignment — Feature Tease + Notifications
+// Screen 9: The First Alignment — Feature Tease
 import React, { useEffect } from 'react';
 import {
   View,
@@ -45,9 +45,8 @@ export default function Screen9() {
   const segAngle = (2 * Math.PI) / SEGMENTS;
   const ABHIJIT_IDX = 5; // ~noon segment
 
-  async function requestNotifications() {
+  async function continueToNextStep() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // expo-notifications not installed; just proceed
     router.push('/onboarding/step-10');
   }
 
@@ -61,7 +60,7 @@ export default function Screen9() {
             Your daily{'\n'}alignment, timed
           </Text>
           <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
-            Every day carries a different current. Aksha highlights your{' '}
+            Every day carries a different current. Mihira highlights your{' '}
             <Text className="font-label text-ob-gold">48-minute Abhijit Muhurat</Text>
             {' '}and other supportive windows for action.
           </Text>
@@ -141,7 +140,7 @@ export default function Screen9() {
 
       <Animated.View entering={FadeInUp.delay(800).duration(500)} className="items-center gap-3.5 p-8 pb-11">
         <Pressable
-          onPress={requestNotifications}
+          onPress={continueToNextStep}
           className="items-center rounded-full bg-ob-saffron px-8 py-4"
           style={({ pressed }) => [
             onboardingButtonShadow,
@@ -149,7 +148,7 @@ export default function Screen9() {
           ]}
         >
           <Text className="font-label text-base tracking-[0.3px] text-white">
-            Turn on daily reminders →
+            Continue →
           </Text>
         </Pressable>
         <Pressable onPress={() => {

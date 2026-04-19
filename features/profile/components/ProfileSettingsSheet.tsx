@@ -25,7 +25,7 @@ interface ProfileSettingsSheetProps {
   onSelectLanguage: (language: ProfileData['language']) => void;
   onOpenAuth: () => void;
   onSignOut: () => void | Promise<void>;
-  isPro: boolean;
+  isPlus: boolean;
   onOpenPlans: () => void;
   onManageAccount: () => void;
 }
@@ -43,7 +43,7 @@ export function ProfileSettingsSheet({
   onSelectLanguage,
   onOpenAuth,
   onSignOut,
-  isPro,
+  isPlus,
   onOpenPlans,
   onManageAccount,
 }: ProfileSettingsSheetProps) {
@@ -109,13 +109,13 @@ export function ProfileSettingsSheet({
               <Text className="font-body-medium text-base text-on-surface">Manage account</Text>
             </Pressable>
 
-            {!isPro && (
+            {!isPlus && (
               <Pressable
                 className="mb-3 flex-row items-center gap-2.5 rounded-2xl border border-[rgba(255,149,0,0.102)] bg-[rgba(255,149,0,0.063)] px-4 py-3.5"
                 onPress={onOpenPlans}
               >
                 <Zap size={16} color={colors.secondaryFixed} />
-                <Text className="font-body-medium text-base text-secondary-fixed">Upgrade to Aksha Pro</Text>
+                <Text className="font-body-medium text-base text-secondary-fixed">Upgrade to Mihira Plus</Text>
               </Pressable>
             )}
 

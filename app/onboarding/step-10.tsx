@@ -14,7 +14,7 @@ import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboardin
 
 const TESTIMONIALS = [
   {
-    quote: 'Aksha gave me a calmer way to make decisions in the middle of New York chaos. I stopped leading from fear.',
+    quote: 'Mihira gave me a calmer way to make decisions in the middle of New York chaos. I stopped leading from fear.',
     name: 'Ananya M.',
     title: 'VP, Product · New York',
     initial: 'A',
@@ -61,7 +61,7 @@ export default function Screen10() {
       <View className="flex-1 items-center justify-center gap-7 px-8 pt-6">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2">
           <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
-            People use Aksha{'\n'}to move with clarity.
+            People use Mihira{'\n'}to move with clarity.
           </Text>
           <Text className="text-center font-body text-[15px] text-ob-muted">Real people. Real shifts.</Text>
         </Animated.View>

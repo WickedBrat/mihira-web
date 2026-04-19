@@ -47,7 +47,7 @@ function buildEmptyRetrievalResponse(mode: AskResponseMode, topic: AskTopic): Sc
     },
     sources: [],
     interpretation: {
-      synthesis: 'Aksha is intentionally avoiding a weak or theatrical answer here. A tighter question will produce a more grounded response.',
+      synthesis: 'Mihira is intentionally avoiding a weak or theatrical answer here. A tighter question will produce a more grounded response.',
     },
     action_steps: [
       'Rewrite your question around one concrete dilemma.',

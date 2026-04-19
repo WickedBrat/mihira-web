@@ -50,7 +50,7 @@ export default function MuhuratScreen() {
     return normalizeDate(next);
   }, [today]);
   const { showToast } = useToast();
-  const { isPro, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
+  const { isPlus, isLoaded: isSubscriptionLoaded, openCheckout } = useSubscription();
   const { isAtLimit, isNearLimit, isLoaded: isUsageLoaded, increment } = useUsage('muhurat');
   const [paywallMode, setPaywallMode] = useState<'warning' | 'blocked' | null>(null);
   const pendingQueryRef = useRef<(() => void) | null>(null);
@@ -124,12 +124,12 @@ export default function MuhuratScreen() {
       showToast({
         type: 'error',
         title: 'Describe the event',
-        message: 'Tell Aksha what you’re trying to time.',
+        message: 'Tell Mihira what you’re trying to time.',
       });
       return;
     }
 
-    if (isPro) {
+    if (isPlus) {
       runQuery();
       return;
     }
