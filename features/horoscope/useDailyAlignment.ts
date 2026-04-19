@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useProfile } from '@/features/profile/useProfile';
 import type { BirthChart } from '@/lib/vedic/types';
+import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
 import {
   getCachedDailyAlignment,
   getDailyAlignmentProfileKey,
   saveCachedDailyAlignment,
-  type DailyFocusArea,
 } from '@/lib/dailyAlignmentStorage';
 import { deriveMoonProfileFromBirthDt } from '@/lib/vedic/moonProfile';
 

@@ -1,18 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { BirthChart } from '@/lib/vedic/types';
-
-export interface DailyFocusArea {
-  area: string;
-  action: string;
-  timeRange: string;
-  suggestion: string;
-  reasoning: string;
-}
-
-export interface DailyAlignmentPayload {
-  chart: BirthChart | null;
-  focusAreas: DailyFocusArea[];
-}
+import type { DailyAlignmentPayload } from '@/lib/dailyAlignmentTypes';
 
 interface CachedDailyAlignment extends DailyAlignmentPayload {
   dateKey: string;

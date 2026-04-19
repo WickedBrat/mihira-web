@@ -3,7 +3,7 @@ import { buildBirthChart } from '../../vedic/chart';
 import { parseModelJson } from '../../ai/parseModelJson';
 import { perplexityChat } from '../../ai/perplexity';
 import { DAILY_SYSTEM, buildDailyPrompt } from '../../ai/prompts';
-import type { DailyFocusArea } from '../../dailyAlignmentStorage';
+import type { DailyFocusArea } from '../../dailyAlignmentTypes';
 import type { SignName } from '../../vedic/types';
 
 export async function handleDailyWisdomRequest(request: Request): Promise<Response> {

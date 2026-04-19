@@ -7,7 +7,7 @@ import {
 import { Text } from '@/components/ui/Text';
 import { LinearGradient } from 'expo-linear-gradient';
 import { VedicReasoningAccordion } from './VedicReasoningAccordion';
-import type { DailyFocusArea } from '@/lib/dailyAlignmentStorage';
+import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
 
 const BASE = 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/daily-prediction';
 const img = (filename: string) => ({ uri: `${BASE}/${filename}.jpg` });
