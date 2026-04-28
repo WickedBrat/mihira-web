@@ -26,6 +26,7 @@ import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/ui/Text';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import {
   absoluteFillStyle,
   goldGlowShadow,
@@ -319,6 +320,7 @@ export default function Screen7() {
       <OnboardingDevBackButton />
 
       <CelestialBackdrop />
+      <OnboardingStarField />
 
       <View className="flex-1 items-center px-6 pt-5">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2">
@@ -399,7 +401,7 @@ export default function Screen7() {
 
             <View style={styles.divider} />
 
-            <View className="flex-row gap-5 px-8 py-8">
+            <View className="flex-row gap-5 px-8 py-4">
               <AlignmentTile
                 label="Nakshatra"
                 value={(

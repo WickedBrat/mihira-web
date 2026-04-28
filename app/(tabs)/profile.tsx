@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Constants from 'expo-constants';
 import { useAuth, useUser } from '@clerk/expo';
 import { SacredButton } from '@/components/ui/SacredButton';
+import { PageFooter } from '@/components/ui/PageFooter';
 import { useGuide } from '@/lib/guideStore';
 import { ProfileAuthSheet } from '@/features/profile/components/ProfileAuthSheet';
 import { ProfileFields } from '@/features/profile/components/ProfileFields';
@@ -34,6 +35,8 @@ import { posthog } from '@/lib/posthog';
 import { deriveMoonProfileFromBirthDt } from '@/lib/vedic/moonProfile';
 import { clearAskState } from '@/lib/askStorage';
 import { clearNaradState } from '@/lib/naradStorage';
+import { clearOnboardingCompleted } from '@/lib/onboardingStatus';
+import { resetOnboardingData } from '@/lib/onboardingStore';
 
 const ENABLE_DEV_BUTTONS = Constants.expoConfig?.extra?.enableDevButtons === true;
 
@@ -57,7 +60,7 @@ export default function ProfileScreen() {
     }, [refreshSubscription])
   );
 
-  const { signInWithGoogle, signInWithApple, isLoading: isSigningIn } = useSignIn(() => {
+  const { signInWithGoogle, signInWithApple, isLoading: isSigningIn, loadingProvider } = useSignIn(() => {
     setIsAuthSheetOpen(false);
   });
 
@@ -124,7 +127,11 @@ export default function ProfileScreen() {
             />
             <SacredButton
               label="Trigger Onboarding Flow"
-              onPress={() => router.push('/onboarding')}
+              onPress={async () => {
+                await clearOnboardingCompleted();
+                resetOnboardingData();
+                router.push('/onboarding');
+              }}
               variant="secondary"
               fullWidth
             />
@@ -139,6 +146,8 @@ export default function ProfileScreen() {
             />
           </View>
         )}
+
+        <PageFooter />
       </ScrollView>
 
       <ProfileSettingsSheet
@@ -191,6 +200,7 @@ export default function ProfileScreen() {
         onSignInWithGoogle={signInWithGoogle}
         onSignInWithApple={signInWithApple}
         isLoading={isSigningIn}
+        loadingProvider={loadingProvider}
       />
 
       {isPlansOpen && (

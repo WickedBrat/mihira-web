@@ -1,10 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth, useSession } from '@clerk/expo';
 import { getSupabaseClient } from '@/lib/supabase';
+import type { DailyArthReflection } from './reflectionTypes';
+import { isDailyArthReflection } from './reflectionTypes';
 
 export interface ArthData {
+  id: number;
   quote: string;
   source: string;
+  dailyReflection: DailyArthReflection | null;
 }
 
 export function useDailyArth() {
@@ -42,7 +46,7 @@ export function useDailyArth() {
         // Fetch up to 1000 quotes to avoid dealing with sequence gaps in ID
         const { data, error: fetchError } = await client
           .from('spiritual_quotes')
-          .select('quote, source')
+          .select('id, quote, source, daily_reflection')
           .limit(1000);
 
         if (fetchError) {
@@ -53,7 +57,13 @@ export function useDailyArth() {
         if (!isCancelled && data && data.length > 0) {
           // Pick deterministically from whatever is returned
           const index = dateSeed % data.length;
-          setArth({ quote: data[index].quote, source: data[index].source });
+          const quote = data[index];
+          setArth({
+            id: Number(quote.id),
+            quote: quote.quote,
+            source: quote.source,
+            dailyReflection: isDailyArthReflection(quote.daily_reflection) ? quote.daily_reflection : null,
+          });
         } else if (!isCancelled) {
             throw new Error('Table is empty or no data returned');
         }
@@ -64,8 +74,10 @@ export function useDailyArth() {
           setError(err instanceof Error ? err.message : 'Failed to fetch quote');
           // Provide a fallback quote if the DB fetch fails
           setArth({ 
+              id: 0,
               quote: '"You have a right to your actions, but never to their fruits."', 
-              source: 'The Bhagavad Gita' 
+              source: 'The Bhagavad Gita',
+              dailyReflection: null,
           });
         }
       } finally {

@@ -1,5 +1,5 @@
-// Screen 9: The First Alignment — Feature Tease
-import React, { useEffect } from 'react';
+// Screen 9: Daily Horoscope Suggestions — Homepage Feature Tease
+import React from 'react';
 import {
   View,
   Pressable,
@@ -7,44 +7,41 @@ import {
 import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import {
-  Canvas, Circle, Path, Skia,
-} from '@shopify/react-native-skia';
-import Animated, {
-  FadeInDown, FadeInUp,
-  useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing,
-} from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { useWindowDimensions } from 'react-native';
 import { OB } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import {
-  absoluteFillStyle,
-  dialGlowShadow,
   onboardingButtonShadow,
   pressedButtonStyle,
 } from '@/features/onboarding/onboardingStyles';
 
+const FOCUS_AREAS = [
+  {
+    area: 'Focus',
+    time: 'Morning',
+    action: 'Do the one thing that needs your full mind.',
+    suggestion: 'Start before messages and noise shape the day.',
+    accentColor: OB.gold,
+  },
+  {
+    area: 'Decisions',
+    time: 'Midday',
+    action: 'Handle the conversation you have been delaying.',
+    suggestion: 'A steadier window for judgment and follow-through.',
+    accentColor: OB.saffron,
+  },
+  {
+    area: 'Rest',
+    time: 'Evening',
+    action: 'Close loops instead of opening new ones.',
+    suggestion: 'Let the day settle before choosing what comes next.',
+    accentColor: 'rgba(255,255,255,0.35)',
+  },
+];
+
 export default function Screen9() {
-  const { width } = useWindowDimensions();
-  const cx = (width - 64) / 2;
-  const R  = cx - 16;
-
-  const glowPulse = useSharedValue(0.6);
-  useEffect(() => {
-    glowPulse.value = withRepeat(
-      withTiming(1, { duration: 2200, easing: Easing.inOut(Easing.sin) }),
-      -1,
-      true
-    );
-  }, []);
-  const glowStyle = useAnimatedStyle(() => ({ opacity: glowPulse.value }));
-
-  // Build 12 hour segments on the dial
-  const SEGMENTS = 12;
-  const segAngle = (2 * Math.PI) / SEGMENTS;
-  const ABHIJIT_IDX = 5; // ~noon segment
-
   async function continueToNextStep() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push('/onboarding/step-10');
@@ -53,89 +50,67 @@ export default function Screen9() {
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
+      <OnboardingStarField />
 
-      <View className="flex-1 items-center justify-center gap-6 px-8 pt-6">
+      <View className="flex-1 justify-center gap-6 px-8 pt-6">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
+          <Text className="text-center font-label text-xs uppercase tracking-[3px] text-ob-saffron">
+            Based on your horoscope
+          </Text>
           <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
-            Your daily{'\n'}alignment, timed
+            Three places to put{'\n'}your energy today
           </Text>
           <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
-            Every day carries a different current. Mihira highlights your{' '}
-            <Text className="font-label text-ob-gold">48-minute Abhijit Muhurat</Text>
-            {' '}and other supportive windows for action.
+            On the homepage, Mihira turns your chart and the day's transits into three practical suggestions you can actually use.
           </Text>
         </Animated.View>
 
-        {/* Dial Preview */}
-        <View className="items-center justify-center">
-          <Animated.View
-            className="absolute h-[180px] w-[180px] rounded-full bg-[rgba(217,160,111,0.1)]"
-            style={[dialGlowShadow, glowStyle]}
-            pointerEvents="none"
-          />
+        <View className="gap-3">
+          {FOCUS_AREAS.map((item, index) => (
+            <Animated.View
+              key={item.area}
+              entering={FadeInDown.delay(180 + index * 120).duration(420)}
+              className="overflow-hidden rounded-[24px] border border-ob-card-border bg-ob-card"
+            >
+              <View className="flex-row items-stretch">
+                <View className="w-1.5" style={{ backgroundColor: item.accentColor }} />
+                <View className="flex-1 gap-3 p-4">
+                  <View className="flex-row items-start justify-between gap-4">
+                    <View className="gap-0.5">
+                      <Text className="font-headline-extra text-[28px] leading-[32px] tracking-[-0.4px] text-ob-text">
+                        {item.area}
+                      </Text>
+                      <Text className="font-body text-xs text-ob-muted">{item.time}</Text>
+                    </View>
+                    <View className="rounded-full border border-ob-gold-border bg-ob-gold-dim px-3 py-1">
+                      <Text className="font-body-medium text-[10px] uppercase tracking-[1.4px] text-ob-gold">
+                        Suggestion
+                      </Text>
+                    </View>
+                  </View>
 
-          <Canvas style={{ width: width - 64, height: width - 64 }}>
-            {/* Background ring */}
-            <Circle
-              cx={cx} cy={cx} r={R}
-              style="stroke" strokeWidth={1}
-              color="rgba(255,255,255,0.06)"
-            />
-
-            {/* Segment arcs */}
-            {Array.from({ length: SEGMENTS }).map((_, i) => {
-              const startAngle = i * segAngle - Math.PI / 2;
-              const endAngle   = startAngle + segAngle - 0.04;
-              const isAbhijit  = i === ABHIJIT_IDX;
-
-              const path = Skia.Path.Make();
-              path.addArc(
-                { x: cx - R + 12, y: cx - R + 12, width: (R - 12) * 2, height: (R - 12) * 2 },
-                (startAngle * 180) / Math.PI,
-                ((segAngle - 0.04) * 180) / Math.PI
-              );
-
-              return (
-                <Path
-                  key={i}
-                  path={path}
-                  style="stroke"
-                  strokeWidth={isAbhijit ? 14 : 8}
-                  strokeCap="round"
-                  color={
-                    isAbhijit
-                      ? OB.gold
-                      : i % 3 === 0
-                        ? 'rgba(224,122,95,0.45)'
-                        : 'rgba(255,255,255,0.08)'
-                  }
-                />
-              );
-            })}
-
-            {/* Center label */}
-            <Circle cx={cx} cy={cx} r={R * 0.45} color="rgba(217,160,111,0.07)" />
-            <Circle cx={cx} cy={cx} r={R * 0.45} style="stroke" strokeWidth={0.8} color="rgba(217,160,111,0.2)" />
-          </Canvas>
-
-          {/* Center text overlay */}
-          <View className="items-center justify-center" style={absoluteFillStyle}>
-            <Text className="mb-1 text-[30px] text-ob-gold">☽</Text>
-            <Text className="font-headline text-sm text-ob-text">Abhijit</Text>
-            <Text className="font-body text-[11px] text-ob-muted">48-minute window</Text>
-          </View>
+                  <View className="gap-1.5">
+                    <Text className="font-headline text-[19px] leading-[24px] tracking-[-0.2px] text-ob-text">
+                      {item.action}
+                    </Text>
+                    <Text className="font-body text-[13px] leading-[20px] text-ob-muted">
+                      {item.suggestion}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </Animated.View>
+          ))}
         </View>
 
-        <View className="items-center gap-2.5">
-          <View className="flex-row items-center gap-2">
-            <View className="h-2.5 w-2.5 rounded-full bg-ob-gold" />
-            <Text className="font-body text-xs text-ob-muted">Abhijit Muhurat — your strongest midday window</Text>
-          </View>
-          <View className="flex-row items-center gap-2">
-            <View className="h-2.5 w-2.5 rounded-full bg-ob-saffron opacity-[0.55]" />
-            <Text className="font-body text-xs text-ob-muted">Other auspicious windows</Text>
-          </View>
-        </View>
+        <Animated.View
+          entering={FadeInDown.delay(620).duration(420)}
+          className="rounded-[20px] border border-ob-saffron-border bg-ob-saffron-dim p-4"
+        >
+          <Text className="text-center font-body text-[13px] leading-[21px] text-ob-text">
+            Each card explains what to lean into, when to act, and why that area is being highlighted.
+          </Text>
+        </Animated.View>
       </View>
 
       <Animated.View entering={FadeInUp.delay(800).duration(500)} className="items-center gap-3.5 p-8 pb-11">
@@ -151,10 +126,7 @@ export default function Screen9() {
             Continue →
           </Text>
         </Pressable>
-        <Pressable onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          router.push('/onboarding/step-10');
-        }}>
+        <Pressable onPress={continueToNextStep}>
           <Text className="text-center font-body text-sm text-ob-muted">Skip for now</Text>
         </Pressable>
       </Animated.View>

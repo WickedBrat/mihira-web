@@ -13,11 +13,14 @@ import Animated, {
 import * as Haptics from 'expo-haptics';
 import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import {
   onboardingButtonShadow,
   pressedButtonStyle,
   pressedSendButtonStyle,
 } from '@/features/onboarding/onboardingStyles';
+
+import MihiraLogo from '@/assets/logo.svg';
 
 export default function Screen8() {
   const [question, setQuestion]  = useState('');
@@ -55,22 +58,19 @@ export default function Screen8() {
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
+      <OnboardingStarField />
 
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View className="flex-1 gap-5 px-7 pt-6">
+        <View className="flex-1 gap-5 px-7 pt-6 items-center">
           {/* Sarathi avatar */}
-          <Animated.View entering={FadeIn.delay(200).duration(600)} className="items-start gap-1.5">
-            <View className="h-[52px] w-[52px] items-center justify-center rounded-full border border-ob-saffron-border bg-ob-saffron-dim">
-              <Text className="text-2xl text-ob-gold">☽</Text>
-              <Animated.View
-                className="absolute bottom-[3px] right-[3px] h-2.5 w-2.5 rounded-full border-[1.5px] border-ob-bg bg-ob-saffron"
-                style={dotStyle}
-              />
+          <Animated.View entering={FadeIn.delay(200).duration(600)} className="items-start items-center gap-1.5">
+            <View className="h-[100px] w-[100px] items-center justify-center rounded-full border border-ob-saffron-border bg-ob-saffron-dim">
+              <MihiraLogo width={100} height={100} accessibilityLabel="Mihira logo" />
             </View>
-            <Text className="font-body text-[11px] tracking-[0.5px] text-ob-muted">Your Sarathi</Text>
+            <Text className="font-body text-md tracking-[0.5px] text-ob-muted">Your Sarathi</Text>
           </Animated.View>
 
           {/* Bubble */}
@@ -88,7 +88,7 @@ export default function Screen8() {
           {!answered && !loading && (
             <Animated.View
               entering={FadeInDown.delay(900).duration(500)}
-              className="flex-row items-end gap-2.5 rounded-2xl border border-ob-card-border bg-ob-card p-3.5"
+              className="flex-row items-center gap-2.5 rounded-2xl border border-ob-card-border bg-ob-card p-3.5"
             >
               <TextInput
                 ref={inputRef}

@@ -1,10 +1,12 @@
 // Screen 1: The Initial Spark
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   View,
   Pressable,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
+import MihiraLogo from '@/assets/logo.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, {
@@ -16,13 +18,29 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { useAuth, useSession, useUser } from '@clerk/expo';
 import { analytics } from '@/lib/analytics';
+import { setOnboardingData } from '@/lib/onboardingStore';
+import { useSignIn } from '@/features/auth/useSignIn';
+import AppleLogoIcon from '@/features/auth/AppleLogo';
+import GoogleLogoSolidIcon from '@/features/auth/GoogleLogo';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
-import { onboardingButtonShadow, pressedLogoButtonStyle } from '@/features/onboarding/onboardingStyles';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
+import {
+  onboardingButtonShadow,
+  pressedButtonStyle,
+  pressedLogoButtonStyle,
+} from '@/features/onboarding/onboardingStyles';
+
+type Provider = 'google' | 'apple';
 
 export default function Screen1() {
   const breathe = useSharedValue(1);
   const glow    = useSharedValue(0.6);
+  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoaded: isSessionLoaded } = useSession();
+  const { isLoaded: isUserLoaded, user } = useUser();
+  const [pendingProvider, setPendingProvider] = useState<Provider | null>(null);
 
   useEffect(() => {
     breathe.value = withRepeat(
@@ -42,24 +60,38 @@ export default function Screen1() {
     opacity: glow.value,
   }));
 
+  const continueOnboarding = useCallback(async () => {
+    if (!isUserLoaded) return;
+
+    const signedInName = user?.fullName || user?.firstName || '';
+    if (signedInName.trim()) {
+      setOnboardingData({ userName: signedInName.trim() });
+    }
+
+    analytics.onboardingStarted();
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    router.replace('/onboarding/step-2');
+  }, [isUserLoaded, user]);
+
+  const { signInWithGoogle, signInWithApple, isLoading, loadingProvider } = useSignIn();
+
+  useEffect(() => {
+    if (!isLoaded || !isSessionLoaded || !isSignedIn || !pendingProvider) return;
+    void continueOnboarding();
+  }, [continueOnboarding, isLoaded, isSessionLoaded, isSignedIn, pendingProvider]);
+
+  const activeProvider = loadingProvider ?? pendingProvider;
+  const isBusy = isLoading || pendingProvider !== null;
+  const isAuthReady = isLoaded && isSessionLoaded && isUserLoaded;
+
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
-
-      {/* Ambient star field */}
-      <View pointerEvents="none" className="absolute inset-0">
-        {STARS.map((s, i) => (
-          <View
-            key={i}
-            className="absolute h-0.5 w-0.5 rounded-full bg-ob-gold"
-            style={{ top: s.y, left: s.x, opacity: s.o }}
-          />
-        ))}
-      </View>
+      <OnboardingStarField />
 
       <View className="flex-1 items-center justify-center gap-4 px-8">
         <Animated.View style={logoStyle}>
-          <Text className="mb-[-8px] text-center text-[52px] text-ob-gold">☽</Text>
+          <MihiraLogo width={205} height={205} accessibilityLabel="Mihira logo" />
         </Animated.View>
 
         <Animated.View entering={FadeIn.delay(400).duration(900)}>
@@ -76,44 +108,103 @@ export default function Screen1() {
         </Animated.View>
       </View>
 
-      <Animated.View entering={FadeIn.delay(2200).duration(800)} className="items-center gap-3.5 p-8 pb-11">
-        <Pressable
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            analytics.onboardingStarted();
-            router.push('/onboarding/step-2');
-          }}
-          className="items-center rounded-full bg-ob-saffron px-8 py-4"
-          style={({ pressed }) => [
-            onboardingButtonShadow,
-            pressed && pressedLogoButtonStyle,
-          ]}
-        >
-          <Text className="text-center font-label text-base tracking-[0.3px] text-white">
-            Start My Alignment
-          </Text>
-        </Pressable>
-
-        <Pressable
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            router.replace('/(tabs)');
-          }}
-          className="px-2 py-2"
-          style={({ pressed }) => pressed && pressedLogoButtonStyle}
-        >
-          <Text className="text-center font-body text-sm text-ob-muted">Skip for now</Text>
-        </Pressable>
+      <Animated.View entering={FadeIn.delay(2200).duration(800)} className="w-full items-center gap-3.5 p-8 pb-11">
+        <View className="w-full max-w-[360px] gap-3.5">
+          {isSignedIn ? (
+            <Pressable
+              disabled={!isAuthReady}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                void continueOnboarding();
+              }}
+              className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${
+                !isAuthReady ? 'opacity-60' : ''
+              }`}
+              style={({ pressed }) => [
+                onboardingButtonShadow,
+                pressed && pressedLogoButtonStyle,
+              ]}
+            >
+              <Text className="text-center font-label text-base tracking-[0.3px] text-white">
+                Continue
+              </Text>
+            </Pressable>
+          ) : (
+            <>
+              <OnboardingAuthButton
+                provider="google"
+                onPress={async () => {
+                  setPendingProvider('google');
+                  const didSignIn = await signInWithGoogle();
+                  if (!didSignIn) {
+                    setPendingProvider((current) => (current === 'google' ? null : current));
+                  }
+                }}
+                isDisabled={isBusy}
+                isLoading={activeProvider === 'google'}
+              />
+              <OnboardingAuthButton
+                provider="apple"
+                onPress={async () => {
+                  setPendingProvider('apple');
+                  const didSignIn = await signInWithApple();
+                  if (!didSignIn) {
+                    setPendingProvider((current) => (current === 'apple' ? null : current));
+                  }
+                }}
+                isDisabled={isBusy}
+                isLoading={activeProvider === 'apple'}
+              />
+            </>
+          )}
+        </View>
       </Animated.View>
     </SafeAreaView>
   );
 }
 
-// Fixed decorative stars
-const STARS = [
-  { x: '12%', y: '8%', o: 0.5 }, { x: '78%', y: '6%', o: 0.3 },
-  { x: '91%', y: '18%', o: 0.4 }, { x: '5%', y: '35%', o: 0.25 },
-  { x: '88%', y: '42%', o: 0.4 }, { x: '22%', y: '72%', o: 0.2 },
-  { x: '67%', y: '78%', o: 0.35 }, { x: '44%', y: '15%', o: 0.3 },
-  { x: '56%', y: '88%', o: 0.2 }, { x: '3%', y: '62%', o: 0.3 },
-] as const;
+function OnboardingAuthButton({
+  provider,
+  onPress,
+  isDisabled,
+  isLoading,
+}: {
+  provider: Provider;
+  onPress: () => void | Promise<void>;
+  isDisabled: boolean;
+  isLoading: boolean;
+}) {
+  const isGoogle = provider === 'google';
+
+  return (
+    <Pressable
+      disabled={isDisabled}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        void onPress();
+      }}
+      className={`overflow-hidden rounded-[18px] border border-ob-card-border bg-ob-card ${
+        isDisabled ? 'opacity-60' : ''
+      }`}
+      style={({ pressed }) => pressed && pressedButtonStyle}
+    >
+      <View className="flex-row items-center gap-3.5 px-5 py-4">
+        <View className="h-10 w-10 items-center justify-center rounded-full bg-black">
+          {isGoogle ? (
+            <GoogleLogoSolidIcon size={22} color="#FFFFFF" />
+          ) : (
+            <AppleLogoIcon size={24} color="#FFFFFF" />
+          )}
+        </View>
+        <Text className="flex-1 font-label text-base tracking-[0.2px] text-ob-text">
+          Continue with {isGoogle ? 'Google' : 'Apple'}
+        </Text>
+        {isLoading ? (
+          <ActivityIndicator size="small" color="#D9A06F" />
+        ) : (
+          <Text className="font-headline text-xl text-ob-gold">→</Text>
+        )}
+      </View>
+    </Pressable>
+  );
+}

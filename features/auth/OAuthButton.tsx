@@ -12,6 +12,7 @@ import GoogleLogoSolidIcon from './GoogleLogo';
 interface OAuthButtonProps {
   provider: 'google' | 'apple';
   onPress: () => void;
+  isDisabled?: boolean;
   isLoading?: boolean;
 }
 
@@ -25,15 +26,17 @@ const PROVIDER_SYMBOL: Record<OAuthButtonProps['provider'], any> = {
   apple: <AppleLogoIcon size={24} color="#fff" />,
 };
 
-export function OAuthButton({ provider, onPress, isLoading }: OAuthButtonProps) {
+export function OAuthButton({ provider, onPress, isDisabled, isLoading }: OAuthButtonProps) {
   const { colors } = useTheme();
 
   return (
     <Pressable
-      className="rounded-2xl border border-black/[0.07] bg-surface-container-low dark:border-white/[0.07]"
+      className={`rounded-2xl border border-black/[0.07] bg-surface-container-low dark:border-white/[0.07] ${
+        isDisabled ? 'opacity-60' : ''
+      }`}
       style={({ pressed }) => pressed && { opacity: 0.7 }}
       onPress={onPress}
-      disabled={isLoading}
+      disabled={isDisabled ?? isLoading}
     >
       <View className="flex-row items-center gap-3.5 px-4 py-4">
         <View className="h-8 w-8 items-center justify-center rounded-lg bg-black/[0.06] dark:bg-white/[0.06]">

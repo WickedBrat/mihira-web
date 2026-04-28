@@ -6,6 +6,7 @@ import {
 import { Text } from '@/components/ui/Text';
 import { GlowCard } from '@/components/ui/GlowCard';
 import { PageHero } from '@/components/ui/PageHero';
+import { PageFooter } from '@/components/ui/PageFooter';
 import { DailyArthCard } from '@/features/daily/DailyArthCard';
 import { SacredDayCard } from '@/features/daily/SacredDayCard';
 import { DailyAlignmentCard } from '@/features/horoscope/DailyAlignmentCard';
@@ -66,6 +67,8 @@ export default function HomeScreen() {
             error={error}
           />
         </View>
+
+        <PageFooter />
       </ScrollView>
     </View>
   );

@@ -27,6 +27,7 @@ import Animated, {
 import { useWindowDimensions } from 'react-native';
 import { OB, getOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { absoluteFillStyle } from '@/features/onboarding/onboardingStyles';
 
 const STEPS = [
@@ -99,6 +100,7 @@ export default function Screen6() {
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
+      <OnboardingStarField />
 
       <View className="flex-1 items-center justify-center gap-4 px-8 pt-7">
         <Animated.View entering={FadeInDown.duration(500)} className="self-stretch items-center gap-2">

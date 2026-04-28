@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Stack, SplashScreen, usePathname, useGlobalSearchParams } from 'expo-router';
+import { Stack, SplashScreen, router, usePathname, useGlobalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -11,6 +11,10 @@ import {
   GoogleSans_600SemiBold,
   GoogleSans_700Bold,
 } from '@expo-google-fonts/google-sans';
+import {
+  CormorantGaramond_600SemiBold,
+  CormorantGaramond_700Bold,
+} from '@expo-google-fonts/cormorant-garamond';
 import { PostHogProvider } from 'posthog-react-native';
 import { vars } from 'nativewind';
 import { tokenCache } from '@/lib/clerk';
@@ -19,6 +23,8 @@ import { posthog } from '@/lib/posthog';
 import { analytics } from '@/lib/analytics';
 import { ThemeProvider, useTheme } from '@/lib/theme-context';
 import { getThemeColorVariables } from '@/lib/theme';
+import { getOnboardingCompleted } from '@/lib/onboardingStatus';
+import { OnboardingAudioControl } from '@/features/onboarding/OnboardingAudioControl';
 import '../global.css';
 
 SplashScreen.preventAutoHideAsync();
@@ -60,6 +66,41 @@ function ScreenTracker() {
   return null;
 }
 
+function OnboardingGate() {
+  const pathname = usePathname();
+  const { isLoaded } = useAuth();
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    let isActive = true;
+
+    async function checkOnboarding() {
+      const onboardingCompleted = await getOnboardingCompleted();
+      if (!isActive) return;
+
+      const isOnboardingRoute = pathname.startsWith('/onboarding');
+
+      if (onboardingCompleted && isOnboardingRoute) {
+        router.replace('/(tabs)');
+        return;
+      }
+
+      if (!onboardingCompleted && !isOnboardingRoute) {
+        router.replace('/onboarding');
+      }
+    }
+
+    void checkOnboarding();
+
+    return () => {
+      isActive = false;
+    };
+  }, [isLoaded, pathname]);
+
+  return null;
+}
+
 function ThemedStack() {
   const { isDark, colors } = useTheme();
 
@@ -86,6 +127,7 @@ function ThemedStack() {
         <Stack.Screen name="onboarding/step-11" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-12" options={{ gestureEnabled: false, animation: 'fade' }} />
         <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="daily-arth/reflect" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="sacred-day/[id]" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="pricing" options={{ headerShown: false }} />
         <Stack.Screen name="payment-success" options={{ headerShown: false }} />
@@ -117,6 +159,8 @@ export default function RootLayout() {
     GoogleSans_500Medium,
     GoogleSans_600SemiBold,
     GoogleSans_700Bold,
+    CormorantGaramond_600SemiBold,
+    CormorantGaramond_700Bold,
   });
 
   useEffect(() => {
@@ -143,7 +187,9 @@ export default function RootLayout() {
               <ToastProvider>
                 <AnalyticsIdentity />
                 <ScreenTracker />
+                <OnboardingGate />
                 <ThemedStack />
+                <OnboardingAudioControl />
               </ToastProvider>
             </PostHogProvider>
           </SafeAreaProvider>

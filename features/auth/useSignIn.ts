@@ -6,21 +6,26 @@ import { analytics } from '@/lib/analytics';
 
 WebBrowser.maybeCompleteAuthSession();
 
+type SignInProvider = 'google' | 'apple';
+
 export function useSignIn(onSuccess?: () => void) {
   const googleOAuth = useOAuth({ strategy: 'oauth_google' });
   const appleOAuth = useOAuth({ strategy: 'oauth_apple' });
   const { showToast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingProvider, setLoadingProvider] = useState<SignInProvider | null>(null);
 
   const signInWithGoogle = async () => {
-    setIsLoading(true);
+    setLoadingProvider('google');
     try {
       const { createdSessionId, setActive } = await googleOAuth.startOAuthFlow();
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
         analytics.userSignedIn({ method: 'google' });
         onSuccess?.();
+        return true;
       }
+
+      return false;
     } catch (err) {
       console.error('[useSignIn] Google OAuth error', err);
       showToast({
@@ -28,20 +33,24 @@ export function useSignIn(onSuccess?: () => void) {
         title: 'Google sign-in failed',
         message: 'Please try again.',
       });
+      return false;
     } finally {
-      setIsLoading(false);
+      setLoadingProvider(null);
     }
   };
 
   const signInWithApple = async () => {
-    setIsLoading(true);
+    setLoadingProvider('apple');
     try {
       const { createdSessionId, setActive } = await appleOAuth.startOAuthFlow();
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
         analytics.userSignedIn({ method: 'apple' });
         onSuccess?.();
+        return true;
       }
+
+      return false;
     } catch (err) {
       console.error('[useSignIn] Apple OAuth error', err);
       showToast({
@@ -49,10 +58,11 @@ export function useSignIn(onSuccess?: () => void) {
         title: 'Apple sign-in failed',
         message: 'Please try again.',
       });
+      return false;
     } finally {
-      setIsLoading(false);
+      setLoadingProvider(null);
     }
   };
 
-  return { signInWithGoogle, signInWithApple, isLoading };
+  return { signInWithGoogle, signInWithApple, isLoading: loadingProvider !== null, loadingProvider };
 }

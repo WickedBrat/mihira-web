@@ -12,6 +12,7 @@ import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated'
 import * as Haptics from 'expo-haptics';
 import { setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const PILLS = [
@@ -56,6 +57,7 @@ export default function Screen2() {
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
+      <OnboardingStarField />
 
       <View className="flex-1 items-center gap-9 px-8 pt-8">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
@@ -72,7 +74,7 @@ export default function Screen2() {
               <Animated.View key={pill} entering={FadeInDown.delay(i * 80 + 200).duration(400)}>
                 <Pressable
                   onPress={() => toggle(pill)}
-                  className={`flex-row items-center justify-center gap-2.5 rounded-[14px] border px-[22px] py-4 ${
+                  className={`flex-row items-center justify-center gap-2.5 rounded-[14px] border px-[22px] py-4 mb-1 ${
                     active
                       ? 'border-ob-saffron-border bg-ob-saffron-dim'
                       : 'border-ob-card-border bg-ob-card'
@@ -111,7 +113,7 @@ export default function Screen2() {
       {/* Validation toast */}
       {toastVisible && (
         <RNAnimated.View
-          className="absolute bottom-[120px] left-6 right-6 rounded-[14px] border border-ob-gold-border bg-[rgba(217,160,111,0.15)] p-4"
+          className="absolute bottom-[120px] mb-6 left-6 right-6 rounded-[14px] border border-ob-gold-border bg-[rgba(217,160,111,0.15)] p-4"
           style={{ opacity: toastOpacity }}
         >
           <Text className="text-center font-body text-sm leading-5 text-ob-gold">

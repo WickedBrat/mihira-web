@@ -16,6 +16,10 @@ Next.js site for `getmihira.com`.
 - `POST /v1/api/narad`
 - `POST /v1/api/wisdom/daily`
 - `POST /v1/api/wisdom/muhurat`
+- `POST /v1/api/wisdom/daily-arth-reflection`
+
+`POST /api/wisdom/daily-arth-reflection` is also exposed as a compatibility
+route for native builds that are configured with a web API base URL.
 
 These routes reuse the shared handlers in `/lib/server/routes`, so the Expo app and the Next app stay aligned.
 

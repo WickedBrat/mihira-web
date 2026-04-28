@@ -12,9 +12,10 @@ import { useTheme } from '@/lib/theme-context';
 interface ProfileAuthSheetProps {
   visible: boolean;
   onClose: () => void;
-  onSignInWithGoogle: () => void | Promise<void>;
-  onSignInWithApple: () => void | Promise<void>;
+  onSignInWithGoogle: () => void | Promise<void> | Promise<boolean>;
+  onSignInWithApple: () => void | Promise<void> | Promise<boolean>;
   isLoading: boolean;
+  loadingProvider: 'google' | 'apple' | null;
 }
 
 export function ProfileAuthSheet({
@@ -23,6 +24,7 @@ export function ProfileAuthSheet({
   onSignInWithGoogle,
   onSignInWithApple,
   isLoading,
+  loadingProvider,
 }: ProfileAuthSheetProps) {
   const { colors } = useTheme();
 
@@ -48,8 +50,18 @@ export function ProfileAuthSheet({
       </View>
 
       <View className="gap-3">
-        <OAuthButton provider="google" onPress={onSignInWithGoogle} isLoading={isLoading} />
-        <OAuthButton provider="apple" onPress={onSignInWithApple} isLoading={isLoading} />
+        <OAuthButton
+          provider="google"
+          onPress={() => void onSignInWithGoogle()}
+          isDisabled={isLoading}
+          isLoading={loadingProvider === 'google'}
+        />
+        <OAuthButton
+          provider="apple"
+          onPress={() => void onSignInWithApple()}
+          isDisabled={isLoading}
+          isLoading={loadingProvider === 'apple'}
+        />
       </View>
     </BottomSheet>
   );

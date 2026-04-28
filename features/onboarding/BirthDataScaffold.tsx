@@ -9,6 +9,7 @@ import Animated, {
 import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/ui/Text';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import {
   onboardingButtonShadow,
   pressedButtonStyle,
@@ -38,6 +39,7 @@ export function BirthDataScaffold({
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
+      <OnboardingStarField />
 
       <ScrollView
         className="flex-1"

@@ -58,8 +58,8 @@ module.exports = {
         'ob-divider': 'rgba(255,255,255,0.07)',
       },
       fontFamily: {
-        headline: ['GoogleSans_700Bold'],
-        'headline-extra': ['GoogleSans_700Bold'],
+        headline: ['CormorantGaramond_600SemiBold'],
+        'headline-extra': ['CormorantGaramond_700Bold'],
         body: ['GoogleSans_400Regular'],
         'body-medium': ['GoogleSans_500Medium'],
         label: ['GoogleSans_600SemiBold'],

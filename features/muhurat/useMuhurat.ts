@@ -1,6 +1,7 @@
 // features/muhurat/useMuhurat.ts
 import { useState, useEffect } from 'react';
 import type { MuhuratWindow } from '@/lib/vedic/types';
+import { apiUrl } from '@/lib/apiUrl';
 
 export interface MuhuratRequest {
   eventDescription: string;
@@ -32,7 +33,7 @@ export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
 
     setState(s => ({ ...s, isLoading: true, error: null }));
 
-    fetch('/api/wisdom/muhurat', {
+    fetch(apiUrl('/api/wisdom/muhurat'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

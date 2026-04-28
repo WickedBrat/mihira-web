@@ -10,6 +10,7 @@ import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const TESTIMONIALS = [
@@ -57,6 +58,7 @@ export default function Screen10() {
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
+      <OnboardingStarField />
 
       <View className="flex-1 items-center justify-center gap-7 px-8 pt-6">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2">

@@ -1,5 +1,5 @@
 // Screen 4: The Sacred Request — Name Input
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View, Text, Pressable,
   TextInput, KeyboardAvoidingView, Platform,
@@ -8,13 +8,26 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { OB, setOnboardingData } from '@/lib/onboardingStore';
+import { useUser } from '@clerk/expo';
+import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 export default function Screen4() {
-  const [name, setName] = useState('');
+  const { user } = useUser();
+  const [name, setName] = useState(() => {
+    const storedName = getOnboardingData().userName;
+    return storedName || user?.fullName || user?.firstName || '';
+  });
   const inputRef = useRef<TextInput>(null);
+  const clerkName = user?.fullName || user?.firstName || '';
+
+  useEffect(() => {
+    if (name.trim() || !clerkName.trim()) return;
+    setName(clerkName.trim());
+    setOnboardingData({ userName: clerkName.trim() });
+  }, [clerkName, name]);
 
   function proceed() {
     const trimmed = name.trim();
@@ -27,6 +40,7 @@ export default function Screen4() {
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
+      <OnboardingStarField />
 
       <KeyboardAvoidingView
         className="flex-1"

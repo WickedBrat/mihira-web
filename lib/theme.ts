@@ -117,8 +117,8 @@ export const lightColors = {
 } as const satisfies ColorPalette;
 
 export const fonts = {
-  headlineExtra: 'GoogleSans_700Bold',
-  headline: 'GoogleSans_700Bold',
+  headlineExtra: 'CormorantGaramond_700Bold',
+  headline: 'CormorantGaramond_600SemiBold',
   label: 'GoogleSans_600SemiBold',
   bodyMedium: 'GoogleSans_500Medium',
   body: 'GoogleSans_400Regular',

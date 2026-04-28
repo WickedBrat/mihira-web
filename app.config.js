@@ -10,7 +10,7 @@ export default {
     splash: {
       image: './assets/splash-icon.png',
       resizeMode: 'contain',
-      backgroundColor: '#0e0e0e',
+      backgroundColor: '#191C20',
     },
     ios: {
       bundleIdentifier: 'com.mihira.app',
@@ -22,7 +22,7 @@ export default {
       versionCode: 1,
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: '#0e0e0e',
+        backgroundColor: '#191C20',
       },
     },
     web: {
@@ -43,6 +43,21 @@ export default {
         },
       ],
       '@react-native-community/datetimepicker',
+      [
+        'expo-audio',
+        {
+          microphonePermission: false,
+          recordAudioAndroid: false,
+          enableBackgroundPlayback: false,
+        },
+      ],
+      [
+        'expo-calendar',
+        {
+          calendarPermission: 'Allow Mihira to open calendar entries for focus reminders.',
+          remindersPermission: 'Allow Mihira to save your daily focus tasks as reminders.',
+        },
+      ],
       'expo-secure-store',
       'expo-web-browser',
     ],
