@@ -87,9 +87,9 @@ export default function ProfileScreen() {
         className="flex-1"
         contentContainerStyle={{
           paddingHorizontal: layout.screenPaddingX,
-          paddingTop: 16,
-          paddingBottom: 176,
-          gap: 16,
+          paddingTop: 10,
+          paddingBottom: 220,
+          gap: 14,
         }}
         showsVerticalScrollIndicator={false}
       >

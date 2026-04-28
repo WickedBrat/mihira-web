@@ -445,7 +445,7 @@ export default function Screen7() {
         <Pressable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            router.push('/onboarding/step-8');
+            router.push('/onboarding/step-10');
           }}
           className="overflow-hidden rounded-full"
           style={({ pressed }) => [
@@ -460,7 +460,7 @@ export default function Screen7() {
             style={styles.ctaGradient}
           >
             <Text className="font-label text-base tracking-[0.3px] text-white">
-              Meet your Sarathi →
+              See what this unlocks →
             </Text>
           </LinearGradient>
         </Pressable>

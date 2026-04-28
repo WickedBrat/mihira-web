@@ -115,8 +115,12 @@ function ThemedStack() {
       >
         <Stack.Screen name="onboarding/index" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-2" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-3" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-4" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-4-support" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-4-synthesis" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-5" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-5-trust" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-5-tob" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-5-place" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-6" options={{ gestureEnabled: false, animation: 'fade' }} />

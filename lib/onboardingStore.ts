@@ -3,6 +3,8 @@
 
 export interface OnboardingData {
   painPoints: string[];
+  guidanceContext: string[];
+  supportTypes: string[];
   userName: string;
   birthDate: Date;
   birthTime: Date;
@@ -14,6 +16,8 @@ export interface OnboardingData {
 
 const DEFAULT: OnboardingData = {
   painPoints: [],
+  guidanceContext: [],
+  supportTypes: [],
   userName: '',
   birthDate: new Date(2000, 0, 1),
   birthTime: new Date(2000, 0, 1, 9, 0),

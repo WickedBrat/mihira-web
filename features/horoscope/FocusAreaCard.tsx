@@ -198,10 +198,8 @@ export function FocusAreaCard({ focusArea, isLast = false }: Props) {
       </View>
 
       {!isLast && (
-        <View className="h-10 items-center gap-1.5 py-1.5">
-          <View className="w-[1.5px] flex-1 bg-black/12 dark:bg-white/14" />
-          <View className="h-[5px] w-[5px] rounded-full bg-secondary-fixed/65" />
-          <View className="w-[1.5px] flex-1 bg-black/12 dark:bg-white/14" />
+        <View className="h-8 items-center py-1.5">
+          <View className="w-px flex-1 bg-black/10 dark:bg-white/10" />
         </View>
       )}
     </View>

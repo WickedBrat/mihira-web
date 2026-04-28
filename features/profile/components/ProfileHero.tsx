@@ -29,13 +29,13 @@ export function ProfileHero({
   const { colors } = useTheme();
 
   return (
-    <View className="items-center pb-5 pt-3">
-      <View className="relative mb-4 items-center justify-center">
-        <View className="absolute left-[-22px] top-[-20px] h-40 w-40 items-center justify-center opacity-50">
-          <ProfileBg width={270} height={270} fill="#4b3d32" />
+    <View className="items-center pb-3 pt-1">
+      <View className="relative mb-3 items-center justify-center">
+        <View className="absolute left-[-18px] top-[-18px] h-36 w-36 items-center justify-center opacity-45">
+          <ProfileBg width={236} height={236} fill="#4b3d32" />
         </View>
         
-        <View className="h-[130px] w-[130px] items-center justify-center overflow-hidden rounded-full border border-black/[0.06] bg-[rgba(250,247,242,0.94)] dark:border-white/[0.06] dark:bg-[rgba(19,19,19,0.94)]">
+        <View className="h-[112px] w-[112px] items-center justify-center overflow-hidden rounded-full border border-black/[0.06] bg-[rgba(250,247,242,0.94)] dark:border-white/[0.06] dark:bg-[rgba(19,19,19,0.94)]">
           {isSignedIn && hasAvatar ? (
             <Image source={{ uri: avatarUrl ?? undefined }} className="h-full w-full" />
           ) : isSignedIn ? (
@@ -46,7 +46,7 @@ export function ProfileHero({
         </View>
       </View>
 
-      <Text className="mb-1.5 font-headline text-[30px] tracking-[-0.4px] text-on-surface">{displayName}</Text>
+      <Text className="mb-1.5 font-headline text-[28px] tracking-[-0.2px] text-on-surface">{displayName}</Text>
 
       {planLabel ? (
         <View

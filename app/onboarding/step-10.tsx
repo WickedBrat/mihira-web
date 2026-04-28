@@ -1,135 +1,113 @@
-// Screen 10: The Evidence — Social Proof Carousel
-import React, { useState, useRef } from 'react';
+// Screen 10: Personal Plan Reveal
+import React from 'react';
 import {
-  View, Text, Pressable,
-  ScrollView, useWindowDimensions,
-  NativeSyntheticEvent, NativeScrollEvent,
+  Pressable,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { BookOpenTextIcon, CalendarDaysIcon, CompassIcon, MessageCircleQuestionIcon } from 'lucide-react-native';
+import { Text } from '@/components/ui/Text';
+import { OB, getOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
-const TESTIMONIALS = [
+const PLAN_ITEMS = [
   {
-    quote: 'Mihira gave me a calmer way to make decisions in the middle of New York chaos. I stopped leading from fear.',
-    name: 'Ananya M.',
-    title: 'VP, Product · New York',
-    initial: 'A',
-    nakshatra: 'Rohini',
+    icon: CompassIcon,
+    title: 'Morning alignment',
+    body: 'A daily read on where to place your energy first.',
   },
   {
-    quote: 'I finally understood my Sade Sati and stopped resisting every hard season. That shift changed how I work.',
-    name: 'Rohan K.',
-    title: 'Founder · Bangalore',
-    initial: 'R',
-    nakshatra: 'Ashwini',
+    icon: CalendarDaysIcon,
+    title: 'Sacred timing',
+    body: 'Auspicious windows for decisions, rituals, and important actions.',
   },
   {
-    quote: 'For the first time, my calendar felt aligned with my energy instead of fighting it. The fog lifted fast.',
-    name: 'Priya S.',
-    title: 'Creative Director · London',
-    initial: 'P',
-    nakshatra: 'Pushya',
+    icon: MessageCircleQuestionIcon,
+    title: 'Sarathi guidance',
+    body: 'A private place to ask what is weighing on your heart.',
   },
   {
-    quote: 'I was sceptical, but my chart felt uncannily specific. This went far beyond generic horoscope advice.',
-    name: 'Arjun V.',
-    title: 'Surgeon · Mumbai',
-    initial: 'A',
-    nakshatra: 'Hasta',
+    icon: BookOpenTextIcon,
+    title: 'Scripture in context',
+    body: 'Wisdom translated into next steps you can actually use.',
   },
 ];
 
-export default function Screen10() {
-  const { width } = useWindowDimensions();
-  const [activeIdx, setActiveIdx] = useState(0);
-  const scrollRef = useRef<ScrollView>(null);
-  const CARD_W = width - 64;
+function getPrimaryThread() {
+  const data = getOnboardingData();
+  return data.supportTypes[0] ?? data.painPoints[0] ?? 'Daily grounding';
+}
 
-  function onScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
-    const idx = Math.round(e.nativeEvent.contentOffset.x / CARD_W);
-    setActiveIdx(idx);
-  }
+export default function Screen10() {
+  const data = getOnboardingData();
+  const name = data.userName?.split(' ')[0] || 'you';
+  const primaryThread = getPrimaryThread();
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
       <OnboardingStarField />
 
-      <View className="flex-1 items-center justify-center gap-7 px-8 pt-6">
-        <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2">
-          <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
-            People use Mihira{'\n'}to move with clarity.
+      <View className="flex-1 justify-center gap-6 px-8 pt-6">
+        <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
+          <Text className="text-center font-label text-xs uppercase tracking-[3px] text-ob-saffron">
+            Your first seven days
           </Text>
-          <Text className="text-center font-body text-[15px] text-ob-muted">Real people. Real shifts.</Text>
+          <Text className="text-center font-headline text-[35px] leading-[41px] tracking-[-0.9px] text-ob-text">
+            A rhythm is ready{'\n'}for {name}.
+          </Text>
+          <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
+            Mihira will begin with {primaryThread.toLowerCase()} and adjust as you keep using it.
+          </Text>
         </Animated.View>
 
-        {/* Carousel */}
-        <ScrollView
-          ref={scrollRef}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onMomentumScrollEnd={onScroll}
-          decelerationRate="fast"
-          snapToInterval={CARD_W}
-          className="mx-[-32px]"
-        >
-          {TESTIMONIALS.map((t, i) => (
-            <Animated.View
-              key={i}
-              entering={FadeInDown.delay(i * 60 + 200).duration(400)}
-              className="gap-[18px] rounded-[20px] border border-ob-card-border bg-ob-card p-6"
-              style={{ width: CARD_W, marginHorizontal: 16 }}
-            >
-              {/* Stars */}
-              <Text className="text-center text-base tracking-[3px] text-ob-gold">★★★★★</Text>
-
-              <Text className="text-center font-body text-[15px] italic leading-6 text-ob-text">"{t.quote}"</Text>
-
-              <View className="flex-row items-center gap-3">
-                <View className="h-[42px] w-[42px] items-center justify-center rounded-full border border-ob-saffron-border bg-ob-saffron-dim">
-                  <Text className="font-headline text-lg text-ob-saffron">{t.initial}</Text>
+        <View className="gap-3">
+          {PLAN_ITEMS.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <Animated.View
+                key={item.title}
+                entering={FadeInDown.delay(180 + index * 100).duration(420)}
+                className="overflow-hidden rounded-[22px] border border-ob-card-border bg-ob-card p-4"
+              >
+                <View className="flex-row items-start gap-3.5">
+                  <View className="h-11 w-11 items-center justify-center rounded-full border border-ob-gold-border bg-ob-gold-dim">
+                    <Icon size={21} color={OB.gold} strokeWidth={1.8} />
+                  </View>
+                  <View className="flex-1 gap-1">
+                    <Text className="font-headline text-[20px] leading-6 text-ob-text">
+                      {item.title}
+                    </Text>
+                    <Text className="font-body text-[13px] leading-5 text-ob-muted">
+                      {item.body}
+                    </Text>
+                  </View>
                 </View>
-                <View className="flex-1 gap-0.5">
-                  <Text className="font-label text-sm text-ob-text">{t.name}</Text>
-                  <Text className="font-body text-[11px] text-ob-muted">{t.title}</Text>
-                </View>
-                <View className="rounded-[20px] border border-ob-gold-border bg-ob-gold-dim px-2.5 py-1">
-                  <Text className="font-body-medium text-[10px] text-ob-gold">{t.nakshatra}</Text>
-                </View>
-              </View>
-            </Animated.View>
-          ))}
-        </ScrollView>
-
-        {/* Page dots */}
-        <View className="flex-row justify-center gap-2">
-          {TESTIMONIALS.map((_, i) => (
-            <Pressable
-              key={i}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                scrollRef.current?.scrollTo({ x: i * CARD_W, animated: true });
-                setActiveIdx(i);
-              }}
-              className={`h-1.5 rounded-full ${
-                i === activeIdx ? 'w-[18px] bg-ob-saffron' : 'w-1.5 bg-ob-card-border'
-              }`}
-            />
-          ))}
+              </Animated.View>
+            );
+          })}
         </View>
+
+        <Animated.View
+          entering={FadeInDown.delay(620).duration(420)}
+          className="rounded-[20px] border border-ob-saffron-border bg-ob-saffron-dim p-4"
+        >
+          <Text className="text-center font-body text-[13px] leading-[21px] text-ob-text">
+            Next, Mihira will show the kind of daily guidance that appears on your home screen.
+          </Text>
+        </Animated.View>
       </View>
 
-      <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-center p-8 pb-11">
+      <Animated.View entering={FadeInUp.delay(760).duration(500)} className="items-center p-8 pb-11">
         <Pressable
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            router.push('/onboarding/step-11');
+            router.push('/onboarding/step-9');
           }}
           className="items-center rounded-full bg-ob-saffron px-8 py-4"
           style={({ pressed }) => [
@@ -137,7 +115,7 @@ export default function Screen10() {
             pressed && pressedButtonStyle,
           ]}
         >
-          <Text className="font-label text-base tracking-[0.3px] text-white">Choose my rhythm →</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">Preview my day →</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>

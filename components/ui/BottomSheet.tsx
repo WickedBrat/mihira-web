@@ -108,7 +108,7 @@ export function BottomSheet({
   const sheet = (
     <Animated.View
       onLayout={onSheetLayout}
-      className="absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-[30px] border border-black/[0.08] dark:border-white/[0.06]"
+      className="absolute bottom-0 left-0 right-0 overflow-hidden rounded-t-[28px] border border-black/[0.08] dark:border-white/[0.06]"
       style={[{ zIndex, maxHeight: windowHeight * 0.82 }, sheetAnimatedStyle, sheetStyle]}
     >
       <BlurView intensity={50} tint={isDark ? 'dark' : 'light'} className="absolute inset-0" />
@@ -116,8 +116,8 @@ export function BottomSheet({
       <SafeAreaView className="flex-1 px-5 pb-6 pt-3" style={contentStyle} edges={safeAreaEdges}>
         {showHandle && (
           <View
-            className="mb-[18px] h-[5px] w-12 self-center rounded-full"
-            style={{ backgroundColor: `${colors.onSurfaceVariant}66` }}
+            className="mb-4 h-[3px] w-11 self-center rounded-full"
+            style={{ backgroundColor: `${colors.onSurfaceVariant}55` }}
           />
         )}
         {children}
@@ -128,7 +128,7 @@ export function BottomSheet({
   return (
     <View pointerEvents="box-none" className="absolute inset-0">
       <Animated.View
-        className="absolute inset-0 bg-black/30 dark:bg-black/[0.54]"
+        className="absolute inset-0 bg-black/45 dark:bg-black/[0.68]"
         style={[{ zIndex: zIndex - 1 }, backdropStyle]}
       >
         <Pressable className="absolute inset-0" onPress={onClose} />

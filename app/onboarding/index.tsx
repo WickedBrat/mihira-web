@@ -1,7 +1,6 @@
 // Screen 1: The Initial Spark
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
-  ActivityIndicator,
   View,
   Pressable,
 } from 'react-native';
@@ -18,29 +17,17 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { useAuth, useSession, useUser } from '@clerk/expo';
 import { analytics } from '@/lib/analytics';
-import { setOnboardingData } from '@/lib/onboardingStore';
-import { useSignIn } from '@/features/auth/useSignIn';
-import AppleLogoIcon from '@/features/auth/AppleLogo';
-import GoogleLogoSolidIcon from '@/features/auth/GoogleLogo';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import {
   onboardingButtonShadow,
   pressedButtonStyle,
-  pressedLogoButtonStyle,
 } from '@/features/onboarding/onboardingStyles';
-
-type Provider = 'google' | 'apple';
 
 export default function Screen1() {
   const breathe = useSharedValue(1);
-  const glow    = useSharedValue(0.6);
-  const { isLoaded, isSignedIn } = useAuth();
-  const { isLoaded: isSessionLoaded } = useSession();
-  const { isLoaded: isUserLoaded, user } = useUser();
-  const [pendingProvider, setPendingProvider] = useState<Provider | null>(null);
+  const glow = useSharedValue(0.6);
 
   useEffect(() => {
     breathe.value = withRepeat(
@@ -61,28 +48,10 @@ export default function Screen1() {
   }));
 
   const continueOnboarding = useCallback(async () => {
-    if (!isUserLoaded) return;
-
-    const signedInName = user?.fullName || user?.firstName || '';
-    if (signedInName.trim()) {
-      setOnboardingData({ userName: signedInName.trim() });
-    }
-
     analytics.onboardingStarted();
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     router.replace('/onboarding/step-2');
-  }, [isUserLoaded, user]);
-
-  const { signInWithGoogle, signInWithApple, isLoading, loadingProvider } = useSignIn();
-
-  useEffect(() => {
-    if (!isLoaded || !isSessionLoaded || !isSignedIn || !pendingProvider) return;
-    void continueOnboarding();
-  }, [continueOnboarding, isLoaded, isSessionLoaded, isSignedIn, pendingProvider]);
-
-  const activeProvider = loadingProvider ?? pendingProvider;
-  const isBusy = isLoading || pendingProvider !== null;
-  const isAuthReady = isLoaded && isSessionLoaded && isUserLoaded;
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
@@ -108,103 +77,28 @@ export default function Screen1() {
         </Animated.View>
       </View>
 
-      <Animated.View entering={FadeIn.delay(2200).duration(800)} className="w-full items-center gap-3.5 p-8 pb-11">
+      <Animated.View entering={FadeIn.delay(1800).duration(800)} className="w-full items-center gap-3.5 p-8 pb-11">
         <View className="w-full max-w-[360px] gap-3.5">
-          {isSignedIn ? (
-            <Pressable
-              disabled={!isAuthReady}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                void continueOnboarding();
-              }}
-              className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${
-                !isAuthReady ? 'opacity-60' : ''
-              }`}
-              style={({ pressed }) => [
-                onboardingButtonShadow,
-                pressed && pressedLogoButtonStyle,
-              ]}
-            >
-              <Text className="text-center font-label text-base tracking-[0.3px] text-white">
-                Continue
-              </Text>
-            </Pressable>
-          ) : (
-            <>
-              <OnboardingAuthButton
-                provider="google"
-                onPress={async () => {
-                  setPendingProvider('google');
-                  const didSignIn = await signInWithGoogle();
-                  if (!didSignIn) {
-                    setPendingProvider((current) => (current === 'google' ? null : current));
-                  }
-                }}
-                isDisabled={isBusy}
-                isLoading={activeProvider === 'google'}
-              />
-              <OnboardingAuthButton
-                provider="apple"
-                onPress={async () => {
-                  setPendingProvider('apple');
-                  const didSignIn = await signInWithApple();
-                  if (!didSignIn) {
-                    setPendingProvider((current) => (current === 'apple' ? null : current));
-                  }
-                }}
-                isDisabled={isBusy}
-                isLoading={activeProvider === 'apple'}
-              />
-            </>
-          )}
+          <Pressable
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              void continueOnboarding();
+            }}
+            className="items-center rounded-full bg-ob-saffron px-8 py-4"
+            style={({ pressed }) => [
+              onboardingButtonShadow,
+              pressed && pressedButtonStyle,
+            ]}
+          >
+            <Text className="text-center font-label text-base tracking-[0.3px] text-white">
+              Begin my alignment →
+            </Text>
+          </Pressable>
+          <Text className="px-4 text-center font-body text-xs leading-[18px] text-ob-muted">
+            You can save your account after Mihira shows your first guidance.
+          </Text>
         </View>
       </Animated.View>
     </SafeAreaView>
-  );
-}
-
-function OnboardingAuthButton({
-  provider,
-  onPress,
-  isDisabled,
-  isLoading,
-}: {
-  provider: Provider;
-  onPress: () => void | Promise<void>;
-  isDisabled: boolean;
-  isLoading: boolean;
-}) {
-  const isGoogle = provider === 'google';
-
-  return (
-    <Pressable
-      disabled={isDisabled}
-      onPress={() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        void onPress();
-      }}
-      className={`overflow-hidden rounded-[18px] border border-ob-card-border bg-ob-card ${
-        isDisabled ? 'opacity-60' : ''
-      }`}
-      style={({ pressed }) => pressed && pressedButtonStyle}
-    >
-      <View className="flex-row items-center gap-3.5 px-5 py-4">
-        <View className="h-10 w-10 items-center justify-center rounded-full bg-black">
-          {isGoogle ? (
-            <GoogleLogoSolidIcon size={22} color="#FFFFFF" />
-          ) : (
-            <AppleLogoIcon size={24} color="#FFFFFF" />
-          )}
-        </View>
-        <Text className="flex-1 font-label text-base tracking-[0.2px] text-ob-text">
-          Continue with {isGoogle ? 'Google' : 'Apple'}
-        </Text>
-        {isLoading ? (
-          <ActivityIndicator size="small" color="#D9A06F" />
-        ) : (
-          <Text className="font-headline text-xl text-ob-gold">→</Text>
-        )}
-      </View>
-    </Pressable>
   );
 }

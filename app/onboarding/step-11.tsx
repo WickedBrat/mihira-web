@@ -10,12 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { useAuth } from '@clerk/expo';
-import { analytics } from '@/lib/analytics';
-import { getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
-import { setOnboardingCompleted } from '@/lib/onboardingStatus';
-import { useProfile } from '@/features/profile/useProfile';
-import { formatBirthDateTime, mergeDateAndTime } from '@/features/profile/utils';
+import { setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
@@ -52,40 +47,11 @@ type TierId = (typeof TIERS)[number]['id'];
 
 export default function Screen11() {
   const [selected, setSelected] = useState<TierId>('growth');
-  const [isCompleting, setIsCompleting] = useState(false);
-  const { isSignedIn } = useAuth();
-  const { saveField } = useProfile();
 
-  async function proceed() {
-    if (isCompleting) return;
-    setIsCompleting(true);
+  function proceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOnboardingData({ commitmentTier: selected });
-
-    const d = getOnboardingData();
-
-    analytics.onboardingCompleted({
-      has_birth_place: Boolean(d.birthPlace),
-      commitment_tier: d.commitmentTier ?? null,
-      is_signed_in: Boolean(isSignedIn),
-    });
-
-    if (isSignedIn) {
-      const birthDateTime = !d.unknownBirthTime
-        ? formatBirthDateTime(mergeDateAndTime(d.birthDate, d.birthTime))
-        : '';
-
-      await Promise.all([
-        d.userName ? saveField('name', d.userName).catch(() => {}) : Promise.resolve(),
-        birthDateTime ? saveField('birth_dt', birthDateTime).catch(() => {}) : Promise.resolve(),
-        d.birthPlace ? saveField('birth_place', d.birthPlace).catch(() => {}) : Promise.resolve(),
-        d.commitmentTier ? saveField('focus_area', d.commitmentTier).catch(() => {}) : Promise.resolve(),
-      ]);
-    }
-
-    await setOnboardingCompleted(true);
-    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    router.replace('/(tabs)');
+    router.push('/onboarding/step-12');
   }
 
   return (
@@ -180,17 +146,14 @@ export default function Screen11() {
       >
         <Pressable
           onPress={proceed}
-          disabled={isCompleting}
-          className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${
-            isCompleting ? 'opacity-60' : ''
-          }`}
+          className="items-center rounded-full bg-ob-saffron px-8 py-4"
           style={({ pressed }) => [
             onboardingButtonShadow,
             pressed && pressedButtonStyle,
           ]}
           >
             <Text className="font-label text-base tracking-[0.3px] text-white">
-              {isCompleting ? 'Saving...' : 'Set my daily rhythm →'}
+              Set my daily rhythm →
             </Text>
           </Pressable>
         </Animated.View>

@@ -152,10 +152,10 @@ export default function MuhuratScreen() {
       <ScrollView
         className="flex-1"
         contentContainerStyle={{
-          paddingTop: 64,
+          paddingTop: 54,
           paddingHorizontal: layout.screenPaddingX,
-          paddingBottom: 176,
-          gap: 24,
+          paddingBottom: 196,
+          gap: 22,
         }}
         showsVerticalScrollIndicator={false}
       >
@@ -169,7 +169,7 @@ export default function MuhuratScreen() {
           subtitleMaxWidth={360}
         />
 
-        <View className="gap-4 rounded-3xl border border-black/[0.05] bg-[rgba(232,225,212,0.62)] p-6 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]">
+        <View className="gap-4 rounded-[24px] border border-black/[0.05] bg-[rgba(232,225,212,0.62)] p-6 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]">
           <View className="flex-row items-center gap-2">
             <Sparkles size={16} color={colors.secondaryFixed} />
             <Text className="font-label text-xs uppercase tracking-[2px] text-secondary-fixed">Your Intention</Text>
@@ -179,18 +179,18 @@ export default function MuhuratScreen() {
             value={eventDescription}
             onChangeText={setEventDescription}
             placeholder="Describe the event or decision you want help timing. Example: I need the best window for a difficult conversation with my co-founder."
-            placeholderTextColor={colors.outline}
+            placeholderTextColor={`${colors.onSurfaceVariant}B8`}
             multiline
             textAlignVertical="top"
             selectionColor={colors.primary}
-            className="min-h-[126px] rounded-[18px] border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-5 py-4 font-body text-base leading-[22px] text-on-surface dark:bg-[rgba(14,14,14,0.45)]"
+            className="min-h-[126px] rounded-2xl border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-5 py-4 font-body text-base leading-[22px] text-on-surface dark:bg-[rgba(14,14,14,0.45)]"
           />
 
           <Text className="font-label text-xs uppercase tracking-[2px] text-on-surface-variant">Date Range</Text>
           <View className="flex-row gap-3.5">
             <Pressable
               onPress={() => openDatePicker('start')}
-              className="flex-1 flex-row items-start gap-2.5 rounded-[18px] border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-2.5 py-3.5 dark:bg-[rgba(14,14,14,0.45)]"
+              className="flex-1 flex-row items-start gap-2.5 rounded-2xl border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-2.5 py-3.5 active:border-secondary-fixed/45 dark:bg-[rgba(14,14,14,0.45)]"
             >
               <CalendarDays size={16} color={colors.secondaryFixed} />
               <View className="flex-1 gap-[3px]">
@@ -201,7 +201,7 @@ export default function MuhuratScreen() {
 
             <Pressable
               onPress={() => openDatePicker('end')}
-              className="flex-1 flex-row items-start gap-2.5 rounded-[18px] border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-2.5 py-3.5 dark:bg-[rgba(14,14,14,0.45)]"
+              className="flex-1 flex-row items-start gap-2.5 rounded-2xl border border-outline-variant/25 bg-[rgba(240,234,222,0.55)] px-2.5 py-3.5 active:border-secondary-fixed/45 dark:bg-[rgba(14,14,14,0.45)]"
             >
               <CalendarDays size={16} color={colors.secondaryFixed} />
               <View className="flex-1 gap-[3px]">

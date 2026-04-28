@@ -60,17 +60,17 @@ export function ProfileSettingsSheet({
     <BottomSheet
       visible={visible}
       onClose={onClose}
-      sheetStyle={{ borderTopLeftRadius: 34, borderTopRightRadius: 34 }}
+      sheetStyle={{ borderTopLeftRadius: 28, borderTopRightRadius: 28 }}
     >
-      <View className="mb-[22px] flex-row items-start justify-between gap-3">
+      <View className="mb-[18px] flex-row items-start justify-between gap-3">
         <View>
-          <Text className="mb-1 font-headline text-2xl tracking-[-0.4px] text-on-surface">Settings</Text>
+          <Text className="mb-1 font-headline text-[23px] tracking-[-0.2px] text-on-surface">Settings</Text>
           <Text className="max-w-[220px] font-body text-sm leading-[19px] text-on-surface-variant">
             Account, preferences, and reading settings.
           </Text>
         </View>
         <Pressable
-          className="h-9 w-9 items-center justify-center rounded-full border border-outline-variant/20 bg-surface-container-low"
+          className="h-9 w-9 items-center justify-center rounded-full border border-outline-variant/20 bg-surface-container-low active:bg-surface-container"
           onPress={onClose}
         >
           <X size={18} color={colors.onSurfaceVariant} />
@@ -86,7 +86,7 @@ export function ProfileSettingsSheet({
         {isSignedIn ? (
           <>
             <View
-              className="mb-4 flex-row items-center gap-3.5 rounded-[18px] border p-3.5"
+              className="mb-3 flex-row items-center gap-3.5 rounded-2xl border p-3.5"
               style={{ backgroundColor: `${colors.primary}12`, borderColor: `${colors.primary}22` }}
             >
               <View
@@ -102,7 +102,7 @@ export function ProfileSettingsSheet({
             </View>
 
             <Pressable
-              className="mb-3 flex-row items-center gap-2.5 rounded-2xl border border-black/[0.05] bg-surface-container-low px-4 py-3.5 dark:border-white/[0.05]"
+              className="mb-2.5 flex-row items-center gap-2.5 rounded-2xl border border-black/[0.05] bg-surface-container-low px-4 py-3.5 active:bg-surface-container dark:border-white/[0.05]"
               onPress={onManageAccount}
             >
               <Settings size={16} color={colors.onSurfaceVariant} />
@@ -110,7 +110,7 @@ export function ProfileSettingsSheet({
             </Pressable>
 
             <Pressable
-              className="mb-3 flex-row items-center gap-2.5 rounded-2xl border border-[rgba(255,149,0,0.102)] bg-[rgba(255,149,0,0.063)] px-4 py-3.5"
+              className="mb-2.5 flex-row items-center gap-2.5 rounded-2xl border border-secondary-fixed/20 bg-secondary-fixed/10 px-4 py-3.5 active:bg-secondary-fixed/15"
               onPress={onOpenPlans}
             >
               <Zap size={16} color={colors.secondaryFixed} />
@@ -120,11 +120,11 @@ export function ProfileSettingsSheet({
             </Pressable>
 
             <Pressable
-              className="mb-5 flex-row items-center gap-2.5 rounded-2xl border border-[rgba(207,102,121,0.15)] bg-[rgba(207,102,121,0.08)] px-4 py-3.5"
+              className="mb-4 flex-row items-center gap-2.5 rounded-2xl border border-black/[0.05] bg-surface-container-low px-4 py-3.5 active:bg-surface-container dark:border-white/[0.05]"
               onPress={onSignOut}
             >
-              <LogOut size={16} color="#CF6679" />
-              <Text className="font-body-medium text-base text-[#CF6679]">Sign out</Text>
+              <LogOut size={16} color={colors.onSurfaceVariant} />
+              <Text className="font-body-medium text-base text-on-surface-variant">Sign out</Text>
             </Pressable>
           </>
         ) : (
@@ -136,7 +136,7 @@ export function ProfileSettingsSheet({
         )}
 
         <View className="mb-[18px]">
-          <Text className="mb-2.5 pt-6 font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">
+          <Text className="mb-2.5 pt-4 font-label text-[11px] uppercase tracking-[1.5px] text-on-surface-variant">
             Content Language
           </Text>
           <Pressable
@@ -184,7 +184,7 @@ export function ProfileSettingsSheet({
         </View>
 
         <View className="mb-[18px]">
-          <Text className="mb-2.5 font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">Appearance</Text>
+          <Text className="mb-2.5 font-label text-[11px] uppercase tracking-[1.5px] text-on-surface-variant">Appearance</Text>
           <View className="flex-row gap-1 rounded-2xl border border-black/[0.05] bg-surface-container-low p-1 dark:border-white/[0.05]">
             {(['system', 'light', 'dark'] as ThemePreference[]).map((option) => (
               <Pressable
@@ -211,7 +211,7 @@ export function ProfileSettingsSheet({
         </View>
 
         <View className="mb-[18px]">
-          <Text className="mb-2.5 font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">Region</Text>
+          <Text className="mb-2.5 font-label text-[11px] uppercase tracking-[1.5px] text-on-surface-variant">Region</Text>
           <View className="rounded-2xl border border-black/[0.05] bg-surface-container-low px-4 py-3.5 dark:border-white/[0.05]">
             <Text className="font-body-medium text-base text-on-surface">{region}</Text>
           </View>

@@ -30,13 +30,13 @@ type TabConfig = {
 
 const BAR_PADDING = 4;
 const SELECTOR_HORIZONTAL_INSET = 0;
-const SELECTOR_VERTICAL_INSET = 5;
-const TAB_HORIZONTAL_PADDING = 6;
-const TAB_CONTENT_TOP_PADDING = 6;
-const TAB_CONTENT_BOTTOM_PADDING = 8;
-const ICON_RAIL_HEIGHT = 26;
-const LABEL_RAIL_HEIGHT = 14;
-const ICON_LABEL_GAP = 4;
+const SELECTOR_VERTICAL_INSET = 7;
+const TAB_HORIZONTAL_PADDING = 4;
+const TAB_CONTENT_TOP_PADDING = 5;
+const TAB_CONTENT_BOTTOM_PADDING = 6;
+const ICON_RAIL_HEIGHT = 24;
+const LABEL_RAIL_HEIGHT = 13;
+const ICON_LABEL_GAP = 3;
 const SPRING = {
   damping: 22,
   stiffness: 240,
@@ -109,7 +109,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
   );
   const slotWidth = barWidth > 0 ? (barWidth - BAR_PADDING * 2) / tabs.length : 0;
   const selectorWidth =
-    slotWidth > 0 ? Math.max(0, slotWidth - 4) : 0;
+    slotWidth > 0 ? Math.max(0, slotWidth - 12) : 0;
 
   useEffect(() => {
     if (!slotWidth) return;
@@ -124,12 +124,12 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
     setBarWidth(event.nativeEvent.layout.width);
   };
 
-  const inactiveIconColor = isDark ? 'rgba(255,255,255,0.56)' : 'rgba(0,0,0,0.46)';
+  const inactiveIconColor = isDark ? 'rgba(255,247,237,0.62)' : 'rgba(26,20,16,0.58)';
 
   return (
     <View pointerEvents="box-none" className="absolute left-0 right-0 z-[100] items-center" style={{ bottom: 10 }}>
       <View
-        className="w-[95%] max-w-[620px] min-h-[80px] overflow-hidden rounded-full border border-black/[0.10] bg-[rgba(250,247,242,0.14)] p-1 dark:border-white/[0.10] dark:bg-[rgba(18,18,22,0.16)]"
+        className="w-[94%] max-w-[600px] min-h-[72px] overflow-hidden rounded-full border border-black/[0.10] bg-[rgba(250,247,242,0.14)] p-1 dark:border-white/[0.10] dark:bg-[rgba(18,18,22,0.16)]"
         style={barShadow}
         onLayout={handleLayout}
       >
@@ -139,12 +139,12 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
         {selectorWidth > 0 ? (
           <Animated.View
             pointerEvents="none"
-            className="absolute overflow-hidden rounded-[30px] border border-black/[0.08] bg-black/[0.04] dark:border-white/[0.08] dark:bg-white/[0.035]"
+            className="absolute overflow-hidden rounded-[26px] border border-black/[0.08] bg-black/[0.04] dark:border-white/[0.08] dark:bg-white/[0.035]"
             style={[
               selectorShadow,
               {
                 width: selectorWidth,
-                left: BAR_PADDING,
+                left: BAR_PADDING + 6,
                 right: BAR_PADDING,
                 top: SELECTOR_VERTICAL_INSET,
                 bottom: SELECTOR_VERTICAL_INSET,
@@ -182,7 +182,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                     navigation.navigate(route.name);
                   }
                 }}
-                className="z-[1] min-h-[64px] min-w-0 flex-1 items-center justify-center"
+                className="z-[1] min-h-[58px] min-w-0 flex-1 items-center justify-center"
                 style={({ pressed }) => pressed && { opacity: 0.84 }}
               >
                 <View
@@ -206,10 +206,10 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                     style={{ height: LABEL_RAIL_HEIGHT, marginTop: ICON_LABEL_GAP }}
                   >
                     <Text
-                      className={`text-center font-label text-[11px] leading-[13px] tracking-[0.2px] ${
+                      className={`text-center font-label text-[10px] leading-[12px] tracking-[0.1px] ${
                         isFocused
-                          ? 'text-on-surface'
-                          : 'text-black/[0.46] dark:text-white/56'
+                          ? 'text-secondary-fixed'
+                          : 'text-white/30 dark:text-white/62'
                       }`}
                       numberOfLines={1}
                       adjustsFontSizeToFit

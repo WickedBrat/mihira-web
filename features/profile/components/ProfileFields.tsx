@@ -18,7 +18,7 @@ export function ProfileFields({ profile, moonProfile }: ProfileFieldsProps) {
 
   return (
     <View className="gap-2.5">
-      <Text className="mb-0.5 px-1 font-label text-xs uppercase tracking-[1.8px] text-on-surface-variant">
+      <Text className="mb-0.5 px-1 font-label text-[11px] uppercase tracking-[1.5px] text-on-surface-variant">
         Your Details
       </Text>
       {PROFILE_FIELDS.map(({ id, label, placeholder, icon: Icon }) => {
@@ -26,7 +26,7 @@ export function ProfileFields({ profile, moonProfile }: ProfileFieldsProps) {
         return (
           <View
             key={id}
-            className="flex-row items-center gap-3.5 rounded-[20px] border border-black/[0.06] bg-[rgba(232,225,212,0.62)] p-3.5 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]"
+            className="flex-row items-center gap-3.5 rounded-[18px] border border-black/[0.06] bg-[rgba(232,225,212,0.62)] p-3.5 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]"
           >
             <View
               className="h-10 w-10 shrink-0 items-center justify-center rounded-xl"
@@ -37,7 +37,7 @@ export function ProfileFields({ profile, moonProfile }: ProfileFieldsProps) {
             <View className="flex-1 gap-[3px]">
               <Text className="font-label text-[9px] uppercase tracking-wide text-on-surface-variant">{label}</Text>
               {value ? (
-                <Text className="font-body-medium text tracking-wide  text-on-surface">{value}</Text>
+                <Text className="font-body-medium text-base tracking-wide text-on-surface">{value}</Text>
               ) : (
                 <Text className="font-body italic text-outline">{placeholder}</Text>
               )}
@@ -46,7 +46,7 @@ export function ProfileFields({ profile, moonProfile }: ProfileFieldsProps) {
         );
       })}
       {moonProfile ? (
-        <View className="rounded-[20px] border border-black/[0.06] bg-[rgba(232,225,212,0.62)] p-4 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]">
+        <View className="rounded-[18px] border border-black/[0.06] bg-[rgba(232,225,212,0.62)] p-4 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]">
           <Text className="mb-3 px-1 font-label text-[9px] uppercase tracking-wide text-on-surface-variant">
             Cosmic Signature
           </Text>

@@ -30,10 +30,10 @@ export function DailyArthCard() {
       : `The ${displaySource}`
     : '';
   const quoteSizeClass = displayQuote.length > 135
-    ? 'text-lg leading-[25px]'
+    ? 'text-base leading-[25px]'
     : displayQuote.length > 72
-      ? 'text-[21px] leading-[30px]'
-      : 'text-2xl leading-[32px]';
+      ? 'text-[18px] leading-[30px]'
+      : 'text-xl leading-[32px]';
 
   const handleReflect = async () => {
     hapticLight();
@@ -58,46 +58,12 @@ export function DailyArthCard() {
       transition={{ type: 'spring', damping: 18, stiffness: 100 }}
       className="relative"
     >
-      <View
-        pointerEvents="none"
-        className="absolute -top-8 left-[12%] right-[12%] h-[72px] rounded-full"
-        style={{
-          backgroundColor: `${colors.primary}12`,
-          shadowColor: colors.primary,
-          shadowOpacity: isDark ? 0.34 : 0.18,
-          shadowRadius: 42,
-          shadowOffset: { width: 0, height: 0 },
-        }}
-      />
 
       <View
         className={`relative items-center overflow-hidden px-6 pb-6 pt-7 ${
           isLoading ? 'min-h-[220px] justify-center' : ''
         }`}
       >
-        <LinearGradient
-          pointerEvents="none"
-          colors={
-            isDark
-              ? ['rgba(255,255,255,0.065)', 'rgba(37,38,38,0.82)', 'rgba(12,12,12,0.46)']
-              : ['rgba(255,255,255,0.72)', 'rgba(232,225,212,0.74)', 'rgba(250,247,242,0.58)']
-          }
-          locations={[0, 0.54, 1]}
-          start={{ x: 0.05, y: 0 }}
-          end={{ x: 0.95, y: 1 }}
-          className="absolute inset-0"
-        />
-        <View
-          pointerEvents="none"
-          className="absolute -top-16 left-8 h-32 w-32 rounded-full"
-          style={{ backgroundColor: isDark ? 'rgba(255,255,255,0.035)' : 'rgba(255,255,255,0.38)' }}
-        />
-        <View
-          pointerEvents="none"
-          className="absolute bottom-[-64px] left-[18%] right-[18%] h-[112px] rounded-full"
-          style={{ backgroundColor: `${colors.primary}14` }}
-        />
-
         <View pointerEvents="none" className="absolute right-[-94px] top-[-18px] h-[268px] w-[268px] opacity-[0.16]">
           {Platform.OS !== 'web' ? (
             <DailyArthBg width="100%" height="100%" />

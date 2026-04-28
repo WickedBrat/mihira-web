@@ -51,7 +51,7 @@ export default function Screen2() {
     if (selected.length === 0) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOnboardingData({ painPoints: selected });
-    router.push('/onboarding/step-4');
+    router.push('/onboarding/step-3');
   }
 
   return (

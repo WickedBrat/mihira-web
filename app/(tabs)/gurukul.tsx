@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Pressable,
   View,
   Image,
   useWindowDimensions,
@@ -9,13 +10,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { layout } from '@/lib/theme';
 import { useTheme } from '@/lib/theme-context';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 export default function GurukulScreen() {
   const { colors, isDark } = useTheme();
   const insets = useSafeAreaInsets();
   const { height } = useWindowDimensions();
-  const heroHeight = Math.min(Math.max(height * 0.42, 320), 430);
-  const sheetOverlap = 42;
+  const heroHeight = Math.min(Math.max(height * 0.32, 260), 340);
+  const sheetOverlap = 30;
 
   const imageWashColors: [string, string, string] = [
     'rgba(16,11,6,0.14)',
@@ -75,7 +77,7 @@ export default function GurukulScreen() {
             style={{
               backgroundColor: panelColor,
               paddingHorizontal: layout.screenPaddingX,
-              paddingTop: 28,
+              paddingTop: 24,
               paddingBottom: Math.max(insets.bottom + 110, 132),
             }}
           >
@@ -90,7 +92,7 @@ export default function GurukulScreen() {
             />
             <View className="items-center">
               <Text
-                className="mb-2 font-label text-[11px] uppercase tracking-[2.6px]"
+                className="mb-2 font-label text-[11px] uppercase tracking-[2px]"
                 style={{ color: badgeColor }}
               >
                 Gurukul
@@ -102,11 +104,19 @@ export default function GurukulScreen() {
                 Coming Soon
               </Text>
               <Text
-                className="mt-3 max-w-[292px] text-center font-label text-base leading-[24px]"
+                className="mt-3 max-w-[292px] text-center font-body text-base leading-[24px]"
                 style={{ color: bodyColor }}
               >
                 A guided library of wisdom, breathwork, and philosophy is on the way.
               </Text>
+              <Pressable
+                accessibilityRole="button"
+                className="mt-7 rounded-full border px-5 py-3 active:opacity-80"
+                style={{ borderColor: `${colors.secondaryFixed}55`, backgroundColor: `${colors.secondaryFixed}12` }}
+                onPress={() => router.push('/ask')}
+              >
+                <Text className="font-label text-sm text-secondary-fixed">Explore Guidance</Text>
+              </Pressable>
             </View>
           </View>
         </View>

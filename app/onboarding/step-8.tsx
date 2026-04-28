@@ -147,7 +147,7 @@ export default function Screen8() {
             <Pressable
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                router.push('/onboarding/step-9');
+                router.push('/onboarding/step-11');
               }}
               className="items-center rounded-full bg-ob-saffron px-8 py-4"
               style={({ pressed }) => [

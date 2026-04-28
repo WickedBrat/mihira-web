@@ -44,7 +44,7 @@ const FOCUS_AREAS = [
 export default function Screen9() {
   async function continueToNextStep() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/onboarding/step-10');
+    router.push('/onboarding/step-8');
   }
 
   return (

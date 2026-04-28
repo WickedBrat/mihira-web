@@ -23,6 +23,7 @@ These areas are materially in place:
 - Expo server API routes for AI-backed features
 - initial release docs, env docs, and QA checklist
 - draft legal/support copy in `docs/`
+- basic analytics hooks that can support launch learning
 
 This is enough to justify a release push. It is not enough to submit safely yet.
 
@@ -39,6 +40,7 @@ This is enough to justify a release push. It is not enough to submit safely yet.
 | Release config | Mostly built | `eas.json`, app identifiers, and versioning are present; release process still needs validation |
 | Backend deployment | Partial | Expo API routes exist, but production hosting and mobile API base URL strategy are not finalized |
 | Store readiness | Partial | Draft legal docs exist in-repo, but hosted URLs, assets, metadata, and privacy disclosures are still needed |
+| Launch systems | Missing | Waitlist, feedback board, lifecycle email, public landing page, and launch promotion plan are not documented or wired yet |
 | QA | Partial | A release QA checklist exists, but there is no visible real-device signoff or release-build verification yet |
 
 ## Critical Blockers
@@ -234,6 +236,33 @@ Recommended action:
 - test on at least one real iPhone and one real Android device
 - validate sign-in, onboarding, profile save, sacred timing, guidance, paywall behavior, account deletion, and app startup
 
+## 11. Launch Systems Are Not Prepared Yet
+
+Current state:
+
+- analytics hooks exist, but production PostHog setup still needs cleanup
+- there is no visible waitlist or prelaunch email capture flow
+- there is no visible public marketing landing page for launch traffic
+- there is no visible feedback board for feature requests and upvotes
+- there is no visible lifecycle email sequence beyond any basic auth/provider email behavior
+- there is no written launch promotion plan for social, waitlist email, Product Hunt, Reddit, communities, or partner/friend amplification
+
+Why this matters:
+
+- a launch without a waitlist gives Mihira less initial distribution and fewer beta testers
+- a launch without analytics and feedback loops makes early churn and feature demand harder to diagnose
+- a launch without lifecycle email misses a low-effort retention channel for helping new users discover core value
+- a launch without a real landing page and promotion plan wastes attention when store pages and beta links go live
+
+Recommended action:
+
+1. create a simple waitlist page before wider beta outreach
+2. build or publish the launch landing page with app screenshots, positioning, support/legal links, and store/TestFlight calls to action
+3. configure a feedback board using Canny, UserJot, or a simpler equivalent
+4. set up a lifecycle email tool and at minimum prepare welcome, inactive-user feedback, and early feature-education sequences
+5. define launch promotion channels and the exact launch-week posting/email schedule
+6. use beta analytics to decide launch timing based on early retention, not just feature completion
+
 ## Important Non-Blocking Gaps
 
 These gaps do not have to block a careful beta, but they should be handled intentionally:
@@ -241,6 +270,7 @@ These gaps do not have to block a careful beta, but they should be handled inten
 - Gurukul is still a placeholder and should remain clearly marked as coming soon
 - production crash reporting is not clearly visible
 - store screenshots, metadata, and support flows are not prepared yet
+- waitlist, feedback board, lifecycle email, and launch promotion systems are not prepared yet
 - pricing needs a clearer annual-plan story for subscription conversion
 - some release docs still need freshness review so they match the current repo state
 
@@ -287,6 +317,15 @@ Ship Gurukul only as a clearly labeled teaser, or hide it from launch builds if 
 3. Prepare store assets and metadata
 4. Launch to TestFlight and closed testing first
 
+## Phase 5: Launch Systems and Promotion
+
+1. Publish the waitlist or beta signup page
+2. Publish the public launch landing page
+3. Set up the feedback board and link it from the app/support surfaces
+4. Configure lifecycle email sequences for onboarding, inactivity, and feature education
+5. Prepare the launch announcement plan across owned social, email, Product Hunt, Reddit, and relevant communities
+6. Launch broadly only after beta analytics show that early users are sticking around for at least the first few days
+
 ## Suggested Immediate Next Actions
 
 If the team wants the fastest path to a real release, do these next:
@@ -298,6 +337,7 @@ If the team wants the fastest path to a real release, do these next:
 5. publish legal URLs and prepare store submission assets
 6. run real-device QA on preview builds
 7. verify account deletion and data cleanup behavior
+8. stand up the waitlist, feedback board, lifecycle email, landing page, and launch promotion plan before public launch
 
 ## Working Release Assessment
 

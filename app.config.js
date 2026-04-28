@@ -18,7 +18,7 @@ export default {
       supportsTablet: false,
     },
     android: {
-      package: 'com.mihira.app',
+      package: 'com.mihiralabs.app',
       versionCode: 1,
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
@@ -68,6 +68,9 @@ export default {
       posthogProjectToken: process.env.POSTHOG_PROJECT_TOKEN,
       posthogHost: process.env.POSTHOG_HOST,
       enableDevButtons: process.env.ENABLE_DEV_BUTTONS === 'true',
+      eas: {
+        projectId: '6facd4de-331a-4c16-86c4-7ff3d5778d84',
+      },
     },
   },
 };

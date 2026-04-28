@@ -18,7 +18,7 @@ interface NaradIntroProps {
   onEnter: () => void;
 }
 
-const TRUST_ICON_COLOR = '#FF8C00';
+const TRUST_ICON_COLOR = '#ffae42';
 
 function SacredTextsIcon({ color = TRUST_ICON_COLOR }: { color?: string }) {
   return (
@@ -79,18 +79,16 @@ export function NaradIntro({ onEnter }: NaradIntroProps) {
   return (
     <View className="flex-1">
       <View pointerEvents="none" className="absolute inset-0">
-        <AmbientBlob color="rgba(212, 175, 55, 0.10)" top={-80} left={-60} size={360} />
-        <AmbientBlob color="rgba(212, 190, 228, 0.08)" top={180} left={180} size={260} />
-        <AmbientBlob color="rgba(255, 140, 0, 0.06)" top={470} left={40} size={260} />
+        <AmbientBlob color="rgba(255, 174, 66, 0.10)" top={-80} left={-60} size={360} />
+        <AmbientBlob color="rgba(255, 247, 237, 0.05)" top={180} left={180} size={260} />
+        <AmbientBlob color="rgba(255, 174, 66, 0.06)" top={470} left={40} size={260} />
       </View>
 
-      <SafeAreaView edges={['top', 'bottom']} className="flex-1 justify-center px-7">
+      <SafeAreaView edges={['top', 'bottom']} className="flex-1 justify-start px-7 pt-[86px]">
         <Animated.View className="w-full" style={contentStyle}>
-          <View className="self-center rounded-full border border-[rgba(212,175,55,0.22)] bg-[rgba(242,206,173,0.12)] px-4 py-2">
-            <Text className="font-label text-[11px] uppercase tracking-[1.8px] text-[rgb(150,110,10)]">
+          <Text className="font-label text-center text-[11px] uppercase tracking-[1.3px] text-secondary-fixed">
               Scripture Grounded Guidance
             </Text>
-          </View>
 
           <Text className="mt-6 text-center font-headline-extra text-[42px] leading-[48px] tracking-[-1px] text-on-surface">
             Bring a life question.
@@ -100,11 +98,11 @@ export function NaradIntro({ onEnter }: NaradIntroProps) {
             practice you can use today.
           </Text>
 
-          <View className="mt-8 gap-3 text-center">
+          <View className="mt-7 gap-3 text-center">
             {TRUST_PILLARS.map(({ label, Icon }) => (
               <View
                 key={label}
-                className="rounded-[22px] border w-[240px] mx-auto border-black/[0.06] bg-black/[0.03] px-5 py-4 dark:border-white/[0.06] dark:bg-white/[0.04]"
+                className="mx-auto w-[240px] rounded-2xl border border-black/[0.06] bg-black/[0.03] px-4 py-3.5 dark:border-white/[0.06] dark:bg-white/[0.04]"
               >
                 <View className="flex-row items-center justify-around gap-3">
                   <Icon color={TRUST_ICON_COLOR} />

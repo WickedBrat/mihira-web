@@ -22,17 +22,11 @@ interface Props {
   error: string | null;
 }
 
-const REC_COLORS: Record<string, string> = {
-  Yes:  '#4ade80',
-  No:   '#f87171',
-  Wait: '#fbbf24',
-};
-
-function scoreColor(score: number): string {
-  if (score >= 9) return '#4ade80';
-  if (score >= 7) return '#86efac';
-  if (score >= 5) return '#fbbf24';
-  return '#94a3b8';
+function scoreOpacity(score: number): number {
+  if (score >= 9) return 1;
+  if (score >= 7) return 0.78;
+  if (score >= 5) return 0.58;
+  return 0.42;
 }
 
 export function MuhuratCard({
@@ -80,31 +74,31 @@ export function MuhuratCard({
 
   if (!recommendation) return null;
 
-  const recColor = REC_COLORS[recommendation] ?? colors.onSurface;
+  const recColor = colors.secondaryFixed;
 
   return (
     <View className="gap-3.5 rounded-[20px] border border-black/[0.06] bg-surface-container-low p-5 dark:border-white/[0.06]">
       <View className="flex-row items-center gap-3">
-        <View className="self-start rounded-lg border-[1.5px] px-3 py-1" style={{ borderColor: recColor }}>
-          <Text className="font-headline-extra text-lg tracking-[1px]" style={{ color: recColor }}>{recommendation}</Text>
+        <View className="self-start rounded-lg border px-3 py-1" style={{ borderColor: `${recColor}AA`, backgroundColor: `${recColor}14` }}>
+          <Text className="font-label text-sm tracking-[0.5px]" style={{ color: recColor }}>{recommendation}</Text>
         </View>
         {confidence && (
-          <Text className="font-label text-xs uppercase tracking-[1.5px] text-on-surface-variant">Confidence: {confidence}</Text>
+          <Text className="font-label text-[11px] uppercase tracking-[1.2px] text-on-surface-variant">Confidence: {confidence}</Text>
         )}
       </View>
 
       {festivalNote && (
-        <View className="flex-row items-start gap-2 rounded-[10px] border border-[rgba(251,191,36,0.45)] bg-[rgba(251,191,36,0.10)] px-3.5 py-2.5">
-          <Text className="mt-px text-sm text-[#fbbf24]">✦</Text>
-          <Text className="flex-1 font-body text-sm leading-5 text-[#fde68a]">{festivalNote}</Text>
+        <View className="flex-row items-start gap-2 rounded-[10px] border px-3.5 py-2.5" style={{ borderColor: `${colors.secondaryFixed}45`, backgroundColor: `${colors.secondaryFixed}10` }}>
+          <Text className="mt-px text-sm text-secondary-fixed">✦</Text>
+          <Text className="flex-1 font-body text-sm leading-5 text-on-surface-variant">{festivalNote}</Text>
         </View>
       )}
 
       {suggestion && <Text className="font-body text-base leading-6 text-on-surface">{suggestion}</Text>}
 
       {warnings && warnings !== 'None' && (
-        <View className="rounded-[10px] border border-[rgba(251,191,36,0.3)] bg-[rgba(251,191,36,0.08)] px-3.5 py-2.5">
-          <Text className="font-body text-sm leading-5 text-[#fbbf24]">{warnings}</Text>
+        <View className="rounded-[10px] border px-3.5 py-2.5" style={{ borderColor: `${colors.secondaryFixed}32`, backgroundColor: `${colors.secondaryFixed}0F` }}>
+          <Text className="font-body text-sm leading-5 text-on-surface-variant">{warnings}</Text>
         </View>
       )}
 
@@ -113,14 +107,18 @@ export function MuhuratCard({
           <Text className="font-label text-[9px] uppercase tracking-[2px] text-secondary-fixed">
             Top Auspicious Windows · Highest Score First
           </Text>
-          {rankedWindows.map((w, i) => (
+          {rankedWindows.map((w, i) => {
+            const isTopWindow = i < 3;
+            const scoreAlpha = w.score == null ? 0.45 : scoreOpacity(w.score);
+
+            return (
             <View
               key={i}
-              className={`flex-row items-center justify-between gap-3 rounded-lg bg-black/[0.03] px-3 py-2 dark:bg-white/[0.03] ${
-                w.type === 'abhijit'
-                    ? 'border border-[rgba(255,159,75,0.4)]'
-                    : ''
-              }`}
+              className="flex-row items-center justify-between gap-3 rounded-xl border px-3 py-2.5"
+              style={{
+                borderColor: isTopWindow ? `${colors.secondaryFixed}55` : `${colors.onSurfaceVariant}18`,
+                backgroundColor: isTopWindow ? `${colors.secondaryFixed}0F` : `${colors.onSurfaceVariant}08`,
+              }}
             >
               <View className="flex-1 gap-1">
                 <Text className="font-label text-[9px] uppercase tracking-[1.1px] text-secondary-fixed">
@@ -138,13 +136,20 @@ export function MuhuratCard({
                 <Text className="font-label text-[9px] tracking-[1px] text-on-surface-variant">{w.quality}</Text>
               </View>
               {w.score != null && (
-                <View className="flex-row items-baseline gap-px rounded-lg border-[1.5px] px-2 py-1" style={{ borderColor: scoreColor(w.score) }}>
-                  <Text className="font-headline-extra text-base" style={{ color: scoreColor(w.score) }}>{w.score}</Text>
+                <View
+                  className="flex-row items-baseline gap-px rounded-lg border px-2 py-1"
+                  style={{
+                    borderColor: `${colors.secondaryFixed}${Math.round(scoreAlpha * 255).toString(16).padStart(2, '0')}`,
+                    backgroundColor: `${colors.secondaryFixed}0D`,
+                  }}
+                >
+                  <Text className="font-headline-extra text-base" style={{ color: colors.secondaryFixed, opacity: scoreAlpha }}>{w.score}</Text>
                   <Text className="font-label text-[9px] tracking-[0.5px] text-on-surface-variant">/10</Text>
                 </View>
               )}
             </View>
-          ))}
+            );
+          })}
         </>
       )}
 

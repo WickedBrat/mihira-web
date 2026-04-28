@@ -41,7 +41,7 @@ export function VedicReasoningAccordion({ reasoning }: Props) {
         accessibilityState={{ expanded: open }}
         className="min-h-[44px] flex-row items-center justify-between rounded-xl px-0.5 active:bg-black/[0.04] dark:active:bg-white/[0.05]"
       >
-        <Text className="font-label text-[10px] uppercase leading-4 tracking-[1.7px] text-secondary-fixed">
+        <Text className="font-label text-[11px] uppercase leading-4 tracking-[1.4px] text-secondary-fixed">
           {open ? 'Hide Vedic Reasoning' : 'View Vedic Reasoning'}
         </Text>
         <Animated.View className="h-8 w-8 items-center justify-center rounded-full bg-black/[0.04] dark:bg-white/[0.06]" style={chevronStyle}>

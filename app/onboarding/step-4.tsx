@@ -34,7 +34,7 @@ export default function Screen4() {
     if (!trimmed) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOnboardingData({ userName: trimmed });
-    router.push('/onboarding/step-5');
+    router.push('/onboarding/step-5-trust');
   }
 
   return (
