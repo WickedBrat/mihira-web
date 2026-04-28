@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth, useSession } from '@clerk/expo';
 import { getSupabaseClient } from '@/lib/supabase';
-import type { DailyArthReflection } from './reflectionTypes';
-import { isDailyArthReflection } from './reflectionTypes';
+import type { DailyArthReflection } from '@/lib/dailyArthReflectionTypes';
+import { isDailyArthReflection } from '@/lib/dailyArthReflectionTypes';
 
 export interface ArthData {
   id: number;

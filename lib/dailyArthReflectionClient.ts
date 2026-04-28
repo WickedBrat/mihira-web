@@ -3,8 +3,8 @@ import {
   getCachedDailyArthReflection,
   saveCachedDailyArthReflection,
 } from '@/lib/dailyArthReflectionStorage';
-import type { DailyArthReflection } from '@/features/daily/reflectionTypes';
-import { isDailyArthReflection } from '@/features/daily/reflectionTypes';
+import type { DailyArthReflection } from '@/lib/dailyArthReflectionTypes';
+import { isDailyArthReflection } from '@/lib/dailyArthReflectionTypes';
 
 interface FetchReflectionInput {
   quoteId: number;

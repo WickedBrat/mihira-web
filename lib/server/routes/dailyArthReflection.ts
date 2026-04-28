@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { parseModelJson } from '../../ai/parseModelJson';
 import { perplexityChat } from '../../ai/perplexity';
-import type { DailyArthReflection } from '../../../features/daily/reflectionTypes';
-import { isDailyArthReflection } from '../../../features/daily/reflectionTypes';
+import type { DailyArthReflection } from '../../dailyArthReflectionTypes';
+import { isDailyArthReflection } from '../../dailyArthReflectionTypes';
 
 const REFLECTION_SYSTEM = `You are Mihira's Daily Arth reflection writer. Explain Hindu and Indic wisdom quotes with warmth, practical clarity, and no fortune-telling. Respond ONLY in valid JSON. No markdown fences, no commentary, no text outside the JSON object.`;
 

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { DailyArthReflection } from '@/features/daily/reflectionTypes';
-import { isDailyArthReflection } from '@/features/daily/reflectionTypes';
+import type { DailyArthReflection } from '@/lib/dailyArthReflectionTypes';
+import { isDailyArthReflection } from '@/lib/dailyArthReflectionTypes';
 
 const KEY_PREFIX = 'daily_arth_reflection_v1';
 
