@@ -1,7 +1,14 @@
 import Link from 'next/link';
+import { Charmonman } from 'next/font/google';
 import { FAQList } from '@/components/faq-list';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { WebGLShader } from '@/components/ui/web-gl-shader';
+
+const charmonman = Charmonman({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+});
 
 const appStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL || '#download';
 const googlePlayUrl = process.env.NEXT_PUBLIC_GOOGLE_PLAY_URL || '#download';
@@ -98,6 +105,21 @@ const downloadBadges = [
   },
 ];
 
+function MihiraText() {
+  return <span className={charmonman.className}>Mihira</span>;
+}
+
+function renderMihiraText(text: string) {
+  const parts = text.split('Mihira');
+
+  return parts.map((part, index) => (
+    <span key={`${part}-${index}`}>
+      {part}
+      {index < parts.length - 1 ? <MihiraText /> : null}
+    </span>
+  ));
+}
+
 function StoreIcon({ icon }: { icon: string }) {
   if (icon === 'apple') {
     return (
@@ -152,11 +174,13 @@ export default function HomePage() {
       <header className="site-header">
         <div className="site-header__inner">
           <Link className="site-logo" href="/">
-            Mihira
+            <MihiraText />
           </Link>
 
           <nav className="site-nav" aria-label="Primary">
-            <Link href="#methodology">Why Mihira</Link>
+            <Link href="#methodology">
+              Why <MihiraText />
+            </Link>
             <Link href="#sacred-timing">What You Can Ask</Link>
             <Link href="#daily-practice">How It Works</Link>
             <Link href="#faq">FAQ</Link>
@@ -173,13 +197,13 @@ export default function HomePage() {
           <p className="section-kicker section-kicker--center">Scripture-grounded guidance and sacred timing</p>
           <h1>Guidance for the decisions you do not want answered lightly.</h1>
           <p className="hero-copy">
-            Mihira is a private mobile app for daily alignment, scripture-grounded guidance, and sacred timing
+            <MihiraText /> is a private mobile app for daily alignment, scripture-grounded guidance, and sacred timing
             when work, family, grief, or major decisions need more than a generic feed.
           </p>
 
           <div className="hero-actions">
             <a className="button button--solid button--hero" href={appStoreUrl}>
-              Download Mihira
+              Download <MihiraText />
             </a>
             <a className="button button--ghost button--hero" href="#daily-practice">
               See How It Works
@@ -220,7 +244,7 @@ export default function HomePage() {
                   <PillarIcon icon={pillar.icon} />
                 </span>
                 <h3>{pillar.title}</h3>
-                <p>{pillar.body}</p>
+                <p>{renderMihiraText(pillar.body)}</p>
               </article>
             ))}
           </div>
@@ -233,7 +257,7 @@ export default function HomePage() {
             <p className="section-kicker">What You Can Ask</p>
             <h2>Bring the questions you would not hand to a generic feed.</h2>
             <p className="lead-copy">
-              Mihira is built for people carrying real uncertainty: difficult decisions, emotional weight, and
+              <MihiraText /> is built for people carrying real uncertainty: difficult decisions, emotional weight, and
               moments when better timing or deeper perspective would change how they move.
             </p>
 
@@ -243,7 +267,7 @@ export default function HomePage() {
                   <span className="inquiry-list__bullet" aria-hidden="true">
                     ●
                   </span>
-                  <span>{inquiry}</span>
+                  <span>{renderMihiraText(inquiry)}</span>
                 </li>
               ))}
             </ul>
@@ -257,7 +281,9 @@ export default function HomePage() {
             />
             <div className="quote-panel__overlay">
               <blockquote>&quot;The point is not certainty. The point is steadier judgment.&quot;</blockquote>
-              <p>The Mihira approach</p>
+              <p>
+                The <MihiraText /> approach
+              </p>
             </div>
           </aside>
         </div>
@@ -278,7 +304,7 @@ export default function HomePage() {
                   <strong>{step.verb}</strong>
                   <span>{step.title}</span>
                 </h3>
-                <p>{step.body}</p>
+                <p>{renderMihiraText(step.body)}</p>
               </article>
             ))}
           </div>
@@ -288,10 +314,18 @@ export default function HomePage() {
       <section id="faq" className="landing-band">
         <div className="content-shell content-shell--narrow">
           <div className="section-heading section-heading--center">
-            <h2>Questions people ask before they trust Mihira.</h2>
+            <h2>
+              Questions people ask before they trust <MihiraText />.
+            </h2>
           </div>
 
-          <FAQList faqs={faqs} />
+          <FAQList
+            faqs={faqs.map((faq) => ({
+              ...faq,
+              questionContent: renderMihiraText(faq.question),
+              answer: renderMihiraText(faq.answer),
+            }))}
+          />
         </div>
       </section>
 
@@ -304,9 +338,11 @@ export default function HomePage() {
             <div className="final-cta__panel">
               <div className="final-cta__content">
                 <p className="section-kicker section-kicker--center">Start With Clearer Direction</p>
-                <h2>Download Mihira and bring more clarity to what already matters.</h2>
+                <h2>
+                  Download <MihiraText /> and bring more clarity to what already matters.
+                </h2>
                 <p className="final-cta__copy">
-                  Use Mihira for daily alignment, deeper questions, and better timing when the next step carries
+                  Use <MihiraText /> for daily alignment, deeper questions, and better timing when the next step carries
                   real weight.
                 </p>
                 <div className="final-cta__availability">
@@ -315,7 +351,9 @@ export default function HomePage() {
                 </div>
                 <div className="final-cta__actions">
                   <LiquidButton asChild className="rounded-full border border-white/15 text-white" size="xl">
-                    <a href={appStoreUrl}>Download Mihira</a>
+                    <a href={appStoreUrl}>
+                      Download <MihiraText />
+                    </a>
                   </LiquidButton>
                   <a className="button button--ghost" href="#daily-practice">
                     See How It Works
@@ -330,8 +368,12 @@ export default function HomePage() {
       <footer className="site-footer">
         <div className="site-footer__inner">
           <div className="site-footer__brand">
-            <span className="site-logo">Mihira</span>
-            <p>© 2026 Mihira. Scripture-grounded guidance for modern life.</p>
+            <span className="site-logo">
+              <MihiraText />
+            </span>
+            <p>
+              © 2026 <MihiraText />. Scripture-grounded guidance for modern life.
+            </p>
           </div>
 
           <div className="site-footer__links">

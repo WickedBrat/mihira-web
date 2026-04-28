@@ -1,10 +1,12 @@
 "use client";
 
+import type { ReactNode } from 'react';
 import { useState } from 'react';
 
 type FAQ = {
   question: string;
-  answer: string;
+  questionContent?: ReactNode;
+  answer: ReactNode;
 };
 
 export function FAQList({ faqs }: { faqs: FAQ[] }) {
@@ -35,7 +37,7 @@ export function FAQList({ faqs }: { faqs: FAQ[] }) {
                 });
               }}
             >
-              <span>{faq.question}</span>
+              <span>{faq.questionContent ?? faq.question}</span>
               <span className="faq-item__icon" aria-hidden="true">
                 +
               </span>
