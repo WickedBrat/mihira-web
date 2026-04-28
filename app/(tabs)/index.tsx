@@ -53,9 +53,9 @@ export default function HomeScreen() {
 
         {/* Celestial Alignment */}
         <View className="mb-10 mt-16 max-w-[480px] self-stretch" style={{ paddingHorizontal: layout.screenPaddingX }}>
-          <View className="mb-6 gap-2">
-            <Text className="font-label text-xs uppercase tracking-[3px] text-secondary-fixed">Based on your horoscope</Text>
-            <Text className="font-headline-extra text-[36px] leading-[42px] tracking-[-0.8px] text-on-surface">
+          <View className="mb-7 gap-2.5">
+            <Text className="font-label text-[11px] uppercase leading-4 tracking-[2.6px] text-secondary-fixed">Based on your horoscope</Text>
+            <Text className="font-headline-extra text-[34px] leading-[40px] tracking-[-0.4px] text-on-surface">
               Where to place your energy
             </Text>
           </View>

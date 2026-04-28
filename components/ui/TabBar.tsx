@@ -31,12 +31,11 @@ type TabConfig = {
 const BAR_PADDING = 4;
 const SELECTOR_HORIZONTAL_INSET = 0;
 const SELECTOR_VERTICAL_INSET = 5;
-const ACCENT_ICON_COLOR = '#ff9500';
 const TAB_HORIZONTAL_PADDING = 6;
 const TAB_CONTENT_TOP_PADDING = 6;
 const TAB_CONTENT_BOTTOM_PADDING = 8;
 const ICON_RAIL_HEIGHT = 26;
-const LABEL_RAIL_HEIGHT = 12;
+const LABEL_RAIL_HEIGHT = 14;
 const ICON_LABEL_GAP = 4;
 const SPRING = {
   damping: 22,
@@ -125,12 +124,12 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
     setBarWidth(event.nativeEvent.layout.width);
   };
 
-  const inactiveIconColor = isDark ? 'rgba(255,255,255,0.40)' : 'rgba(0,0,0,0.35)';
+  const inactiveIconColor = isDark ? 'rgba(255,255,255,0.56)' : 'rgba(0,0,0,0.46)';
 
   return (
     <View pointerEvents="box-none" className="absolute left-0 right-0 z-[100] items-center" style={{ bottom: 10 }}>
       <View
-        className="w-[95%] max-w-[620px] min-h-[76px] overflow-hidden rounded-full border border-black/[0.08] bg-[rgba(250,247,242,0.10)] p-1 dark:border-white/[0.08] dark:bg-[rgba(18,18,22,0.10)]"
+        className="w-[95%] max-w-[620px] min-h-[80px] overflow-hidden rounded-full border border-black/[0.10] bg-[rgba(250,247,242,0.14)] p-1 dark:border-white/[0.10] dark:bg-[rgba(18,18,22,0.16)]"
         style={barShadow}
         onLayout={handleLayout}
       >
@@ -162,10 +161,8 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
             const isFocused = route.key === activeRouteKey;
             const tabConfig = TAB_CONFIG[route.name];
             const iconColor = isFocused
-              ? ACCENT_ICON_COLOR
-              : isFocused
-                ? colors.onSurface
-                : inactiveIconColor;
+              ? colors.secondaryFixed
+              : inactiveIconColor;
 
             return (
               <Pressable
@@ -185,7 +182,7 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                     navigation.navigate(route.name);
                   }
                 }}
-                className="z-[1] min-w-0 flex-1 items-center justify-center"
+                className="z-[1] min-h-[64px] min-w-0 flex-1 items-center justify-center"
                 style={({ pressed }) => pressed && { opacity: 0.84 }}
               >
                 <View
@@ -209,10 +206,10 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                     style={{ height: LABEL_RAIL_HEIGHT, marginTop: ICON_LABEL_GAP }}
                   >
                     <Text
-                      className={`text-center font-label text-[10px] leading-3 tracking-[0.2px] ${
+                      className={`text-center font-label text-[11px] leading-[13px] tracking-[0.2px] ${
                         isFocused
                           ? 'text-on-surface'
-                          : 'text-black/[0.35] dark:text-white/40'
+                          : 'text-black/[0.46] dark:text-white/56'
                       }`}
                       numberOfLines={1}
                       adjustsFontSizeToFit

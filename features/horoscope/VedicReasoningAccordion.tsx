@@ -34,15 +34,22 @@ export function VedicReasoningAccordion({ reasoning }: Props) {
   }));
 
   return (
-    <View className="mt-3 border-t border-black/[0.06] pt-3 dark:border-white/[0.06]">
-      <Pressable onPress={toggle} className="flex-row items-center justify-between">
-        <Text className="font-label text-[9px] uppercase tracking-[1.5px] text-secondary-fixed">View Vedic Reasoning</Text>
-        <Animated.View style={chevronStyle}>
-          <ChevronDown size={14} color={colors.secondaryFixed} />
+    <View className="mt-3 border-t border-black/[0.08] pt-2.5 dark:border-white/[0.09]">
+      <Pressable
+        onPress={toggle}
+        accessibilityRole="button"
+        accessibilityState={{ expanded: open }}
+        className="min-h-[44px] flex-row items-center justify-between rounded-xl px-0.5 active:bg-black/[0.04] dark:active:bg-white/[0.05]"
+      >
+        <Text className="font-label text-[10px] uppercase leading-4 tracking-[1.7px] text-secondary-fixed">
+          {open ? 'Hide Vedic Reasoning' : 'View Vedic Reasoning'}
+        </Text>
+        <Animated.View className="h-8 w-8 items-center justify-center rounded-full bg-black/[0.04] dark:bg-white/[0.06]" style={chevronStyle}>
+          <ChevronDown size={16} color={colors.secondaryFixed} strokeWidth={2} />
         </Animated.View>
       </Pressable>
       <Animated.View style={bodyStyle}>
-        <Text className="pt-2.5 font-body text-sm leading-5 text-on-surface-variant">{reasoning}</Text>
+        <Text className="pb-1 pt-2 font-body text-[14px] leading-[22px] text-on-surface-variant dark:text-white/68">{reasoning}</Text>
       </Animated.View>
     </View>
   );

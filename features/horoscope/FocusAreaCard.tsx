@@ -157,24 +157,25 @@ export function FocusAreaCard({ focusArea, isLast = false }: Props) {
     <View>
       <ImageBackground
         source={image}
-        className="h-[140px] self-stretch overflow-hidden rounded-3xl"
-        imageStyle={{ borderRadius: 24 }}
+        className="h-[144px] self-stretch overflow-hidden rounded-[22px] border border-white/[0.08] bg-surface-container-high"
+        imageStyle={{ borderRadius: 22 }}
         resizeMode="cover"
       >
         <LinearGradient
-          colors={['rgba(0,0,0,0.0)', 'rgba(0,0,0,0.5)']}
+          colors={['rgba(8,8,8,0.04)', 'rgba(8,8,8,0.20)', 'rgba(8,8,8,0.70)']}
+          locations={[0, 0.48, 1]}
           style={styles.imageOverlay}
         >
           <View style={styles.imageTextBlock}>
-            <Text className="text-right font-headline-extra text-3xl tracking-[-0.3px] text-white">{focusArea.area}</Text>
-            <Text className="mt-0.5 text-right font-body text-sm text-white/55">{focusArea.timeRange}</Text>
+            <Text className="text-right font-headline-extra text-[31px] leading-[34px] tracking-[-0.2px] text-white">{focusArea.area}</Text>
+            <Text className="mt-1 text-right font-body-medium text-[13px] leading-[17px] text-white/75">{focusArea.timeRange}</Text>
           </View>
         </LinearGradient>
       </ImageBackground>
 
-      <View className="mt-2.5 gap-2.5 self-stretch rounded-[20px] border border-black/[0.06] bg-[rgba(232,225,212,0.6)] p-5 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.6)]">
-        <View className="flex-row items-start gap-3">
-          <Text className="flex-1 font-body text-xl leading-[27px] tracking-[-0.3px] text-white">{focusArea.action}</Text>
+      <View className="mt-3 gap-3 self-stretch rounded-[22px] border border-black/[0.08] bg-[rgba(250,247,242,0.86)] p-5 dark:border-white/[0.10] dark:bg-[rgba(31,32,32,0.86)]" style={styles.cardShadow}>
+        <View className="flex-row items-start gap-3.5">
+          <Text className="flex-1 font-body text-[19px] leading-[28px] tracking-[-0.2px] text-on-surface">{focusArea.action}</Text>
           <Pressable
             onPress={() => {
               void handleSetReminder();
@@ -183,7 +184,7 @@ export function FocusAreaCard({ focusArea, isLast = false }: Props) {
             accessibilityRole="button"
             accessibilityLabel={`Set reminder for ${focusArea.area}`}
             accessibilityHint="Creates a reminder with this focus task and opens your reminder app."
-            className="h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.08] active:bg-white/[0.14]"
+            className="h-11 w-11 items-center justify-center rounded-full border border-black/[0.08] bg-black/[0.04] active:bg-black/[0.08] dark:border-white/[0.14] dark:bg-white/[0.08] dark:active:bg-white/[0.16]"
           >
             {isAddingReminder ? (
               <ActivityIndicator size="small" color={colors.secondaryFixed} />
@@ -192,15 +193,15 @@ export function FocusAreaCard({ focusArea, isLast = false }: Props) {
             )}
           </Pressable>
         </View>
-        <Text className="font-body text-base leading-[23px] text-white/65">{focusArea.suggestion}</Text>
+        <Text className="font-body text-[15px] leading-[24px] text-on-surface-variant dark:text-white/72">{focusArea.suggestion}</Text>
         <VedicReasoningAccordion reasoning={focusArea.reasoning} />
       </View>
 
       {!isLast && (
-        <View className="h-9 items-center gap-1 py-1">
-          <View className="w-[1.5px] flex-1 bg-black/10 dark:bg-white/10" />
-          <View className="h-[5px] w-[5px] rounded-full bg-black/15 dark:bg-white/20" />
-          <View className="w-[1.5px] flex-1 bg-black/10 dark:bg-white/10" />
+        <View className="h-10 items-center gap-1.5 py-1.5">
+          <View className="w-[1.5px] flex-1 bg-black/12 dark:bg-white/14" />
+          <View className="h-[5px] w-[5px] rounded-full bg-secondary-fixed/65" />
+          <View className="w-[1.5px] flex-1 bg-black/12 dark:bg-white/14" />
         </View>
       )}
     </View>
@@ -286,9 +287,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    padding: 20,
+    padding: 18,
   },
   imageTextBlock: {
     alignItems: 'flex-end',
+    maxWidth: '82%',
+  },
+  cardShadow: {
+    shadowColor: '#000',
+    shadowOpacity: 0.20,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 8,
   },
 });

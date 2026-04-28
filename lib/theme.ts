@@ -34,38 +34,50 @@ type ColorPalette = {
   errorContainer: string;
 };
 
+const DARK_SURFACE = '#0e0e0e';
+const DARK_CARD = '#191a1a';
+const DARK_TEXT = '#fff7ed';
+const DARK_MUTED_TEXT = '#d8ccbc';
+const SAFFRON = '#ffae42';
+
+const LIGHT_SURFACE = '#faf7f2';
+const LIGHT_CARD = '#ede7db';
+const LIGHT_TEXT = '#1a1410';
+const LIGHT_MUTED_TEXT = '#6b5e4e';
+const LIGHT_SAFFRON = '#9a6500';
+
 export const darkColors = {
-  surface: '#0e0e0e',
-  surfaceDim: '#0e0e0e',
+  surface: DARK_SURFACE,
+  surfaceDim: DARK_SURFACE,
   surfaceContainerLowest: '#000000',
-  surfaceContainerLow: '#131313',
-  surfaceContainer: '#191a1a',
-  surfaceContainerHigh: '#1f2020',
-  surfaceContainerHighest: '#252626',
-  surfaceBright: '#2b2c2c',
-  surfaceBrightGlass: 'rgba(43, 44, 44, 0.6)',
-  surfaceVariant: '#252626',
+  surfaceContainerLow: DARK_CARD,
+  surfaceContainer: DARK_CARD,
+  surfaceContainerHigh: DARK_CARD,
+  surfaceContainerHighest: DARK_CARD,
+  surfaceBright: DARK_CARD,
+  surfaceBrightGlass: 'rgba(25, 26, 26, 0.72)',
+  surfaceVariant: DARK_CARD,
 
-  primary: '#b564fc',
-  primaryDim: '#c6b1d6',
-  primaryFixed: '#f0dbff',
-  primaryFixedDim: '#b44aff',
-  primaryContainer: '#b564fc',
-  onPrimary: '#ffffff',
-  onPrimaryFixed: '#b564fc',
+  primary: SAFFRON,
+  primaryDim: SAFFRON,
+  primaryFixed: SAFFRON,
+  primaryFixedDim: SAFFRON,
+  primaryContainer: SAFFRON,
+  onPrimary: '#1a1410',
+  onPrimaryFixed: SAFFRON,
 
-  secondary: '#ff9500',
-  secondaryDim: '#ff9500',
-  secondaryFixed: '#ff9500',
-  secondaryFixedDim: '#ff9239',
-  secondaryContainer: '#4e371f',
+  secondary: SAFFRON,
+  secondaryDim: SAFFRON,
+  secondaryFixed: SAFFRON,
+  secondaryFixedDim: SAFFRON,
+  secondaryContainer: SAFFRON,
   onSecondary: '#2f1c07',
-  onSecondaryContainer: '#dcb99a',
+  onSecondaryContainer: SAFFRON,
 
-  onSurface: '#fff',
-  onSurfaceVariant: '#aee3ff',
-  onBackground: '#fff',
-  background: '#0e0e0e',
+  onSurface: DARK_TEXT,
+  onSurfaceVariant: DARK_MUTED_TEXT,
+  onBackground: DARK_TEXT,
+  background: DARK_SURFACE,
 
   outline: '#767575',
   outlineVariant: '#484848',
@@ -77,37 +89,37 @@ export const darkColors = {
 export type Colors = ColorPalette;
 
 export const lightColors = {
-  surface: '#faf7f2',
-  surfaceDim: '#f5f0e8',
+  surface: LIGHT_SURFACE,
+  surfaceDim: LIGHT_SURFACE,
   surfaceContainerLowest: '#ffffff',
-  surfaceContainerLow: '#f2ede4',
-  surfaceContainer: '#ede7db',
-  surfaceContainerHigh: '#e8e1d4',
-  surfaceContainerHighest: '#e2dacb',
-  surfaceBright: '#fdfaf6',
+  surfaceContainerLow: LIGHT_CARD,
+  surfaceContainer: LIGHT_CARD,
+  surfaceContainerHigh: LIGHT_CARD,
+  surfaceContainerHighest: LIGHT_CARD,
+  surfaceBright: LIGHT_SURFACE,
   surfaceBrightGlass: 'rgba(250, 247, 242, 0.8)',
-  surfaceVariant: '#e8e1d4',
+  surfaceVariant: LIGHT_CARD,
 
-  primary: '#7c3aed',
-  primaryDim: '#9a6cc4',
-  primaryFixed: '#4c1d95',
-  primaryFixedDim: '#6d28d9',
-  primaryContainer: '#7c3aed',
+  primary: LIGHT_SAFFRON,
+  primaryDim: LIGHT_SAFFRON,
+  primaryFixed: LIGHT_SAFFRON,
+  primaryFixedDim: LIGHT_SAFFRON,
+  primaryContainer: LIGHT_SAFFRON,
   onPrimary: '#ffffff',
-  onPrimaryFixed: '#6d28d9',
+  onPrimaryFixed: LIGHT_SAFFRON,
 
-  secondary: '#92722a',
-  secondaryDim: '#92722a',
-  secondaryFixed: '#c47c00',
-  secondaryFixedDim: '#d4890f',
-  secondaryContainer: '#f5e6c8',
+  secondary: LIGHT_SAFFRON,
+  secondaryDim: LIGHT_SAFFRON,
+  secondaryFixed: LIGHT_SAFFRON,
+  secondaryFixedDim: LIGHT_SAFFRON,
+  secondaryContainer: LIGHT_SAFFRON,
   onSecondary: '#5c3f00',
-  onSecondaryContainer: '#7a5500',
+  onSecondaryContainer: LIGHT_SAFFRON,
 
-  onSurface: '#1a1410',
-  onSurfaceVariant: '#6b5e4e',
-  onBackground: '#1a1410',
-  background: '#faf7f2',
+  onSurface: LIGHT_TEXT,
+  onSurfaceVariant: LIGHT_MUTED_TEXT,
+  onBackground: LIGHT_TEXT,
+  background: LIGHT_SURFACE,
 
   outline: '#a89880',
   outlineVariant: '#d4c8b8',
@@ -156,9 +168,9 @@ export const darkGradients = {
   primaryToContainer: [darkColors.primary, darkColors.primaryContainer] as const,
   secondaryToContainer: [darkColors.secondary, darkColors.secondaryContainer] as const,
   peaceBg: [
-    'rgba(149, 0, 255, 0.15)',
+    'rgba(255, 174, 66, 0.12)',
     'transparent',
-    'rgba(184, 152, 122, 0.1)',
+    'rgba(255, 174, 66, 0.08)',
     'transparent',
   ] as const,
 } as const satisfies GradientsType;
@@ -167,9 +179,9 @@ export const lightGradients = {
   primaryToContainer: [lightColors.primary, lightColors.primaryContainer] as const,
   secondaryToContainer: [lightColors.secondary, lightColors.secondaryContainer] as const,
   peaceBg: [
-    'rgba(124, 58, 237, 0.10)',
+    'rgba(154, 101, 0, 0.10)',
     'transparent',
-    'rgba(146, 114, 42, 0.08)',
+    'rgba(154, 101, 0, 0.08)',
     'transparent',
   ] as const,
 } as const satisfies GradientsType;

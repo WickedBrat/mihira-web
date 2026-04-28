@@ -15,11 +15,11 @@ jest.mock('@/lib/theme-context', () => ({
   useTheme: () => ({
     colors: {
       onPrimary: '#fff',
-      primary: '#7c3aed',
+      primary: '#9a6500',
     },
     gradients: {
-      primaryToContainer: ['#7c3aed', '#4c1d95'],
-      secondaryToContainer: ['#92722a', '#5c3f00'],
+      primaryToContainer: ['#9a6500', '#9a6500'],
+      secondaryToContainer: ['#9a6500', '#9a6500'],
     },
   }),
 }));
