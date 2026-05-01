@@ -60,6 +60,7 @@ export default {
       ],
       'expo-secure-store',
       'expo-web-browser',
+      './plugins/withAndroidPackagingOptions',
     ],
     experiments: {
       typedRoutes: true,
