@@ -4,16 +4,16 @@ import type {
   AskResponseMode,
   AskTopic,
   ScriptureGuideResponse,
-} from '@/features/ask/types';
-import { parseModelJson } from '@/lib/ai/parseModelJson';
-import { perplexityChat } from '@/lib/ai/perplexity';
-import { buildAskComparePrompt, buildAskSynthesisPrompt, ASK_GUIDANCE_SYSTEM } from '@/lib/ai/prompts';
-import type { ModelScriptureGuidePayload } from '@/lib/ai/askValidators';
-import { validateModelScriptureGuidePayload } from '@/lib/ai/askValidators';
-import { rankScriptureCandidates } from '@/lib/ai/scriptureRanking';
-import { classifyAskQuestion, retrieveScriptureCandidates } from '@/lib/ai/scriptureRetrieval';
-import { buildSafetyResponse, detectAskSafetyBoundary } from '@/lib/ai/scriptureSafety';
-import { toScriptureSource } from '@/lib/ai/scriptureCorpus';
+} from '../../features/ask/types';
+import { parseModelJson } from './parseModelJson';
+import { perplexityChat } from './perplexity';
+import { buildAskComparePrompt, buildAskSynthesisPrompt, ASK_GUIDANCE_SYSTEM } from './prompts';
+import type { ModelScriptureGuidePayload } from './askValidators';
+import { validateModelScriptureGuidePayload } from './askValidators';
+import { rankScriptureCandidates } from './scriptureRanking';
+import { classifyAskQuestion, retrieveScriptureCandidates } from './scriptureRetrieval';
+import { buildSafetyResponse, detectAskSafetyBoundary } from './scriptureSafety';
+import { toScriptureSource } from './scriptureCorpus';
 
 export interface AskRequestPayload {
   message: string;

@@ -4,7 +4,7 @@ import type {
   AskSafetyEscalationType,
   AskTopic,
   ScriptureGuideResponse,
-} from '@/features/ask/types';
+} from '../../features/ask/types';
 
 interface SafetyRule {
   escalationType: AskSafetyEscalationType;

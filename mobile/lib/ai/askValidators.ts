@@ -1,6 +1,6 @@
-import type { AskResponseMode, AskTopic } from '@/features/ask/types';
-import type { RetrievalCandidate } from '@/lib/ai/scriptureRetrieval';
-import { getScriptureModeConfig } from '@/lib/ai/scriptureModes';
+import type { AskResponseMode, AskTopic } from '../../features/ask/types';
+import type { RetrievalCandidate } from './scriptureRetrieval';
+import { getScriptureModeConfig } from './scriptureModes';
 
 export interface ModelScriptureGuidePayload extends Record<string, unknown> {
   answer: {

@@ -1,4 +1,4 @@
-import type { AskResponseMode } from '@/features/ask/types';
+import type { AskResponseMode } from '../../features/ask/types';
 
 export interface ScriptureModeConfig {
   responseMode: AskResponseMode;

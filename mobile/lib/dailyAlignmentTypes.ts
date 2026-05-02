@@ -1,4 +1,4 @@
-import type { BirthChart } from '@/lib/vedic/types';
+import type { BirthChart } from './vedic/types';
 
 export interface DailyFocusArea {
   area: string;

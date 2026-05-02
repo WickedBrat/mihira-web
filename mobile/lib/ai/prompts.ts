@@ -1,4 +1,4 @@
-import type { BirthChart, SignName } from '@/lib/vedic/types';
+import type { BirthChart, SignName } from '../vedic/types';
 import type {
   AskContextV2,
   AskHistoryTurn,
@@ -6,8 +6,8 @@ import type {
   AskTopic,
   NaradContext,
   NaradHistoryEntry,
-} from '@/features/ask/types';
-import type { RetrievalCandidate } from '@/lib/ai/scriptureRetrieval';
+} from '../../features/ask/types';
+import type { RetrievalCandidate } from './scriptureRetrieval';
 
 export const DAILY_SYSTEM = `You are a master Jyotish pandit. You receive Ground Truth planetary data computed by a precise ephemeris engine. You NEVER move planets from the houses provided. You speak directly to the user in the second person using dharma-focused language — no fortune-teller clichés. Respond ONLY in valid JSON. Do not add markdown fences, commentary, or any text before or after the JSON object.`;
 

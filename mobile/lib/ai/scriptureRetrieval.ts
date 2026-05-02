@@ -1,6 +1,6 @@
-import type { AskResponseMode, AskTopic } from '@/features/ask/types';
-import type { ScripturePassage } from '@/lib/scriptures/schema';
-import { getScriptureCorpus, editorialConfidenceToResponseConfidence, withCitation } from '@/lib/ai/scriptureCorpus';
+import type { AskResponseMode, AskTopic } from '../../features/ask/types';
+import type { ScripturePassage } from '../scriptures/schema';
+import { getScriptureCorpus, editorialConfidenceToResponseConfidence, withCitation } from './scriptureCorpus';
 
 export interface AskClassification {
   primary_topic: AskTopic;

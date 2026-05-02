@@ -1,11 +1,11 @@
-import type { ScriptureSource } from '@/features/ask/types';
-import type { EditorialConfidence, ScripturePassage } from '@/lib/scriptures/schema';
+import type { ScriptureSource } from '../../features/ask/types';
+import type { EditorialConfidence, ScripturePassage } from '../scriptures/schema';
 
-import gitaCorpus from '@/lib/scriptures/corpus/gita.json';
-import upanishadsCorpus from '@/lib/scriptures/corpus/upanishads.json';
-import ramayanaCorpus from '@/lib/scriptures/corpus/ramayana.json';
-import yogaSutrasCorpus from '@/lib/scriptures/corpus/yoga-sutras.json';
-import companionCorpus from '@/lib/scriptures/corpus/companion-texts.json';
+import gitaCorpus from '../scriptures/corpus/gita.json';
+import upanishadsCorpus from '../scriptures/corpus/upanishads.json';
+import ramayanaCorpus from '../scriptures/corpus/ramayana.json';
+import yogaSutrasCorpus from '../scriptures/corpus/yoga-sutras.json';
+import companionCorpus from '../scriptures/corpus/companion-texts.json';
 
 export interface RankedPassage extends ScripturePassage {
   citation_label: string;
