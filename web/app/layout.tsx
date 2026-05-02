@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -44,6 +44,16 @@ export const metadata: Metadata = {
   },
   description:
     'Mihira brings scripture-grounded guidance, sacred timing, and a steadier way to navigate modern life on iPhone and Android.',
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [
+      {
+        url: '/icon.jpg',
+        type: 'image/jpeg',
+      },
+    ],
+    shortcut: ['/icon.jpg'],
+  },
   openGraph: {
     title: 'Mihira',
     description: 'Scripture-grounded guidance and sacred timing for the decisions that matter most.',
@@ -56,6 +66,11 @@ export const metadata: Metadata = {
     title: 'Mihira',
     description: 'Scripture-grounded guidance and sacred timing for the decisions that matter most.',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#10100e',
+  colorScheme: 'dark light',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

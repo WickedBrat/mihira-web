@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { Charmonman } from 'next/font/google';
 import { FAQList } from '@/components/faq-list';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
@@ -12,6 +13,81 @@ const charmonman = Charmonman({
 
 const appStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL || '#download';
 const googlePlayUrl = process.env.NEXT_PUBLIC_GOOGLE_PLAY_URL || '#download';
+const siteUrl = 'https://getmihira.com';
+const pageTitle = 'Mihira - Scripture-Grounded Guidance and Sacred Timing App';
+const pageDescription =
+  'Download Mihira for scripture-grounded guidance, sacred timing, daily alignment, and calmer decision-making for work, family, grief, purpose, and relationships.';
+
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: pageDescription,
+  keywords: [
+    'Mihira',
+    'spiritual guidance app',
+    'scripture guidance',
+    'sacred timing',
+    'Vedic lifestyle app',
+    'daily alignment',
+    'muhurat app',
+    'decision guidance',
+    'astrology guidance app',
+  ],
+  alternates: {
+    canonical: '/',
+  },
+  applicationName: 'Mihira',
+  category: 'Lifestyle',
+  creator: 'Mihira',
+  publisher: 'Mihira',
+  referrer: 'origin-when-cross-origin',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: '/',
+    siteName: 'Mihira',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Mihira scripture-grounded guidance and sacred timing app',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: pageTitle,
+    description: pageDescription,
+    images: ['/opengraph-image'],
+  },
+  appleWebApp: {
+    title: 'Mihira',
+    capable: true,
+    statusBarStyle: 'black-translucent',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  appLinks: {
+    web: {
+      url: siteUrl,
+      should_fallback: true,
+    },
+  },
+};
 
 const pillars = [
   {
@@ -105,6 +181,56 @@ const downloadBadges = [
   },
 ];
 
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Mihira',
+    url: siteUrl,
+    email: 'founders@getmihira.com',
+    sameAs: [siteUrl],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Mihira',
+    url: siteUrl,
+    description: pageDescription,
+    inLanguage: 'en-US',
+    publisher: {
+      '@type': 'Organization',
+      name: 'Mihira',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Mihira',
+    applicationCategory: 'LifestyleApplication',
+    operatingSystem: 'iOS, Android',
+    url: siteUrl,
+    description: pageDescription,
+    offers: {
+      '@type': 'Offer',
+      availability: 'https://schema.org/InStock',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  },
+];
+
 function MihiraText() {
   return <span className={charmonman.className}>Mihira</span>;
 }
@@ -171,6 +297,11 @@ function PillarIcon({ icon }: { icon: string }) {
 export default function HomePage() {
   return (
     <main className="landing-page">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <header className="site-header">
         <div className="site-header__inner">
           <Link className="site-logo" href="/">
@@ -202,21 +333,17 @@ export default function HomePage() {
           </p>
 
           <div className="hero-actions">
-            <a className="button button--solid button--hero" href={appStoreUrl}>
-              Download <MihiraText />
-            </a>
+            <div id="download" className="store-badges" aria-label="Download Mihira">
+              {downloadBadges.map((badge) => (
+                <a key={badge.store} className="store-badge" href={badge.href} aria-label={badge.alt}>
+                  <StoreIcon icon={badge.icon} />
+                  <span>{badge.store}</span>
+                </a>
+              ))}
+            </div>
             <a className="button button--ghost button--hero" href="#daily-practice">
               See How It Works
             </a>
-          </div>
-
-          <div id="download" className="store-badges" aria-label="Download Mihira">
-            {downloadBadges.map((badge) => (
-              <a key={badge.store} className="store-badge" href={badge.href} aria-label={badge.alt}>
-                <StoreIcon icon={badge.icon} />
-                <span>{badge.store}</span>
-              </a>
-            ))}
           </div>
 
           <div className="scroll-cue" aria-hidden="true">
