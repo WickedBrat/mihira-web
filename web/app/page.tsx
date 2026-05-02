@@ -14,7 +14,9 @@ const charmonman = Charmonman({
 const configuredAppStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
 const configuredGooglePlayUrl = process.env.NEXT_PUBLIC_GOOGLE_PLAY_URL;
 const earlyAccessUrl = 'mailto:founders@getmihira.com?subject=Mihira%20early%20access';
-const hasStoreLinks = Boolean(configuredAppStoreUrl || configuredGooglePlayUrl);
+const hasAppStoreUrl = Boolean(configuredAppStoreUrl);
+const hasGooglePlayUrl = Boolean(configuredGooglePlayUrl);
+const hasStoreLinks = hasAppStoreUrl || hasGooglePlayUrl;
 const appStoreUrl = configuredAppStoreUrl || earlyAccessUrl;
 const googlePlayUrl = configuredGooglePlayUrl || earlyAccessUrl;
 const siteUrl = 'https://getmihira.com';
@@ -24,6 +26,13 @@ const pageDescription =
 const primaryCtaLabel = hasStoreLinks ? 'Download App' : 'Get Early Access';
 const primaryCtaHref = hasStoreLinks ? '#download' : earlyAccessUrl;
 const availabilityCopy = hasStoreLinks ? 'Available for iPhone and Android' : 'Private beta for iPhone and Android';
+const shellClass = 'mx-auto w-full max-w-[1280px] px-6 lg:px-10';
+const bandClass = 'py-20 md:py-28';
+const kickerClass =
+  'mb-4 font-sans text-[0.58rem] uppercase tracking-[0.28em] text-[#ff9500]';
+const headingClass =
+  'm-0 text-balance font-[var(--font-display)] text-[clamp(2.45rem,4.8vw,4rem)] font-semibold leading-[1.04] tracking-normal text-white';
+const bodyClass = 'text-base leading-[1.65] text-white/72';
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -200,14 +209,14 @@ const faqs = [
 const downloadBadges = [
   {
     href: appStoreUrl,
-    alt: hasStoreLinks ? 'Download on the App Store' : 'Request iPhone early access',
-    store: hasStoreLinks ? 'App Store' : 'iPhone Beta',
+    alt: hasAppStoreUrl ? 'Download on the App Store' : 'Request iPhone early access',
+    store: hasAppStoreUrl ? 'App Store' : 'iPhone Beta',
     icon: 'apple',
   },
   {
     href: googlePlayUrl,
-    alt: hasStoreLinks ? 'Get it on Google Play' : 'Request Android early access',
-    store: hasStoreLinks ? 'Google Play' : 'Android Beta',
+    alt: hasGooglePlayUrl ? 'Get it on Google Play' : 'Request Android early access',
+    store: hasGooglePlayUrl ? 'Google Play' : 'Android Beta',
     icon: 'play',
   },
 ];
@@ -277,10 +286,10 @@ function renderMihiraText(text: string) {
   ));
 }
 
-function StoreIcon({ icon }: { icon: string }) {
+function StoreIcon({ icon, className = 'h-[18px] w-[18px]' }: { icon: string; className?: string }) {
   if (icon === 'apple') {
     return (
-      <svg className="store-badge__icon store-badge__icon--apple" viewBox="0 0 24 24" aria-hidden="true">
+      <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
         <path
           fill="currentColor"
           d="M16.7 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.5-.1-2.8.8-3.6.8s-2-.8-3.3-.8c-1.7 0-3.2 1-4.1 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.5 1.3-.1 1.8-.8 3.4-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.2-2.5 1-1.5 1.4-2.9 1.4-2.9-.1 0-3.5-1.3-3.5-4.5ZM14.4 5.8c.7-.9 1.2-2 1.1-3.2-1.1.1-2.3.7-3.1 1.6-.7.8-1.3 2-1.1 3.1 1.2.1 2.4-.6 3.1-1.5Z"
@@ -290,19 +299,19 @@ function StoreIcon({ icon }: { icon: string }) {
   }
 
   return (
-    <svg className="store-badge__icon store-badge__icon--play" viewBox="0 0 24 24" aria-hidden="true">
-      <path className="store-badge__play-blue" d="M4.5 3.3v17.4l9-8.7-9-8.7Z" />
-      <path className="store-badge__play-green" d="m13.5 12 2.8-2.7L6.4 3.6c-.6-.4-1.2-.5-1.9-.3l9 8.7Z" />
-      <path className="store-badge__play-yellow" d="m13.5 12-9 8.7c.6.2 1.3.1 1.9-.3l9.9-5.7-2.8-2.7Z" />
-      <path className="store-badge__play-red" d="m16.3 9.3-2.8 2.7 2.8 2.7 2.3-1.3c1.2-.7 1.2-2.1 0-2.8l-2.3-1.3Z" />
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M4.5 3.3v17.4l9-8.7-9-8.7Z" />
+      <path fill="currentColor" d="m13.5 12 2.8-2.7L6.4 3.6c-.6-.4-1.2-.5-1.9-.3l9 8.7Z" />
+      <path fill="currentColor" d="m13.5 12-9 8.7c.6.2 1.3.1 1.9-.3l9.9-5.7-2.8-2.7Z" />
+      <path fill="currentColor" d="m16.3 9.3-2.8 2.7 2.8 2.7 2.3-1.3c1.2-.7 1.2-2.1 0-2.8l-2.3-1.3Z" />
     </svg>
   );
 }
 
-function PillarIcon({ icon }: { icon: string }) {
+function PillarIcon({ icon, className = 'h-[25px] w-[25px]' }: { icon: string; className?: string }) {
   if (icon === 'guidance') {
     return (
-      <svg viewBox="0 -960 960 960" aria-hidden="true">
+      <svg className={className} viewBox="0 -960 960 960" aria-hidden="true">
         <path
           fill="currentColor"
           d="M272-160q-30 0-51-21t-21-51q0-21 12-39.5t32-26.5l156-62v-90q-54 63-125.5 96.5T120-320v-80q68 0 123.5-28T344-508l54-64q12-14 28-21t34-7h40q18 0 34 7t28 21l54 64q45 52 100.5 80T840-400v80q-83 0-154.5-33.5T560-450v90l156 62q20 8 32 26.5t12 39.5q0 30-21 51t-51 21H400v-20q0-26 17-43t43-17h120q9 0 14.5-5.5T600-260q0-9-5.5-14.5T580-280H460q-42 0-71 29t-29 71v20h-88Zm151.5-503.5Q400-687 400-720t23.5-56.5Q447-800 480-800t56.5 23.5Q560-753 560-720t-23.5 56.5Q513-640 480-640t-56.5-23.5Z"
@@ -313,7 +322,7 @@ function PillarIcon({ icon }: { icon: string }) {
 
   if (icon === 'daily') {
     return (
-      <svg viewBox="0 -960 960 960" aria-hidden="true">
+      <svg className={className} viewBox="0 -960 960 960" aria-hidden="true">
         <path
           fill="currentColor"
           d="M567-364.5Q630-328 702-308q-40 51-98 79.5T481-200q-117 0-198.5-81.5T201-480q0-65 28.5-123t79.5-98q20 72 56.5 135T453-452q51 51 114 87.5ZM743-380q-20-5-39.5-11T665-405q8-18 11.5-36.5T680-480q0-83-58.5-141.5T480-680q-20 0-38.5 3.5T405-665q-8-19-13.5-38T381-742q24-9 49-13.5t51-4.5q117 0 198.5 81.5T761-480q0 26-4.5 51T743-380ZM440-840v-120h80v120h-80Zm0 840v-120h80V0h-80Zm323-706-57-57 85-84 57 56-85 85ZM169-113l-57-56 85-85 57 57-85 84Zm671-327v-80h120v80H840ZM0-440v-80h120v80H0Zm791 328-85-85 57-57 84 85-56 57ZM197-706l-84-85 56-57 85 85-57 57Z"
@@ -322,91 +331,131 @@ function PillarIcon({ icon }: { icon: string }) {
     );
   }
 
-  return <span className="pillar-card__icon-mask" aria-hidden="true" />;
+  return <img src="/icons/muhurat.svg" alt="" className={className} aria-hidden="true" />;
 }
 
 export default function HomePage() {
   return (
-    <main className="landing-page">
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <header className="site-header">
-        <div className="site-header__inner">
-          <Link className="site-logo" href="/">
+    <main className="bg-[#0e0e0e] text-white">
+      {structuredData.map((schema) => (
+        <script
+          key={schema['@type']}
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+      <header className="fixed left-0 top-2 z-50 w-full bg-transparent px-[18px] max-[760px]:sticky max-[760px]:top-0 max-[760px]:px-2 max-[760px]:py-2 md:max-lg:px-3">
+        <div className="mx-auto flex min-h-[5.5rem] w-full max-w-[1280px] items-center justify-between gap-8 rounded-full border border-white/[0.05] bg-[radial-gradient(circle_at_60%_0%,rgba(255,149,0,0.08),transparent_30%),rgba(31,35,38,0.96)] px-5 py-4 pl-8 shadow-[0_22px_48px_rgba(0,0,0,0.22)] backdrop-blur-[22px] max-[760px]:min-h-16 max-[760px]:gap-3 max-[760px]:rounded-[2rem] max-[760px]:px-2.5 max-[760px]:py-2.5 max-[760px]:pl-4 md:max-lg:min-h-[4.75rem] md:max-lg:gap-5 md:max-lg:px-3.5 md:max-lg:py-3 md:max-lg:pl-6">
+          <Link className="inline-flex min-w-48 items-center text-[clamp(2rem,3.2vw,3rem)] font-bold leading-none tracking-normal text-white max-[760px]:min-w-0 max-[760px]:text-lg md:max-lg:min-w-32 md:max-lg:text-lg" href="/">
             <MihiraText />
           </Link>
 
-          <nav className="site-nav" aria-label="Primary">
-            <Link href="#preview">Product</Link>
-            <Link href="#methodology">
-              Why {renderMihiraText('Mihira')}
+          <nav className="flex flex-1 flex-wrap items-center justify-center gap-[clamp(28px,4vw,58px)] max-[760px]:hidden md:max-lg:gap-4" aria-label="Primary">
+            <Link className="font-sans text-md font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:text-[#ff9500] md:max-lg" href="#preview">
+              Features
             </Link>
-            <Link href="#sacred-timing">What You Can Ask</Link>
-            <Link href="#daily-practice">How It Works</Link>
-            <Link href="#faq">FAQ</Link>
+            <Link className="font-sans text-lg font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:text-[#ff9500] md:max-lg" href="#daily-practice">
+              Method
+            </Link>
+            <Link className="font-sans text-lg font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:text-[#ff9500] md:max-lg" href="#faq">
+              Company
+            </Link>
           </nav>
 
-          <a className="header-cta" href={primaryCtaHref}>
-            {primaryCtaLabel}
-          </a>
+          <div className="flex items-center gap-6 border-l border-white/20 pl-[clamp(22px,3vw,42px)] max-[760px]:gap-2 max-[760px]:border-l-0 max-[760px]:pl-0 md:max-lg:gap-3.5 md:max-lg:pl-4" aria-label={primaryCtaLabel}>
+            <a className="inline-flex min-h-14 items-center justify-center rounded-full px-[clamp(18px,2vw,28px)] font-sans text-[0.86rem] font-bold uppercase tracking-[0.14em] text-white/90 transition-transform hover:-translate-y-px max-[760px]:min-h-10 max-[760px]:bg-[#b564fc] max-[760px]:px-3 max-[760px]:text-[0.56rem] md:max-lg" href={primaryCtaHref}>
+              {primaryCtaLabel}
+            </a>
+            <div className="flex items-center gap-[18px] max-[760px]:gap-2 md:max-lg:gap-2.5">
+              {downloadBadges.map((badge) => (
+                <a
+                  key={badge.store}
+                  className="inline-flex size-16 flex-none items-center justify-center rounded-full bg-white text-[#111214] shadow-[0_14px_26px_rgba(0,0,0,0.2)] transition hover:-translate-y-px hover:bg-[#fff8ed] hover:shadow-[0_18px_34px_rgba(0,0,0,0.26)] max-[760px]:size-10 md:max-lg:size-[52px]"
+                  href={badge.href}
+                  aria-label={badge.alt}
+                >
+                  <StoreIcon icon={badge.icon} className="size-[30px] max-[760px]:size-[21px] md:max-lg:size-[25px]" />
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </header>
 
-      <section className="hero-section">
-        <div className="hero-section__inner">
-          <p className="section-kicker section-kicker--center">Scripture-grounded guidance and sacred timing</p>
-          <h1>Guidance for the decisions you do not want answered lightly.</h1>
-          <p className="hero-copy">
+      <section className="relative isolate min-h-screen overflow-hidden px-0 pb-14 pt-24 max-[760px]:min-h-0 max-[760px]:pt-[5.75rem]">
+        <div className="relative z-10 mx-auto w-full max-w-[1080px] px-10 pt-[9vh] text-center max-[760px]:px-6 max-[760px]:pb-[10vh] max-[760px]:pt-[8vh]">
+          <p className={`${kickerClass} text-center`}>Scripture-grounded guidance and sacred timing</p>
+          <h1 className="mx-auto max-w-[15ch] text-balance font-[var(--font-display)] text-[clamp(2.95rem,5.25vw,4.8rem)] font-semibold leading-[0.94] tracking-normal text-white max-[760px]:text-[clamp(2.7rem,13vw,4rem)]">
+            Guidance for the decisions you do not want answered lightly.
+          </h1>
+          <p className="mx-auto mt-[18px] max-w-[40rem] text-[1.05rem] leading-[1.7] text-white/72">
             <MihiraText /> is a private mobile app for daily alignment, scripture-grounded guidance, and sacred timing
             for Indians abroad who want tradition, timing, and steadier judgment to fit modern life.
           </p>
 
-          <div className="hero-actions">
-            <div id="download" className="store-badges" aria-label="Download Mihira">
+          <div className="mt-[1.625rem] flex flex-wrap justify-center gap-3 max-[760px]:flex-col" id="download" aria-label="Download Mihira">
+            <div className="flex flex-wrap items-center justify-center gap-3 max-[760px]:flex-col">
               {downloadBadges.map((badge) => (
-                <a key={badge.store} className="store-badge" href={badge.href} aria-label={badge.alt}>
+                <a
+                  key={badge.store}
+                  className="inline-flex h-11 w-[154px] items-center justify-center gap-2 rounded border border-[#b564fc]/40 bg-[#b564fc] font-sans text-[0.62rem] font-bold uppercase tracking-[0.14em] text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-px hover:border-[#ff9500]/55 hover:shadow-[0_16px_34px_rgba(181,100,252,0.28)] max-[760px]:w-full"
+                  href={badge.href}
+                  aria-label={badge.alt}
+                >
                   <StoreIcon icon={badge.icon} />
                   <span>{badge.store}</span>
                 </a>
               ))}
             </div>
-            <a className="button button--ghost button--hero" href="#daily-practice">
+            <a className="inline-flex min-h-12 min-w-[198px] items-center justify-center rounded border border-white/20 px-[1.375rem] font-sans text-[0.58rem] font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-px max-[760px]:w-full" href="#daily-practice">
               See How It Works
             </a>
           </div>
 
-          <div className="scroll-cue" aria-hidden="true">
+          <div className="mt-[2.625rem] text-[1.35rem] text-[#e7e5e5]/35" aria-hidden="true">
             <span>⌄</span>
           </div>
         </div>
       </section>
 
-      <section id="preview" className="landing-band landing-band--preview">
-        <div className="content-shell">
-          <div className="section-heading section-heading--split">
+      <section
+        id="preview"
+        className={`${bandClass} relative overflow-hidden bg-[linear-gradient(180deg,rgba(14,14,14,1),rgba(19,19,19,1))] before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] before:bg-[length:76px_76px] before:opacity-[0.22] before:[mask-image:linear-gradient(180deg,transparent,black_18%,black_78%,transparent)]`}
+      >
+        <div className={`${shellClass} relative z-10`}>
+          <div className="mb-[3.375rem] grid grid-cols-[minmax(0,0.9fr)_minmax(280px,0.68fr)] items-end gap-11 max-lg:grid-cols-1">
             <div>
-              <p className="section-kicker">Inside The App</p>
-              <h2>Daily practice, deep questions, and timing in one private rhythm.</h2>
+              <p className={kickerClass}>Inside The App</p>
+              <h2 className={headingClass}>Daily practice, deep questions, and timing in one private rhythm.</h2>
             </div>
-            <p className="section-heading__copy">
+            <p className="mb-1 text-base leading-[1.7] text-white/72">
               Mihira is not a horoscope feed or a live-consult marketplace. It is built around three repeatable moments:
               begin the day, ask carefully, and choose timing with context.
             </p>
           </div>
 
-          <div className="product-preview-grid">
-            {productPreviews.map((preview) => (
-              <article key={preview.title} className="product-preview-card">
-                <div className="product-preview-card__media">
-                  <img alt={preview.alt} src={preview.image} />
+          <div className="grid grid-cols-3 gap-5 max-lg:grid-cols-1">
+            {productPreviews.map((preview, index) => (
+              <article
+                key={preview.title}
+                className={`relative grid min-h-[620px] content-between overflow-hidden rounded-xl border border-[#e7e5e5]/15 bg-[radial-gradient(circle_at_50%_12%,rgba(255,149,0,0.12),transparent_32%),linear-gradient(180deg,rgba(37,38,38,0.96),rgba(17,18,18,0.98))] shadow-[0_24px_44px_rgba(0,0,0,0.2)] max-lg:min-h-0 ${index === 1 ? 'translate-y-7 max-lg:translate-y-0' : ''} ${index === 2 ? 'translate-y-2 max-lg:translate-y-0' : ''}`}
+              >
+                <div className="flex justify-center px-6 pt-[2.125rem]">
+                  <img
+                    alt={preview.alt}
+                    src={preview.image}
+                    className="aspect-[9/19.5] w-[min(100%,260px)] rounded-[2rem] border border-white/10 object-cover object-top shadow-[0_30px_54px_rgba(0,0,0,0.36),0_0_0_8px_rgba(5,5,5,0.72)] max-lg:w-[min(100%,300px)]"
+                  />
                 </div>
-                <div className="product-preview-card__copy">
-                  <p>{preview.eyebrow}</p>
-                  <h3>{preview.title}</h3>
-                  <span>{preview.body}</span>
+                <div className="relative z-10 bg-[linear-gradient(180deg,transparent,rgba(10,10,10,0.88)_22%,rgba(10,10,10,0.96))] px-[1.625rem] pb-7 pt-8">
+                  <p className="mb-2.5 font-sans text-[0.56rem] font-bold uppercase tracking-[0.2em] text-[#ff9500]">
+                    {preview.eyebrow}
+                  </p>
+                  <h3 className="font-[var(--font-display)] text-[1.72rem] font-semibold leading-[1.05] text-white">
+                    {preview.title}
+                  </h3>
+                  <span className="mt-3 block text-[0.98rem] leading-[1.62] text-white/72">{preview.body}</span>
                 </div>
               </article>
             ))}
@@ -414,46 +463,46 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="methodology" className="landing-band landing-band--muted">
-        <div className="content-shell">
-          <div className="section-heading">
-            <p className="section-kicker">The Pillars</p>
-            <h2>Three reasons people keep returning after the first question.</h2>
+      <section id="methodology" className={`${bandClass} bg-[#131313]`}>
+        <div className={shellClass}>
+          <div className="mb-[3.375rem]">
+            <p className={kickerClass}>The Pillars</p>
+            <h2 className={headingClass}>Three reasons people keep returning after the first question.</h2>
           </div>
 
-          <div className="pillar-grid">
+          <div className="grid grid-cols-3 gap-[18px] max-lg:grid-cols-2 max-[760px]:grid-cols-1">
             {pillars.map((pillar) => (
               <article
                 key={pillar.title}
-                className={`pillar-card${pillar.title === 'Sacred Timing' ? ' pillar-card--timing' : ''}${
-                  pillar.title === 'Daily Practice' ? ' pillar-card--practice' : ''
-                }`}
+                className="relative min-h-[212px] overflow-hidden rounded-lg border border-[#e7e5e5]/15 bg-[linear-gradient(180deg,rgba(37,38,38,0.94),rgba(25,26,26,0.98)),radial-gradient(circle_at_top,rgba(181,100,252,0.08),transparent_32%)] p-6 pt-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.02),0_18px_34px_rgba(0,0,0,0.16)]"
               >
-                <span className="pillar-card__icon" aria-hidden="true">
+                <span className="relative z-10 inline-flex size-11 items-center justify-center rounded-full border border-[#ff9500]/20 bg-[#ff9500]/10 text-[#ff9500]" aria-hidden="true">
                   <PillarIcon icon={pillar.icon} />
                 </span>
-                <h3>{pillar.title}</h3>
-                <p>{renderMihiraText(pillar.body)}</p>
+                <h3 className="relative z-10 mt-[1.375rem] font-[var(--font-display)] text-[1.52rem] font-semibold leading-[1.05] text-white">
+                  {pillar.title}
+                </h3>
+                <p className={`${bodyClass} relative z-10 mt-4`}>{renderMihiraText(pillar.body)}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="sacred-timing" className="landing-band">
-        <div className="content-shell inquiry-layout">
-          <div className="inquiry-copy">
-            <p className="section-kicker">What You Can Ask</p>
-            <h2>Bring the questions you would not hand to a generic feed.</h2>
-            <p className="lead-copy">
+      <section id="sacred-timing" className={`${bandClass} bg-[#0e0e0e]`}>
+        <div className={`${shellClass} grid grid-cols-[minmax(0,0.95fr)_minmax(320px,0.85fr)] items-center gap-11 max-lg:grid-cols-1`}>
+          <div>
+            <p className={kickerClass}>What You Can Ask</p>
+            <h2 className={headingClass}>Bring the questions you would not hand to a generic feed.</h2>
+            <p className={`${bodyClass} mt-[1.375rem] max-w-[35rem]`}>
               <MihiraText /> is built for people carrying real uncertainty: difficult decisions, emotional weight, and
               moments when better timing or deeper perspective would change how they move.
             </p>
 
-            <ul className="inquiry-list">
+            <ul className="mt-[2.125rem] grid list-none gap-[1.125rem] p-0">
               {inquiries.map((inquiry) => (
-                <li key={inquiry}>
-                  <span className="inquiry-list__bullet" aria-hidden="true">
+                <li key={inquiry} className="flex items-start gap-3 text-base italic leading-[1.55] text-white/72">
+                  <span className="translate-y-[0.4rem] flex-none text-[0.72rem] text-[#ff9500]" aria-hidden="true">
                     ●
                   </span>
                   <span>{renderMihiraText(inquiry)}</span>
@@ -462,15 +511,17 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <aside className="quote-panel">
+          <aside className="relative overflow-hidden rounded-xl border border-white/10 bg-[#252626] shadow-[0_24px_40px_rgba(0,0,0,0.22)]">
             <img
               alt="A close-up handwritten journal page with soft focus and archival texture"
-              className="quote-panel__image"
+              className="aspect-[4/5] w-full object-cover opacity-[0.84]"
               src="https://images.unsplash.com/photo-1559455348-3245e7c10709?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             />
-            <div className="quote-panel__overlay">
-              <blockquote>&quot;The point is not certainty. The point is steadier judgment.&quot;</blockquote>
-              <p>
+            <div className="absolute inset-x-3.5 bottom-3.5 border-l-2 border-[#ff9500] bg-[#0e0e0e]/90 p-[1.125rem]">
+              <blockquote className="m-0 font-[var(--font-display)] text-[1.45rem] italic leading-[1.28] text-white max-[760px]:text-[1.2rem]">
+                &quot;The point is not certainty. The point is steadier judgment.&quot;
+              </blockquote>
+              <p className="mt-3.5 font-sans text-[0.56rem] uppercase tracking-[0.18em] text-[#ff9500]">
                 The {renderMihiraText('Mihira')} approach
               </p>
             </div>
@@ -478,55 +529,63 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="daily-practice" className="landing-band landing-band--accent">
-        <div className="content-shell">
-          <div className="section-heading section-heading--center">
-            <p className="section-kicker">How It Works</p>
-            <h2>A calm product flow that leads to something usable.</h2>
+      <section id="daily-practice" className={`${bandClass} bg-[linear-gradient(180deg,rgba(181,100,252,0.08),rgba(255,149,0,0.05))]`}>
+        <div className={shellClass}>
+          <div className="mb-[3.375rem] text-center">
+            <p className={kickerClass}>How It Works</p>
+            <h2 className={headingClass}>A calm product flow that leads to something usable.</h2>
           </div>
 
-          <div className="flow-grid">
+          <div className="grid grid-cols-4 gap-[18px] max-lg:grid-cols-2 max-[760px]:grid-cols-1">
             {flowSteps.map((step) => (
-              <article key={step.number} className="flow-step">
-                <span className="flow-step__number">{step.number}</span>
-                <h3>
-                  <strong>{step.verb}</strong>
-                  <span>{step.title}</span>
+              <article key={step.number}>
+                <span className="inline-block font-sans text-[2.15rem] font-semibold leading-none tracking-[0.08em] text-[#ff9500]/35">
+                  {step.number}
+                </span>
+                <h3 className="mt-4 flex flex-wrap items-baseline gap-[0.35em] font-[var(--font-display)] text-[1.22rem] font-semibold leading-[1.05] text-white">
+                  <strong className="font-bold">{step.verb}</strong>
+                  <span className="text-[0.98rem] font-medium text-white/80">{step.title}</span>
                 </h3>
-                <p>{renderMihiraText(step.body)}</p>
+                <p className={`${bodyClass} mt-3`}>{renderMihiraText(step.body)}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="landing-band landing-band--trust">
-        <div className="content-shell trust-layout">
-          <div className="trust-copy">
-            <p className="section-kicker">Built For Trust</p>
-            <h2>A private Vedic companion, not a noisy content feed.</h2>
+      <section className={`${bandClass} bg-[#131313]`}>
+        <div className={`${shellClass} grid grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)] items-start gap-12 max-lg:grid-cols-1`}>
+          <div className="sticky top-28 max-lg:static">
+            <p className={kickerClass}>Built For Trust</p>
+            <h2 className={headingClass}>A private Vedic companion, not a noisy content feed.</h2>
           </div>
-          <div className="trust-grid">
-            <article>
-              <h3>Designed for life abroad</h3>
-              <p>English-first, culturally rooted guidance for people who want continuity without needing an astrologer on call.</p>
+          <div className="grid gap-3.5">
+            <article className="rounded-lg border border-[#e7e5e5]/10 bg-[linear-gradient(180deg,rgba(31,32,32,0.94),rgba(20,20,20,0.98)),radial-gradient(circle_at_top_left,rgba(255,149,0,0.08),transparent_36%)] p-6">
+              <h3 className="font-[var(--font-display)] text-[1.35rem] font-semibold leading-[1.05] text-white">
+                Designed for life abroad
+              </h3>
+              <p className={`${bodyClass} mt-3`}>English-first, culturally rooted guidance for people who want continuity without needing an astrologer on call.</p>
             </article>
-            <article>
-              <h3>Grounded, not absolute</h3>
-              <p>Guidance is framed to sharpen judgment and next steps, not replace professional advice or personal responsibility.</p>
+            <article className="rounded-lg border border-[#e7e5e5]/10 bg-[linear-gradient(180deg,rgba(31,32,32,0.94),rgba(20,20,20,0.98)),radial-gradient(circle_at_top_left,rgba(255,149,0,0.08),transparent_36%)] p-6">
+              <h3 className="font-[var(--font-display)] text-[1.35rem] font-semibold leading-[1.05] text-white">
+                Grounded, not absolute
+              </h3>
+              <p className={`${bodyClass} mt-3`}>Guidance is framed to sharpen judgment and next steps, not replace professional advice or personal responsibility.</p>
             </article>
-            <article>
-              <h3>Sensitive by design</h3>
-              <p>Birth details, preferences, and questions are treated as sensitive product data. Mihira does not sell personal data.</p>
+            <article className="rounded-lg border border-[#e7e5e5]/10 bg-[linear-gradient(180deg,rgba(31,32,32,0.94),rgba(20,20,20,0.98)),radial-gradient(circle_at_top_left,rgba(255,149,0,0.08),transparent_36%)] p-6">
+              <h3 className="font-[var(--font-display)] text-[1.35rem] font-semibold leading-[1.05] text-white">
+                Sensitive by design
+              </h3>
+              <p className={`${bodyClass} mt-3`}>Birth details, preferences, and questions are treated as sensitive product data. Mihira does not sell personal data.</p>
             </article>
           </div>
         </div>
       </section>
 
-      <section id="faq" className="landing-band">
-        <div className="content-shell content-shell--narrow">
-          <div className="section-heading section-heading--center">
-            <h2>
+      <section id="faq" className={`${bandClass} bg-[#0e0e0e]`}>
+        <div className="mx-auto w-full max-w-[920px] px-6 lg:px-10">
+          <div className="mb-[3.375rem] text-center">
+            <h2 className={headingClass}>
               Questions people ask before they trust <MihiraText />.
             </h2>
           </div>
@@ -541,40 +600,40 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="landing-band landing-band--cta">
-        <div className="final-cta final-cta--full">
-          <div className="final-cta__frame">
-            <div className="final-cta__shader" aria-hidden="true">
+      <section className="relative overflow-hidden bg-[#131313] py-20 px-0 md:py-28">
+        <div className="relative w-full text-center">
+          <div className="relative w-full overflow-hidden border border-zinc-800/90 bg-black/80 p-2">
+            <div className="absolute inset-px z-0 opacity-90" aria-hidden="true">
               <WebGLShader />
             </div>
-            <div className="final-cta__panel">
-              <div className="final-cta__content">
-                <p className="section-kicker section-kicker--center">Start With Clearer Direction</p>
-                <h2>
+            <div className="relative min-h-[29rem] overflow-hidden border border-zinc-800/90 bg-[#070707]/65 max-[760px]:min-h-96">
+              <div className="relative z-10 flex min-h-[29rem] flex-col items-center justify-center bg-[radial-gradient(circle_at_center,rgba(181,100,252,0.1),transparent_40%),linear-gradient(180deg,rgba(5,5,5,0.36),rgba(5,5,5,0.74))] px-6 py-[4.25rem] pb-[5.25rem] max-[760px]:min-h-96">
+                <p className={`${kickerClass} text-center`}>Start With Clearer Direction</p>
+                <h2 className={`${headingClass} mx-auto max-w-[14ch]`}>
                   Download <MihiraText /> and bring more clarity to what already matters.
                 </h2>
-                <p className="final-cta__copy">
+                <p className="mx-auto mt-5 max-w-[38rem] text-base leading-[1.7] text-white/72">
                   Use <MihiraText /> for daily alignment, deeper questions, and better timing when the next step carries
                   real weight.
                 </p>
-                <div className="final-cta__availability">
-                  <span className="final-cta__status" aria-hidden="true" />
+                <div className="mt-8 inline-flex items-center gap-2 font-sans text-xs tracking-[0.04em] text-green-500">
+                  <span className="inline-flex size-3 rounded-full bg-green-500 shadow-[0_0_0_0_rgba(34,197,94,0.55)] animate-pulse" aria-hidden="true" />
                   <p>{availabilityCopy}</p>
                 </div>
-                <div className="final-cta__actions">
+                <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-3 max-[760px]:flex-col">
                   <LiquidButton asChild className="rounded-full border border-white/15 text-white" size="xl">
                     <a href={appStoreUrl}>
-                      {hasStoreLinks ? (
+                      {hasAppStoreUrl ? (
                         <>
                           Download <MihiraText />
                         </>
                       ) : (
-                        'Get Early Access'
+                        'iPhone Beta'
                       )}
                     </a>
                   </LiquidButton>
-                  <a className="button button--ghost" href={googlePlayUrl}>
-                    {hasStoreLinks ? 'Google Play' : 'Android Beta'}
+                  <a className="inline-flex min-h-[2.625rem] items-center justify-center rounded border border-white/20 px-[1.125rem] font-sans text-[0.58rem] font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-px max-[760px]:w-full" href={googlePlayUrl}>
+                    {hasGooglePlayUrl ? 'Google Play' : 'Android Beta'}
                   </a>
                 </div>
               </div>
@@ -583,21 +642,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="site-footer">
-        <div className="site-footer__inner">
-          <div className="site-footer__brand">
-            <span className="site-logo">
+      <footer className="border-t border-white/10 bg-[#131313]">
+        <div className={`${shellClass} flex items-center justify-between gap-6 py-7 max-[760px]:flex-col max-[760px]:items-start`}>
+          <div>
+            <span className="inline-flex items-center text-[1.15rem] font-bold leading-none tracking-normal text-white">
               <MihiraText />
             </span>
-            <p>
+            <p className="mt-2.5 font-sans text-[0.52rem] uppercase tracking-[0.14em] text-[#ff9500]">
               © 2026 Mihira. Scripture-grounded guidance for modern life.
             </p>
           </div>
 
-          <div className="site-footer__links">
-            <Link href="/privacy">Privacy Policy</Link>
-            <Link href="/terms">Terms of Service</Link>
-            <a href="mailto:founders@getmihira.com">Contact</a>
+          <div className="flex flex-wrap items-center gap-[1.375rem]">
+            <Link className="font-sans text-[0.62rem] uppercase tracking-[0.14em] text-white transition-colors hover:text-[#ff9500]" href="/privacy">
+              Privacy Policy
+            </Link>
+            <Link className="font-sans text-[0.62rem] uppercase tracking-[0.14em] text-white transition-colors hover:text-[#ff9500]" href="/terms">
+              Terms of Service
+            </Link>
+            <a className="font-sans text-[0.62rem] uppercase tracking-[0.14em] text-white transition-colors hover:text-[#ff9500]" href="mailto:founders@getmihira.com">
+              Contact
+            </a>
           </div>
         </div>
       </footer>

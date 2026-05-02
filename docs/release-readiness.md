@@ -20,7 +20,7 @@ These areas are materially in place:
 - analytics hooks with PostHog
 - Supabase-backed usage tracking
 - paywall and plans UI
-- Expo server API routes for AI-backed features
+- Expo server API routes for AI-backed features under `mobile/app/api/`
 - initial release docs, env docs, and QA checklist
 - draft legal/support copy in `docs/`
 - basic analytics hooks that can support launch learning
@@ -91,7 +91,7 @@ This is no longer a structural blocker, but it is not fully validated.
 
 Current state:
 
-- `eas.json` is now present
+- `mobile/eas.json` is now present
 - development, preview, and production profiles are defined
 - app identifiers, version, build number, and version code exist in Expo config
 - there is still no visible CI or release automation
@@ -128,7 +128,7 @@ Recommended action:
 
 Current state:
 
-- `.env.example` now includes Clerk, Supabase, RevenueCat, PostHog, and Perplexity placeholders
+- `mobile/.env.example` now includes Clerk, Supabase, RevenueCat, PostHog, and Perplexity placeholders
 - `docs/env-setup.md` now documents dev, preview, and production expectations
 - the release path has moved away from Stripe and toward RevenueCat
 - actual production secrets and callback URLs are still not visible in this repo, which is expected but still blocking launch
@@ -148,7 +148,7 @@ Recommended action:
 
 Current state:
 
-- the app includes Expo server API routes under `app/api/`
+- the app includes Expo server API routes under `mobile/app/api/`
 - AI-backed flows depend on those routes to call Perplexity using the server-side `PERPLEXITY_API_KEY`
 - the repo also includes Supabase migrations under `supabase/migrations/`
 - the current mobile route resolution is still development-oriented in places and does not show a finalized production API host strategy

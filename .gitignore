@@ -2,13 +2,18 @@
 
 # dependencies
 node_modules/
+mobile/node_modules/
 web/node_modules/
 
 # Expo
 .expo/
+mobile/.expo/
 dist/
+mobile/dist/
 web-build/
+mobile/web-build/
 expo-env.d.ts
+mobile/expo-env.d.ts
 web/.next/
 
 # Native
@@ -34,6 +39,8 @@ yarn-error.*
 
 # local env files
 .env*.local
+mobile/.env
+mobile/.env*.local
 web/.env.local
 
 # typescript
@@ -41,6 +48,8 @@ web/.env.local
 
 # generated native folders
 /ios
+/mobile/ios
 /android
+/mobile/android
 .env
 .agents

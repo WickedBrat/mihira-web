@@ -26,8 +26,8 @@ These variables are currently referenced by the app and release config.
 
 Recommended files:
 
-- `.env.local` for your personal local values
-- `.env.example` as the repo template
+- `mobile/.env.local` for your personal local values
+- `mobile/.env.example` as the repo template
 
 Recommended defaults:
 
@@ -63,13 +63,13 @@ Recommended defaults:
 
 ## Expo and EAS Notes
 
-The repo now includes [eas.json](/Users/Apple/projects/aksha/eas.json) with:
+The mobile app includes [eas.json](/Users/Apple/Desktop/mihira/mobile/eas.json) with:
 
 - `development` profile for dev client builds
 - `preview` profile for internal distribution
 - `production` profile with auto-increment enabled
 
-The active Expo config is [app.config.js](/Users/Apple/projects/aksha/app.config.js). Keep production identifiers and build behavior there.
+The active Expo config is [app.config.js](/Users/Apple/Desktop/mihira/mobile/app.config.js). Keep production identifiers and build behavior there.
 
 ## Current Identifiers
 

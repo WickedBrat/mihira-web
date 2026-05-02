@@ -1,6 +1,6 @@
 # Mihira Release TODO
 
-Based on [release-readiness.md](/Users/Apple/projects/aksha/docs/release-readiness.md)
+Based on [release-readiness.md](/Users/Apple/Desktop/mihira/docs/release-readiness.md)
 
 ## P0: Blockers
 
@@ -14,8 +14,8 @@ Based on [release-readiness.md](/Users/Apple/projects/aksha/docs/release-readine
 - [ ] If notifications are in v1, implement and test reminder permissions and delivery
 - [x] Add `eas.json`
 - [x] Define `development`, `preview`, and `production` build profiles
-- [x] Set `ios.bundleIdentifier` in [app.json](/Users/Apple/projects/aksha/app.json)
-- [x] Set `android.package` in [app.json](/Users/Apple/projects/aksha/app.json)
+- [x] Set `ios.bundleIdentifier` in [app.json](/Users/Apple/Desktop/mihira/mobile/app.json)
+- [x] Set `android.package` in [app.json](/Users/Apple/Desktop/mihira/mobile/app.json)
 - [x] Define iOS build number strategy
 - [x] Define Android version code strategy
 
@@ -26,7 +26,7 @@ Based on [release-readiness.md](/Users/Apple/projects/aksha/docs/release-readine
 - [ ] Create RevenueCat project and app-specific API keys
 - [ ] Create production PostHog project and keys
 - [ ] Finalize production domain and callback URLs
-- [x] Expand [.env.example](/Users/Apple/projects/aksha/.env.example) to include all required variables
+- [x] Expand [.env.example](/Users/Apple/Desktop/mihira/mobile/.env.example) to include all required variables
 - [x] Document dev, preview, and production env setup
 - [x] Install `react-native-purchases` and `react-native-purchases-ui`
 - [ ] Configure Apple App Store app in RevenueCat
@@ -36,7 +36,7 @@ Based on [release-readiness.md](/Users/Apple/projects/aksha/docs/release-readine
 
 ## P1: App Compliance and Review Safety
 
-- [x] Audit Android permissions in [AndroidManifest.xml](/Users/Apple/projects/aksha/android/app/src/main/AndroidManifest.xml)
+- [x] Audit Android permissions in [AndroidManifest.xml](/Users/Apple/Desktop/mihira/mobile/android/app/src/main/AndroidManifest.xml)
 - [x] Remove unused `READ_EXTERNAL_STORAGE`
 - [x] Remove unused `WRITE_EXTERNAL_STORAGE`
 - [x] Remove unused `SYSTEM_ALERT_WINDOW`
