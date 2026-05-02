@@ -20,6 +20,9 @@ export default {
     android: {
       package: 'com.mihiralabs.app',
       versionCode: 1,
+      permissions: [
+        'com.google.android.gms.permission.AD_ID',
+      ],
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#191C20',
