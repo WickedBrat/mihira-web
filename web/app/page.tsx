@@ -105,7 +105,7 @@ const downloadBadges = [
   },
 ];
 
-function MihiraText() {
+export function MihiraText() {
   return <span className={charmonman.className}>Mihira</span>;
 }
 
@@ -179,7 +179,7 @@ export default function HomePage() {
 
           <nav className="site-nav" aria-label="Primary">
             <Link href="#methodology">
-              Why <MihiraText />
+              Why {renderMihiraText('Mihira')}
             </Link>
             <Link href="#sacred-timing">What You Can Ask</Link>
             <Link href="#daily-practice">How It Works</Link>
@@ -282,7 +282,7 @@ export default function HomePage() {
             <div className="quote-panel__overlay">
               <blockquote>&quot;The point is not certainty. The point is steadier judgment.&quot;</blockquote>
               <p>
-                The <MihiraText /> approach
+                The {renderMihiraText('Mihira')} approach
               </p>
             </div>
           </aside>
@@ -372,7 +372,7 @@ export default function HomePage() {
               <MihiraText />
             </span>
             <p>
-              © 2026 <MihiraText />. Scripture-grounded guidance for modern life.
+              © 2026 Mihira. Scripture-grounded guidance for modern life.
             </p>
           </div>
 
