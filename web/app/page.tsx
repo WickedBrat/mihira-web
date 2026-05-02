@@ -33,6 +33,30 @@ const kickerClass =
 const headingClass =
   'm-0 text-balance font-[var(--font-display)] text-[clamp(2.45rem,4.8vw,4rem)] font-semibold leading-[1.04] tracking-normal text-white';
 const bodyClass = 'text-base leading-[1.65] text-white/72';
+const headerClass =
+  'fixed left-0 top-2 z-50 w-full bg-transparent px-[18px] max-[760px]:sticky max-[760px]:top-0 max-[760px]:px-2 max-[760px]:py-2 md:max-lg:px-3';
+const headerInnerClass =
+  'mx-auto flex py-2 w-full max-w-5xl items-center justify-between gap-8 rounded-full border border-white/[0.05] bg-[radial-gradient(circle_at_60%_0%,rgba(255,149,0,0.08),transparent_30%),rgba(31,35,38,0.96)] px-2 pl-4 shadow-[0_22px_48px_rgba(0,0,0,0.22)] backdrop-blur-[22px] max-[760px]:min-h-16 max-[760px]:gap-3 max-[760px]:rounded-[2rem] md:max-lg:min-h-[4.75rem] md:max-lg:gap-5';
+const headerLogoClass =
+  'inline-flex min-w-48 items-center text-[clamp(1rem,1.5vw,1.5rem)] font-bold leading-none tracking-normal text-white max-[760px]:min-w-0 max-[760px]:text-lg md:max-lg:min-w-32 md:max-lg:text-[2rem]';
+const navLinkClass =
+  'font-sans text-xs font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:text-[#ff9500]';
+const headerCtaClass =
+  'inline-flex min-h-8 items-center justify-center rounded-full px-[clamp(18px,2vw,28px)] font-sans font-bold uppercase tracking-[0.14em] text-white/90 transition-transform hover:-translate-y-px max-[760px]:min-h-10 max-[760px]:bg-[#b564fc] max-[760px]:px-3 text-xs';
+const headerStoreLinkClass =
+  'inline-flex size-12 flex-none items-center justify-center rounded-full bg-white text-[#111214] shadow-[0_14px_26px_rgba(0,0,0,0.2)] transition hover:-translate-y-px hover:bg-[#fff8ed] hover:shadow-[0_18px_34px_rgba(0,0,0,0.26)]';
+const storeBadgeLinkClass =
+  'inline-flex h-6 w-[100px] items-center justify-center gap-2 rounded border border-[#b564fc]/40 bg-[#b564fc] font-sans text-[0.62rem] font-bold uppercase tracking-[0.14em] text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-px hover:border-[#ff9500]/55 hover:shadow-[0_16px_34px_rgba(181,100,252,0.28)]';
+const ghostButtonClass =
+  'inline-flex items-center justify-center rounded border border-white/20 font-sans font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-px max-[760px]:w-full';
+const previewCardClass =
+  'relative grid min-h-[620px] content-between overflow-hidden rounded-xl border border-[#e7e5e5]/15 bg-[radial-gradient(circle_at_50%_12%,rgba(255,149,0,0.12),transparent_32%),linear-gradient(180deg,rgba(37,38,38,0.96),rgba(17,18,18,0.98))] shadow-[0_24px_44px_rgba(0,0,0,0.2)] max-lg:min-h-0';
+const pillarCardClass =
+  'relative min-h-[212px] overflow-hidden rounded-lg border border-[#e7e5e5]/15 bg-[linear-gradient(180deg,rgba(37,38,38,0.94),rgba(25,26,26,0.98)),radial-gradient(circle_at_top,rgba(181,100,252,0.08),transparent_32%)] p-6 pt-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.02),0_18px_34px_rgba(0,0,0,0.16)]';
+const trustCardClass =
+  'rounded-lg border border-[#e7e5e5]/10 bg-[linear-gradient(180deg,rgba(31,32,32,0.94),rgba(20,20,20,0.98)),radial-gradient(circle_at_top_left,rgba(255,149,0,0.08),transparent_36%)] p-6';
+const footerLinkClass =
+  'font-sans text-[0.62rem] uppercase tracking-[0.14em] text-white transition-colors hover:text-[#ff9500]';
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -291,7 +315,7 @@ function StoreIcon({ icon, className = 'h-[18px] w-[18px]' }: { icon: string; cl
     return (
       <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
         <path
-          fill="currentColor"
+          fill="black"
           d="M16.7 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.5-.1-2.8.8-3.6.8s-2-.8-3.3-.8c-1.7 0-3.2 1-4.1 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.5 1.3-.1 1.8-.8 3.4-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.2-2.5 1-1.5 1.4-2.9 1.4-2.9-.1 0-3.5-1.3-3.5-4.5ZM14.4 5.8c.7-.9 1.2-2 1.1-3.2-1.1.1-2.3.7-3.1 1.6-.7.8-1.3 2-1.1 3.1 1.2.1 2.4-.6 3.1-1.5Z"
         />
       </svg>
@@ -299,11 +323,8 @@ function StoreIcon({ icon, className = 'h-[18px] w-[18px]' }: { icon: string; cl
   }
 
   return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
-      <path fill="currentColor" d="M4.5 3.3v17.4l9-8.7-9-8.7Z" />
-      <path fill="currentColor" d="m13.5 12 2.8-2.7L6.4 3.6c-.6-.4-1.2-.5-1.9-.3l9 8.7Z" />
-      <path fill="currentColor" d="m13.5 12-9 8.7c.6.2 1.3.1 1.9-.3l9.9-5.7-2.8-2.7Z" />
-      <path fill="currentColor" d="m16.3 9.3-2.8 2.7 2.8 2.7 2.3-1.3c1.2-.7 1.2-2.1 0-2.8l-2.3-1.3Z" />
+    <svg className={`pl-1 ${className}`} viewBox="0 0 18 18" aria-hidden="true">
+      <path fill="black" d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055zM1 13.396V2.603L6.846 8zM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27"/>
     </svg>
   );
 }
@@ -345,33 +366,33 @@ export default function HomePage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
-      <header className="fixed left-0 top-2 z-50 w-full bg-transparent px-[18px] max-[760px]:sticky max-[760px]:top-0 max-[760px]:px-2 max-[760px]:py-2 md:max-lg:px-3">
-        <div className="mx-auto flex min-h-[5.5rem] w-full max-w-[1280px] items-center justify-between gap-8 rounded-full border border-white/[0.05] bg-[radial-gradient(circle_at_60%_0%,rgba(255,149,0,0.08),transparent_30%),rgba(31,35,38,0.96)] px-5 py-4 pl-8 shadow-[0_22px_48px_rgba(0,0,0,0.22)] backdrop-blur-[22px] max-[760px]:min-h-16 max-[760px]:gap-3 max-[760px]:rounded-[2rem] max-[760px]:px-2.5 max-[760px]:py-2.5 max-[760px]:pl-4 md:max-lg:min-h-[4.75rem] md:max-lg:gap-5 md:max-lg:px-3.5 md:max-lg:py-3 md:max-lg:pl-6">
-          <Link className="inline-flex min-w-48 items-center text-[clamp(2rem,3.2vw,3rem)] font-bold leading-none tracking-normal text-white max-[760px]:min-w-0 max-[760px]:text-lg md:max-lg:min-w-32 md:max-lg:text-lg" href="/">
+      <header className={headerClass}>
+        <div className={headerInnerClass}>
+          <Link className={headerLogoClass} href="/">
             <MihiraText />
           </Link>
 
           <nav className="flex flex-1 flex-wrap items-center justify-center gap-[clamp(28px,4vw,58px)] max-[760px]:hidden md:max-lg:gap-4" aria-label="Primary">
-            <Link className="font-sans text-md font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:text-[#ff9500] md:max-lg" href="#preview">
+            <Link className={navLinkClass} href="#preview">
               Features
             </Link>
-            <Link className="font-sans text-lg font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:text-[#ff9500] md:max-lg" href="#daily-practice">
+            <Link className={navLinkClass} href="#daily-practice">
               Method
             </Link>
-            <Link className="font-sans text-lg font-bold uppercase tracking-[0.14em] text-white/80 transition-colors hover:text-[#ff9500] md:max-lg" href="#faq">
+            <Link className={navLinkClass} href="#faq">
               Company
             </Link>
           </nav>
 
           <div className="flex items-center gap-6 border-l border-white/20 pl-[clamp(22px,3vw,42px)] max-[760px]:gap-2 max-[760px]:border-l-0 max-[760px]:pl-0 md:max-lg:gap-3.5 md:max-lg:pl-4" aria-label={primaryCtaLabel}>
-            <a className="inline-flex min-h-14 items-center justify-center rounded-full px-[clamp(18px,2vw,28px)] font-sans text-[0.86rem] font-bold uppercase tracking-[0.14em] text-white/90 transition-transform hover:-translate-y-px max-[760px]:min-h-10 max-[760px]:bg-[#b564fc] max-[760px]:px-3 max-[760px]:text-[0.56rem] md:max-lg" href={primaryCtaHref}>
+            <a className={headerCtaClass} href={primaryCtaHref}>
               {primaryCtaLabel}
             </a>
             <div className="flex items-center gap-[18px] max-[760px]:gap-2 md:max-lg:gap-2.5">
               {downloadBadges.map((badge) => (
                 <a
                   key={badge.store}
-                  className="inline-flex size-16 flex-none items-center justify-center rounded-full bg-white text-[#111214] shadow-[0_14px_26px_rgba(0,0,0,0.2)] transition hover:-translate-y-px hover:bg-[#fff8ed] hover:shadow-[0_18px_34px_rgba(0,0,0,0.26)] max-[760px]:size-10 md:max-lg:size-[52px]"
+                  className={headerStoreLinkClass}
                   href={badge.href}
                   aria-label={badge.alt}
                 >
@@ -383,13 +404,13 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="relative isolate min-h-screen overflow-hidden px-0 pb-14 pt-24 max-[760px]:min-h-0 max-[760px]:pt-[5.75rem]">
+      <section className="relative isolate min-h-screen overflow-hidden px-0 pb-14 pt-24 max-[760px]:min-h-0 max-[760px]:pt-23">
         <div className="relative z-10 mx-auto w-full max-w-[1080px] px-10 pt-[9vh] text-center max-[760px]:px-6 max-[760px]:pb-[10vh] max-[760px]:pt-[8vh]">
           <p className={`${kickerClass} text-center`}>Scripture-grounded guidance and sacred timing</p>
-          <h1 className="mx-auto max-w-[15ch] text-balance font-[var(--font-display)] text-[clamp(2.95rem,5.25vw,4.8rem)] font-semibold leading-[0.94] tracking-normal text-white max-[760px]:text-[clamp(2.7rem,13vw,4rem)]">
+          <h1 className="mx-auto max-w-[15ch] text-balance text-[clamp(2.95rem,5.25vw,4.8rem)] font-semibold leading-[0.94] tracking-normal text-white max-[760px]:text-[clamp(2.7rem,13vw,4rem)]">
             Guidance for the decisions you do not want answered lightly.
           </h1>
-          <p className="mx-auto mt-[18px] max-w-[40rem] text-[1.05rem] leading-[1.7] text-white/72">
+          <p className="mx-auto mt-[18px] max-w-160 text-[1.05rem] leading-[1.7] text-white/72">
             <MihiraText /> is a private mobile app for daily alignment, scripture-grounded guidance, and sacred timing
             for Indians abroad who want tradition, timing, and steadier judgment to fit modern life.
           </p>
@@ -399,7 +420,7 @@ export default function HomePage() {
               {downloadBadges.map((badge) => (
                 <a
                   key={badge.store}
-                  className="inline-flex h-11 w-[154px] items-center justify-center gap-2 rounded border border-[#b564fc]/40 bg-[#b564fc] font-sans text-[0.62rem] font-bold uppercase tracking-[0.14em] text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-px hover:border-[#ff9500]/55 hover:shadow-[0_16px_34px_rgba(181,100,252,0.28)] max-[760px]:w-full"
+                  className={storeBadgeLinkClass}
                   href={badge.href}
                   aria-label={badge.alt}
                 >
@@ -408,7 +429,7 @@ export default function HomePage() {
                 </a>
               ))}
             </div>
-            <a className="inline-flex min-h-12 min-w-[198px] items-center justify-center rounded border border-white/20 px-[1.375rem] font-sans text-[0.58rem] font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-px max-[760px]:w-full" href="#daily-practice">
+            <a className={`${ghostButtonClass} min-h-12 min-w-[198px] px-[1.375rem] text-[0.58rem]`} href="#daily-practice">
               See How It Works
             </a>
           </div>
@@ -439,7 +460,7 @@ export default function HomePage() {
             {productPreviews.map((preview, index) => (
               <article
                 key={preview.title}
-                className={`relative grid min-h-[620px] content-between overflow-hidden rounded-xl border border-[#e7e5e5]/15 bg-[radial-gradient(circle_at_50%_12%,rgba(255,149,0,0.12),transparent_32%),linear-gradient(180deg,rgba(37,38,38,0.96),rgba(17,18,18,0.98))] shadow-[0_24px_44px_rgba(0,0,0,0.2)] max-lg:min-h-0 ${index === 1 ? 'translate-y-7 max-lg:translate-y-0' : ''} ${index === 2 ? 'translate-y-2 max-lg:translate-y-0' : ''}`}
+                className={`${previewCardClass} ${index === 1 ? 'translate-y-7 max-lg:translate-y-0' : ''} ${index === 2 ? 'translate-y-2 max-lg:translate-y-0' : ''}`}
               >
                 <div className="flex justify-center px-6 pt-[2.125rem]">
                   <img
@@ -474,7 +495,7 @@ export default function HomePage() {
             {pillars.map((pillar) => (
               <article
                 key={pillar.title}
-                className="relative min-h-[212px] overflow-hidden rounded-lg border border-[#e7e5e5]/15 bg-[linear-gradient(180deg,rgba(37,38,38,0.94),rgba(25,26,26,0.98)),radial-gradient(circle_at_top,rgba(181,100,252,0.08),transparent_32%)] p-6 pt-7 shadow-[inset_0_1px_0_rgba(255,255,255,0.02),0_18px_34px_rgba(0,0,0,0.16)]"
+                className={pillarCardClass}
               >
                 <span className="relative z-10 inline-flex size-11 items-center justify-center rounded-full border border-[#ff9500]/20 bg-[#ff9500]/10 text-[#ff9500]" aria-hidden="true">
                   <PillarIcon icon={pillar.icon} />
@@ -560,19 +581,19 @@ export default function HomePage() {
             <h2 className={headingClass}>A private Vedic companion, not a noisy content feed.</h2>
           </div>
           <div className="grid gap-3.5">
-            <article className="rounded-lg border border-[#e7e5e5]/10 bg-[linear-gradient(180deg,rgba(31,32,32,0.94),rgba(20,20,20,0.98)),radial-gradient(circle_at_top_left,rgba(255,149,0,0.08),transparent_36%)] p-6">
+            <article className={trustCardClass}>
               <h3 className="font-[var(--font-display)] text-[1.35rem] font-semibold leading-[1.05] text-white">
                 Designed for life abroad
               </h3>
               <p className={`${bodyClass} mt-3`}>English-first, culturally rooted guidance for people who want continuity without needing an astrologer on call.</p>
             </article>
-            <article className="rounded-lg border border-[#e7e5e5]/10 bg-[linear-gradient(180deg,rgba(31,32,32,0.94),rgba(20,20,20,0.98)),radial-gradient(circle_at_top_left,rgba(255,149,0,0.08),transparent_36%)] p-6">
+            <article className={trustCardClass}>
               <h3 className="font-[var(--font-display)] text-[1.35rem] font-semibold leading-[1.05] text-white">
                 Grounded, not absolute
               </h3>
               <p className={`${bodyClass} mt-3`}>Guidance is framed to sharpen judgment and next steps, not replace professional advice or personal responsibility.</p>
             </article>
-            <article className="rounded-lg border border-[#e7e5e5]/10 bg-[linear-gradient(180deg,rgba(31,32,32,0.94),rgba(20,20,20,0.98)),radial-gradient(circle_at_top_left,rgba(255,149,0,0.08),transparent_36%)] p-6">
+            <article className={trustCardClass}>
               <h3 className="font-[var(--font-display)] text-[1.35rem] font-semibold leading-[1.05] text-white">
                 Sensitive by design
               </h3>
@@ -654,13 +675,13 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-[1.375rem]">
-            <Link className="font-sans text-[0.62rem] uppercase tracking-[0.14em] text-white transition-colors hover:text-[#ff9500]" href="/privacy">
+            <Link className={footerLinkClass} href="/privacy">
               Privacy Policy
             </Link>
-            <Link className="font-sans text-[0.62rem] uppercase tracking-[0.14em] text-white transition-colors hover:text-[#ff9500]" href="/terms">
+            <Link className={footerLinkClass} href="/terms">
               Terms of Service
             </Link>
-            <a className="font-sans text-[0.62rem] uppercase tracking-[0.14em] text-white transition-colors hover:text-[#ff9500]" href="mailto:founders@getmihira.com">
+            <a className={footerLinkClass} href="mailto:founders@getmihira.com">
               Contact
             </a>
           </div>

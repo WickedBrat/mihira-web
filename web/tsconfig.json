@@ -26,6 +26,21 @@
       "@supabase/*": [
         "./node_modules/@supabase/*"
       ],
+      "@/features/*": [
+        "../mobile/features/*"
+      ],
+      "@/lib/ai/*": [
+        "../mobile/lib/ai/*"
+      ],
+      "@/lib/dailyAlignmentTypes": [
+        "../mobile/lib/dailyAlignmentTypes.ts"
+      ],
+      "@/lib/dailyArthReflectionTypes": [
+        "../mobile/lib/dailyArthReflectionTypes.ts"
+      ],
+      "@/lib/vedic/*": [
+        "../mobile/lib/vedic/*"
+      ],
       "@/*": [
         "./*",
         "../*"
