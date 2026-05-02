@@ -105,7 +105,7 @@ const downloadBadges = [
   },
 ];
 
-export function MihiraText() {
+function MihiraText() {
   return <span className={charmonman.className}>Mihira</span>;
 }
 
