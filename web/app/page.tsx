@@ -11,12 +11,19 @@ const charmonman = Charmonman({
   display: 'swap',
 });
 
-const appStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL || '#download';
-const googlePlayUrl = process.env.NEXT_PUBLIC_GOOGLE_PLAY_URL || '#download';
+const configuredAppStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
+const configuredGooglePlayUrl = process.env.NEXT_PUBLIC_GOOGLE_PLAY_URL;
+const earlyAccessUrl = 'mailto:founders@getmihira.com?subject=Mihira%20early%20access';
+const hasStoreLinks = Boolean(configuredAppStoreUrl || configuredGooglePlayUrl);
+const appStoreUrl = configuredAppStoreUrl || earlyAccessUrl;
+const googlePlayUrl = configuredGooglePlayUrl || earlyAccessUrl;
 const siteUrl = 'https://getmihira.com';
 const pageTitle = 'Mihira - Scripture-Grounded Guidance and Sacred Timing App';
 const pageDescription =
-  'Download Mihira for scripture-grounded guidance, sacred timing, daily alignment, and calmer decision-making for work, family, grief, purpose, and relationships.';
+  'Get Mihira, a private Vedic guidance app for Indians abroad seeking scripture-grounded guidance, sacred timing, daily alignment, and calmer decision-making.';
+const primaryCtaLabel = hasStoreLinks ? 'Download App' : 'Get Early Access';
+const primaryCtaHref = hasStoreLinks ? '#download' : earlyAccessUrl;
+const availabilityCopy = hasStoreLinks ? 'Available for iPhone and Android' : 'Private beta for iPhone and Android';
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -116,6 +123,30 @@ const inquiries = [
   'What do the texts say when grief and duty pull in different directions?',
 ];
 
+const productPreviews = [
+  {
+    eyebrow: 'Daily Alignment',
+    title: 'Start the day with direction',
+    body: 'A personalized reading helps you decide where to place energy before the day starts moving too fast.',
+    image: '/product-screenshots/daily-alignment.png',
+    alt: 'Mihira daily alignment screen preview',
+  },
+  {
+    eyebrow: 'Scripture Guidance',
+    title: 'Ask what actually weighs on you',
+    body: 'Bring questions about duty, grief, ambition, family, or relationships and get grounded guidance with usable next steps.',
+    image: '/product-screenshots/scripture-guidance.png',
+    alt: 'Mihira scripture guidance screen preview',
+  },
+  {
+    eyebrow: 'Sacred Timing',
+    title: 'Choose better windows',
+    body: 'Describe an event and review auspicious timing with reasoning for conversations, travel, ceremonies, and commitments.',
+    image: '/product-screenshots/sacred-timing.png',
+    alt: 'Mihira sacred timing screen preview',
+  },
+];
+
 const flowSteps = [
   {
     number: '01',
@@ -169,14 +200,14 @@ const faqs = [
 const downloadBadges = [
   {
     href: appStoreUrl,
-    alt: 'Download on the App Store',
-    store: 'App Store',
+    alt: hasStoreLinks ? 'Download on the App Store' : 'Request iPhone early access',
+    store: hasStoreLinks ? 'App Store' : 'iPhone Beta',
     icon: 'apple',
   },
   {
     href: googlePlayUrl,
-    alt: 'Get it on Google Play',
-    store: 'Google Play',
+    alt: hasStoreLinks ? 'Get it on Google Play' : 'Request Android early access',
+    store: hasStoreLinks ? 'Google Play' : 'Android Beta',
     icon: 'play',
   },
 ];
@@ -309,6 +340,7 @@ export default function HomePage() {
           </Link>
 
           <nav className="site-nav" aria-label="Primary">
+            <Link href="#preview">Product</Link>
             <Link href="#methodology">
               Why {renderMihiraText('Mihira')}
             </Link>
@@ -317,8 +349,8 @@ export default function HomePage() {
             <Link href="#faq">FAQ</Link>
           </nav>
 
-          <a className="header-cta" href="#download">
-            Download App
+          <a className="header-cta" href={primaryCtaHref}>
+            {primaryCtaLabel}
           </a>
         </div>
       </header>
@@ -329,7 +361,7 @@ export default function HomePage() {
           <h1>Guidance for the decisions you do not want answered lightly.</h1>
           <p className="hero-copy">
             <MihiraText /> is a private mobile app for daily alignment, scripture-grounded guidance, and sacred timing
-            when work, family, grief, or major decisions need more than a generic feed.
+            for Indians abroad who want tradition, timing, and steadier judgment to fit modern life.
           </p>
 
           <div className="hero-actions">
@@ -348,6 +380,36 @@ export default function HomePage() {
 
           <div className="scroll-cue" aria-hidden="true">
             <span>⌄</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="preview" className="landing-band landing-band--preview">
+        <div className="content-shell">
+          <div className="section-heading section-heading--split">
+            <div>
+              <p className="section-kicker">Inside The App</p>
+              <h2>Daily practice, deep questions, and timing in one private rhythm.</h2>
+            </div>
+            <p className="section-heading__copy">
+              Mihira is not a horoscope feed or a live-consult marketplace. It is built around three repeatable moments:
+              begin the day, ask carefully, and choose timing with context.
+            </p>
+          </div>
+
+          <div className="product-preview-grid">
+            {productPreviews.map((preview) => (
+              <article key={preview.title} className="product-preview-card">
+                <div className="product-preview-card__media">
+                  <img alt={preview.alt} src={preview.image} />
+                </div>
+                <div className="product-preview-card__copy">
+                  <p>{preview.eyebrow}</p>
+                  <h3>{preview.title}</h3>
+                  <span>{preview.body}</span>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -438,6 +500,29 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="landing-band landing-band--trust">
+        <div className="content-shell trust-layout">
+          <div className="trust-copy">
+            <p className="section-kicker">Built For Trust</p>
+            <h2>A private Vedic companion, not a noisy content feed.</h2>
+          </div>
+          <div className="trust-grid">
+            <article>
+              <h3>Designed for life abroad</h3>
+              <p>English-first, culturally rooted guidance for people who want continuity without needing an astrologer on call.</p>
+            </article>
+            <article>
+              <h3>Grounded, not absolute</h3>
+              <p>Guidance is framed to sharpen judgment and next steps, not replace professional advice or personal responsibility.</p>
+            </article>
+            <article>
+              <h3>Sensitive by design</h3>
+              <p>Birth details, preferences, and questions are treated as sensitive product data. Mihira does not sell personal data.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section id="faq" className="landing-band">
         <div className="content-shell content-shell--narrow">
           <div className="section-heading section-heading--center">
@@ -474,16 +559,22 @@ export default function HomePage() {
                 </p>
                 <div className="final-cta__availability">
                   <span className="final-cta__status" aria-hidden="true" />
-                  <p>Available for iPhone and Android</p>
+                  <p>{availabilityCopy}</p>
                 </div>
                 <div className="final-cta__actions">
                   <LiquidButton asChild className="rounded-full border border-white/15 text-white" size="xl">
                     <a href={appStoreUrl}>
-                      Download <MihiraText />
+                      {hasStoreLinks ? (
+                        <>
+                          Download <MihiraText />
+                        </>
+                      ) : (
+                        'Get Early Access'
+                      )}
                     </a>
                   </LiquidButton>
-                  <a className="button button--ghost" href="#daily-practice">
-                    See How It Works
+                  <a className="button button--ghost" href={googlePlayUrl}>
+                    {hasStoreLinks ? 'Google Play' : 'Android Beta'}
                   </a>
                 </div>
               </div>
