@@ -4,6 +4,7 @@ import { Charmonman } from 'next/font/google';
 import { FAQList } from '@/components/faq-list';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { WebGLShader } from '@/components/ui/web-gl-shader';
+import mihiraLogo from './logo.svg';
 
 const charmonman = Charmonman({
   subsets: ['latin'],
@@ -158,18 +159,18 @@ const inquiries = [
 
 const productPreviews = [
   {
-    eyebrow: 'Daily Alignment',
-    title: 'Start the day with direction',
-    body: 'A personalized reading helps you decide where to place energy before the day starts moving too fast.',
-    image: '/product-screenshots/daily-alignment.png',
-    alt: 'Mihira daily alignment screen preview',
-  },
-  {
     eyebrow: 'Scripture Guidance',
     title: 'Ask what actually weighs on you',
     body: 'Bring questions about duty, grief, ambition, family, or relationships and get grounded guidance with usable next steps.',
     image: '/product-screenshots/scripture-guidance.png',
     alt: 'Mihira scripture guidance screen preview',
+  },
+  {
+    eyebrow: 'Daily Alignment',
+    title: 'Start the day with direction',
+    body: 'A personalized reading helps you decide where to place energy before the day starts moving too fast.',
+    image: '/product-screenshots/daily-alignment.png',
+    alt: 'Mihira daily alignment screen preview',
   },
   {
     eyebrow: 'Sacred Timing',
@@ -369,6 +370,7 @@ export default function HomePage() {
       <header className={headerClass}>
         <div className={headerInnerClass}>
           <Link className={headerLogoClass} href="/">
+            <img src={mihiraLogo.src} className='mr-2' width={40} height={40} alt="Mihira logo" />
             <MihiraText />
           </Link>
 
@@ -404,7 +406,20 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="relative isolate min-h-screen overflow-hidden px-0 pb-14 pt-24 max-[760px]:min-h-0 max-[760px]:pt-23">
+      <section className="relative isolate min-h-screen overflow-hidden px-0 pb-14 pt-24 max-[760px]:min-h-0 max-[760px]:pt-[5.75rem]">
+        <video
+          src="/loop.mp4"
+          className="absolute inset-0 rounded-[4rem] mt-10 -z-10 h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(14,14,14,0.62),rgba(14,14,14,0.36)_42%,rgba(14,14,14,0.88)),radial-gradient(circle_at_center,rgba(181,100,252,0.22),transparent_46%)]"
+          aria-hidden="true"
+        />
         <div className="relative z-10 mx-auto w-full max-w-[1080px] px-10 pt-[9vh] text-center max-[760px]:px-6 max-[760px]:pb-[10vh] max-[760px]:pt-[8vh]">
           <p className={`${kickerClass} text-center`}>Scripture-grounded guidance and sacred timing</p>
           <h1 className="mx-auto max-w-[15ch] text-balance text-[clamp(2.95rem,5.25vw,4.8rem)] font-semibold leading-[0.94] tracking-normal text-white max-[760px]:text-[clamp(2.7rem,13vw,4rem)]">
@@ -460,7 +475,7 @@ export default function HomePage() {
             {productPreviews.map((preview, index) => (
               <article
                 key={preview.title}
-                className={`${previewCardClass} ${index === 1 ? 'translate-y-7 max-lg:translate-y-0' : ''} ${index === 2 ? 'translate-y-2 max-lg:translate-y-0' : ''}`}
+                className={`${previewCardClass}`}
               >
                 <div className="flex justify-center px-6 pt-[2.125rem]">
                   <img
