@@ -2,12 +2,12 @@
 import React from 'react';
 import {
   View,
-  Text,
   Image,
   ScrollView,
   Pressable,
   Dimensions,
 } from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppBlurView } from '@/components/ui/AppBlurView';

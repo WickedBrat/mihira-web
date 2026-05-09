@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth, useSession } from '@clerk/expo';
 import { getSupabaseClient } from '@/lib/supabase';
+import { withTimeout } from '@/lib/withTimeout';
+
+const SUPABASE_TIMEOUT_MS = 15000;
 
 export interface CalendarEvent {
   id: number;
@@ -15,33 +17,29 @@ export interface CalendarEvent {
 }
 
 export function useCalendarEvents(dateOverride?: string) {
-  const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
-  const { isLoaded: isSessionLoaded, session } = useSession();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const getClient = useCallback(async () => {
-    let token: string | null = null;
-    if (isSignedIn && isSessionLoaded && session) {
-      token = await session.getToken();
-    }
-    return getSupabaseClient(async () => token ?? '');
-  }, [isSessionLoaded, isSignedIn, session]);
+    return getSupabaseClient();
+  }, []);
 
   useEffect(() => {
-    if (!isAuthLoaded || !isSessionLoaded) return;
-
     let isCancelled = false;
 
     const fetch = async () => {
       try {
         const today = dateOverride ?? new Date().toISOString().split('T')[0];
         const client = await getClient();
-        const { data, error: err } = await client
-          .from('aksha_calendar')
-          .select('*')
-          .eq('date', today);
+        const { data, error: err } = await withTimeout(
+          client
+            .from('aksha_calendar')
+            .select('*')
+            .eq('date', today),
+          SUPABASE_TIMEOUT_MS,
+          'Calendar request timed out. Check Supabase connectivity.'
+        );
 
         if (err) throw err;
         if (!isCancelled) setEvents(data ?? []);
@@ -54,39 +52,40 @@ export function useCalendarEvents(dateOverride?: string) {
 
     void fetch();
     return () => { isCancelled = true; };
-  }, [getClient, isAuthLoaded, isSessionLoaded, dateOverride]);
+  }, [getClient, dateOverride]);
 
   return { events, isLoading, error };
 }
 
 export function useCalendarEventById(id: number | null) {
-  const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
-  const { isLoaded: isSessionLoaded, session } = useSession();
   const [event, setEvent] = useState<CalendarEvent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const getClient = useCallback(async () => {
-    let token: string | null = null;
-    if (isSignedIn && isSessionLoaded && session) {
-      token = await session.getToken();
-    }
-    return getSupabaseClient(async () => token ?? '');
-  }, [isSessionLoaded, isSignedIn, session]);
+    return getSupabaseClient();
+  }, []);
 
   useEffect(() => {
-    if (!isAuthLoaded || !isSessionLoaded || id === null) return;
+    if (id === null) {
+      setIsLoading(false);
+      return;
+    }
 
     let isCancelled = false;
 
     const fetch = async () => {
       try {
         const client = await getClient();
-        const { data, error: err } = await client
-          .from('aksha_calendar')
-          .select('*')
-          .eq('id', id)
-          .single();
+        const { data, error: err } = await withTimeout(
+          client
+            .from('aksha_calendar')
+            .select('*')
+            .eq('id', id)
+            .single(),
+          SUPABASE_TIMEOUT_MS,
+          'Calendar detail request timed out. Check Supabase connectivity.'
+        );
 
         if (err) throw err;
         if (!isCancelled) setEvent(data);
@@ -99,7 +98,7 @@ export function useCalendarEventById(id: number | null) {
 
     void fetch();
     return () => { isCancelled = true; };
-  }, [getClient, isAuthLoaded, isSessionLoaded, id]);
+  }, [getClient, id]);
 
   return { event, isLoading, error };
 }

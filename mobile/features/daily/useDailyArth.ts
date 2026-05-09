@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth, useSession } from '@clerk/expo';
 import { getSupabaseClient } from '@/lib/supabase';
+import { withTimeout } from '@/lib/withTimeout';
 import type { DailyArthReflection } from '@/lib/dailyArthReflectionTypes';
 import { isDailyArthReflection } from '@/lib/dailyArthReflectionTypes';
+
+const SUPABASE_TIMEOUT_MS = 15000;
 
 export interface ArthData {
   id: number;
@@ -12,24 +14,15 @@ export interface ArthData {
 }
 
 export function useDailyArth() {
-  const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
-  const { isLoaded: isSessionLoaded, session } = useSession();
   const [arth, setArth] = useState<ArthData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const getClient = useCallback(async () => {
-    let token: string | null = null;
-    if (isSignedIn && isSessionLoaded && session) {
-      token = await session.getToken();
-    }
-    // getSupabaseClient gracefully handles token string or empty depending on setup
-    return getSupabaseClient(async () => token);
-  }, [isSessionLoaded, isSignedIn, session]);
+    return getSupabaseClient();
+  }, []);
 
   useEffect(() => {
-    if (!isAuthLoaded || !isSessionLoaded) return;
-
     let isCancelled = false;
 
     const fetchArth = async () => {
@@ -44,10 +37,14 @@ export function useDailyArth() {
         const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
         
         // Fetch up to 1000 quotes to avoid dealing with sequence gaps in ID
-        const { data, error: fetchError } = await client
-          .from('spiritual_quotes')
-          .select('id, quote, source, daily_reflection')
-          .limit(1000);
+        const { data, error: fetchError } = await withTimeout(
+          client
+            .from('spiritual_quotes')
+            .select('id, quote, source, daily_reflection')
+            .limit(1000),
+          SUPABASE_TIMEOUT_MS,
+          'Daily quote request timed out. Check Supabase connectivity.'
+        );
 
         if (fetchError) {
             console.error('[useDailyArth] SUPABASE ERROR:', fetchError);
@@ -90,7 +87,7 @@ export function useDailyArth() {
     return () => {
       isCancelled = true;
     };
-  }, [getClient, isAuthLoaded, isSessionLoaded]);
+  }, [getClient]);
 
   return { arth, isLoading, error };
 }

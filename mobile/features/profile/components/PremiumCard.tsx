@@ -30,7 +30,6 @@ export function PremiumCard({ isPlus, onPress }: PremiumCardProps) {
           imageStyle={{ opacity: 0.3 }}
           resizeMode="cover"
         >
-          <AppBlurView intensity={26} tint="dark" className="absolute inset-0" />
           <View className="min-h-[88px] items-center justify-center rounded-[22px] bg-black/[0.10] px-8 py-9">
             <Text className="mb-[5px] text-center font-headline text-[32px] leading-[36px] tracking-[-0.2px] text-on-surface">
               {isPlus ? 'Mihira Plus Active' : 'Unlock Mihira Plus'}

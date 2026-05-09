@@ -1,40 +1,77 @@
 import { useState } from 'react';
-import { useOAuth } from '@clerk/expo';
-import * as Linking from 'expo-linking';
+import { makeRedirectUri } from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import { useToast } from '@/components/ui/ToastProvider';
 import { analytics } from '@/lib/analytics';
+import { createSupabaseSessionFromUrl } from '@/lib/auth';
+import { getSupabaseClient } from '@/lib/supabase';
+import { withTimeout } from '@/lib/withTimeout';
 
 WebBrowser.maybeCompleteAuthSession();
 
 type SignInProvider = 'google' | 'apple';
 
-const redirectUrl = Linking.createURL('oauth-native-callback');
+const OAUTH_TIMEOUT_MS = 60000;
+
+const redirectUrl = makeRedirectUri({
+  scheme: 'mihira',
+  path: 'oauth-native-callback',
+});
 
 export function useSignIn(onSuccess?: () => void) {
-  const googleOAuth = useOAuth({ strategy: 'oauth_google' });
-  const appleOAuth = useOAuth({ strategy: 'oauth_apple' });
   const { showToast } = useToast();
   const [loadingProvider, setLoadingProvider] = useState<SignInProvider | null>(null);
 
-  const signInWithGoogle = async () => {
-    setLoadingProvider('google');
+  const signInWithProvider = async (provider: SignInProvider) => {
+    setLoadingProvider(provider);
+
     try {
-      const { createdSessionId, setActive } = await googleOAuth.startOAuthFlow({ redirectUrl });
-      if (createdSessionId && setActive) {
-        await setActive({ session: createdSessionId });
-        analytics.userSignedIn({ method: 'google' });
-        onSuccess?.();
-        return true;
+      const client = getSupabaseClient();
+      const { data, error } = await client.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: redirectUrl,
+          skipBrowserRedirect: true,
+        },
+      });
+
+      if (error) throw error;
+      if (!data.url) throw new Error('Supabase did not return an OAuth URL.');
+
+      const result = await withTimeout(
+        WebBrowser.openAuthSessionAsync(data.url, redirectUrl),
+        OAUTH_TIMEOUT_MS,
+        `${provider === 'google' ? 'Google' : 'Apple'} sign-in timed out. Close the browser and try again.`
+      );
+
+      if (result.type !== 'success') {
+        showToast({
+          type: 'error',
+          title: `${provider === 'google' ? 'Google' : 'Apple'} sign-in was cancelled`,
+          message: 'No session was created. Please try again.',
+        });
+        return false;
       }
 
-      return false;
+      const session = await createSupabaseSessionFromUrl(result.url);
+      if (!session) {
+        showToast({
+          type: 'error',
+          title: `${provider === 'google' ? 'Google' : 'Apple'} sign-in was cancelled`,
+          message: 'No session was created. Please try again.',
+        });
+        return false;
+      }
+
+      analytics.userSignedIn({ method: provider });
+      onSuccess?.();
+      return true;
     } catch (err) {
-      console.error('[useSignIn] Google OAuth error', err);
+      console.error(`[useSignIn] ${provider} OAuth error`, err);
       showToast({
         type: 'error',
-        title: 'Google sign-in failed',
-        message: 'Please try again.',
+        title: `${provider === 'google' ? 'Google' : 'Apple'} sign-in failed`,
+        message: err instanceof Error ? err.message : 'Please try again.',
       });
       return false;
     } finally {
@@ -42,30 +79,13 @@ export function useSignIn(onSuccess?: () => void) {
     }
   };
 
-  const signInWithApple = async () => {
-    setLoadingProvider('apple');
-    try {
-      const { createdSessionId, setActive } = await appleOAuth.startOAuthFlow({ redirectUrl });
-      if (createdSessionId && setActive) {
-        await setActive({ session: createdSessionId });
-        analytics.userSignedIn({ method: 'apple' });
-        onSuccess?.();
-        return true;
-      }
+  const signInWithGoogle = async () => signInWithProvider('google');
+  const signInWithApple = async () => signInWithProvider('apple');
 
-      return false;
-    } catch (err) {
-      console.error('[useSignIn] Apple OAuth error', err);
-      showToast({
-        type: 'error',
-        title: 'Apple sign-in failed',
-        message: 'Please try again.',
-      });
-      return false;
-    } finally {
-      setLoadingProvider(null);
-    }
+  return {
+    signInWithGoogle,
+    signInWithApple,
+    isLoading: loadingProvider !== null,
+    loadingProvider,
   };
-
-  return { signInWithGoogle, signInWithApple, isLoading: loadingProvider !== null, loadingProvider };
 }

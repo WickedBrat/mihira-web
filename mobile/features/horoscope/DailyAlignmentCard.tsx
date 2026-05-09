@@ -11,11 +11,12 @@ import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
 interface Props {
   chart: BirthChart | null;
   focusAreas: DailyFocusArea[];
+  gender?: string | null;
   isLoading: boolean;
   error: string | null;
 }
 
-export function DailyAlignmentCard({ chart, focusAreas, isLoading, error }: Props) {
+export function DailyAlignmentCard({ chart, focusAreas, gender, isLoading, error }: Props) {
   if (isLoading) {
     return (
       <View className="py-2">
@@ -45,6 +46,7 @@ export function DailyAlignmentCard({ chart, focusAreas, isLoading, error }: Prop
         <FocusAreaCard
           key={area.area}
           focusArea={area}
+          gender={gender}
           isLast={index === focusAreas.length - 1}
         />
       ))}

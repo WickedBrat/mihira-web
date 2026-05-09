@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AppState, Platform } from 'react-native';
-import { useAuth, useSession } from '@clerk/expo';
+import { useAuth } from '@/lib/auth';
 import { useToast } from '@/components/ui/ToastProvider';
 import { analytics } from '@/lib/analytics';
 import { getSupabaseClient } from '@/lib/supabase';
+import { USER_DETAILS_TABLE, USER_DETAILS_USER_ID_COLUMN } from '@/lib/userDetails';
 import {
   getRevenueCatUiUnavailableMessage,
   getPaywallResult,
@@ -21,6 +22,12 @@ type MirroredSubscriptionRecord = {
   subscription_plan?: string | null;
   subscription_status?: string | null;
 } | null;
+type RevenueCatPurchases = {
+  configure: (options: { apiKey: string; appUserID?: string }) => Promise<void> | void;
+  logIn?: (appUserID: string) => Promise<unknown> | unknown;
+  logOut?: () => Promise<unknown> | unknown;
+  getCustomerInfo: () => Promise<unknown>;
+};
 
 interface UseSubscriptionReturn {
   isPlus: boolean;
@@ -33,15 +40,88 @@ interface UseSubscriptionReturn {
 }
 
 const BILLING_UNAVAILABLE_MESSAGE = 'Subscriptions are not configured yet for this build.';
+let revenueCatConfigured = false;
+let revenueCatConfiguredUserId: string | null = null;
+let revenueCatConfigurePromise: Promise<void> | null = null;
+let revenueCatCustomerInfoPromise: Promise<unknown> | null = null;
+let revenueCatIdentityPromise: Promise<void> | null = null;
 
-export function getSubscriptionProfilePatch(
+async function ensureRevenueCatConfigured(
+  purchases: RevenueCatPurchases,
+  apiKey: string,
+  appUserID: string | null
+) {
+  if (revenueCatConfigurePromise) {
+    await revenueCatConfigurePromise;
+  }
+
+  if (!revenueCatConfigured) {
+    revenueCatConfigurePromise = Promise.resolve(
+      purchases.configure({
+        apiKey,
+        appUserID: appUserID ?? undefined,
+      })
+    )
+      .then(() => {
+        revenueCatConfigured = true;
+        revenueCatConfiguredUserId = appUserID;
+      })
+      .finally(() => {
+        revenueCatConfigurePromise = null;
+      });
+
+    await revenueCatConfigurePromise;
+    return;
+  }
+
+  if (revenueCatIdentityPromise) {
+    await revenueCatIdentityPromise;
+  }
+
+  if (appUserID && revenueCatConfiguredUserId !== appUserID) {
+    await revenueCatCustomerInfoPromise;
+    revenueCatIdentityPromise = Promise.resolve(purchases.logIn?.(appUserID))
+      .then(() => {
+        revenueCatConfiguredUserId = appUserID;
+      })
+      .finally(() => {
+        revenueCatIdentityPromise = null;
+      });
+    await revenueCatIdentityPromise;
+    return;
+  }
+
+  if (!appUserID && revenueCatConfiguredUserId) {
+    await revenueCatCustomerInfoPromise;
+    revenueCatIdentityPromise = Promise.resolve(purchases.logOut?.())
+      .then(() => {
+        revenueCatConfiguredUserId = null;
+      })
+      .finally(() => {
+        revenueCatIdentityPromise = null;
+      });
+    await revenueCatIdentityPromise;
+  }
+}
+
+async function getSharedCustomerInfo(purchases: RevenueCatPurchases) {
+  if (!revenueCatCustomerInfoPromise) {
+    revenueCatCustomerInfoPromise = Promise.resolve(purchases.getCustomerInfo()).finally(() => {
+      revenueCatCustomerInfoPromise = null;
+    });
+  }
+
+  return revenueCatCustomerInfoPromise;
+}
+
+export function getSubscriptionUserDetailsPatch(
   userId: string,
   plan: Plan,
   source: Exclude<SubscriptionSource, 'none'> = 'revenuecat',
   now = new Date().toISOString()
 ) {
   return {
-    id: userId,
+    user_id: userId,
     subscription_plan: plan,
     subscription_status: plan === 'plus' ? 'active' : 'inactive',
     subscription_source: source,
@@ -56,7 +136,6 @@ export function isMirroredPlus(record: MirroredSubscriptionRecord): boolean {
 
 export function useSubscription(): UseSubscriptionReturn {
   const { isLoaded: isAuthLoaded, isSignedIn, userId } = useAuth();
-  const { isLoaded: isSessionLoaded, session } = useSession();
   const { showToast } = useToast();
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -65,27 +144,23 @@ export function useSubscription(): UseSubscriptionReturn {
 
   const isInitializingRef = useRef(false);
   const isOpeningPaywallRef = useRef(false);
-  const configuredRef = useRef(false);
-  const configuredUserIdRef = useRef<string | null>(null);
   const lastMirroredPlanKeyRef = useRef<string | null>(null);
 
   const apiKey = useMemo(() => getRevenueCatApiKey(), []);
   const entitlementId = useMemo(() => getRevenueCatEntitlementId(), []);
   const modules = useMemo(() => loadRevenueCatModules(), []);
-  const hasResolvedPlanState = !isSignedIn || isSessionLoaded || source === 'revenuecat';
+  const hasResolvedPlanState = !isSignedIn || isLoaded || source === 'revenuecat';
 
   const getClient = useCallback(async () => {
-    if (!isSignedIn || !userId || !isSessionLoaded) return null;
+    if (!isSignedIn || !userId) return null;
 
     try {
-      const token = await session?.getToken();
-      if (!token) return null;
-      return getSupabaseClient(async () => token);
+      return getSupabaseClient();
     } catch (error) {
       console.error('[useSubscription] supabase client error', error);
       return null;
     }
-  }, [isSessionLoaded, isSignedIn, session, userId]);
+  }, [isSignedIn, userId]);
 
   const mirrorPlanToSupabase = useCallback(async (nextIsPlus: boolean) => {
     if (!isSignedIn || !userId) return;
@@ -98,8 +173,11 @@ export function useSubscription(): UseSubscriptionReturn {
 
     const now = new Date().toISOString();
     const { error } = await client
-      .from('profiles')
-      .upsert(getSubscriptionProfilePatch(userId, nextIsPlus ? 'plus' : 'free', 'revenuecat', now), { onConflict: 'id' });
+      .from(USER_DETAILS_TABLE)
+      .upsert(
+        getSubscriptionUserDetailsPatch(userId, nextIsPlus ? 'plus' : 'free', 'revenuecat', now),
+        { onConflict: USER_DETAILS_USER_ID_COLUMN }
+      );
 
     if (error) {
       console.error('[useSubscription] mirror error', error);
@@ -120,9 +198,9 @@ export function useSubscription(): UseSubscriptionReturn {
     if (!client) return false;
 
     const { data, error } = await client
-      .from('profiles')
+      .from(USER_DETAILS_TABLE)
       .select('subscription_plan, subscription_status')
-      .eq('id', userId)
+      .eq(USER_DETAILS_USER_ID_COLUMN, userId)
       .maybeSingle();
 
     if (error) {
@@ -154,7 +232,7 @@ export function useSubscription(): UseSubscriptionReturn {
       return;
     }
 
-    const customerInfo = await modules.purchases.getCustomerInfo();
+    const customerInfo = await getSharedCustomerInfo(modules.purchases);
     await applyRevenueCatCustomerInfo(customerInfo);
   }, [apiKey, applyRevenueCatCustomerInfo, loadMirroredPlan, modules.purchases]);
 
@@ -189,20 +267,7 @@ export function useSubscription(): UseSubscriptionReturn {
           }
         }
 
-        if (!configuredRef.current) {
-          await purchases.configure({
-            apiKey,
-            appUserID: isSignedIn && userId ? userId : undefined,
-          });
-          configuredRef.current = true;
-          configuredUserIdRef.current = isSignedIn && userId ? userId : null;
-        } else if (isSignedIn && userId && configuredUserIdRef.current !== userId) {
-          await purchases.logIn(userId);
-          configuredUserIdRef.current = userId;
-        } else if (!isSignedIn && configuredUserIdRef.current) {
-          await purchases.logOut();
-          configuredUserIdRef.current = null;
-        }
+        await ensureRevenueCatConfigured(purchases, apiKey, isSignedIn && userId ? userId : null);
 
         await syncCustomerInfo();
 

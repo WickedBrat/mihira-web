@@ -1,11 +1,9 @@
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useProfile } from '@/features/profile/useProfile';
 
-// Mock Clerk
 const mockGetToken = jest.fn().mockResolvedValue('test-jwt');
-jest.mock('@clerk/expo', () => ({
+jest.mock('@/lib/auth', () => ({
   useAuth: jest.fn(),
-  useSession: jest.fn(),
 }));
 
 // Mock Supabase client
@@ -29,16 +27,14 @@ jest.mock('@/components/ui/ToastProvider', () => ({
   useToast: () => ({ showToast: jest.fn() }),
 }));
 
-const { useAuth, useSession } = require('@clerk/expo') as {
+const { useAuth } = require('@/lib/auth') as {
   useAuth: jest.Mock;
-  useSession: jest.Mock;
 };
 
 describe('useProfile (signed out)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     useAuth.mockReturnValue({ isLoaded: true, isSignedIn: false, userId: null, getToken: mockGetToken });
-    useSession.mockReturnValue({ isLoaded: true, session: null });
   });
 
   it('returns initial empty profile when signed out', () => {
@@ -61,10 +57,6 @@ describe('useProfile (signed in)', () => {
       isSignedIn: true,
       userId: 'user_123',
       getToken: mockGetToken,
-    });
-    useSession.mockReturnValue({
-      isLoaded: true,
-      session: { id: 'sess_123', getToken: mockGetToken },
     });
     mockSingle.mockResolvedValue({
       data: {

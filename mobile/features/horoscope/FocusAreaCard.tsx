@@ -16,81 +16,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { VedicReasoningAccordion } from './VedicReasoningAccordion';
 import { useTheme } from '@/lib/theme-context';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
-
-const BASE = 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/aksha/daily-prediction';
-const img = (filename: string) => ({ uri: `${BASE}/${filename}.jpg` });
-
-const IMAGES: Record<string, { uri: string }> = {
-  // Ambition / Career
-  Ambition:               img('ambition'),
-  Work:                   img('ambition'),
-  Career:                 img('ambition'),
-  'Public presence':      img('public-presence'),
-  'Public Presence':      img('public-presence'),
-  Networking:             img('networking'),
-  Community:              img('community'),
-
-  // Mind / Knowledge
-  Knowledge:              img('knowledge'),
-  Learning:               img('knowledge'),
-  Reading:                img('reading'),
-  Writing:                img('writing'),
-  Speaking:               img('speaking'),
-  'Problem solving':      img('problem-solving'),
-  'Problem Solving':      img('problem-solving'),
-  Focus:                  img('focus'),
-
-  // Decisions / Finance
-  Decisions:              img('decision'),
-  Decision:               img('decision'),
-  'Material decisions':   img('material-decision'),
-  'Material Decisions':   img('material-decision'),
-  Financial:              img('financial'),
-  Money:                  img('money'),
-  Negotiations:           img('negotiations'),
-  Correspondence:         img('correspondence'),
-
-  // Relationships
-  Romance:                img('romance'),
-  Partnership:            img('romance'),
-  'Social bonds':         img('social-bonds'),
-  'Social Bonds':         img('social-bonds'),
-
-  // Family / Home
-  Home:                   img('domestic'),
-  'Domestic matters':     img('domestic'),
-  'Domestic Matters':     img('domestic'),
-  Domestic:               img('domestic'),
-  Lineage:                img('lineage'),
-
-  // Self-care / Wellness
-  Rest:                   img('rest'),
-  Health:                 img('health'),
-  Body:                   img('body'),
-  Routines:               img('routine'),
-  Routine:                img('routine'),
-  Exercise:               img('exercise'),
-  Healing:                img('healing'),
-  'Physical vitality':    img('physical-vitality'),
-  'Physical Vitality':    img('physical-vitality'),
-  Movement:               img('movement'),
-  Meditation:             img('meditation'),
-
-  // Creativity / Spirit
-  Art:                    img('art'),
-  Making:                 img('making'),
-  Ritual:                 img('ritual'),
-};
-
-const FALLBACK = img('focus');
+import { getDailyPredictionImage } from './dailyPredictionImages';
 
 interface Props {
   focusArea: DailyFocusArea;
+  gender?: string | null;
   isLast?: boolean;
 }
 
-export function FocusAreaCard({ focusArea, isLast = false }: Props) {
-  const image = IMAGES[focusArea.area] ?? FALLBACK;
+export function FocusAreaCard({ focusArea, gender, isLast = false }: Props) {
+  const image = getDailyPredictionImage(focusArea.area, gender);
   const { colors } = useTheme();
   const { showToast } = useToast();
   const [isAddingReminder, setIsAddingReminder] = useState(false);

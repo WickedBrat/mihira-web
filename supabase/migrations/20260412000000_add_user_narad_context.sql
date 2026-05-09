@@ -10,7 +10,7 @@ create table if not exists user_narad_context (
 );
 
 -- RLS: each user can only read and write their own row.
--- Clerk JWT stores the user ID in the 'sub' claim.
+-- Supabase Auth stores the user ID in the 'sub' claim.
 alter table user_narad_context enable row level security;
 
 create policy "Users manage own narad context"

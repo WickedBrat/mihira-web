@@ -13,10 +13,12 @@ import { DailyAlignmentCard } from '@/features/horoscope/DailyAlignmentCard';
 import { useDailyAlignment } from '@/features/horoscope/useDailyAlignment';
 import { useCalendarEvents } from '@/features/daily/useCalendarEvents';
 import { layout } from '@/lib/theme';
+import { useUser } from '@/lib/auth';
 
 export default function HomeScreen() {
   const { chart, focusAreas, isLoading, error } = useDailyAlignment();
   const { events: todayEvents } = useCalendarEvents();
+  const { user } = useUser();
 
   return (
     <View className="flex-1">
@@ -63,6 +65,7 @@ export default function HomeScreen() {
           <DailyAlignmentCard
             chart={chart}
             focusAreas={focusAreas}
+            gender={user?.gender}
             isLoading={isLoading}
             error={error}
           />

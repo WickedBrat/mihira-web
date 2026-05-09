@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Constants from 'expo-constants';
-import { useAuth, useUser } from '@clerk/expo';
+import { useAuth, useUser } from '@/lib/auth';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { PageFooter } from '@/components/ui/PageFooter';
 import { useGuide } from '@/lib/guideStore';
@@ -128,7 +128,7 @@ export default function ProfileScreen() {
             <SacredButton
               label="Trigger Onboarding Flow"
               onPress={async () => {
-                await clearOnboardingCompleted();
+                await clearOnboardingCompleted({ userId: signedIn ? userId : null });
                 resetOnboardingData();
                 router.push('/onboarding');
               }}

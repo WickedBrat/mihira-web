@@ -19,8 +19,8 @@
 | Language            | TypeScript + TSX (React Native 0.81 / React 19)        |
 | Styling             | React Native `StyleSheet` + custom `lib/theme.ts`      |
 | Animations          | `moti` and `react-native-reanimated` (~4.1)            |
-| Authentication      | Clerk (`@clerk/clerk-expo` v2) via OAuth                |
-| Token Cache         | `expo-secure-store` (keychain-backed, persists after first unlock) |
+| Authentication      | Supabase Auth (`@supabase/supabase-js`) via OAuth      |
+| Auth Storage        | `@react-native-async-storage/async-storage`            |
 | Database            | Supabase (`@supabase/supabase-js`) for profile sync    |
 | Local Storage       | `@react-native-async-storage/async-storage`            |
 | AI                  | Perplexity AI via `sonar-pro` (structured) and `sonar` (streaming) |
@@ -38,7 +38,6 @@
 The following env vars are required:
 
 ```
-EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=  # Clerk OAuth
 EXPO_PUBLIC_SUPABASE_URL=           # Supabase project URL
 EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY= (or EXPO_PUBLIC_SUPABASE_ANON_KEY=)
 PERPLEXITY_API_KEY=                 # Used server-side only (API routes)
@@ -94,7 +93,7 @@ aksha/
 ├── features/                   # Feature-specific components, hooks, types
 │   ├── auth/
 │   │   ├── OAuthButton.tsx     # Google/Apple OAuth button
-│   │   └── useSignIn.ts        # Clerk OAuth flows (Google + Apple)
+│   │   └── useSignIn.ts        # Supabase OAuth flows (Google + Apple)
 │   ├── chat/
 │   │   ├── ChatBubble.tsx      # Message render component
 │   │   ├── ChatInput.tsx       # Keyboard-attached input bar
@@ -129,8 +128,8 @@ aksha/
 │   ├── theme.ts                # Color palette, font names, glassMorphism, gradients, layout
 │   ├── typography.ts           # scaleFont(size) — applies FONT_SCALE=1.14 globally
 │   ├── haptics.ts              # hapticLight, hapticMedium, hapticSuccess wrappers
-│   ├── clerk.ts                # Clerk tokenCache (SecureStore-backed)
-│   ├── supabase.ts             # getSupabaseClient() — Clerk JWT-authenticated Supabase client
+│   ├── auth.tsx                # Supabase auth provider, hooks, OAuth redirect session handling
+│   ├── supabase.ts             # getSupabaseClient() — persisted Supabase Auth client
 │   ├── chatStorage.ts          # AsyncStorage: persist/load last 50 chat messages
 │   ├── profileStorage.ts       # AsyncStorage: snapshot current user profile per userId
 │   ├── dailyAlignmentStorage.ts # AsyncStorage: cache AI daily alignment (date-keyed)
@@ -199,12 +198,13 @@ All fonts are from the `Lexend` family, loaded statically. A global `FONT_SCALE 
 `app/_layout.tsx` is the application shell. It establishes the entire provider tree:
 
 ```
-ClerkProvider
-  └── GestureHandlerRootView
-       └── SafeAreaProvider
-            └── ToastProvider
-                 └── StatusBar (dark + #0e0e0e background)
-                      └── Stack Navigator (all screens)
+ThemeProvider
+  └── AuthProvider
+       └── GestureHandlerRootView
+            └── SafeAreaProvider
+                 └── PostHogProvider
+                      └── ToastProvider
+                           └── Stack Navigator (all screens)
 ```
 
 Fonts are loaded with `useFonts()` and the SplashScreen is held until they resolve. Onboarding screens have `gestureEnabled: false` and some use `animation: 'fade'` to create a ritualistic progression feel.
@@ -246,7 +246,7 @@ Fonts are loaded with `useFonts()` and the SplashScreen is held until they resol
 - Closes with a Rumi quote section
 
 ### Profile — `app/(tabs)/profile.tsx`
-- Displays avatar/initials derived from `useUser()` (Clerk) or `profile.name`
+- Displays avatar/initials derived from the Supabase auth user or `profile.name`
 - Birth date/time picker is fully custom and platform-split (Android: dual-step picker; iOS: combined date+time bottom sheet)
 - Profile fields: name, birth_dt (formatted as `DD/MM/YYYY, HH:MM AM`), birth_place
 - Settings sheet accessed via gear icon: shows language selection, sign-out, account info
@@ -310,20 +310,29 @@ Collapsible section that reveals the AI's technical Jyotish reasoning. Animates 
 ## Supabase Integration
 
 `lib/supabase.ts` creates a Supabase client with:
-- `persistSession: false` (Clerk manages sessions)
-- `autoRefreshToken: false`
-- `accessToken: getToken` — passes a Clerk JWT getter function so Supabase uses the Clerk-issued token for RLS
+- `persistSession: true`
+- `autoRefreshToken: true`
+- `AsyncStorage` session persistence for Supabase Auth
 
-The Supabase `profiles` table schema (inferred from `useProfile.ts`):
+The Supabase `user_details` table stores one row per `auth.users` user:
 ```
-profiles (
-  id          text PRIMARY KEY,  -- Clerk userId
-  name        text,
-  birth_dt    text,              -- "DD/MM/YYYY, HH:MM AM" format
+user_details (
+  user_id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  name text,
+  birth_dt text,
   birth_place text,
-  language    text,
-  region      text,
-  focus_area  text,
-  updated_at  timestamptz
+  language text,
+  region text,
+  focus_area text,
+  muhurat_count integer,
+  ask_count integer,
+  period_start timestamptz,
+  period_end timestamptz,
+  subscription_plan text,
+  subscription_status text,
+  onboarding_completed boolean,
+  onboarding_step text,
+  onboarding_data jsonb,
+  updated_at timestamptz
 )
 ```

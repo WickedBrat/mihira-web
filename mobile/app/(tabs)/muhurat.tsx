@@ -2,13 +2,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   View,
-  Text,
   ScrollView,
   Pressable,
   TextInput,
   Keyboard,
   Platform,
 } from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { CalendarDays, Sparkles } from 'lucide-react-native';
 import { MuhuratCard } from '@/features/muhurat/MuhuratCard';

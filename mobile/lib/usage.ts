@@ -1,7 +1,8 @@
 // lib/usage.ts
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth, useSession } from '@clerk/expo';
+import { useAuth } from '@/lib/auth';
 import { getSupabaseClient } from '@/lib/supabase';
+import { USER_DETAILS_TABLE, USER_DETAILS_USER_ID_COLUMN } from '@/lib/userDetails';
 
 export type Feature = 'muhurat' | 'ask';
 
@@ -40,22 +41,19 @@ function newPeriod() {
 
 export function useUsage(feature: Feature): UseUsageReturn {
   const { isSignedIn, userId } = useAuth();
-  const { isLoaded: isSessionLoaded, session } = useSession();
   const limit = LIMITS[feature];
 
   const [count, setCount] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const getClient = useCallback(async () => {
-    if (!isSignedIn || !userId || !isSessionLoaded) return null;
+    if (!isSignedIn || !userId) return null;
     try {
-      const token = await session?.getToken();
-      if (!token) return null;
-      return getSupabaseClient(() => session!.getToken());
+      return getSupabaseClient();
     } catch {
       return null;
     }
-  }, [isSignedIn, userId, isSessionLoaded, session]);
+  }, [isSignedIn, userId]);
 
   useEffect(() => {
     if (!isSignedIn || !userId) {
@@ -75,9 +73,9 @@ export function useUsage(feature: Feature): UseUsageReturn {
       }
 
       const { data } = await client
-        .from('user_usage')
+        .from(USER_DETAILS_TABLE)
         .select('*')
-        .eq('user_id', userId)
+        .eq(USER_DETAILS_USER_ID_COLUMN, userId)
         .single<UsageRow>();
 
       if (cancelled) return;
@@ -105,9 +103,9 @@ export function useUsage(feature: Feature): UseUsageReturn {
     if (!client) return;
 
     const { data: existing } = await client
-      .from('user_usage')
+      .from(USER_DETAILS_TABLE)
       .select('*')
-      .eq('user_id', userId)
+      .eq(USER_DETAILS_USER_ID_COLUMN, userId)
       .single<UsageRow>();
 
     const expired = !existing || isExpired(existing.period_end);
@@ -131,8 +129,8 @@ export function useUsage(feature: Feature): UseUsageReturn {
     setCount(newCount); // optimistic
 
     const { error } = await client
-      .from('user_usage')
-      .upsert(upsertRow, { onConflict: 'user_id' });
+      .from(USER_DETAILS_TABLE)
+      .upsert(upsertRow, { onConflict: USER_DETAILS_USER_ID_COLUMN });
 
     if (error) {
       console.error('[useUsage] increment error', error);

@@ -2,10 +2,10 @@
 import React from 'react';
 import {
   View,
-  Text,
   Image,
   Pressable,
 } from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ChevronRight, Star } from 'lucide-react-native';
 import { router } from 'expo-router';

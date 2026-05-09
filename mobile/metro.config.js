@@ -1,5 +1,8 @@
 const { getDefaultConfig } = require('expo/metro-config');
 const { withNativeWind } = require('nativewind/metro');
+const path = require('path');
+
+process.chdir(__dirname);
 
 const config = getDefaultConfig(__dirname);
 
@@ -29,4 +32,8 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   return context.resolveRequest(context, moduleName, platform);
 };
 
-module.exports = withNativeWind(config, { input: './global.css' });
+module.exports = withNativeWind(config, {
+  input: path.join(__dirname, 'global.css'),
+  configPath: path.join(__dirname, 'tailwind.config.js'),
+  typescriptEnvPath: 'nativewind-env.d.ts',
+});

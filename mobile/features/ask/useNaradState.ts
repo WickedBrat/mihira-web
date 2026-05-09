@@ -1,8 +1,7 @@
 // features/ask/useNaradState.ts
-import { fetch } from 'expo/fetch';
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { useAuth, useUser } from '@clerk/expo';
-import { apiUrl } from '@/lib/apiUrl';
+import { useAuth, useUser } from '@/lib/auth';
+import { apiFetch } from '@/lib/apiFetch';
 import type { Message } from '@/features/ask/types';
 import type { NaradContext, NaradResponse } from './types';
 import {
@@ -29,7 +28,7 @@ const NARAD_WELCOME: Message = {
 };
 
 export function useNaradState() {
-  const { getToken, userId } = useAuth();
+  const { userId } = useAuth();
   const { user } = useUser();
 
   // Source of truth for all messages — never truncated (pagination reads from here)
@@ -61,7 +60,7 @@ export function useNaradState() {
     load();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Effect 2: sync firstName from Clerk once it resolves (no message overwrite)
+  // Effect 2: sync firstName from auth once it resolves (no message overwrite)
   useEffect(() => {
     if (!user?.firstName) return;
     setNaradContext(prev => {
@@ -106,7 +105,7 @@ export function useNaradState() {
       try {
         const history = await loadNaradHistory();
 
-        const res = await fetch(apiUrl('/api/narad'), {
+        const res = await apiFetch('/api/narad', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -177,7 +176,7 @@ export function useNaradState() {
         });
 
         if (userId) {
-          syncNaradContextToSupabase(newContext, userId, getToken).catch(() => {});
+          syncNaradContextToSupabase(newContext, userId).catch(() => {});
         }
       } catch (err) {
         console.error('[narad] sendMessage error:', err);
@@ -193,7 +192,7 @@ export function useNaradState() {
         setIsTyping(false);
       }
     },
-    [isTyping, userId, getToken],
+    [isTyping, userId],
   );
 
   const clearChat = useCallback(async () => {

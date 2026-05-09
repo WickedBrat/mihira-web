@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { useUser } from '@clerk/expo';
+import { useUser } from '@/lib/auth';
 import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
@@ -21,13 +21,13 @@ export default function Screen4() {
     return storedName || user?.fullName || user?.firstName || '';
   });
   const inputRef = useRef<TextInput>(null);
-  const clerkName = user?.fullName || user?.firstName || '';
+  const authName = user?.fullName || user?.firstName || '';
 
   useEffect(() => {
-    if (name.trim() || !clerkName.trim()) return;
-    setName(clerkName.trim());
-    setOnboardingData({ userName: clerkName.trim() });
-  }, [clerkName, name]);
+    if (name.trim() || !authName.trim()) return;
+    setName(authName.trim());
+    setOnboardingData({ userName: authName.trim() });
+  }, [authName, name]);
 
   function proceed() {
     const trimmed = name.trim();

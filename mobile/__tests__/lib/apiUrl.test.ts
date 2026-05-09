@@ -2,16 +2,21 @@ const originalApiBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL;
 
 function loadApiUrl({
   hostUri,
+  apiBaseUrl,
   platform = 'ios',
 }: {
   hostUri?: string;
+  apiBaseUrl?: string;
   platform?: 'ios' | 'android' | 'web';
 } = {}) {
   jest.resetModules();
   jest.doMock('expo-constants', () => ({
     __esModule: true,
     default: {
-      expoConfig: hostUri ? { hostUri } : {},
+      expoConfig: {
+        ...(hostUri ? { hostUri } : {}),
+        ...(apiBaseUrl ? { extra: { apiBaseUrl } } : {}),
+      },
     },
   }));
   jest.doMock('react-native', () => ({
@@ -40,6 +45,20 @@ describe('apiUrl', () => {
     expect(apiUrl('/api/wisdom/daily-arth-reflection')).toBe(
       'https://www.getmihira.com/v1/api/wisdom/daily-arth-reflection'
     );
+  });
+
+  it('uses Expo extra API base when public env is unavailable', () => {
+    delete process.env.EXPO_PUBLIC_API_BASE_URL;
+    const { apiUrl } = loadApiUrl({ apiBaseUrl: 'https://api.getmihira.com/' });
+
+    expect(apiUrl('/api/ask')).toBe('https://api.getmihira.com/v1/api/ask');
+  });
+
+  it('ignores unresolved app.json env placeholders', () => {
+    delete process.env.EXPO_PUBLIC_API_BASE_URL;
+    const { apiUrl } = loadApiUrl({ apiBaseUrl: '${EXPO_PUBLIC_API_BASE_URL}' });
+
+    expect(apiUrl('/api/ask')).toBe('https://www.getmihira.com/v1/api/ask');
   });
 
   it('keeps Expo hostUri for web local API routes when no base URL is configured', () => {

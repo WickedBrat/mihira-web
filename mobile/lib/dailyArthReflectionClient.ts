@@ -1,4 +1,4 @@
-import { apiUrl } from '@/lib/apiUrl';
+import { apiFetch } from '@/lib/apiFetch';
 import {
   getCachedDailyArthReflection,
   saveCachedDailyArthReflection,
@@ -20,7 +20,7 @@ export async function getDailyArthReflection({
   const cached = await getCachedDailyArthReflection(quoteId);
   if (cached) return cached;
 
-  const response = await fetch(apiUrl('/api/wisdom/daily-arth-reflection'), {
+  const response = await apiFetch('/api/wisdom/daily-arth-reflection', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ quoteId, quote, source }),

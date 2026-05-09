@@ -18,6 +18,24 @@ export function ProfileFields({ profile, moonProfile }: ProfileFieldsProps) {
 
   return (
     <View className="gap-2.5">
+
+      {moonProfile ? (
+        <View className="rounded-[18px] mb-2 border border-black/[0.06] bg-[rgba(232,225,212,0.62)] p-4 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]">
+          <Text className="mb-3 px-1 font-label text-[9px] uppercase tracking-wide text-on-surface-variant">
+            Cosmic Signature
+          </Text>
+          <View className="flex-row gap-3">
+            <View className="flex-1 rounded-2xl bg-black/[0.04] px-3 py-3 dark:bg-white/[0.04]">
+              <Text className="font-label text-[9px] uppercase tracking-wide text-on-surface-variant">Nakshatra</Text>
+              <Text className="mt-1 font-body-medium tracking-wide text-on-surface">{moonProfile.nakshatra}</Text>
+            </View>
+            <View className="flex-1 rounded-2xl bg-black/[0.04] px-3 py-3 dark:bg-white/[0.04]">
+              <Text className="font-label text-[9px] uppercase tracking-wide text-on-surface-variant">Rashi</Text>
+              <Text className="mt-1 font-body-medium tracking-wide text-on-surface">{moonProfile.rashi}</Text>
+            </View>
+          </View>
+        </View>
+      ) : null}
       <Text className="mb-0.5 px-1 font-label text-[11px] uppercase tracking-[1.5px] text-on-surface-variant">
         Your Details
       </Text>
@@ -45,23 +63,6 @@ export function ProfileFields({ profile, moonProfile }: ProfileFieldsProps) {
           </View>
         );
       })}
-      {moonProfile ? (
-        <View className="rounded-[18px] border border-black/[0.06] bg-[rgba(232,225,212,0.62)] p-4 dark:border-white/[0.05] dark:bg-[rgba(37,38,38,0.62)]">
-          <Text className="mb-3 px-1 font-label text-[9px] uppercase tracking-wide text-on-surface-variant">
-            Cosmic Signature
-          </Text>
-          <View className="flex-row gap-3">
-            <View className="flex-1 rounded-2xl bg-black/[0.04] px-3 py-3 dark:bg-white/[0.04]">
-              <Text className="font-label text-[9px] uppercase tracking-wide text-on-surface-variant">Nakshatra</Text>
-              <Text className="mt-1 font-body-medium tracking-wide text-on-surface">{moonProfile.nakshatra}</Text>
-            </View>
-            <View className="flex-1 rounded-2xl bg-black/[0.04] px-3 py-3 dark:bg-white/[0.04]">
-              <Text className="font-label text-[9px] uppercase tracking-wide text-on-surface-variant">Rashi</Text>
-              <Text className="mt-1 font-body-medium tracking-wide text-on-surface">{moonProfile.rashi}</Text>
-            </View>
-          </View>
-        </View>
-      ) : null}
     </View>
   );
 }

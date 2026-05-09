@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useAuth, useSession } from '@clerk/expo';
+import { useAuth } from '@/lib/auth';
 import { useToast } from '@/components/ui/ToastProvider';
 import { getSupabaseClient } from '@/lib/supabase';
+import { USER_DETAILS_TABLE, USER_DETAILS_USER_ID_COLUMN } from '@/lib/userDetails';
+import { withTimeout } from '@/lib/withTimeout';
+
+const SUPABASE_TIMEOUT_MS = 15000;
 
 export interface ProfileData {
   name: string;
@@ -64,27 +68,22 @@ function getSyncUnavailableMessage(error: unknown) {
   }
 
   if (message.includes('session token') || message.includes('empty session token')) {
-    return 'Clerk did not return a session token. Sign out, sign back in, then try again.';
-  }
-
-  if (lowerMessage.includes('native api disabled') || lowerMessage.includes('native_api_disabled')) {
-    return 'Enable Native API in the Clerk Dashboard under Native Applications, then sign in again.';
+    return 'Supabase did not return a session token. Sign out, sign back in, then try again.';
   }
 
   if (lowerMessage.includes('network')) {
-    return 'Clerk token request failed over the network. Check your internet connection and Clerk configuration.';
+    return 'Supabase auth failed over the network. Check your internet connection and Supabase configuration.';
   }
 
   if (message) {
     return message;
   }
 
-  return 'Changes will stay on this device until Clerk and Supabase auth are connected.';
+  return 'Changes will stay on this device until Supabase auth is connected.';
 }
 
 export function useProfile() {
   const { isLoaded: isAuthLoaded, isSignedIn, userId } = useAuth();
-  const { isLoaded: isSessionLoaded, session } = useSession();
   const { showToast } = useToast();
   const [profile, setProfile] = useState<ProfileData>(INITIAL_PROFILE);
   const [isSaving, setIsSaving] = useState(false);
@@ -96,16 +95,13 @@ export function useProfile() {
 
   useEffect(() => {
     hasWarnedSyncUnavailable.current = false;
-  }, [isSignedIn, userId, session?.id]);
+  }, [isSignedIn, userId]);
 
   const getClient = useCallback(async () => {
-    if (!isSignedIn || !userId || !isSessionLoaded) return null;
+    if (!isSignedIn || !userId) return null;
 
     try {
-      const token = await session?.getToken();
-      if (!token) throw new Error('Missing Clerk session token for Supabase');
-
-      return getSupabaseClient(async () => token);
+      return getSupabaseClient();
     } catch (error) {
       if (!hasWarnedSyncUnavailable.current) {
         console.warn(
@@ -123,7 +119,7 @@ export function useProfile() {
 
       return null;
     }
-  }, [isSessionLoaded, isSignedIn, session, showToast, userId]);
+  }, [isSignedIn, showToast, userId]);
 
   const notifySaveSuccess = useCallback(() => {
     const now = Date.now();
@@ -146,13 +142,17 @@ export function useProfile() {
         if (!client) return;
 
         setIsSaving(true);
-        const { error: saveError } = await client.from('profiles').upsert(
-          {
-            id: userId,
-            ...fields,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'id' }
+        const { error: saveError } = await withTimeout(
+          client.from(USER_DETAILS_TABLE).upsert(
+            {
+              user_id: userId,
+              ...fields,
+              updated_at: new Date().toISOString(),
+            },
+            { onConflict: USER_DETAILS_USER_ID_COLUMN }
+          ),
+          SUPABASE_TIMEOUT_MS,
+          'Profile save timed out. Check Supabase connectivity.'
         );
         if (saveError) {
           console.error('[useProfile] save error', saveError);
@@ -181,11 +181,11 @@ export function useProfile() {
 
   // Fetch on sign-in
   useEffect(() => {
-    if (!isAuthLoaded || !isSessionLoaded) {
+    if (!isAuthLoaded) {
       return;
     }
 
-    if (!isSignedIn || !userId || !session) {
+    if (!isSignedIn || !userId) {
       setProfile(INITIAL_PROFILE);
       isLoadedFromDB.current = false;
       return;
@@ -199,13 +199,25 @@ export function useProfile() {
           return;
         }
 
-        const { error: upsertError } = await client
-          .from('profiles')
-          .upsert({ id: userId }, { onConflict: 'id', ignoreDuplicates: true });
+        const { error: upsertError } = await withTimeout(
+          client
+            .from(USER_DETAILS_TABLE)
+            .upsert({ user_id: userId }, { onConflict: USER_DETAILS_USER_ID_COLUMN, ignoreDuplicates: true }),
+          SUPABASE_TIMEOUT_MS,
+          'Profile setup timed out. Check Supabase connectivity.'
+        );
 
         if (upsertError) throw new Error(upsertError.message);
 
-        const { data } = await client.from('profiles').select('*').eq('id', userId).single();
+        const { data } = await withTimeout(
+          client
+            .from(USER_DETAILS_TABLE)
+            .select('*')
+            .eq(USER_DETAILS_USER_ID_COLUMN, userId)
+            .single(),
+          SUPABASE_TIMEOUT_MS,
+          'Profile load timed out. Check Supabase connectivity.'
+        );
         const nextProfile = data as Partial<ProfileData> | null;
 
         if (nextProfile) {
@@ -232,7 +244,7 @@ export function useProfile() {
     };
 
     void loadProfile();
-  }, [getClient, isAuthLoaded, isSessionLoaded, isSignedIn, session, showToast, userId]);
+  }, [getClient, isAuthLoaded, isSignedIn, showToast, userId]);
 
   const updateField = useCallback(
     <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => {
@@ -257,7 +269,7 @@ export function useProfile() {
 
   // Debounced auto-save
   useEffect(() => {
-    if (!isSignedIn || !userId || !session || !isLoadedFromDB.current) return;
+    if (!isSignedIn || !userId || !isLoadedFromDB.current) return;
 
     if (skipNextSave.current) {
       skipNextSave.current = false;
@@ -272,7 +284,7 @@ export function useProfile() {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [profile, isSignedIn, session, userId, persistFields]);
+  }, [profile, isSignedIn, userId, persistFields]);
 
   return { profile, updateField, saveField, isSaving };
 }

@@ -1,6 +1,14 @@
-import { createClient } from '@supabase/supabase-js';
+import 'react-native-url-polyfill/auto';
 
-export function getSupabaseClient(getToken: () => Promise<string | null>) {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppState, Platform } from 'react-native';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+
+let supabaseClient: SupabaseClient | null = null;
+let hasRegisteredAutoRefresh = false;
+let autoRefreshSubscription: { remove: () => void } | null = null;
+
+function getSupabaseConfig() {
   const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
   const key =
     process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
@@ -12,12 +20,46 @@ export function getSupabaseClient(getToken: () => Promise<string | null>) {
     );
   }
 
-  return createClient(url, key, {
+  return { url, key };
+}
+
+function registerAutoRefresh(client: SupabaseClient) {
+  if (hasRegisteredAutoRefresh || Platform.OS === 'web') return;
+
+  hasRegisteredAutoRefresh = true;
+  if (AppState.currentState === 'active') {
+    client.auth.startAutoRefresh();
+  }
+
+  autoRefreshSubscription = AppState.addEventListener('change', (state) => {
+    if (state === 'active') {
+      client.auth.startAutoRefresh();
+    } else {
+      client.auth.stopAutoRefresh();
+    }
+  });
+}
+
+export function getSupabaseClient() {
+  if (supabaseClient) return supabaseClient;
+
+  const { url, key } = getSupabaseConfig();
+  supabaseClient = createClient(url, key, {
     auth: {
-      persistSession: false,
-      autoRefreshToken: false,
+      storage: AsyncStorage,
+      persistSession: true,
+      autoRefreshToken: true,
       detectSessionInUrl: false,
     },
-    accessToken: getToken,
   });
+
+  registerAutoRefresh(supabaseClient);
+  return supabaseClient;
+}
+
+export function resetSupabaseClientForTests() {
+  supabaseClient = null;
+  hasRegisteredAutoRefresh = false;
+  autoRefreshSubscription?.remove();
+  autoRefreshSubscription = null;
 }

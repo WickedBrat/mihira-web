@@ -12,6 +12,7 @@ jest.mock('expo-linear-gradient', () => ({
 }));
 
 jest.mock('@/lib/theme-context', () => ({
+  useOptionalTheme: () => null,
   useTheme: () => ({
     colors: {
       onPrimary: '#fff',

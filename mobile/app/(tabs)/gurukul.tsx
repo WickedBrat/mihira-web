@@ -19,17 +19,6 @@ export default function GurukulScreen() {
   const heroHeight = Math.min(Math.max(height * 0.32, 260), 340);
   const sheetOverlap = 30;
 
-  const imageWashColors: [string, string, string] = [
-    'rgba(16,11,6,0.14)',
-    'rgba(69,48,18,0.05)',
-    'rgba(250,247,242,0)',
-  ];
-  const imageDepthColors: [string, string, string, string] = [
-    'rgba(0,0,0,0)',
-    'rgba(17,12,7,0.08)',
-    isDark ? 'rgba(18,14,10,0.56)' : 'rgba(250,247,242,0.22)',
-    isDark ? 'rgba(18,18,22,0.92)' : 'rgba(250,247,242,0.95)',
-  ];
   const panelColor = isDark ? '#15110d' : colors.surface;
   const badgeColor = isDark ? '#e8b25b' : '#a56a18';
   const bodyColor = isDark ? 'rgba(255,244,226,0.76)' : colors.onSurfaceVariant;
@@ -38,28 +27,16 @@ export default function GurukulScreen() {
     <View className="flex-1 bg-surface">
       <View className="absolute inset-x-0 top-0 overflow-hidden" style={{ height: heroHeight }}>
         <Image
-          source={{ uri: 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/gurukul_coming_soon.jpg' }}
-          className="absolute inset-x-0"
+          source={{ uri: 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/gurukul_coming_soon.png' }}
+          className="absolute"
           resizeMode="cover"
           style={{
-            top: -16,
+            top: -36,
+            backgroundColor: 'black',
             height: heroHeight + 56,
             width: '100%',
             transform: [{ scale: 1.02 }],
           }}
-        />
-        <LinearGradient
-          colors={imageWashColors}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          className="absolute inset-0"
-        />
-        <LinearGradient
-          colors={imageDepthColors}
-          locations={[0, 0.35, 0.76, 1]}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          className="absolute bottom-0 left-0 right-0 h-[220px]"
         />
         <View
           className="absolute left-6 right-6 top-0 rounded-b-[36px]"
@@ -81,15 +58,6 @@ export default function GurukulScreen() {
               paddingBottom: Math.max(insets.bottom + 110, 132),
             }}
           >
-            <LinearGradient
-              colors={[
-                isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.86)',
-                'rgba(255,255,255,0)',
-              ]}
-              start={{ x: 0.5, y: 0 }}
-              end={{ x: 0.5, y: 1 }}
-              className="absolute inset-x-0 top-0 h-8"
-            />
             <View className="items-center">
               <Text
                 className="mb-2 font-label text-[11px] uppercase tracking-[2px]"

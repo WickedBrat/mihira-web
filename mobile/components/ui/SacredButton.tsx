@@ -37,7 +37,7 @@ export function SacredButton({
     ? gradients.primaryToContainer
     : gradients.secondaryToContainer;
   const shadowColor = variant === 'primary' ? colors.primary : colors.secondaryFixed;
-  const labelColor = variant === 'primary' ? colors.onPrimary : colors.onSecondaryContainer;
+  const labelColor = 'black';
 
   const handlePress = () => { hapticMedium(); onPress(); };
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
   Pressable,
-  Text,
   View,
   type LayoutChangeEvent,
 } from 'react-native';
+import { Text } from '@/components/ui/Text';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { AppBlurView } from '@/components/ui/AppBlurView';
 import { DailyIcon } from '@/components/ui/DailyIcon';

@@ -1,5 +1,4 @@
-import { fetch } from 'expo/fetch';
-import { useAuth, useUser } from '@clerk/expo';
+import { useUser } from '@/lib/auth';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   AskChatItem,
@@ -10,7 +9,7 @@ import type {
   ScriptureGuideResponse,
   ScriptureSource,
 } from '@/features/ask/types';
-import { apiUrl } from '@/lib/apiUrl';
+import { apiFetch } from '@/lib/apiFetch';
 import { analytics } from '@/lib/analytics';
 import {
   DEFAULT_ASK_CONTEXT,
@@ -29,7 +28,6 @@ const PAGE_SIZE = 12;
 
 export function useAskState() {
   const { user } = useUser();
-  const { userId } = useAuth();
   const allMessagesRef = useRef<AskChatItem[]>([]);
   const [messages, setMessages] = useState<AskChatItem[]>([]);
   const [hasMoreMessages, setHasMoreMessages] = useState(false);
@@ -127,7 +125,7 @@ export function useAskState() {
         conversation_length: nextAllMessages.length,
       });
 
-      const response = await fetch(apiUrl('/api/ask'), {
+      const response = await apiFetch('/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

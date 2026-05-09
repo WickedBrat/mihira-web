@@ -1,6 +1,7 @@
 // lib/naradStorage.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getSupabaseClient } from '@/lib/supabase';
+import { USER_DETAILS_USER_ID_COLUMN } from '@/lib/userDetails';
 import type { NaradContext, NaradHistoryEntry } from '@/features/ask/types';
 import type { Message } from '@/features/ask/types';
 
@@ -100,17 +101,16 @@ export async function clearNaradState(): Promise<void> {
 export async function syncNaradContextToSupabase(
   ctx: NaradContext,
   userId: string,
-  getToken: () => Promise<string | null>,
 ): Promise<void> {
   try {
-    const supabase = getSupabaseClient(getToken);
+    const supabase = getSupabaseClient();
     const { error } = await supabase.from('user_narad_context').upsert({
       user_id: userId,
       last_deity: ctx.lastDeity,
       last_theme: ctx.lastTheme,
       interaction_count: ctx.interactionCount,
       updated_at: new Date().toISOString(),
-    });
+    }, { onConflict: USER_DETAILS_USER_ID_COLUMN });
     if (error) {
       console.error('[naradStorage] syncNaradContextToSupabase supabase error', error.message);
     }

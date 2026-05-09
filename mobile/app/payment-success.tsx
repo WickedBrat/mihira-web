@@ -1,5 +1,4 @@
-import {
-  useUser } from '@clerk/expo';
+import { useUser } from '@/lib/auth';
 import { View,
   Image,
   TouchableOpacity,

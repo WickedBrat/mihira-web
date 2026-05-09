@@ -2,12 +2,12 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   View,
-  Text,
   FlatList,
   Pressable,
   Dimensions,
   Image,
 } from 'react-native';
+import { Text } from '@/components/ui/Text';
 import type { ViewToken } from 'react-native';
 import Animated, {
   FadeInDown,

@@ -11,7 +11,7 @@ import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { useAuth, useSession, useUser } from '@clerk/expo';
+import { useAuth, useUser } from '@/lib/auth';
 import { analytics } from '@/lib/analytics';
 import { getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
 import { setOnboardingCompleted } from '@/lib/onboardingStatus';
@@ -33,8 +33,7 @@ type Provider = 'google' | 'apple';
 
 export default function Screen12() {
   const data = getOnboardingData();
-  const { isLoaded, isSignedIn } = useAuth();
-  const { isLoaded: isSessionLoaded } = useSession();
+  const { isLoaded, isSignedIn, userId } = useAuth();
   const { isLoaded: isUserLoaded, user } = useUser();
   const { saveField } = useProfile();
   const [pendingCompletion, setPendingCompletion] = useState(false);
@@ -72,23 +71,27 @@ export default function Screen12() {
       ]);
     }
 
-    await setOnboardingCompleted(true);
+    await setOnboardingCompleted(true, {
+      userId: isSignedIn ? userId : null,
+      onboardingData: latest,
+      onboardingStep: 'completed',
+    });
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     router.replace('/(tabs)');
-  }, [isCompleting, isSignedIn, saveField, signedInName]);
+  }, [isCompleting, isSignedIn, saveField, signedInName, userId]);
 
   const { signInWithGoogle, signInWithApple, isLoading, loadingProvider } = useSignIn(() => {
     setPendingCompletion(true);
   });
 
   useEffect(() => {
-    if (!isLoaded || !isSessionLoaded || !isSignedIn || !pendingCompletion) return;
+    if (!isLoaded || !isSignedIn || !pendingCompletion) return;
     setPendingCompletion(false);
     void completeOnboarding();
-  }, [completeOnboarding, isLoaded, isSessionLoaded, isSignedIn, pendingCompletion]);
+  }, [completeOnboarding, isLoaded, isSignedIn, pendingCompletion]);
 
   const isBusy = isLoading || pendingCompletion || isCompleting;
-  const isAuthReady = isLoaded && isSessionLoaded && isUserLoaded;
+  const isAuthReady = isLoaded && isUserLoaded;
 
   return (
     <View className="flex-1">

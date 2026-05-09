@@ -1,16 +1,38 @@
+function readConfigValue(value) {
+  const trimmed = value?.trim();
+  if (!trimmed || trimmed.startsWith('${')) return undefined;
+  return trimmed;
+}
+
+const appEnvironment =
+  readConfigValue(process.env.APP_ENV) ??
+  readConfigValue(process.env.EAS_BUILD_PROFILE) ??
+  readConfigValue(process.env.NODE_ENV);
+const supabaseUrl = readConfigValue(process.env.EXPO_PUBLIC_SUPABASE_URL);
+const supabasePublishableKey =
+  readConfigValue(process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY) ??
+  readConfigValue(process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY);
+const isProductionBuild = appEnvironment === 'production';
+const enableDevButtons =
+  !isProductionBuild && readConfigValue(process.env.ENABLE_DEV_BUTTONS) === 'true';
+
 export default {
   expo: {
     name: 'Mihira',
     slug: 'mihira',
     version: '1.0.0',
-    orientation: 'portrait',
     scheme: 'mihira',
     userInterfaceStyle: 'dark',
     icon: './assets/icon.png',
     splash: {
-      image: './assets/splash-icon.png',
+      image: './assets/splash-logo.png',
       resizeMode: 'contain',
       backgroundColor: '#191C20',
+      dark: {
+        image: './assets/splash-logo.png',
+        resizeMode: 'contain',
+        backgroundColor: '#191C20',
+      },
     },
     ios: {
       bundleIdentifier: 'com.mihira.app',
@@ -19,13 +41,23 @@ export default {
     },
     android: {
       package: 'com.mihiralabs.app',
-      versionCode: 1,
+      versionCode: 2,
       permissions: [
         'com.google.android.gms.permission.AD_ID',
       ],
       adaptiveIcon: {
-        foregroundImage: './assets/adaptive-icon.png',
+        foregroundImage: './assets/adaptive-icon-foreground.png',
         backgroundColor: '#191C20',
+      },
+      splash: {
+        image: './assets/splash-logo.png',
+        resizeMode: 'contain',
+        backgroundColor: '#191C20',
+        dark: {
+          image: './assets/splash-logo.png',
+          resizeMode: 'contain',
+          backgroundColor: '#191C20',
+        },
       },
     },
     web: {
@@ -61,17 +93,30 @@ export default {
           remindersPermission: 'Allow Mihira to save your daily focus tasks as reminders.',
         },
       ],
+      "expo-asset",
       'expo-secure-store',
       'expo-web-browser',
+      [
+        'react-native-edge-to-edge',
+        {
+          android: {
+            parentTheme: 'Default',
+            enforceNavigationBarContrast: false,
+          },
+        },
+      ],
       './plugins/withAndroidPackagingOptions',
     ],
     experiments: {
       typedRoutes: true,
     },
     extra: {
+      apiBaseUrl: readConfigValue(process.env.EXPO_PUBLIC_API_BASE_URL),
+      supabaseUrl,
+      supabasePublishableKey,
       posthogProjectToken: process.env.POSTHOG_PROJECT_TOKEN,
       posthogHost: process.env.POSTHOG_HOST,
-      enableDevButtons: process.env.ENABLE_DEV_BUTTONS === 'true',
+      enableDevButtons,
       eas: {
         projectId: '6facd4de-331a-4c16-86c4-7ff3d5778d84',
       },

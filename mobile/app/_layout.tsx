@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useRef } from 'react';
-import { Stack, SplashScreen, router, usePathname, useGlobalSearchParams } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { View } from 'react-native';
+import { Stack, SplashScreen, router, usePathname, useGlobalSearchParams, type Href } from 'expo-router';
+import { SystemBars } from 'react-native-edge-to-edge';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ClerkProvider, useAuth, useUser } from '@clerk/expo';
 import {
   useFonts,
   GoogleSans_400Regular,
@@ -17,20 +17,17 @@ import {
 } from '@expo-google-fonts/cormorant-garamond';
 import { PostHogProvider } from 'posthog-react-native';
 import { vars } from 'nativewind';
-import { tokenCache } from '@/lib/clerk';
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { posthog } from '@/lib/posthog';
 import { analytics } from '@/lib/analytics';
+import { AuthProvider, useAuth, useUser } from '@/lib/auth';
 import { ThemeProvider, useTheme } from '@/lib/theme-context';
 import { getThemeColorVariables } from '@/lib/theme';
-import { getOnboardingCompleted } from '@/lib/onboardingStatus';
+import { getOnboardingState, setOnboardingStep } from '@/lib/onboardingStatus';
 import { OnboardingAudioControl } from '@/features/onboarding/OnboardingAudioControl';
 import '../global.css';
 
 SplashScreen.preventAutoHideAsync();
-
-const CLERK_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
-if (!CLERK_KEY) throw new Error('Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY');
 
 function AnalyticsIdentity() {
   const { isSignedIn, userId } = useAuth();
@@ -66,29 +63,28 @@ function ScreenTracker() {
   return null;
 }
 
-function OnboardingGate() {
+function GuardedNavigation() {
   const pathname = usePathname();
-  const { isLoaded } = useAuth();
+  const { isLoaded, isSignedIn, userId } = useAuth();
+  const [onboardingState, setOnboardingState] = useState<{
+    completed: boolean;
+    step: string | null;
+    pathname: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!isLoaded) return;
 
     let isActive = true;
+    setOnboardingState(null);
 
     async function checkOnboarding() {
-      const onboardingCompleted = await getOnboardingCompleted();
+      const nextState = await getOnboardingState({
+        userId: isSignedIn ? userId : null,
+      });
       if (!isActive) return;
 
-      const isOnboardingRoute = pathname.startsWith('/onboarding');
-
-      if (onboardingCompleted && isOnboardingRoute) {
-        router.replace('/(tabs)');
-        return;
-      }
-
-      if (!onboardingCompleted && !isOnboardingRoute) {
-        router.replace('/onboarding');
-      }
+      setOnboardingState({ ...nextState, pathname });
     }
 
     void checkOnboarding();
@@ -96,7 +92,31 @@ function OnboardingGate() {
     return () => {
       isActive = false;
     };
-  }, [isLoaded, pathname]);
+  }, [isLoaded, isSignedIn, pathname, userId]);
+
+  useEffect(() => {
+    if (!isLoaded || !onboardingState || onboardingState.pathname !== pathname) return;
+
+    const isOnboardingRoute = pathname.startsWith('/onboarding');
+    const onboardingUserId = isSignedIn ? userId : null;
+
+    if (onboardingState.completed && isOnboardingRoute) {
+      router.replace('/(tabs)');
+      return;
+    }
+
+    if (!onboardingState.completed && isOnboardingRoute) {
+      void setOnboardingStep(pathname, { userId: onboardingUserId });
+      return;
+    }
+
+    if (!onboardingState.completed && !isOnboardingRoute) {
+      const nextStep = onboardingState.step?.startsWith('/onboarding')
+        ? onboardingState.step
+        : '/onboarding';
+      router.replace(nextStep as Href);
+    }
+  }, [isLoaded, isSignedIn, onboardingState, pathname, userId]);
 
   return null;
 }
@@ -106,7 +126,7 @@ function ThemedStack() {
 
   return (
     <>
-      <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.background} />
+      <SystemBars style={isDark ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -147,12 +167,16 @@ function ThemedAppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <GestureHandlerRootView
-      style={[
-        { flex: 1, backgroundColor: colors.background },
-        themeVars,
-      ]}
+      style={{ flex: 1, backgroundColor: colors.background }}
     >
-      {children}
+      <View
+        style={[
+          { flex: 1, backgroundColor: colors.background },
+          themeVars,
+        ]}
+      >
+        {children}
+      </View>
     </GestureHandlerRootView>
   );
 }
@@ -176,8 +200,8 @@ export default function RootLayout() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <ClerkProvider publishableKey={CLERK_KEY!} tokenCache={tokenCache}>
-      <ThemeProvider>
+    <ThemeProvider>
+      <AuthProvider>
         <ThemedAppShell>
           <SafeAreaProvider>
             <PostHogProvider
@@ -191,14 +215,14 @@ export default function RootLayout() {
               <ToastProvider>
                 <AnalyticsIdentity />
                 <ScreenTracker />
-                <OnboardingGate />
+                <GuardedNavigation />
                 <ThemedStack />
                 <OnboardingAudioControl />
               </ToastProvider>
             </PostHogProvider>
           </SafeAreaProvider>
         </ThemedAppShell>
-      </ThemeProvider>
-    </ClerkProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

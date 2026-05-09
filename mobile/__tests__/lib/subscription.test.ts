@@ -1,6 +1,5 @@
-jest.mock('@clerk/expo', () => ({
+jest.mock('@/lib/auth', () => ({
   useAuth: jest.fn(),
-  useSession: jest.fn(),
 }));
 
 jest.mock('@/components/ui/ToastProvider', () => ({
@@ -28,13 +27,13 @@ jest.mock('@/lib/revenuecat', () => ({
   loadRevenueCatModules: jest.fn(),
 }));
 
-import { getSubscriptionProfilePatch, isMirroredPlus } from '@/lib/subscription';
+import { getSubscriptionUserDetailsPatch, isMirroredPlus } from '@/lib/subscription';
 import { LIMITS } from '@/lib/usage';
 
 describe('subscription helpers', () => {
   it('builds a Plus profile patch for Supabase mirroring', () => {
-    expect(getSubscriptionProfilePatch('user_123', 'plus', 'revenuecat', '2026-04-19T08:00:00.000Z')).toEqual({
-      id: 'user_123',
+    expect(getSubscriptionUserDetailsPatch('user_123', 'plus', 'revenuecat', '2026-04-19T08:00:00.000Z')).toEqual({
+      user_id: 'user_123',
       subscription_plan: 'plus',
       subscription_status: 'active',
       subscription_source: 'revenuecat',
@@ -44,8 +43,8 @@ describe('subscription helpers', () => {
   });
 
   it('builds a Free profile patch for Supabase mirroring', () => {
-    expect(getSubscriptionProfilePatch('user_123', 'free', 'supabase', '2026-04-19T08:00:00.000Z')).toEqual({
-      id: 'user_123',
+    expect(getSubscriptionUserDetailsPatch('user_123', 'free', 'supabase', '2026-04-19T08:00:00.000Z')).toEqual({
+      user_id: 'user_123',
       subscription_plan: 'free',
       subscription_status: 'inactive',
       subscription_source: 'supabase',

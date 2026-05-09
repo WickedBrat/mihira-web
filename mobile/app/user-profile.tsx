@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import {
-  Platform,
   View,
   Pressable,
   Alert,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
-import { UserProfile } from '@clerk/expo/web';
-import { useUser, useAuth } from '@clerk/expo';
+import { useUser, useAuth } from '@/lib/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { SacredButton } from '@/components/ui/SacredButton';
 import { useTheme } from '@/lib/theme-context';
 
-function NativeManageAccount() {
+function ManageAccount() {
   const { user } = useUser();
-  const { signOut } = useAuth();
+  const { deleteAccount } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteAccount = () => {
@@ -31,10 +29,10 @@ function NativeManageAccount() {
           onPress: async () => {
             try {
               setIsDeleting(true);
-              await user?.delete();
-              await signOut();
+              await deleteAccount();
               router.replace('/');
             } catch (error) {
+              console.error('[account] delete error', error);
               Alert.alert('Error', 'Failed to delete account. Please try again.');
               setIsDeleting(false);
             }
@@ -90,12 +88,8 @@ export default function UserProfilePage() {
           </View>
         </View>
       </View>
-      <View className={`flex-1 bg-background ${Platform.OS === 'web' ? 'items-center pt-6' : ''}`}>
-        {Platform.OS === 'web' ? (
-          <UserProfile routing="hash" />
-        ) : (
-          <NativeManageAccount />
-        )}
+      <View className="flex-1 bg-background">
+        <ManageAccount />
       </View>
     </SafeAreaView>
   );

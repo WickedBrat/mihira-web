@@ -8,6 +8,12 @@ function trimTrailingSlash(value: string): string {
   return value.endsWith('/') ? value.slice(0, -1) : value;
 }
 
+function normalizeConfiguredBase(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed || trimmed.startsWith('${')) return undefined;
+  return trimmed;
+}
+
 function normalizeProductionPath(path: string): string {
   if (path.startsWith('/v1/')) return path;
   if (path.startsWith('/api/')) return `/v1${path}`;
@@ -17,7 +23,10 @@ function normalizeProductionPath(path: string): string {
 export function apiUrl(path: string): string {
   if (/^https?:\/\//.test(path)) return path;
 
-  const configuredBase = process.env.EXPO_PUBLIC_API_BASE_URL?.trim();
+  const configuredBase = normalizeConfiguredBase(
+    process.env.EXPO_PUBLIC_API_BASE_URL ??
+    (Constants.expoConfig?.extra?.apiBaseUrl as string | undefined)
+  );
   if (configuredBase) {
     const base = trimTrailingSlash(configuredBase);
     return `${base}${normalizeProductionPath(path)}`;

@@ -6,9 +6,8 @@ These variables are currently referenced by the app and release config.
 
 ### Public Expo Variables
 
-- `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - `EXPO_PUBLIC_SUPABASE_URL`
-- `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+- `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `EXPO_PUBLIC_REVENUECAT_APPLE_API_KEY`
 - `EXPO_PUBLIC_REVENUECAT_GOOGLE_API_KEY`
 - `EXPO_PUBLIC_REVENUECAT_WEB_API_KEY`
@@ -32,7 +31,7 @@ Recommended files:
 Recommended defaults:
 
 - `ENABLE_DEV_BUTTONS=true` for local development if you want the debug controls visible
-- use non-production Clerk, Supabase, RevenueCat, and PostHog credentials
+- use non-production Supabase, RevenueCat, and PostHog credentials
 
 ## Preview Builds
 
@@ -40,7 +39,7 @@ Use preview builds for internal QA and stakeholder testing.
 
 Recommended setup:
 
-- point to preview or staging Clerk and Supabase projects
+- point to a preview or staging Supabase project
 - use RevenueCat Test Store or store sandbox products
 - use either a staging PostHog project or a filtered dev environment
 - keep `ENABLE_DEV_BUTTONS=false`
@@ -51,7 +50,6 @@ Use only production credentials here.
 
 Required before public release:
 
-- production Clerk instance
 - production Supabase project
 - production RevenueCat project
 - production PostHog project
@@ -85,8 +83,7 @@ The active Expo config is [app.config.js](/Users/Apple/Desktop/mihira/mobile/app
 - Apple Developer account enrollment as an individual
 - Google Play developer account as a personal account
 - RevenueCat project and API keys once created
-- production Clerk keys
-- production Supabase URL and anon key
+- production Supabase URL and publishable key
 - production PostHog token and host
 
 RevenueCat now replaces Stripe as the mobile release path for subscriptions.

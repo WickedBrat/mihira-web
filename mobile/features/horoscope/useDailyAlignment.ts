@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useProfile } from '@/features/profile/useProfile';
 import type { BirthChart } from '@/lib/vedic/types';
 import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
-import { apiUrl } from '@/lib/apiUrl';
+import { apiFetch } from '@/lib/apiFetch';
 import {
   getCachedDailyAlignment,
   getDailyAlignmentProfileKey,
@@ -49,7 +49,7 @@ export function useDailyAlignment(): DailyAlignmentState {
       }
 
       try {
-        const response = await fetch(apiUrl('/api/wisdom/daily'), {
+        const response = await apiFetch('/api/wisdom/daily', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

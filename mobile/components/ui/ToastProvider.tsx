@@ -11,10 +11,10 @@ import {
   Animated,
   Easing,
   Pressable,
-  Text,
   View,
 } from 'react-native';
 import { AppBlurView } from '@/components/ui/AppBlurView';
+import { Text } from '@/components/ui/Text';
 import { AlertCircle, CheckCircle2, Info } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/lib/theme-context';

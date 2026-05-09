@@ -17,8 +17,8 @@ npx expo run:android    # Native Android build
 | Framework | Expo SDK 54, expo-router (file-based) |
 | Language | TypeScript + TSX |
 | Styling | React Native StyleSheet + `lib/theme.ts` |
-| Auth | Clerk v2 (`@clerk/clerk-expo`) |
-| DB | Supabase (Clerk JWT-authenticated via `getSupabaseClient()`) |
+| Auth | Supabase Auth (`@supabase/supabase-js`) |
+| DB | Supabase (`getSupabaseClient()`) |
 | Storage | AsyncStorage (chat, profile, daily cache) |
 | AI | Perplexity `sonar-pro` (structured) / `sonar` (SSE streaming) |
 | Animations | `moti` + `react-native-reanimated` |
@@ -27,9 +27,8 @@ npx expo run:android    # Native Android build
 ## Required Env Vars
 
 ```
-EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=
 EXPO_PUBLIC_SUPABASE_URL=
-EXPO_PUBLIC_SUPABASE_ANON_KEY=
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 PERPLEXITY_API_KEY=   # server-side only (app/api/ routes)
 ```
 
@@ -47,7 +46,7 @@ lib/                # ai/, vedic/, theme.ts, typography.ts, supabase.ts, usage.t
 ## Key Gotchas
 
 - **FONT_SCALE = 1.14**: All font sizes go through `scaleFont()` in `lib/typography.ts` — don't hardcode raw font sizes
-- **Supabase auth**: Uses Clerk JWT, not Supabase auth — always use `getSupabaseClient()`, never the raw client
+- **Supabase auth**: `lib/auth.tsx` owns session state; use `getSupabaseClient()` for database calls so the persisted Supabase session is attached automatically
 - **Onboarding palette**: Onboarding uses separate warm `OB` palette (saffron/gold), not the main dark theme
 - **Date pickers**: Platform-split — Android uses `DateTimePickerAndroid.open`, iOS uses custom bottom-sheet
 - **AI streaming**: `/api/chat` returns SSE; client parses chunks in `useChatState.ts`
