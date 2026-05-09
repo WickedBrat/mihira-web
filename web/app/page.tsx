@@ -47,7 +47,7 @@ const headerCtaClass =
 const headerStoreLinkClass =
   'inline-flex size-12 flex-none items-center justify-center rounded-full bg-white text-[#111214] shadow-[0_14px_26px_rgba(0,0,0,0.2)] transition hover:-translate-y-px hover:bg-[#fff8ed] hover:shadow-[0_18px_34px_rgba(0,0,0,0.26)]';
 const storeBadgeLinkClass =
-  'inline-flex h-6 w-[100px] items-center justify-center gap-2 rounded border border-[#b564fc]/40 bg-[#b564fc] font-sans text-[0.62rem] font-bold uppercase tracking-[0.14em] text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-px hover:border-[#ff9500]/55 hover:shadow-[0_16px_34px_rgba(181,100,252,0.28)]';
+  'inline-flex min-h-12 min-w-[198px] items-center justify-center gap-3 rounded border border-[#b564fc]/40 bg-[#b564fc] px-[1.375rem] font-sans text-[0.58rem] font-bold uppercase leading-none tracking-[0.18em] text-white shadow-[0_14px_30px_rgba(0,0,0,0.22)] transition hover:-translate-y-px hover:border-[#ff9500]/55 hover:shadow-[0_16px_34px_rgba(181,100,252,0.28)] max-[760px]:w-full';
 const ghostButtonClass =
   'inline-flex items-center justify-center rounded border border-white/20 font-sans font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-px max-[760px]:w-full';
 const previewCardClass =
@@ -407,13 +407,13 @@ export default function HomePage() {
       </header>
 
       <section className="relative isolate min-h-screen overflow-hidden px-0 pb-14 pt-24 max-[760px]:min-h-0 max-[760px]:pt-[5.75rem]">
-        <video
-          src="/loop.mp4"
-          className="absolute inset-0 rounded-[4rem] mt-10 -z-10 h-full w-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
+        <img
+          src="/meditation.webp"
+          alt=""
+          className="absolute inset-0 w-[96%] mx-auto mt-8 h-full rounded-[4rem] object-cover object-center -z-10"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
           aria-hidden="true"
         />
         <div
@@ -439,8 +439,8 @@ export default function HomePage() {
                   href={badge.href}
                   aria-label={badge.alt}
                 >
-                  <StoreIcon icon={badge.icon} />
-                  <span>{badge.store}</span>
+                  <StoreIcon icon={badge.icon} className="size-[25px] flex-none" />
+                  <span className="whitespace-nowrap">{badge.store}</span>
                 </a>
               ))}
             </div>
