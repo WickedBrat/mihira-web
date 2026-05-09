@@ -18,6 +18,7 @@ import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
 import { hapticLight } from '@/lib/haptics';
 import { layout } from '@/lib/theme';
 import { useCalendarEventById } from '@/features/daily/useCalendarEvents';
+import { getCalendarImageUri } from '@/features/daily/calendarImageUrl';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const IMAGE_CLEAR_HEIGHT = SCREEN_HEIGHT * 0.48;
@@ -59,13 +60,14 @@ export default function SacredDayDetailScreen() {
 
   const rituals = day.rituals ?? [];
   const tag = day.tag ?? 'Sacred Day';
+  const imageUri = getCalendarImageUri(day.image_url);
 
   return (
     <View className="flex-1 bg-[#0a0a0a]">
       {/* Full-screen fixed background image */}
-      {day.image_url ? (
+      {imageUri ? (
         <Image
-          source={{ uri: day.image_url }}
+          source={{ uri: imageUri }}
           className="absolute inset-0 h-full w-full"
           resizeMode="cover"
         />
@@ -152,7 +154,7 @@ export default function SacredDayDetailScreen() {
             {day.significance ? (
               <Animated.View entering={FadeInDown.delay(320).duration(500)} className="mb-7 gap-3">
                 <Text className="font-label text-[11px] uppercase tracking-[2.5px] text-secondary-fixed">Significance</Text>
-                <Text className="font-body text-base leading-6 text-white/60">{day.significance}</Text>
+                <Text className="font-body text-lg leading-6 text-white/80">{day.significance}</Text>
               </Animated.View>
             ) : null}
 
@@ -164,19 +166,12 @@ export default function SacredDayDetailScreen() {
                   {rituals.map((step, i) => (
                     <View key={i} className="flex-row items-start gap-3">
                       <View className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: ACCENT_COLOR }} />
-                      <Text className="flex-1 font-body text-sm leading-[22px] text-white/60">{step}</Text>
+                      <Text className="flex-1 font-body text-base leading-[22px] text-white/80">{step}</Text>
                     </View>
                   ))}
                 </View>
               </Animated.View>
             ) : null}
-
-            {/* Tag chip */}
-            <Animated.View entering={FadeInDown.delay(440).duration(500)} className="mt-1 flex-row flex-wrap gap-2">
-              <View className="rounded-full border border-white/[0.12] bg-white/[0.08] px-3 py-1.5">
-                <Text className="font-label text-[11px] tracking-[0.3px] text-white/55">{tag}</Text>
-              </View>
-            </Animated.View>
           </View>
         </AppBlurView>
       </ScrollView>

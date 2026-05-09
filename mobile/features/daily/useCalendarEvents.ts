@@ -4,6 +4,14 @@ import { withTimeout } from '@/lib/withTimeout';
 
 const SUPABASE_TIMEOUT_MS = 15000;
 
+export function getLocalCalendarDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
 export interface CalendarEvent {
   id: number;
   title: string;
@@ -30,7 +38,7 @@ export function useCalendarEvents(dateOverride?: string) {
 
     const fetch = async () => {
       try {
-        const today = dateOverride ?? new Date().toISOString().split('T')[0];
+        const today = dateOverride ?? getLocalCalendarDateKey();
         const client = await getClient();
         const { data, error: err } = await withTimeout(
           client

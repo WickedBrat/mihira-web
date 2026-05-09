@@ -9,9 +9,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
 import { Text } from '@/components/ui/Text';
 import { View as MotiView } from 'moti/build/components/view';
-import { ArrowRight, Sparkles } from 'lucide-react-native';
+import { ArrowRight } from 'lucide-react-native';
 import { router } from 'expo-router';
 import DailyArthBg from '../../assets/daily-arth-bg.svg';
+import ReflectIcon from '../../assets/reflect.svg';
 import { hapticLight } from '@/lib/haptics';
 import { saveCachedDailyArthReflection } from '@/lib/dailyArthReflectionStorage';
 import { useTheme } from '@/lib/theme-context';
@@ -127,7 +128,7 @@ export function DailyArthCard() {
                   style={{ backgroundColor: `${colors.primary}40` }}
                 />
                 <View className="min-w-[156px] flex-row items-center justify-center gap-2.5 px-5 py-3">
-                  <Sparkles size={16} color={colors.primary} strokeWidth={2.2} />
+                  <ReflectIcon width={17} height={17} color={colors.primary} />
                   <Text className="font-label text-[15px] text-primary">Reflect</Text>
                   <ArrowRight size={16} color={colors.primary} strokeWidth={2.2} />
                 </View>

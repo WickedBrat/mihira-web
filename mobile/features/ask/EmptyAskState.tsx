@@ -33,7 +33,7 @@ export function EmptyAskState({ onSelectPrompt }: EmptyAskStateProps) {
           <Pressable
             key={title}
             onPress={() => onSelectPrompt(prompt)}
-            className="min-w-[47%] flex-1 rounded-[20px] border border-black/[0.06] bg-white/[0.4] px-4 py-4 dark:border-white/[0.06] dark:bg-white/[0.03]"
+            className="min-w-full flex-1 rounded-[20px] border border-black/[0.06] bg-white/[0.4] px-4 py-4 dark:border-white/[0.06] dark:bg-white/[0.03]"
           >
             <Text className="font-label text-xs uppercase tracking-[1.2px] text-secondary-dim">
               {title}

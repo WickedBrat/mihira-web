@@ -221,10 +221,10 @@ export default function AskScreen() {
                     subtitleStyle={{ maxWidth: 340 }}
                   />
 
-                  <View className="flex-row flex-wrap gap-2 px-1">
+                  <View className="flex-row flex-wrap items-center justify-center gap-2 px-1">
                     <TrustChip label="Cited passages" />
-                    <TrustChip label="Interpretation, not overload" />
                     <TrustChip label="Practical next step" />
+                    <TrustChip label="Mordern Interpretation" />
                   </View>
                 </View>
               )}

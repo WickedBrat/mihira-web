@@ -27,7 +27,7 @@ export default function GurukulScreen() {
     <View className="flex-1 bg-surface">
       <View className="absolute inset-x-0 top-0 overflow-hidden" style={{ height: heroHeight }}>
         <Image
-          source={{ uri: 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/gurukul_coming_soon.png' }}
+          source={{ uri: 'https://raw.githubusercontent.com/WickedBrat/images/refs/heads/master/mihira/gurukul_coming_soon.webp' }}
           className="absolute"
           resizeMode="cover"
           style={{
