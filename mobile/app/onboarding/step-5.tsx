@@ -26,7 +26,7 @@ export default function Screen5() {
   return (
     <BirthDataScaffold
       title={`When were you born,${'\n'}${name.split(' ')[0]}?`}
-      description="Your birth date helps us map the planetary positions in your chart. We’ll sharpen it with your birth time next."
+      description="Your birth date helps Mihira map the lunar pattern and planetary positions. Birth time will sharpen it next."
       ctaLabel="Continue"
       onProceed={proceed}
     >

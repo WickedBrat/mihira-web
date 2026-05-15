@@ -39,6 +39,7 @@ import {
   NAKSHATRA_INSIGHTS,
   setOnboardingData,
 } from '@/lib/onboardingStore';
+import { getPrimaryThread } from '@/features/onboarding/personalGuidance';
 import { deriveMoonProfile } from '@/lib/vedic/moonProfile';
 import { LucideIcon, ZodiacAries, ZodiacTaurus, ZodiacGemini, ZodiacCancer, ZodiacLeo, ZodiacVirgo, ZodiacLibra, ZodiacScorpio, ZodiacSagittarius, ZodiacCapricorn, ZodiacAquarius, ZodiacPisces } from 'lucide-react-native';
 
@@ -281,6 +282,7 @@ export default function Screen7() {
   const data = getOnboardingData();
   const name = data.userName?.split(' ')[0] || 'Friend';
   const initial = name.slice(0, 1).toUpperCase();
+  const primaryThread = getPrimaryThread(data);
 
   const { nakshatra, rashi } = deriveMoonProfile(
     data.birthDate,
@@ -328,7 +330,7 @@ export default function Screen7() {
             Your cosmic{'\n'}signature
           </Text>
           <Text className="max-w-[250px] text-center font-body text-sm leading-5 text-ob-muted">
-            We’ve mapped the lunar pattern you were born into.
+            A starting point, not a label. Mihira will use this for {primaryThread}.
           </Text>
         </Animated.View>
 

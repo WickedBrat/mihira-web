@@ -11,6 +11,7 @@ import * as Haptics from 'expo-haptics';
 import { BookOpenTextIcon, CalendarDaysIcon, CompassIcon, MessageCircleQuestionIcon } from 'lucide-react-native';
 import { Text } from '@/components/ui/Text';
 import { OB, getOnboardingData } from '@/lib/onboardingStore';
+import { getPrimaryThread } from '@/features/onboarding/personalGuidance';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
@@ -28,7 +29,7 @@ const PLAN_ITEMS = [
   },
   {
     icon: MessageCircleQuestionIcon,
-    title: 'Sarathi guidance',
+    title: 'Saarthi guidance',
     body: 'A private place to ask what is weighing on your heart.',
   },
   {
@@ -38,15 +39,11 @@ const PLAN_ITEMS = [
   },
 ];
 
-function getPrimaryThread() {
-  const data = getOnboardingData();
-  return data.supportTypes[0] ?? data.painPoints[0] ?? 'Daily grounding';
-}
-
 export default function Screen10() {
   const data = getOnboardingData();
   const name = data.userName?.split(' ')[0] || 'you';
-  const primaryThread = getPrimaryThread();
+  const primaryThread = getPrimaryThread(data);
+  const hasBirthChart = Boolean(data.birthPlace);
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
@@ -62,7 +59,7 @@ export default function Screen10() {
             A rhythm is ready{'\n'}for {name}.
           </Text>
           <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
-            Mihira will begin with {primaryThread.toLowerCase()} and adjust as you keep using it.
+            Built from your question{hasBirthChart ? ', your chart,' : ''} and your context. Mihira will begin with {primaryThread}.
           </Text>
         </Animated.View>
 

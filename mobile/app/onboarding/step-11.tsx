@@ -94,7 +94,7 @@ export default function Screen11() {
                 >
                   {'recommended' in tier && tier.recommended && (
                     <View className="absolute right-0 top-0 rounded-bl-xl bg-ob-saffron px-3 py-[5px]">
-                      <Text className="font-label text-[9px] tracking-[1.5px] text-white">MOST POPULAR</Text>
+                      <Text className="font-label text-[9px] tracking-[1.5px] text-white">FOR YOUR SEASON</Text>
                     </View>
                   )}
 

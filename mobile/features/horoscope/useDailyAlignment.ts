@@ -13,6 +13,7 @@ import { deriveMoonProfileFromBirthDt } from '@/lib/vedic/moonProfile';
 interface DailyAlignmentState {
   chart: BirthChart | null;
   focusAreas: DailyFocusArea[];
+  gender: string | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -20,7 +21,7 @@ interface DailyAlignmentState {
 export function useDailyAlignment(): DailyAlignmentState {
   const { profile } = useProfile();
   const [state, setState] = useState<DailyAlignmentState>({
-    chart: null, focusAreas: [], isLoading: false, error: null,
+    chart: null, focusAreas: [], gender: null, isLoading: false, error: null,
   });
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export function useDailyAlignment(): DailyAlignmentState {
           setState({
             chart: cached.chart,
             focusAreas: cached.focusAreas ?? [],
+            gender: profile.gender || null,
             isLoading: false,
             error: null,
           });
@@ -81,7 +83,7 @@ export function useDailyAlignment(): DailyAlignmentState {
         await saveCachedDailyAlignment(profileKey, nextState);
 
         if (!isCancelled) {
-          setState({ ...nextState, isLoading: false, error: null });
+          setState({ ...nextState, gender: profile.gender || null, isLoading: false, error: null });
         }
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Daily alignment unavailable';
@@ -93,7 +95,7 @@ export function useDailyAlignment(): DailyAlignmentState {
 
     void loadDailyAlignment();
     return () => { isCancelled = true; };
-  }, [profile.birth_dt, profile.birth_place]);
+  }, [profile.birth_dt, profile.birth_place, profile.gender]);
 
-  return state;
+  return { ...state, gender: profile.gender || state.gender };
 }

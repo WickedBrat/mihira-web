@@ -12,12 +12,14 @@ import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const CONTEXTS = [
-  'Far from home',
-  'Between traditions',
-  'Building a family',
-  'Under pressure',
-  'Returning to practice',
-  'Finding my own way',
+  'Work',
+  'Family',
+  'Relationship',
+  'Spiritual practice',
+  'Identity / purpose',
+  'Money / stability',
+  'Health / energy',
+  'I am not sure',
 ];
 
 export default function Screen3() {
@@ -34,7 +36,7 @@ export default function Screen3() {
     if (selected.length === 0) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOnboardingData({ guidanceContext: selected });
-    router.push('/onboarding/step-4-support');
+    router.push('/onboarding/step-4');
   }
 
   return (
@@ -45,10 +47,10 @@ export default function Screen3() {
       <View className="flex-1 items-center gap-8 px-8 pt-8">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
           <Text className="text-center font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
-            Where are you seeking{'\n'}guidance from?
+            Where is this{'\n'}showing up?
           </Text>
           <Text className="text-center font-body text-[15px] leading-[23px] text-ob-muted">
-            Mihira feels more useful when it understands the life around the question.
+            This helps Mihira respond to your real situation.
           </Text>
         </Animated.View>
 
@@ -85,7 +87,7 @@ export default function Screen3() {
             className="w-full max-w-[360px] rounded-[20px] border border-ob-gold-border bg-ob-gold-dim p-4"
           >
             <Text className="text-center font-body text-[13px] leading-[21px] text-ob-gold">
-              Noted. Your guidance should respect where you are, not just what you ask.
+              Noted. Saarthi will respond to where life is actually pressing.
             </Text>
           </Animated.View>
         ) : null}

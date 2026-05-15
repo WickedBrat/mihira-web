@@ -9,7 +9,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { OB } from '@/lib/onboardingStore';
+import { OB, getOnboardingData } from '@/lib/onboardingStore';
+import { getDailyGuidancePreview } from '@/features/onboarding/personalGuidance';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import {
@@ -17,34 +18,18 @@ import {
   pressedButtonStyle,
 } from '@/features/onboarding/onboardingStyles';
 
-const FOCUS_AREAS = [
-  {
-    area: 'Focus',
-    time: 'Morning',
-    action: 'Do the one thing that needs your full mind.',
-    suggestion: 'Start before messages and noise shape the day.',
-    accentColor: OB.gold,
-  },
-  {
-    area: 'Decisions',
-    time: 'Midday',
-    action: 'Handle the conversation you have been delaying.',
-    suggestion: 'A steadier window for judgment and follow-through.',
-    accentColor: OB.saffron,
-  },
-  {
-    area: 'Rest',
-    time: 'Evening',
-    action: 'Close loops instead of opening new ones.',
-    suggestion: 'Let the day settle before choosing what comes next.',
-    accentColor: 'rgba(255,255,255,0.35)',
-  },
-];
+const ACCENT_COLORS = {
+  gold: OB.gold,
+  saffron: OB.saffron,
+  muted: 'rgba(255,255,255,0.35)',
+} as const;
 
 export default function Screen9() {
+  const focusAreas = getDailyGuidancePreview(getOnboardingData());
+
   async function continueToNextStep() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/onboarding/step-8');
+    router.push('/onboarding/step-11');
   }
 
   return (
@@ -55,25 +40,25 @@ export default function Screen9() {
       <View className="flex-1 justify-center gap-6 px-8 pt-6">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
           <Text className="text-center font-label text-xs uppercase tracking-[3px] text-ob-saffron">
-            Based on your horoscope
+            Based on your guidance
           </Text>
           <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
             Three places to put{'\n'}your energy today
           </Text>
           <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
-            On the homepage, Mihira turns your chart and the day's transits into three practical suggestions you can actually use.
+            Mihira turns your question, your context, and your rhythm into practical suggestions you can actually use.
           </Text>
         </Animated.View>
 
         <View className="gap-3">
-          {FOCUS_AREAS.map((item, index) => (
+          {focusAreas.map((item, index) => (
             <Animated.View
               key={item.area}
               entering={FadeInDown.delay(180 + index * 120).duration(420)}
               className="overflow-hidden rounded-[24px] border border-ob-card-border bg-ob-card"
             >
               <View className="flex-row items-stretch">
-                <View className="w-1.5" style={{ backgroundColor: item.accentColor }} />
+                <View className="w-1.5" style={{ backgroundColor: ACCENT_COLORS[item.accent] }} />
                 <View className="flex-1 gap-3 p-4">
                   <View className="flex-row items-start justify-between gap-4">
                     <View className="gap-0.5">
@@ -84,7 +69,7 @@ export default function Screen9() {
                     </View>
                     <View className="rounded-full border border-ob-gold-border bg-ob-gold-dim px-3 py-1">
                       <Text className="font-body-medium text-[10px] uppercase tracking-[1.4px] text-ob-gold">
-                        Suggestion
+                        {item.reference}
                       </Text>
                     </View>
                   </View>

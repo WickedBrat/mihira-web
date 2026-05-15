@@ -16,11 +16,12 @@ import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
 const PILLS = [
-  'Decision Fatigue',
-  'Career Burnout',
-  'Search for Purpose',
-  'Disconnected from Roots',
-  'Restless Mind',
+  'I am overthinking a decision',
+  'I feel burned out',
+  'I am looking for direction',
+  'I feel far from my roots',
+  'My mind will not settle',
+  'I am under pressure',
 ];
 
 export default function Screen2() {
@@ -62,7 +63,7 @@ export default function Screen2() {
       <View className="flex-1 items-center gap-9 px-8 pt-8">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
           <Text className="text-center font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
-            What brings you{'\n'}to Mihira today?
+            What are you{'\n'}carrying today?
           </Text>
           <Text className="text-center font-body text-[15px] text-ob-muted">Choose everything that feels true right now.</Text>
         </Animated.View>

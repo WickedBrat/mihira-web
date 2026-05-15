@@ -6,6 +6,7 @@ export interface OnboardingData {
   guidanceContext: string[];
   supportTypes: string[];
   userName: string;
+  gender: string;
   birthDate: Date;
   birthTime: Date;
   birthPlace: string;
@@ -19,6 +20,7 @@ const DEFAULT: OnboardingData = {
   guidanceContext: [],
   supportTypes: [],
   userName: '',
+  gender: '',
   birthDate: new Date(2000, 0, 1),
   birthTime: new Date(2000, 0, 1, 9, 0),
   birthPlace: '',

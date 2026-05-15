@@ -64,6 +64,7 @@ describe('useProfile (signed in)', () => {
         name: 'Arjun',
         birth_dt: '01/01/2000, 9:00 AM',
         birth_place: 'Mumbai, India',
+        gender: 'male',
         language: 'Hindi',
         region: 'India',
         focus_area: 'purpose',
@@ -77,6 +78,7 @@ describe('useProfile (signed in)', () => {
     await waitFor(() => expect(result.current.profile.name).toBe('Arjun'));
     expect(result.current.profile.language).toBe('Hindi');
     expect(result.current.profile.birth_place).toBe('Mumbai, India');
+    expect(result.current.profile.gender).toBe('male');
   });
 
   it('updateField updates local state immediately', async () => {

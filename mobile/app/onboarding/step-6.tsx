@@ -20,9 +20,7 @@ import Animated, {
   withRepeat,
   withTiming,
   Easing,
-  FadeIn,
   FadeInDown,
-  FadeOut,
 } from 'react-native-reanimated';
 import { useWindowDimensions } from 'react-native';
 import { OB, getOnboardingData } from '@/lib/onboardingStore';
@@ -31,11 +29,10 @@ import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { absoluteFillStyle } from '@/features/onboarding/onboardingStyles';
 
 const STEPS = [
-  'Gathering your birth details…',
-  'Mapping your planetary placements…',
-  'Calculating your rising sign…',
-  'Tracing your lunar pattern…',
-  'Preparing your daily alignment…',
+  'Finding lunar position...',
+  'Mapping nakshatra...',
+  'Reading timing windows...',
+  'Preparing your first rhythm...',
 ];
 
 export default function Screen6() {
@@ -63,7 +60,7 @@ export default function Screen6() {
       true
     );
 
-    // Advance status text every 1.5s, navigate after all steps + 1s delay
+    // Advance status text one line at a time, then reveal the chart.
     const timer = setInterval(() => {
       setStepIndex((prev) => {
         if (prev < STEPS.length - 1) return prev + 1;
@@ -71,7 +68,7 @@ export default function Screen6() {
         setTimeout(() => router.replace('/onboarding/step-7'), 1000);
         return prev;
       });
-    }, 1500);
+    }, 1250);
     return () => clearInterval(timer);
   }, []);
 
@@ -188,15 +185,11 @@ export default function Screen6() {
 
         {/* Status text */}
         <View className="items-center gap-4 pt-2">
-          <Animated.View
-            key={stepIndex}
-            entering={FadeIn.duration(400)}
-            exiting={FadeOut.duration(300)}
-          >
+          <View className="min-h-[22px] items-center justify-center">
             <Text className="text-center font-body text-sm tracking-[0.2px] text-ob-muted">
               {STEPS[stepIndex]}
             </Text>
-          </Animated.View>
+          </View>
 
           <View className="flex-row gap-1.5">
             {STEPS.map((_, i) => (

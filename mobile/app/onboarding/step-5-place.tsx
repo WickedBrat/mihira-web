@@ -68,7 +68,7 @@ export default function Screen5Place() {
   return (
     <BirthDataScaffold
       title={`Where were${'\n'}you born?`}
-      description="Your birthplace gives us the sky, timezone, and coordinates needed to calculate your chart accurately."
+      description="Your birthplace gives Mihira the sky, timezone, and coordinates needed to calculate your chart accurately."
       ctaLabel="Continue"
       canProceed={birthPlace.trim().length > 0}
       onProceed={proceed}

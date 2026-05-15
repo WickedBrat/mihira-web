@@ -14,14 +14,14 @@ import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboardin
 
 const ITEMS = [
   {
-    icon: SparklesIcon,
-    title: 'Personal alignment',
-    body: 'Your chart helps Mihira make daily guidance feel specific, not generic.',
+    icon: TimerIcon,
+    title: 'Timing windows',
+    body: 'Birth details help Mihira refine better moments for decisions, rituals, and reflection.',
   },
   {
-    icon: TimerIcon,
-    title: 'Sacred timing',
-    body: 'Birth details make timing windows more useful for decisions and rituals.',
+    icon: SparklesIcon,
+    title: 'Daily rhythm',
+    body: 'Your chart turns the guidance you just received into a more personal first week.',
   },
   {
     icon: LockKeyholeIcon,
@@ -41,10 +41,10 @@ export default function Screen5Trust() {
       <View className="flex-1 items-center justify-center gap-7 px-8 pt-8">
         <Animated.View entering={FadeInDown.duration(500)} className="max-w-[360px] items-center gap-2.5">
           <Text className="text-center font-headline text-[37px] leading-[43px] tracking-[-1px] text-ob-text">
-            Your chart is not{'\n'}a label, {name}.
+            Make this more{'\n'}personal, {name}.
           </Text>
           <Text className="text-center font-body text-[15px] leading-[24px] text-ob-muted">
-            It is a starting point for timing, reflection, and a practice that meets real life.
+            Your chart is a starting point for timing and rhythm. It is not a label.
           </Text>
         </Animated.View>
 
@@ -84,7 +84,16 @@ export default function Screen5Trust() {
             pressed && pressedButtonStyle,
           ]}
         >
-          <Text className="font-label text-base tracking-[0.3px] text-white">Enter birth details →</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">Use my birth chart →</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            router.push('/onboarding/step-10');
+          }}
+          className="mt-3"
+        >
+          <Text className="text-center font-body text-sm text-ob-muted">Continue without birth details</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>

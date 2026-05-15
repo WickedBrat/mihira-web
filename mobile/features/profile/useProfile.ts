@@ -11,6 +11,7 @@ export interface ProfileData {
   name: string;
   birth_dt: string;
   birth_place: string;
+  gender: string;
   language: 'English' | 'Hindi';
   region: string;
   focus_area: string;
@@ -20,6 +21,7 @@ const INITIAL_PROFILE: ProfileData = {
   name: '',
   birth_dt: '',
   birth_place: '',
+  gender: '',
   language: 'English',
   region: 'India',
   focus_area: '',
@@ -226,6 +228,7 @@ export function useProfile() {
             name: nextProfile.name ?? '',
             birth_dt: nextProfile.birth_dt ?? '',
             birth_place: nextProfile.birth_place ?? '',
+            gender: nextProfile.gender ?? '',
             language: nextProfile.language ?? 'English',
             region: nextProfile.region ?? 'India',
             focus_area: nextProfile.focus_area ?? '',

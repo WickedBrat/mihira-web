@@ -73,6 +73,10 @@ export function normalizeDailyPredictionGender(gender: string | null | undefined
     return 'boy';
   }
 
+  if (normalized === 'girl' || normalized === 'female' || normalized === 'woman' || normalized === 'feminine') {
+    return 'girl';
+  }
+
   return 'girl';
 }
 

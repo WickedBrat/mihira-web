@@ -1,54 +1,43 @@
-// Screen 4a: Support Type
+// Screen 4b: Gender for Daily Imagery
 import React, { useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/ui/Text';
-import { setOnboardingData } from '@/lib/onboardingStore';
+import { getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
-const SUPPORT_TYPES = [
+const GENDER_OPTIONS = [
   {
-    title: 'A calmer morning',
-    subtitle: 'Start the day with direction before the noise begins.',
+    label: 'Woman',
+    value: 'female',
+    body: 'Mihira will keep your daily guidance feeling personal.',
   },
   {
-    title: 'Better timing',
-    subtitle: 'Find steadier windows for decisions and important actions.',
+    label: 'Man',
+    value: 'male',
+    body: 'Mihira will keep your daily guidance feeling personal.',
   },
   {
-    title: 'Scripture I can apply',
-    subtitle: 'Get wisdom translated into practical next steps.',
-  },
-  {
-    title: 'A private practice',
-    subtitle: 'Build a ritual that fits modern life without feeling heavy.',
-  },
-  {
-    title: 'Help with uncertainty',
-    subtitle: 'Think through stress, duty, ambition, and relationships.',
+    label: 'Prefer not to say',
+    value: 'prefer_not_to_say',
+    body: 'Mihira will use its default daily guidance experience.',
   },
 ];
 
-export default function Screen4Support() {
-  const [selected, setSelected] = useState<string[]>([]);
-
-  function toggle(item: string) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setSelected((prev) =>
-      prev.includes(item) ? prev.filter((value) => value !== item) : [...prev, item]
-    );
-  }
+export default function Screen4Gender() {
+  const stored = getOnboardingData();
+  const [selected, setSelected] = useState(stored.gender || '');
 
   function proceed() {
-    if (selected.length === 0) return;
+    if (!selected) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setOnboardingData({ supportTypes: selected });
-    router.push('/onboarding/step-4-synthesis');
+    setOnboardingData({ gender: selected });
+    router.push('/onboarding/step-5-trust');
   }
 
   return (
@@ -56,32 +45,35 @@ export default function Screen4Support() {
       <OnboardingDevBackButton />
       <OnboardingStarField />
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="items-center gap-7 px-8 py-8"
-        showsVerticalScrollIndicator={false}
-      >
+      <View className="flex-1 items-center justify-center gap-8 px-8 pt-8">
         <Animated.View entering={FadeInDown.duration(500)} className="max-w-[360px] items-center gap-2.5">
           <Text className="text-center font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
-            What kind of support{'\n'}would feel useful?
+            What’s your{'\n'}gender?
           </Text>
           <Text className="text-center font-body text-[15px] leading-[23px] text-ob-muted">
-            Choose more than one. Most people come with more than one thread.
+            This helps Mihira make your daily guidance feel more personal.
           </Text>
         </Animated.View>
 
         <View className="w-full max-w-[360px] gap-3">
-          {SUPPORT_TYPES.map((item, index) => {
-            const active = selected.includes(item.title);
+          {GENDER_OPTIONS.map((option, index) => {
+            const active = selected === option.value;
             return (
-              <Animated.View key={item.title} entering={FadeInDown.delay(index * 80 + 180).duration(420)}>
+              <Animated.View
+                key={option.value}
+                entering={FadeInDown.delay(index * 90 + 180).duration(420)}
+              >
                 <Pressable
-                  onPress={() => toggle(item.title)}
+                  onPress={() => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                    setSelected(option.value);
+                  }}
                   className={`rounded-[18px] border p-4 ${
                     active
                       ? 'border-ob-saffron-border bg-ob-saffron-dim'
                       : 'border-ob-card-border bg-ob-card'
                   }`}
+                  style={({ pressed }) => pressed && pressedButtonStyle}
                 >
                   <View className="flex-row items-start gap-3">
                     <View className={`mt-0.5 h-7 w-7 items-center justify-center rounded-full ${
@@ -93,12 +85,12 @@ export default function Screen4Support() {
                         </Animated.Text>
                       ) : null}
                     </View>
-                    <View className="flex-1 gap-1.5">
-                      <Text className={`font-headline text-[20px] leading-6 ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
-                        {item.title}
+                    <View className="flex-1 gap-1">
+                      <Text className={`font-body-medium text-[16px] leading-6 ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
+                        {option.label}
                       </Text>
                       <Text className="font-body text-[13px] leading-5 text-ob-muted">
-                        {item.subtitle}
+                        {option.body}
                       </Text>
                     </View>
                   </View>
@@ -107,25 +99,21 @@ export default function Screen4Support() {
             );
           })}
         </View>
+      </View>
 
-        <View className="h-[120px]" />
-      </ScrollView>
-
-      <Animated.View
-        entering={FadeInUp.delay(680).duration(500)}
-        className="absolute bottom-0 left-0 right-0 items-center bg-[rgba(7,9,12,0.96)] p-8 pb-11"
-      >
+      <Animated.View entering={FadeInUp.delay(620).duration(500)} className="items-center p-8 pb-11">
         <Pressable
+          disabled={!selected}
           onPress={proceed}
           className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${
-            selected.length === 0 ? 'opacity-[0.35]' : ''
+            !selected ? 'opacity-[0.35]' : ''
           }`}
           style={({ pressed }) => [
             onboardingButtonShadow,
             pressed && pressedButtonStyle,
           ]}
         >
-          <Text className="font-label text-base tracking-[0.3px] text-white">Shape my guidance →</Text>
+          <Text className="font-label text-base tracking-[0.3px] text-white">Continue →</Text>
         </Pressable>
       </Animated.View>
     </SafeAreaView>

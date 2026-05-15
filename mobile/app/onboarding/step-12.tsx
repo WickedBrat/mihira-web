@@ -65,6 +65,7 @@ export default function Screen12() {
 
       await Promise.all([
         finalName ? saveField('name', finalName).catch(() => {}) : Promise.resolve(),
+        latest.gender ? saveField('gender', latest.gender).catch(() => {}) : Promise.resolve(),
         birthDateTime ? saveField('birth_dt', birthDateTime).catch(() => {}) : Promise.resolve(),
         latest.birthPlace ? saveField('birth_place', latest.birthPlace).catch(() => {}) : Promise.resolve(),
         latest.commitmentTier ? saveField('focus_area', latest.commitmentTier).catch(() => {}) : Promise.resolve(),
@@ -124,7 +125,7 @@ export default function Screen12() {
             entering={FadeIn.delay(650).duration(700)}
             className="max-w-[315px] text-center font-body text-[15px] leading-[24px] text-ob-text/60"
           >
-            Save your chart, daily rhythm, and first question so Mihira can stay personal across devices.
+            Save your chart, daily rhythm, and first question so Mihira stays personal across devices.
           </Animated.Text>
         </View>
 
@@ -145,7 +146,7 @@ export default function Screen12() {
               ]}
             >
               <Text className="font-label text-base tracking-[0.3px] text-white">
-                {isCompleting ? 'Saving...' : 'Enter Mihira →'}
+                {isCompleting ? 'Saving...' : 'Save and enter Mihira →'}
               </Text>
             </Pressable>
           ) : (
