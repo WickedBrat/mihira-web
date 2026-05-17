@@ -1,0 +1,1382 @@
+{
+  "/Users/Apple/Desktop/mihira/web/postcss.config.mjs": {
+    "mtime": 1776718045.9110024,
+    "hash": "9a944fbda06979be39571bd9bd00b0d9"
+  },
+  "/Users/Apple/Desktop/mihira/web/next-env.d.ts": {
+    "mtime": 1776629873.1660035,
+    "hash": "ba64ff7d54714a8f64db89b1003207d8"
+  },
+  "/Users/Apple/Desktop/mihira/web/next.config.ts": {
+    "mtime": 1777735739.2297816,
+    "hash": "a6fb37de947feca249c5c3bbf9eccc59"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/robots.ts": {
+    "mtime": 1777729434.5258796,
+    "hash": "730af05bb23a37abfab831e1db4fe106"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/opengraph-image.tsx": {
+    "mtime": 1777729434.5257556,
+    "hash": "b6b9f26bdf27ceac6d6fb040c7f9488b"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/sitemap.ts": {
+    "mtime": 1777729434.5260782,
+    "hash": "6053c1cc651309cffede0904cc42cf98"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/layout.tsx": {
+    "mtime": 1777729882.0879834,
+    "hash": "2854502e2eb110cdfe0ecf5a905706a3"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/manifest.ts": {
+    "mtime": 1777729850.285533,
+    "hash": "3b151c33e1684aba268ed036bc12dea1"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/page.tsx": {
+    "mtime": 1778366943.1623309,
+    "hash": "b2aadc003ab0fac9a71e6aa617ed40a3"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/v1/api/chat/route.ts": {
+    "mtime": 1777735660.189353,
+    "hash": "2869dfa10890586ed62ac609e0bb59d5"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/v1/api/ask/route.ts": {
+    "mtime": 1777735660.1897347,
+    "hash": "ef2362f23d163a88ef6cd5fd0d07899b"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/v1/api/wisdom/muhurat/route.ts": {
+    "mtime": 1777735660.1900134,
+    "hash": "60d27ce41b7c92113741a81ade76ba28"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/v1/api/wisdom/daily/route.ts": {
+    "mtime": 1777735660.1901562,
+    "hash": "bb8cc184f2785ac3209b1ad9c0b09884"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/v1/api/wisdom/daily-arth-reflection/route.ts": {
+    "mtime": 1777735660.1905038,
+    "hash": "99a66337ea4a483cd2ca9fa57876ed93"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/v1/api/narad/route.ts": {
+    "mtime": 1777735660.1898816,
+    "hash": "ed630a1c49a90efad6f662858506adab"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/privacy/page.tsx": {
+    "mtime": 1777376685.3907716,
+    "hash": "9336c23039d836dd38aa2f867852e92f"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/terms/page.tsx": {
+    "mtime": 1777376685.3914285,
+    "hash": "0d965e693bfcbb64210853f268a3fc38"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/api/wisdom/daily-arth-reflection/route.ts": {
+    "mtime": 1777735697.1455812,
+    "hash": "cb17ea38ba0e3c7c874a81e307ec86ec"
+  },
+  "/Users/Apple/Desktop/mihira/web/components/faq-list.tsx": {
+    "mtime": 1777399061.7085712,
+    "hash": "1ae1c39a067387b7890b51438f19f0af"
+  },
+  "/Users/Apple/Desktop/mihira/web/components/cinematic-landing-sections.tsx": {
+    "mtime": 1777278010.3087525,
+    "hash": "f848cce923ec5227ce2f32fafc14cda7"
+  },
+  "/Users/Apple/Desktop/mihira/web/components/ui/cinematic-landing-hero.tsx": {
+    "mtime": 1777277503.4713635,
+    "hash": "b1c93775f0ef3d3b220f3bdf412c2844"
+  },
+  "/Users/Apple/Desktop/mihira/web/components/ui/liquid-glass-button.tsx": {
+    "mtime": 1777017586.0865889,
+    "hash": "8e32aca7078ccaf00539be95892d6cbf"
+  },
+  "/Users/Apple/Desktop/mihira/web/components/ui/demo.tsx": {
+    "mtime": 1777017382.5217323,
+    "hash": "bbe0af8541ccf5206985621b3d9f3181"
+  },
+  "/Users/Apple/Desktop/mihira/web/components/ui/web-gl-shader.tsx": {
+    "mtime": 1777017364.857688,
+    "hash": "9eb9a468c413e570d2472d47ff3da16b"
+  },
+  "/Users/Apple/Desktop/mihira/web/components/ui/glsl-hills.tsx": {
+    "mtime": 1776718294.2213268,
+    "hash": "b7ea4336ff3d1aba9d1ee6ae0e1a27d1"
+  },
+  "/Users/Apple/Desktop/mihira/web/lib/utils.ts": {
+    "mtime": 1776718045.9118264,
+    "hash": "8595c2f874aa1ff8c7cc28df2999f354"
+  },
+  "/Users/Apple/Desktop/mihira/docs/data/aksha_2026_calendar.sql": {
+    "mtime": 1775324488.975315,
+    "hash": "58ecae5eb8ddf9cd9f333a029177eb63"
+  },
+  "/Users/Apple/Desktop/mihira/docs/data/spiritual_quotes.sql": {
+    "mtime": 1777327326.2603228,
+    "hash": "19e5eb0e1d5f8cc72c0ef6776bf20746"
+  },
+  "/Users/Apple/Desktop/mihira/supabase/migrations/20260419000000_add_profile_subscription_fields.sql": {
+    "mtime": 1776628053.5049803,
+    "hash": "427e32799e4e51472efa5b72d79cffd6"
+  },
+  "/Users/Apple/Desktop/mihira/supabase/migrations/20260510000000_replace_profiles_usage_with_user_details.sql": {
+    "mtime": 1778359585.2357917,
+    "hash": "013ca9408f62b446cc2e9b384f8349fa"
+  },
+  "/Users/Apple/Desktop/mihira/supabase/migrations/20260428000000_add_daily_arth_reflection.sql": {
+    "mtime": 1777327383.3515937,
+    "hash": "bfb78eb80238771e63a9b5934b5f4e10"
+  },
+  "/Users/Apple/Desktop/mihira/supabase/migrations/20260509000000_switch_to_supabase_auth.sql": {
+    "mtime": 1778359281.1374226,
+    "hash": "33dde2487c7178cf90b7912e9c8c3c5e"
+  },
+  "/Users/Apple/Desktop/mihira/supabase/migrations/20260412000000_add_user_narad_context.sql": {
+    "mtime": 1778338600.095001,
+    "hash": "1bc1394bd173d1933869a777a6c667de"
+  },
+  "/Users/Apple/Desktop/mihira/supabase/migrations/20260511000000_add_gender_to_user_details.sql": {
+    "mtime": 1778522059.8839996,
+    "hash": "4510a3ebc51e1b11554f5e7b3789b0a9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/tailwind.config.js": {
+    "mtime": 1777310173.8301964,
+    "hash": "bbb8a6cab26e54df7c3ea85b07260427"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/jest.setup.js": {
+    "mtime": 1778338903.7996013,
+    "hash": "b0922706f05a7008b0214712d42e829e"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app.config.js": {
+    "mtime": 1778352684.8978956,
+    "hash": "eac41d71a30141db98626ebcd6301f1f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/expo-env.d.ts": {
+    "mtime": 1778524322.7506738,
+    "hash": "0dd9dccdb4b08595bc83df70d6a154d3"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/svg.d.ts": {
+    "mtime": 1777401028.7543738,
+    "hash": "0a3a545b7540b5c357295ff9f4d53126"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/nativewind-env.d.ts": {
+    "mtime": 1774812088.4466567,
+    "hash": "b02bcf4fde15f746f6e5248537d0b156"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/metro.config.js": {
+    "mtime": 1778302214.921914,
+    "hash": "c00bca2ff87c8c7c018a6a20fe5f167c"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/babel.config.js": {
+    "mtime": 1774897187.8197637,
+    "hash": "79aa2b1b7eca37ea39c289d2b5cf9db2"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/index.ts": {
+    "mtime": 1774811965.716567,
+    "hash": "11cdbef6afa001cd39bc187041ca6865"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/types/moti-deep-imports.d.ts": {
+    "mtime": 1774959962.69237,
+    "hash": "4a07b22dbd137fda26291459b091e5e9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/pricing.tsx": {
+    "mtime": 1777400756.3931272,
+    "hash": "deb9babd96a14815f89f46801777c652"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/oauth-native-callback.tsx": {
+    "mtime": 1778322695.0941768,
+    "hash": "273f23325b9e6339d967c7d0d3761640"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/payment-success.tsx": {
+    "mtime": 1778338526.5489523,
+    "hash": "dbc1e064a68479a5a93d44d2f9a32350"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/_layout.tsx": {
+    "mtime": 1778522004.624863,
+    "hash": "e4458c7a3a747b29e0c6eb0d4a65c9a9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/user-profile.tsx": {
+    "mtime": 1778338522.8305554,
+    "hash": "1ec2e0723089154aececef72ca5aa9a9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/(tabs)/index.tsx": {
+    "mtime": 1778522039.9705544,
+    "hash": "c5e5ee602e7909e631391355e16b2c52"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/(tabs)/ask.tsx": {
+    "mtime": 1778366149.221648,
+    "hash": "e018ceefbf16e6c23b1eaee6f3e7fb58"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/(tabs)/gurukul.tsx": {
+    "mtime": 1778364866.7113729,
+    "hash": "f0e9460e4e60d1a72db6067588d87a59"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/(tabs)/muhurat.tsx": {
+    "mtime": 1777808542.9676714,
+    "hash": "8ddc60ec179175a5006571feac45a3ca"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/(tabs)/profile.tsx": {
+    "mtime": 1778358806.4790578,
+    "hash": "75d7ac5ac5f37bc96a518a7cbb754f96"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/(tabs)/_layout.tsx": {
+    "mtime": 1776497014.7411106,
+    "hash": "e2ebfe59d8f11574bba2fd412a453f51"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/sacred-day/[id].tsx": {
+    "mtime": 1778365254.082502,
+    "hash": "c04d29cb85bf62fe988e7b354fe4fcd1"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/daily-arth/reflect.tsx": {
+    "mtime": 1777378132.9345708,
+    "hash": "b77654f927ea18478e4f05948adb46ff"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/ask-krishna/_layout.tsx": {
+    "mtime": 1776172056.8614738,
+    "hash": "a3c1bb06428c12533a689c5dc189372e"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/api/ask+api.ts": {
+    "mtime": 1776629652.548012,
+    "hash": "d76242e8da9423d37d661f386702172b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/api/chat+api.ts": {
+    "mtime": 1776629652.5484006,
+    "hash": "e0435d746a7dcf9c52c4520b2c5d4ab6"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/api/narad+api.ts": {
+    "mtime": 1776629652.5485423,
+    "hash": "3daf44bb300e369f2a35b4f5ac16c933"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/api/wisdom/muhurat+api.ts": {
+    "mtime": 1776629652.5490527,
+    "hash": "f50eda5f42d0ca10fd1e5889fcf0cfb5"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/api/wisdom/daily+api.ts": {
+    "mtime": 1776629652.5488007,
+    "hash": "e37edf172480cc68d4ff9b6a3c7e181d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/api/wisdom/daily-arth-reflection+api.ts": {
+    "mtime": 1777327231.8638234,
+    "hash": "a6e1f80982669e77ee243ede26947036"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/index.tsx": {
+    "mtime": 1777404017.1291685,
+    "hash": "3f07caf2b146ded71ec3ed36b924baaa"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-11.tsx": {
+    "mtime": 1778519552.2054734,
+    "hash": "abe76040bb1508e8d71860529c98194c"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-10.tsx": {
+    "mtime": 1778519649.5610816,
+    "hash": "ae13cb41f08140837cce0d6efe9effbb"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-2.tsx": {
+    "mtime": 1778519288.2993646,
+    "hash": "8cb6667afaf2448ab074eb69568a22fc"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-12.tsx": {
+    "mtime": 1778522047.7214136,
+    "hash": "bc49d61c70df6ede5a1f3ba007b9f47f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-3.tsx": {
+    "mtime": 1778519303.3508365,
+    "hash": "08250f053f96b33c7713e92c4bc566a2"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-7.tsx": {
+    "mtime": 1778519496.5068283,
+    "hash": "74aeb19289d64a143983aa08d7d7e48d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-6.tsx": {
+    "mtime": 1778519476.831806,
+    "hash": "0f943bbdd5a3b06c9d064e80fb83da8d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-4.tsx": {
+    "mtime": 1778523321.6531692,
+    "hash": "05a6ce19075987f8ffce26eabd60cabf"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-5.tsx": {
+    "mtime": 1778519435.6635826,
+    "hash": "dc5336447ac84752444ff81b818023c7"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-4-gender.tsx": {
+    "mtime": 1778523372.2391438,
+    "hash": "6f76e3824821b071951e5bf7d721f771"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-5-place.tsx": {
+    "mtime": 1778519451.1350558,
+    "hash": "4c3bc9dbf252560fadd286f7cab18b1f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-8.tsx": {
+    "mtime": 1778523332.8598502,
+    "hash": "8d73069a109555382f9f5fdb285b0c30"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-5-trust.tsx": {
+    "mtime": 1778519413.5459285,
+    "hash": "ebca68a9330ddc51409eed3d07cee94d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-9.tsx": {
+    "mtime": 1778519537.3519626,
+    "hash": "9fc7f23b79aec281e666f433b61de9ed"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/app/onboarding/step-5-tob.tsx": {
+    "mtime": 1777400756.390618,
+    "hash": "d26afba325cdcabadd2d25e3119dbf34"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/plugins/withAndroidPackagingOptions.js": {
+    "mtime": 1778061533.81434,
+    "hash": "f2b685f14769fa1a7a395008e9a0ccc9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/muhurat/useMuhurat.ts": {
+    "mtime": 1778095192.1623487,
+    "hash": "30e2cd0db6917029d7927eaba442d2c2"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/muhurat/MuhuratCard.tsx": {
+    "mtime": 1777402557.412145,
+    "hash": "ea7f93534680111ea748766c75ab35c0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/muhurat/components/MuhuratDateSheet.tsx": {
+    "mtime": 1776345633.2541332,
+    "hash": "558a84cbc6bf0e4fd5a18307486c26f4"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/useDailyAlignment.ts": {
+    "mtime": 1778522027.2741637,
+    "hash": "b58ea206f1b0b719b58c2e2cdc140ba2"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/VedicReasoningAccordion.tsx": {
+    "mtime": 1777402510.9324393,
+    "hash": "b816e06a7aa7e9fe5a17e874085fc264"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/types.ts": {
+    "mtime": 1774896496.7915218,
+    "hash": "667361ddef6300dd8a964d03242aec7c"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/TimelineItem.tsx": {
+    "mtime": 1776345633.2457194,
+    "hash": "528f6a63e64e2a6ac02a619fbb6c1e84"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/FocusAreaCard.tsx": {
+    "mtime": 1778361344.1843064,
+    "hash": "752ef35eb3661bc1dfefdd02956641eb"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/DailyAlignmentCard.tsx": {
+    "mtime": 1778361344.1862512,
+    "hash": "47b077f52bf15bc404511f445b84fb49"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/FocusAreaChips.tsx": {
+    "mtime": 1777402691.3569055,
+    "hash": "f4b48e5ae800afaddbd0b1aebdf1e5b1"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/TimeOfDayCard.tsx": {
+    "mtime": 1777730662.1043162,
+    "hash": "9c43326cf0c7fb1db122ff408239b9a2"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/horoscope/dailyPredictionImages.ts": {
+    "mtime": 1778522069.8001294,
+    "hash": "2859cd300e2f5e616de39d63197fe065"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/chat/ChatBubble.tsx": {
+    "mtime": 1777400796.4564538,
+    "hash": "94ec2043809eabdf4dd1e568221ff1ca"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/chat/ChatInput.tsx": {
+    "mtime": 1776497014.7502213,
+    "hash": "79d8431e45c635a4a8f4e26e57c880cf"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/useAskState.ts": {
+    "mtime": 1778338485.8022106,
+    "hash": "2e05315b61f81e4146b026629acab8ac"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/ScriptureAnswerCard.tsx": {
+    "mtime": 1776497014.7489424,
+    "hash": "56d170805a25f52d1ffc970604e7f9a6"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/SavedPassageButton.tsx": {
+    "mtime": 1776369927.1545565,
+    "hash": "3dbae9c8dd4bc74f5816126adaf96c55"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/EmptyAskState.tsx": {
+    "mtime": 1778365840.3091934,
+    "hash": "84cff64e0365793bd0bc355314c4e2ee"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/FollowUpActions.tsx": {
+    "mtime": 1776497014.7472308,
+    "hash": "ede8c5b9d6d2629d34d1fed7e18404da"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/ClearChatSheet.tsx": {
+    "mtime": 1777400786.3922594,
+    "hash": "3aea6cfc75b6914e994a66a0eedcbd42"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/types.ts": {
+    "mtime": 1776369602.2092078,
+    "hash": "4e3371e1d4fb98af63ceec7551712c43"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/NaradIntro.tsx": {
+    "mtime": 1777403054.4711976,
+    "hash": "aba18f19845f8d89867190b82486331c"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/GuideSelector.tsx": {
+    "mtime": 1777808542.9695773,
+    "hash": "3e2af3646ed0a8f9e304db3a177dd1ed"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/ResponseModeSwitcher.tsx": {
+    "mtime": 1776497014.7483768,
+    "hash": "ed93874a440fc9e7dfd9f3a277304a7b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/GuideLoader.tsx": {
+    "mtime": 1776345633.2463875,
+    "hash": "33e3b6923699790aa0e1bc602c7a3d23"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/useNaradState.ts": {
+    "mtime": 1778338477.097694,
+    "hash": "6314fec6f4ad3b2186bf78f8a50b080a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/guidePersonas.ts": {
+    "mtime": 1776338721.364895,
+    "hash": "d2431604edb855f3c56d210390de773f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/SourceCard.tsx": {
+    "mtime": 1776497014.7492747,
+    "hash": "5bc5ea382ffe2bca94b2ea4c8bd0c4dd"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/ask/CompareTextsView.tsx": {
+    "mtime": 1776369927.155071,
+    "hash": "6415f386056fe2708159e43d80040622"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/auth/useSignIn.ts": {
+    "mtime": 1778338442.9018805,
+    "hash": "a51ab5d5d08954986c31b37cb087b7c8"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/auth/OAuthButton.tsx": {
+    "mtime": 1777325311.8312557,
+    "hash": "291ae0ae14c326063632df9cf16c5edf"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/auth/AppleLogo.tsx": {
+    "mtime": 1776312972.9775188,
+    "hash": "793fe00485496b596aab6c54840e40fd"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/auth/GoogleLogo.tsx": {
+    "mtime": 1776312943.9212563,
+    "hash": "50ca039460f4269f9704bb875391e80b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/daily/useDailyArth.ts": {
+    "mtime": 1778338739.3688881,
+    "hash": "02cd07744cd9ed350a336f79c8038a68"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/daily/LessonCard.tsx": {
+    "mtime": 1776345633.2552435,
+    "hash": "def6ca7bb46e72bc9162f1e41f56aa0e"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/daily/SacredDayCard.tsx": {
+    "mtime": 1778364375.6850324,
+    "hash": "abb6fed24ab8e7a29191b23c04fbee30"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/daily/calendarImageUrl.ts": {
+    "mtime": 1778363932.617496,
+    "hash": "c7b50a3923b27423865ab50d2bbc2ed9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/daily/types.ts": {
+    "mtime": 1774849456.8705244,
+    "hash": "bb3a536d7f7d14432baf1a56d0ee8305"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/daily/DailyArthCard.tsx": {
+    "mtime": 1778365703.7908113,
+    "hash": "3a30e3053510e47e5ec65b6ecd82dafd"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/daily/useCalendarEvents.ts": {
+    "mtime": 1778363085.545377,
+    "hash": "189ad3ba30fafa90d29064f349c2be9e"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/utils.ts": {
+    "mtime": 1776523431.5742898,
+    "hash": "eda1bfb59676d39722800650e07c1b90"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/constants.ts": {
+    "mtime": 1775032298.2060914,
+    "hash": "e499be3216bc850788de907cbe6e770a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/useProfile.ts": {
+    "mtime": 1778522012.948038,
+    "hash": "f57e0e120aca7718d8d0f9659b397f43"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/components/ProfileFields.tsx": {
+    "mtime": 1778360093.6710324,
+    "hash": "b96fb43b8526958ac00f3089ea020bff"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/components/PremiumCard.tsx": {
+    "mtime": 1778360080.3524563,
+    "hash": "95499bb5783a63f05f12e77b0ed96701"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/components/ProfileAuthSheet.tsx": {
+    "mtime": 1777325311.8315454,
+    "hash": "03f98e90cca774969a85fe5507ecd258"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/components/ProfileHeader.tsx": {
+    "mtime": 1776345633.2534826,
+    "hash": "51555feb21fb19764a444d7e10f41044"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/components/ProfileHero.tsx": {
+    "mtime": 1777402639.4207795,
+    "hash": "d9d45f816f5031ced5bd78edee2da4cb"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/components/ProfileSettingsSheet.tsx": {
+    "mtime": 1777402639.422212,
+    "hash": "f540b8f54d7d5d5fffa2c3e042ae5e29"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/profile/components/ProfileDateTimeSheet.tsx": {
+    "mtime": 1776345633.2462096,
+    "hash": "fd0adcb5bd3cbbefd23a392db5bb8c42"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/gurukul/CategoryCard.tsx": {
+    "mtime": 1776345633.2521234,
+    "hash": "003c5bce769252e873f7ddb686b9aae0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/gurukul/FeaturedCard.tsx": {
+    "mtime": 1776345633.2467568,
+    "hash": "a1c4832bb55dd67df28f6cf236b3a3af"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/gurukul/LessonRow.tsx": {
+    "mtime": 1776345633.2461274,
+    "hash": "e0d02c741b714cd6f1d21d342eb2aead"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/billing/PaywallSheet.tsx": {
+    "mtime": 1777400771.3086486,
+    "hash": "5be731558f25c38671c5052c73dd32eb"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/billing/PlansScreen.tsx": {
+    "mtime": 1777400771.3082688,
+    "hash": "96d47f3c615f5a02127309dbf1fbbee4"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/onboarding/onboardingStyles.ts": {
+    "mtime": 1776344874.6260192,
+    "hash": "4a6b1fa1210d9b72d360821c178db909"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/onboarding/OnboardingStarField.tsx": {
+    "mtime": 1777314651.5575233,
+    "hash": "2c44b93fe44bb9d66a41b0bdfde8b87b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/onboarding/personalGuidance.ts": {
+    "mtime": 1778519905.6936386,
+    "hash": "887ae1c8832a2f6c708135aa61e330d5"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/onboarding/OnboardingDevBackButton.tsx": {
+    "mtime": 1776360925.4225419,
+    "hash": "1aaba5959dd0c978c6689aefe3797450"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/onboarding/OnboardingAudioControl.tsx": {
+    "mtime": 1777314741.0054178,
+    "hash": "436174a296dcc46896e7a66e675cc226"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/onboarding/BirthDataScaffold.tsx": {
+    "mtime": 1777314260.1695096,
+    "hash": "ec8adb23c2ce3d80cce7c3af91bf0343"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/features/onboarding/ChoiceCard.tsx": {
+    "mtime": 1776345633.243179,
+    "hash": "ac6857e3e3b22d44bcfb28b4f4aa942f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/PageHero.tsx": {
+    "mtime": 1776345633.2544851,
+    "hash": "5446c0a1f4af8fc9836ca3e0aed30a99"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/BottomSheet.tsx": {
+    "mtime": 1777730662.1026576,
+    "hash": "8ee5c5719f1ae81f39b3754687ddf1b2"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/GlassCard.tsx": {
+    "mtime": 1777730662.1023948,
+    "hash": "f6583ded45f193744b12d663e7d41c87"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/GurukulIcon.tsx": {
+    "mtime": 1776312030.1189213,
+    "hash": "a7db055d57edf8507331ed3223a7f0a5"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/PageAmbientBlobs.tsx": {
+    "mtime": 1776497014.745627,
+    "hash": "d7c2f96e19fcd9e333337c2896e13c79"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/MihiraText.tsx": {
+    "mtime": 1777400810.9503849,
+    "hash": "00bda5cf5032d711c30fb1fd12913640"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/ToastProvider.tsx": {
+    "mtime": 1777808542.9649305,
+    "hash": "b5b49b653adbd848b3a1e735af8fb146"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/PageFooter.tsx": {
+    "mtime": 1777327861.412802,
+    "hash": "e92f3f7d4106d1d6ab4e865d095e9fff"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/GlowCard.tsx": {
+    "mtime": 1776337358.5250177,
+    "hash": "84af6d6d582965c928fec32d1d4551a3"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/AppBlurView.tsx": {
+    "mtime": 1777730662.101784,
+    "hash": "9849aa7887f95f48486c21afd86c09f5"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/ProfileIcon.tsx": {
+    "mtime": 1776520011.920928,
+    "hash": "931657d57ab5e3357abc13ffb34f9dbd"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/SacredButton.tsx": {
+    "mtime": 1778361724.5537856,
+    "hash": "417cdc66568771223c14b05636cfc783"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/MuhuratIcon.tsx": {
+    "mtime": 1776499389.9043434,
+    "hash": "ceb47176c1e1d96a757fd0c80eb208ba"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/GurukulYogiBackdrop.tsx": {
+    "mtime": 1776337414.4078636,
+    "hash": "e04c0035dcad0588b178d38fedf0da69"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/RealmBackdrop.tsx": {
+    "mtime": 1776312030.1240895,
+    "hash": "77c4da5725dffbe5283468a3ffce24fa"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/Text.tsx": {
+    "mtime": 1777808491.180543,
+    "hash": "e05766d23a22bf91c1227506787df978"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/TabBar.tsx": {
+    "mtime": 1777808542.9660037,
+    "hash": "71c531b0cffe1f000532f27d8f5b5de0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/DailyIcon.tsx": {
+    "mtime": 1776520436.5387967,
+    "hash": "7a5c00eb68b0ca6663cb97b3ec7d920e"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/GuidanceIcon.tsx": {
+    "mtime": 1776499619.8758676,
+    "hash": "35723b1cec9eecb6d9f824ec1b44c05a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/AmbientBlob.tsx": {
+    "mtime": 1776335038.3249097,
+    "hash": "8d967a509b60eb064d0633dfd7f9fc0b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/components/ui/ConstellationLoader.tsx": {
+    "mtime": 1776363574.88919,
+    "hash": "cab10bab2168cbc4c2773431f66a31e0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/app/api/ask+api.test.ts": {
+    "mtime": 1776370263.608557,
+    "hash": "0f9026b828c54145ef4d0d4e19b1cde1"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/features/horoscope/dailyPredictionImages.test.ts": {
+    "mtime": 1778522084.9812434,
+    "hash": "39c71571a1e80e9de8c2a700a5e94819"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/features/ask/ResponseModeSwitcher.test.tsx": {
+    "mtime": 1776370117.0548859,
+    "hash": "ec28851ce79cf0d7c6853544a918ecf1"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/features/ask/ScriptureAnswerCard.test.tsx": {
+    "mtime": 1776497014.7396305,
+    "hash": "45e7b5ad413448b911d33a44d1a98342"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/features/ask/guidePersonas.test.ts": {
+    "mtime": 1775336299.3135004,
+    "hash": "e6cf3c6c1edff66bad4d17a5a114dc73"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/features/ask/SourceCard.test.tsx": {
+    "mtime": 1776497014.740047,
+    "hash": "35c43888fbee5fbb6734e7a38fc4c5e2"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/features/daily/useCalendarEvents.test.ts": {
+    "mtime": 1778363091.2802987,
+    "hash": "82d0100e8c36ce78d1f47307b3dfe7f6"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/features/daily/calendarImageUrl.test.ts": {
+    "mtime": 1778363865.3929923,
+    "hash": "79d2077c05b0e143481152836f690292"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/features/profile/useProfile.test.ts": {
+    "mtime": 1778522097.5704262,
+    "hash": "50b825fd3dd8d816c1b39326f40e10cb"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/components/ui/SacredButton.test.tsx": {
+    "mtime": 1778338912.3523896,
+    "hash": "c9a0eb45e09aa1fb9059288d62ca58be"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/supabase.test.ts": {
+    "mtime": 1778338854.1625729,
+    "hash": "350331c1739b6a8b982b72ac740617ad"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/askStorage.test.ts": {
+    "mtime": 1776426248.903715,
+    "hash": "fe1181846bf61b54325c0a336119a978"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/subscription.test.ts": {
+    "mtime": 1778358899.0552268,
+    "hash": "ae239d063c6364458b8d61faea12822d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/theme-context.test.tsx": {
+    "mtime": 1777730723.838785,
+    "hash": "dbc7be9fb6dd8a4dc9b2ca58f96b99f6"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/onboardingStatus.test.ts": {
+    "mtime": 1778358972.3815,
+    "hash": "c0beaade7195316ed7e71a7462391b1e"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/guideStore.test.ts": {
+    "mtime": 1775337060.1280656,
+    "hash": "a5c0493413a3d7ac7138dbf47c67d85d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/chatStorage.test.ts": {
+    "mtime": 1775023390.285038,
+    "hash": "e2a3d9753b91c4d790fc17fdb2ada13b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/revenuecat.test.ts": {
+    "mtime": 1776628720.2586854,
+    "hash": "55400d47d2153334f50e1552318d6d5f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/theme.test.ts": {
+    "mtime": 1777730723.838098,
+    "hash": "3409f019acf7d8fa9e04df5022ea1c42"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/apiUrl.test.ts": {
+    "mtime": 1778095245.297723,
+    "hash": "de76090baeb852e0c998feeea350590b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/vedic/muhurat.test.ts": {
+    "mtime": 1775143787.0612087,
+    "hash": "d8ea655ce37414eef80e668031c1f2e8"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/vedic/ayanamsha.test.ts": {
+    "mtime": 1774986025.6640365,
+    "hash": "92a271bb0c4967db4eaae5a12ba182e7"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/vedic/ephemeris.test.ts": {
+    "mtime": 1775022116.0241096,
+    "hash": "52cc80f9f6b91b90da64bc25c6226a01"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/vedic/dasha.test.ts": {
+    "mtime": 1775022708.2182145,
+    "hash": "7b50dd3d281895316772d5ce162e0c48"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/vedic/geocode.test.ts": {
+    "mtime": 1775023048.85122,
+    "hash": "45d9371294dec805637403ea556af72a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/vedic/houses.test.ts": {
+    "mtime": 1775022223.2282853,
+    "hash": "759a6040c0f6b0ce9d95134fa0f55720"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/ai/scriptureSafety.test.ts": {
+    "mtime": 1776370117.0535023,
+    "hash": "26e9c2e129c2d72f11583e1b6a17ba9d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/ai/parseModelJson.test.ts": {
+    "mtime": 1775040885.257199,
+    "hash": "3f033907e4a98c1ebab3b6c15da92396"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/ai/scriptureRanking.test.ts": {
+    "mtime": 1776370238.6846838,
+    "hash": "7cfd57df2ebdd03f4b07bb7319c85b82"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/ai/scriptureRetrieval.test.ts": {
+    "mtime": 1776370117.05297,
+    "hash": "2ae9db46f0fac0f70b7a85d069697102"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/ai/perplexity.test.ts": {
+    "mtime": 1775023079.5263646,
+    "hash": "3cfe91917b93b04f1576160eb82739b4"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/__tests__/lib/ai/askValidators.test.ts": {
+    "mtime": 1776370238.6850348,
+    "hash": "b94df054fcc6e05d2194b82ca751c7ef"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/scripts/test-patch.js": {
+    "mtime": 1776312030.1875858,
+    "hash": "7c9f9c5f3fa66ab004940b9c499dbf89"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/scripts/generate-playstore-screenshots.mjs": {
+    "mtime": 1777401081.373051,
+    "hash": "df1b74c434e3ae60709de4b84e0f9860"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/scripts/generate-calendar-images.mjs": {
+    "mtime": 1778364919.6799726,
+    "hash": "32835ca41cb962250342c94efe8a253f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/scripts/patch_text.js": {
+    "mtime": 1776312030.182171,
+    "hash": "545291b58be885ddd03e1dfeb805df26"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/dailyArthReflectionStorage.ts": {
+    "mtime": 1777378132.9338567,
+    "hash": "445c0ee520516f59970be9a401413c0b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/auth.tsx": {
+    "mtime": 1778361344.1883142,
+    "hash": "82a81e721684ba9df9871c2894fb7674"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/usage.ts": {
+    "mtime": 1778358727.4725688,
+    "hash": "0eb1c9016dd30ff09a6eb178ea78b2bb"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/revenuecat.ts": {
+    "mtime": 1776628705.9662948,
+    "hash": "4a6e0cb2481aa48029587658ba547074"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/userDetails.ts": {
+    "mtime": 1778358710.6621547,
+    "hash": "e800b13fba473ead63535a4c3ab75cdb"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/dailyArthReflectionTypes.ts": {
+    "mtime": 1777378132.9322846,
+    "hash": "5295f36535dd47a95546e77e6a969716"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/theme-context.tsx": {
+    "mtime": 1777730677.2981827,
+    "hash": "0ae316b45488496715b071a0a16bf2a3"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/dailyAlignmentTypes.ts": {
+    "mtime": 1777735797.1489427,
+    "hash": "e16576d7e3cf34e738dff45fc53bda73"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/analytics.ts": {
+    "mtime": 1776369934.6849384,
+    "hash": "ace4a166452ea548789b7b05ccd01d7c"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/askStorage.ts": {
+    "mtime": 1776426216.8471344,
+    "hash": "c638c988d9ae790a224a1e866ad66512"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/naradStorage.ts": {
+    "mtime": 1778358740.0905778,
+    "hash": "12d84690a5e1e78c54f8aa926540a5ca"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/onboardingStatus.ts": {
+    "mtime": 1778358782.9437017,
+    "hash": "898676fefa42e8a315611af02ce5d173"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/dailyAlignmentStorage.ts": {
+    "mtime": 1776631744.0306761,
+    "hash": "ca40663239d439573157a2d29de3f623"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/sanskrit.ts": {
+    "mtime": 1776472451.1530185,
+    "hash": "ad092436a8fc9e66dbc69e33aa6c818d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/guideStore.tsx": {
+    "mtime": 1775338379.7674997,
+    "hash": "7d685cddf8d37e162fcb8c39e9badabb"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/profileStorage.ts": {
+    "mtime": 1776172056.8650172,
+    "hash": "db3461f838f13d4ba1d47634d16ac081"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/dailyArthReflectionClient.ts": {
+    "mtime": 1778095196.8620775,
+    "hash": "6d6bf17de331a349ccabc0312636c79d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/chatStorage.ts": {
+    "mtime": 1776312030.1525931,
+    "hash": "108f63a59007d805e27354845a486da2"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/posthog.ts": {
+    "mtime": 1775419116.233733,
+    "hash": "efb9f875e1bd451b08203dead5876f5a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/sacredDays.ts": {
+    "mtime": 1776172056.8651574,
+    "hash": "ab864127c0b3972988195699d759a943"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/apiFetch.ts": {
+    "mtime": 1778095173.7157042,
+    "hash": "5399cced77d8654ba2f58016a15a0fa6"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/haptics.ts": {
+    "mtime": 1776172056.8646142,
+    "hash": "9b0761bf49a8a8e403de26fce50df085"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/subscription.ts": {
+    "mtime": 1778358892.3848503,
+    "hash": "0c53493792c93f6e036f875302bfa1e0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/withTimeout.ts": {
+    "mtime": 1778095265.532595,
+    "hash": "fae338d466124404af68cc3d9a2c82a8"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/theme.ts": {
+    "mtime": 1777730723.8374498,
+    "hash": "e94dfce22972457bc8851cc75eb46354"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/supabase.ts": {
+    "mtime": 1778339020.833,
+    "hash": "75eaa76688553c6cecaa0b8b20d4bf5f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/apiUrl.ts": {
+    "mtime": 1778095236.2011375,
+    "hash": "5bb79ae59887daa91e3b71c30c60b56a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/onboardingStore.ts": {
+    "mtime": 1778521958.7667084,
+    "hash": "71f91eb1c1f866ea24eaaf80c0ef347e"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/skia/realmShaders.ts": {
+    "mtime": 1776312030.1578705,
+    "hash": "c4ebf993af9b5c540beb1321d5a58c6a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/server/routes/muhurat.ts": {
+    "mtime": 1776629652.5471854,
+    "hash": "c458da7af31eb16e4c8be2868839c332"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/server/routes/daily.ts": {
+    "mtime": 1776631744.030958,
+    "hash": "c820672b42b86183f2417be7d78c5591"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/server/routes/narad.ts": {
+    "mtime": 1776629652.5469835,
+    "hash": "853bf8185c14984bb01efed8fa2bbbcc"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/server/routes/chat.ts": {
+    "mtime": 1776629652.5468585,
+    "hash": "fcc22043c058c4023e442192ff872165"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/server/routes/dailyArthReflection.ts": {
+    "mtime": 1777378132.9330928,
+    "hash": "e3b61948465c77fff66edbf11f29007b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/server/routes/ask.ts": {
+    "mtime": 1776629652.546406,
+    "hash": "efedd397ce25e5bf5ac7cfd8b184c088"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/scriptures/schema.ts": {
+    "mtime": 1776369602.2099009,
+    "hash": "8284d21082ee4c79de9cb300d8a7b253"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/muhurat.ts": {
+    "mtime": 1775143787.0820112,
+    "hash": "63b82692c1e280befcbbbd44a8c73d48"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/moonProfile.ts": {
+    "mtime": 1776348987.7519193,
+    "hash": "00d3348d8965d57c335d2ea7020db7c8"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/types.ts": {
+    "mtime": 1775323026.0504315,
+    "hash": "f206a8a743270b587278bf100014b45f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/chart.ts": {
+    "mtime": 1775143787.0811994,
+    "hash": "11c31ca57343cae6ff16716ef2a3b489"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/geocode.ts": {
+    "mtime": 1776364342.3589013,
+    "hash": "0c24f987112141452ee77556311f4497"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/ayanamsha.ts": {
+    "mtime": 1774986036.4214861,
+    "hash": "5bdac0db7d2901bdc751f822150db1be"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/houses.ts": {
+    "mtime": 1775022237.7949276,
+    "hash": "b9eee9ed2447351ae37eb92d7313b70c"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/dasha.ts": {
+    "mtime": 1775022763.672684,
+    "hash": "89d34160dbde30273392b78d1b75c2c0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/vedic/ephemeris.ts": {
+    "mtime": 1775020528.5759819,
+    "hash": "abd53cb846c30425de2294ef85653929"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/askValidators.ts": {
+    "mtime": 1777735740.239018,
+    "hash": "aab63d43b4d1e2b73150ece0df3d29ff"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/scriptureRanking.ts": {
+    "mtime": 1777735740.2392209,
+    "hash": "5136a5566b1d6cd48660ccc25d775539"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/scriptureModes.ts": {
+    "mtime": 1777735740.2396924,
+    "hash": "31c7b4c700c244122e6053c63fa0bf5b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/scriptureSafety.ts": {
+    "mtime": 1777735740.239445,
+    "hash": "279dcf2923b3a201bf849ba0193ad9f0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/scriptureCorpus.ts": {
+    "mtime": 1777735740.2384326,
+    "hash": "10d9eddf43ee7d4fa85fdd67964a9bc0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/prompts.ts": {
+    "mtime": 1777735740.2386615,
+    "hash": "87f94edbe0f7dd18e2b5c776e2ae0bbc"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/perplexity.ts": {
+    "mtime": 1775023072.662397,
+    "hash": "ebe5dcbf13a3e67e1820c6169321acaa"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/scriptureRetrieval.ts": {
+    "mtime": 1777735740.2382019,
+    "hash": "549de7e9057c045b566148401dbb4cec"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/parseModelJson.ts": {
+    "mtime": 1775040885.2571065,
+    "hash": "15aa2e232ec76ad68aef80bb0478d2b1"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/lib/ai/askService.ts": {
+    "mtime": 1777735740.23801,
+    "hash": "e4486a6db22e24f022e5f845dcf41900"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/block-navigation.js": {
+    "mtime": 1776172056.862058,
+    "hash": "13c8dd65c9b9571b0b4960aeaf3fab0a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/prettify.js": {
+    "mtime": 1776172056.8638065,
+    "hash": "6051903a2f7363ee232a01bd32f60b6a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/sorter.js": {
+    "mtime": 1776172056.8640678,
+    "hash": "e2f5129270684bf835820ca4433b4abb"
+  },
+  "/Users/Apple/Desktop/mihira/README.md": {
+    "mtime": 1777735026.4834626,
+    "hash": "c7904b4623be5f0d0e9522bab75135df"
+  },
+  "/Users/Apple/Desktop/mihira/GEMINI.md": {
+    "mtime": 1775798466.2554038,
+    "hash": "85785109b1c3db1926f650ef5d7ded5f"
+  },
+  "/Users/Apple/Desktop/mihira/AGENTS.md": {
+    "mtime": 1775798466.255319,
+    "hash": "85785109b1c3db1926f650ef5d7ded5f"
+  },
+  "/Users/Apple/Desktop/mihira/CLAUDE.md": {
+    "mtime": 1778338763.8241234,
+    "hash": "1bb18468da7823e44f81dcb801e7a860"
+  },
+  "/Users/Apple/Desktop/mihira/web/README.md": {
+    "mtime": 1777352095.215511,
+    "hash": "2812d62e5eba584db7cc10c70f9c054d"
+  },
+  "/Users/Apple/Desktop/mihira/docs/product-overview.md": {
+    "mtime": 1776582334.2629392,
+    "hash": "e5a6291df9e2f10764d61ca58e45c708"
+  },
+  "/Users/Apple/Desktop/mihira/docs/business-strategy-and-gtm.md": {
+    "mtime": 1776582334.263132,
+    "hash": "b8e5d6a05c03482b0a96545d241c3b9f"
+  },
+  "/Users/Apple/Desktop/mihira/docs/support-page.md": {
+    "mtime": 1776581413.1271913,
+    "hash": "e2605e8bfb3c14066e025dc6942a09e8"
+  },
+  "/Users/Apple/Desktop/mihira/docs/privacy-policy.md": {
+    "mtime": 1778338773.53321,
+    "hash": "49a62b9b61cef19bb1f98332d499b366"
+  },
+  "/Users/Apple/Desktop/mihira/docs/env-setup.md": {
+    "mtime": 1778338769.8778865,
+    "hash": "6ce832a6fce436e8f9e946b9fb256e95"
+  },
+  "/Users/Apple/Desktop/mihira/docs/release-todo.md": {
+    "mtime": 1777735088.4430707,
+    "hash": "d29bf871def1276b9ad0c919e9a68c36"
+  },
+  "/Users/Apple/Desktop/mihira/docs/release-readiness.md": {
+    "mtime": 1777735081.5575137,
+    "hash": "6f82fd94474f7bd15863cf2a55bed3f3"
+  },
+  "/Users/Apple/Desktop/mihira/docs/terms-of-service.md": {
+    "mtime": 1777376621.245184,
+    "hash": "2f375bd87b6ec9958abd905fd5139408"
+  },
+  "/Users/Apple/Desktop/mihira/docs/posthog-setup-report.md": {
+    "mtime": 1777735081.5582514,
+    "hash": "c7eb64a21d5385301b56971ca447583a"
+  },
+  "/Users/Apple/Desktop/mihira/docs/logic.md": {
+    "mtime": 1775155641.7028105,
+    "hash": "83ac131f0ebf78503e4b4cb501d98587"
+  },
+  "/Users/Apple/Desktop/mihira/docs/release-qa-checklist.md": {
+    "mtime": 1776523699.6505303,
+    "hash": "a3041c476e8a5b4dcd8db65e0731fbbc"
+  },
+  "/Users/Apple/Desktop/mihira/docs/onboarding.md": {
+    "mtime": 1776347121.5630083,
+    "hash": "e11d4f381aec5408bc520aade8d4365a"
+  },
+  "/Users/Apple/Desktop/mihira/docs/claude.md": {
+    "mtime": 1778358910.988335,
+    "hash": "3697284108268348fea87fa69f7252d6"
+  },
+  "/Users/Apple/Desktop/mihira/docs/research/moonly.md": {
+    "mtime": 1777733210.691493,
+    "hash": "71d3a3f3c8c32d41c117f019813bb3df"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/plans/2026-04-01-intelligence-layer.md": {
+    "mtime": 1774985380.0757236,
+    "hash": "923099f3ea484fe6298409238c7678c8"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/plans/2026-04-05-divine-guide-selector.md": {
+    "mtime": 1775334528.799065,
+    "hash": "544b51985e504517e4528ffc89d2b8d1"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/plans/2026-03-30-aksha-implementation.md": {
+    "mtime": 1774810125.9665077,
+    "hash": "986c8bee65566b8938c07a04908ead72"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/plans/2026-04-12-light-theme.md": {
+    "mtime": 1775933532.308603,
+    "hash": "dba611b5cb0c86954a81cbf781b249d5"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/plans/2026-04-06-clerk-billing.md": {
+    "mtime": 1775422164.183225,
+    "hash": "f50c81b8af9c4660091000d2e6872579"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/plans/2026-04-12-narad-intermediary-engine.md": {
+    "mtime": 1776028521.9251199,
+    "hash": "69ef7405e15c55a6d253d4da14690b18"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/plans/2026-03-31-clerk-supabase-auth.md": {
+    "mtime": 1774945743.94505,
+    "hash": "f3b76a7e9bed293a60400bfceade3c8a"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/plans/2026-04-16-nativewind-migration.md": {
+    "mtime": 1776326499.2668424,
+    "hash": "f5969f818cfe9688175386ea6d46241b"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-04-12-narad-intermediary-engine-design.md": {
+    "mtime": 1776027903.939109,
+    "hash": "43c170600288d6b6d580357de67b4b57"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-04-05-divine-guide-selector-design.md": {
+    "mtime": 1775333728.5731692,
+    "hash": "af01a5be1ee137ec07d106cab5e1fc3a"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-04-17-ask-scripture-guide-design.md": {
+    "mtime": 1776368962.4397933,
+    "hash": "fced177f844e6c0ae35c750cf06ec8b9"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-04-06-clerk-billing-design.md": {
+    "mtime": 1775421255.2728121,
+    "hash": "033c772dd2980d2748b72bf97ba8f429"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-03-31-clerk-supabase-auth-design.md": {
+    "mtime": 1774945197.779986,
+    "hash": "8415c21533dc2e634543ed806781da60"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-04-01-intelligence-layer-design.md": {
+    "mtime": 1774983656.5248404,
+    "hash": "bb57dbbb4f23e12c5ab0d90e9e8548c4"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-04-12-light-theme-design.md": {
+    "mtime": 1775932967.474217,
+    "hash": "720656fa33ebab65160083c468c9a9ad"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-04-16-onboarding-celestial-luxury-design.md": {
+    "mtime": 1776325938.7513754,
+    "hash": "ed3f880bf70ea6a46b1ee498d22119eb"
+  },
+  "/Users/Apple/Desktop/mihira/docs/superpowers/specs/2026-04-16-nativewind-migration-design.md": {
+    "mtime": 1776325665.5539606,
+    "hash": "1f0496ad7886dc8b315708bf25ba26ad"
+  },
+  "/Users/Apple/Desktop/mihira/graphify-out.pre-native-ignore-20260513-202344/GRAPH_REPORT.md": {
+    "mtime": 1778595969.828959,
+    "hash": "67176ec2d2820c6c820f3171aeb70f64"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/index.html": {
+    "mtime": 1776172056.8630927,
+    "hash": "352767a8c262c43cd01452b46c255961"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/features/chat/index.html": {
+    "mtime": 1776172056.8628285,
+    "hash": "21c669c35ade6d9a2bf9d122a1623c4e"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/features/chat/useChatState.ts.html": {
+    "mtime": 1776172056.8629625,
+    "hash": "3f4225ed7ef970403660b2ac5ae3671a"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/components/ui/index.html": {
+    "mtime": 1776172056.8624303,
+    "hash": "82ca720d664b35fb225699c55740d048"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/components/ui/SacredButton.tsx.html": {
+    "mtime": 1776172056.8622935,
+    "hash": "a2a3d5a062a326b2c5ce3a5974a277b9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/lib/index.html": {
+    "mtime": 1776172056.8634086,
+    "hash": "0aff2607448ce40e09248d8d016ad2e9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/lib/haptics.ts.html": {
+    "mtime": 1776172056.8632724,
+    "hash": "de13251c2b16f3c4c9af460f36050024"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/lib/theme.ts.html": {
+    "mtime": 1776172056.8635495,
+    "hash": "a451aec5fdca04151e96029bfc608edd"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/credentials/README.md": {
+    "mtime": 1777446789.2431066,
+    "hash": "4ce8fc2af0e9f929f67e73591cef3153"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/icon.jpg": {
+    "mtime": 1777729827.162682,
+    "hash": "fea3b49eb40cb6935a79ecb106aab032"
+  },
+  "/Users/Apple/Desktop/mihira/web/app/logo.svg": {
+    "mtime": 1777784481.340151,
+    "hash": "d3791b3645892a196be7925787d387f9"
+  },
+  "/Users/Apple/Desktop/mihira/web/public/meditation.webp": {
+    "mtime": 1778366289.6291382,
+    "hash": "ab8a05f29abe5360eb4cfdffb600817c"
+  },
+  "/Users/Apple/Desktop/mihira/web/public/product-screenshots/daily-alignment.png": {
+    "mtime": 1777408777.0,
+    "hash": "4c3482737d78e4414ffad1171d0689e5"
+  },
+  "/Users/Apple/Desktop/mihira/web/public/product-screenshots/scripture-guidance.png": {
+    "mtime": 1777408777.0,
+    "hash": "2911aea7920cd6ce27f3d744faa5e4a3"
+  },
+  "/Users/Apple/Desktop/mihira/web/public/product-screenshots/sacred-timing.png": {
+    "mtime": 1777408777.0,
+    "hash": "0da032d387f519201ef2d69710a9f7be"
+  },
+  "/Users/Apple/Desktop/mihira/web/public/store-badges/google-play.png": {
+    "mtime": 1777235338.66975,
+    "hash": "1e91d02cf5a902f38f2923c006d79281"
+  },
+  "/Users/Apple/Desktop/mihira/web/public/store-badges/app-store.svg": {
+    "mtime": 1777235338.43608,
+    "hash": "2928664fe1fc6aca88583a6f606d60ba"
+  },
+  "/Users/Apple/Desktop/mihira/web/public/icons/muhurat.svg": {
+    "mtime": 1777235888.7541163,
+    "hash": "dfbbf311ca86d1b8747564d801f6db72"
+  },
+  "/Users/Apple/Desktop/mihira/screens/ss_7.png": {
+    "mtime": 1777408807.0,
+    "hash": "b9ebc392a79381b7bd4a991dbe1b385f"
+  },
+  "/Users/Apple/Desktop/mihira/screens/ss_6.png": {
+    "mtime": 1777408807.0,
+    "hash": "964bf102be07937001404e22ff4a6082"
+  },
+  "/Users/Apple/Desktop/mihira/screens/ss_4.png": {
+    "mtime": 1777408777.0,
+    "hash": "46cf3771beb455ea7e520b6e26217762"
+  },
+  "/Users/Apple/Desktop/mihira/screens/ss_5.png": {
+    "mtime": 1777408777.0,
+    "hash": "8ed9e5d936801d7ba9e6e213b5a9d575"
+  },
+  "/Users/Apple/Desktop/mihira/screens/ss_1.png": {
+    "mtime": 1777408777.0,
+    "hash": "4c3482737d78e4414ffad1171d0689e5"
+  },
+  "/Users/Apple/Desktop/mihira/screens/ss_2.png": {
+    "mtime": 1777408777.0,
+    "hash": "0da032d387f519201ef2d69710a9f7be"
+  },
+  "/Users/Apple/Desktop/mihira/screens/ss_3.png": {
+    "mtime": 1777408777.0,
+    "hash": "2911aea7920cd6ce27f3d744faa5e4a3"
+  },
+  "/Users/Apple/Desktop/mihira/screens/store_1.png": {
+    "mtime": 1777409515.8396125,
+    "hash": "736e8f773267121798b519113b309abb"
+  },
+  "/Users/Apple/Desktop/mihira/screens/store_2.png": {
+    "mtime": 1777409522.018039,
+    "hash": "bcce1abe21ec6cd5070baca6800b8dee"
+  },
+  "/Users/Apple/Desktop/mihira/screens/store_3.png": {
+    "mtime": 1777409525.3546011,
+    "hash": "ed1cb5ead365807e7ba118b692c2bfa3"
+  },
+  "/Users/Apple/Desktop/mihira/screens/store_6.png": {
+    "mtime": 1777409533.6060307,
+    "hash": "83980628305acfd27e4b2f9d196c9387"
+  },
+  "/Users/Apple/Desktop/mihira/screens/store_4.png": {
+    "mtime": 1777409528.04916,
+    "hash": "bba77cec0d7ac32c31032ecd204425a6"
+  },
+  "/Users/Apple/Desktop/mihira/screens/store_5.png": {
+    "mtime": 1777409531.129847,
+    "hash": "00840f72fe19f28eb86d641f40058dd0"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/gurukul.svg": {
+    "mtime": 1776312030.0635316,
+    "hash": "62ec971cda77e13ec2c1672dd758d607"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/muhurat.svg": {
+    "mtime": 1776312030.0654714,
+    "hash": "dfbbf311ca86d1b8747564d801f6db72"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/icon.png": {
+    "mtime": 1778062799.0410864,
+    "hash": "337173664c218d092e3aaca8f075174b"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/premium-card-bg-.png": {
+    "mtime": 1776312030.0849907,
+    "hash": "cd24826ff61c24e8064e44b2fd3fcfe8"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/adaptive-icon-foreground.png": {
+    "mtime": 1778062774.1156008,
+    "hash": "255f5b013b1985eaa1260571cc0c6fb5"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/premium-card-bg.svg": {
+    "mtime": 1776312030.111239,
+    "hash": "bb5cbbf49cbe8ea62ca3436a64944b0d"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/premium-card-bg.png": {
+    "mtime": 1776312030.1084902,
+    "hash": "759fd325ae1024330d69627b17c94b84"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/splash-logo.png": {
+    "mtime": 1778062774.2453766,
+    "hash": "4aa7b5f44dc300db55953e36f99c37ad"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/favicon.png": {
+    "mtime": 1774811169.9428895,
+    "hash": "4f1cb2cac2370cd5050681232e8575a8"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/adaptive-icon.png": {
+    "mtime": 1776602822.2083483,
+    "hash": "44903a0ca9dd5eb748dc25c2ec233473"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/daily-arth-bg.svg": {
+    "mtime": 1774903301.2921975,
+    "hash": "cd0a1fa5c1dc71880aa2969a52220668"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/reflect.svg": {
+    "mtime": 1778365703.7899082,
+    "hash": "f8bbdfd55ea3c4c4bca0599479380f75"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/profile_bg.svg": {
+    "mtime": 1776312030.1150124,
+    "hash": "f9e4c997eb313e881f10da5f5c55976f"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/logo.svg": {
+    "mtime": 1777309178.4043484,
+    "hash": "d3791b3645892a196be7925787d387f9"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/splash-icon.png": {
+    "mtime": 1777311884.324851,
+    "hash": "074b7d48f97bb6c136c2486ab9352600"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/favicon.png": {
+    "mtime": 1776172056.8626075,
+    "hash": "8c814a46f24208d0bc459bb2cf8b7b88"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/coverage/lcov-report/sort-arrow-sprite.png": {
+    "mtime": 1776172056.8639276,
+    "hash": "fd08a5625d21e34b1d6d9c026f2728a9"
+  },
+  "/Users/Apple/Desktop/mihira/web/public/loop.mp4": {
+    "mtime": 1777794317.1273751,
+    "hash": "bdd2c00fb013d231b9b8285f09a305ca"
+  },
+  "/Users/Apple/Desktop/mihira/mobile/assets/onboarding-astral.wav": {
+    "mtime": 1777314525.593666,
+    "hash": "0b0c044a1ff82bc81a01335bff2c0e86"
+  }
+}
