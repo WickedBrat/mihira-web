@@ -5,23 +5,22 @@ type RevenueCatModules = {
   ui: any | null;
 };
 
-function readEnv(name: string): string | undefined {
-  const value = process.env[name];
+function readEnvValue(value: string | undefined): string | undefined {
   return typeof value === 'string' && value.trim().length > 0 ? value.trim() : undefined;
 }
 
 export function getRevenueCatApiKey(): string | undefined {
-  if (Platform.OS === 'ios') return readEnv('EXPO_PUBLIC_REVENUECAT_APPLE_API_KEY');
-  if (Platform.OS === 'android') return readEnv('EXPO_PUBLIC_REVENUECAT_GOOGLE_API_KEY');
-  return readEnv('EXPO_PUBLIC_REVENUECAT_WEB_API_KEY');
+  if (Platform.OS === 'ios') return readEnvValue(process.env.EXPO_PUBLIC_REVENUECAT_APPLE_API_KEY);
+  if (Platform.OS === 'android') return readEnvValue(process.env.EXPO_PUBLIC_REVENUECAT_GOOGLE_API_KEY);
+  return readEnvValue(process.env.EXPO_PUBLIC_REVENUECAT_WEB_API_KEY);
 }
 
 export function getRevenueCatEntitlementId(): string {
-  return readEnv('EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID') ?? 'default';
+  return readEnvValue(process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID) ?? 'default';
 }
 
 export function getRevenueCatOfferingId(): string | undefined {
-  return readEnv('EXPO_PUBLIC_REVENUECAT_OFFERING_ID');
+  return readEnvValue(process.env.EXPO_PUBLIC_REVENUECAT_OFFERING_ID);
 }
 
 export function loadRevenueCatModules(): RevenueCatModules {

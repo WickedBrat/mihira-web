@@ -11,6 +11,7 @@ import * as Haptics from 'expo-haptics';
 import { useUser } from '@/lib/auth';
 import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingProgress } from '@/features/onboarding/OnboardingProgress';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
@@ -21,26 +22,39 @@ export default function Screen4() {
     return storedName || user?.fullName || user?.firstName || '';
   });
   const inputRef = useRef<TextInput>(null);
+  const hasSeededNameRef = useRef(Boolean(name.trim()));
+  const hasEditedNameRef = useRef(false);
   const authName = user?.fullName || user?.firstName || '';
+  const canProceed = Boolean(name.trim());
 
   useEffect(() => {
-    if (name.trim() || !authName.trim()) return;
-    setName(authName.trim());
-    setOnboardingData({ userName: authName.trim() });
-  }, [authName, name]);
+    const trimmedAuthName = authName.trim();
+    if (hasSeededNameRef.current || hasEditedNameRef.current || !trimmedAuthName) return;
+    hasSeededNameRef.current = true;
+    setName(trimmedAuthName);
+    setOnboardingData({ userName: trimmedAuthName });
+  }, [authName]);
+
+  function handleNameChange(nextName: string) {
+    hasEditedNameRef.current = true;
+    setName(nextName);
+  }
 
   function proceed() {
     const trimmed = name.trim();
     if (!trimmed) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOnboardingData({ userName: trimmed });
-    router.push('/onboarding/step-8');
+    router.push('/onboarding/step-5');
   }
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
       <OnboardingStarField />
+      <View className="items-center pt-3 pb-1">
+        <OnboardingProgress phase="you" />
+      </View>
 
       <KeyboardAvoidingView
         className="flex-1"
@@ -61,7 +75,7 @@ export default function Screen4() {
               ref={inputRef}
               className="w-full text-center font-headline text-[32px] text-ob-text"
               value={name}
-              onChangeText={setName}
+              onChangeText={handleNameChange}
               placeholder="First name or nickname"
               placeholderTextColor={OB.muted}
               autoFocus
@@ -85,8 +99,10 @@ export default function Screen4() {
         <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-center p-8 pb-11">
           <Pressable
             onPress={proceed}
+            disabled={!canProceed}
+            accessibilityState={{ disabled: !canProceed }}
             className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${
-              !name.trim() ? 'opacity-[0.35]' : ''
+              !canProceed ? 'opacity-[0.35]' : ''
             }`}
             style={({ pressed }) => [
               onboardingButtonShadow,
@@ -94,7 +110,7 @@ export default function Screen4() {
             ]}
           >
             <Text className="font-label text-base tracking-[0.3px] text-white">
-              {name.trim() ? `Continue as ${name.trim().split(' ')[0]} →` : 'Enter your name first'}
+              {canProceed ? `Continue as ${name.trim().split(' ')[0]} →` : 'Enter your name first'}
             </Text>
           </Pressable>
         </Animated.View>

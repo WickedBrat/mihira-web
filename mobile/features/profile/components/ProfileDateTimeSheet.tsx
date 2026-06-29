@@ -7,6 +7,8 @@ import { Text } from '@/components/ui/Text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 
+const MIN_BIRTH_DATE = new Date(1900, 0, 1);
+
 interface ProfileDateTimeSheetProps {
   visible: boolean;
   value: Date;
@@ -48,6 +50,7 @@ export function ProfileDateTimeSheet({
           mode="date"
           display="spinner"
           value={value}
+          minimumDate={MIN_BIRTH_DATE}
           onChange={(_, nextValue) => {
             if (nextValue) onChangeDate(nextValue);
           }}

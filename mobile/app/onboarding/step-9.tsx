@@ -1,120 +1,100 @@
-// Screen 9: Daily Horoscope Suggestions — Homepage Feature Tease
-import React from 'react';
-import {
-  View,
-  Pressable,
-} from 'react-native';
-import { Text } from '@/components/ui/Text';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { Platform, Pressable, Switch, View } from 'react-native';
 import { router } from 'expo-router';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
-import * as Haptics from 'expo-haptics';
-import { OB, getOnboardingData } from '@/lib/onboardingStore';
-import { getDailyGuidancePreview } from '@/features/onboarding/personalGuidance';
-import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
-import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
-import {
-  onboardingButtonShadow,
-  pressedButtonStyle,
-} from '@/features/onboarding/onboardingStyles';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Animated, { FadeInDown, FadeOutUp, LinearTransition } from 'react-native-reanimated';
+import { Text } from '@/components/ui/Text';
+import { BirthDataScaffold } from '@/features/onboarding/BirthDataScaffold';
+import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
 
-const ACCENT_COLORS = {
-  gold: OB.gold,
-  saffron: OB.saffron,
-  muted: 'rgba(255,255,255,0.35)',
-} as const;
+export default function Screen5Tob() {
+  const stored = getOnboardingData();
+  const [birthTime, setBirthTime] = useState(stored.birthTime);
+  const [unknownTime, setUnknownTime] = useState(stored.unknownBirthTime);
+  const [showTimePicker, setShowTimePicker] = useState(true);
+  const smoothLayout = LinearTransition.duration(220);
 
-export default function Screen9() {
-  const focusAreas = getDailyGuidancePreview(getOnboardingData());
-
-  async function continueToNextStep() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/onboarding/step-11');
+  function proceed() {
+    setOnboardingData({ birthTime, unknownBirthTime: unknownTime });
+    router.push('/onboarding/step-10');
   }
 
+  const fmtTime = (date: Date) =>
+    date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
   return (
-    <SafeAreaView className="flex-1 bg-ob-bg">
-      <OnboardingDevBackButton />
-      <OnboardingStarField />
-
-      <View className="flex-1 justify-center gap-6 px-8 pt-6">
-        <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
-          <Text className="text-center font-label text-xs uppercase tracking-[3px] text-ob-saffron">
-            Based on your guidance
+    <BirthDataScaffold
+      title={`What time were${'\n'}you born?`}
+      description="Your birth time sharpens the rising sign and house placements. If you don’t know it, we’ll build a reliable solar chart instead."
+      ctaLabel="Continue"
+      onProceed={proceed}
+    >
+      <View className="w-full items-center gap-4">
+        <Text className="text-center font-label text-[12px] uppercase tracking-[2.4px] text-ob-muted">
+          TIME OF BIRTH
+        </Text>
+        <Pressable
+          onPress={() => {
+            if (unknownTime) return;
+            setShowTimePicker((current) => !current);
+          }}
+          className={`w-full items-center rounded-2xl border px-6 py-5 ${
+            showTimePicker
+              ? 'border-ob-gold-border bg-ob-gold-dim'
+              : 'border-ob-card-border bg-ob-card'
+          } ${unknownTime ? 'opacity-50' : ''}`}
+        >
+          <Text className={`text-center font-body-medium ${unknownTime ? 'text-[16px] leading-7 text-ob-muted' : 'text-[21px] text-ob-text'}`}>
+            {unknownTime
+              ? 'No problem. Mihira will use a midday reference to build a reliable solar chart for you.'
+              : fmtTime(birthTime)}
           </Text>
-          <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
-            Three places to put{'\n'}your energy today
-          </Text>
-          <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
-            Mihira turns your question, your context, and your rhythm into practical suggestions you can actually use.
-          </Text>
-        </Animated.View>
+        </Pressable>
 
-        <View className="gap-3">
-          {focusAreas.map((item, index) => (
-            <Animated.View
-              key={item.area}
-              entering={FadeInDown.delay(180 + index * 120).duration(420)}
-              className="overflow-hidden rounded-[24px] border border-ob-card-border bg-ob-card"
-            >
-              <View className="flex-row items-stretch">
-                <View className="w-1.5" style={{ backgroundColor: ACCENT_COLORS[item.accent] }} />
-                <View className="flex-1 gap-3 p-4">
-                  <View className="flex-row items-start justify-between gap-4">
-                    <View className="gap-0.5">
-                      <Text className="font-headline-extra text-[28px] leading-[32px] tracking-[-0.4px] text-ob-text">
-                        {item.area}
-                      </Text>
-                      <Text className="font-body text-xs text-ob-muted">{item.time}</Text>
-                    </View>
-                    <View className="rounded-full border border-ob-gold-border bg-ob-gold-dim px-3 py-1">
-                      <Text className="font-body-medium text-[10px] uppercase tracking-[1.4px] text-ob-gold">
-                        {item.reference}
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View className="gap-1.5">
-                    <Text className="font-headline text-[19px] leading-[24px] tracking-[-0.2px] text-ob-text">
-                      {item.action}
-                    </Text>
-                    <Text className="font-body text-[13px] leading-[20px] text-ob-muted">
-                      {item.suggestion}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </Animated.View>
-          ))}
-        </View>
+        {showTimePicker && !unknownTime ? (
+          <Animated.View
+            entering={FadeInDown.duration(260)}
+            exiting={FadeOutUp.duration(220)}
+            layout={smoothLayout}
+            className="w-full overflow-hidden rounded-[28px] border border-ob-card-border bg-ob-card px-2 py-2"
+          >
+            <DateTimePicker
+              mode="time"
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              value={birthTime}
+              locale="en-US"
+              onChange={(_, value) => {
+                if (value) setBirthTime(value);
+                if (Platform.OS === 'android') setShowTimePicker(false);
+              }}
+              style={{ alignSelf: 'stretch' }}
+            />
+          </Animated.View>
+        ) : null}
 
         <Animated.View
-          entering={FadeInDown.delay(620).duration(420)}
-          className="rounded-[20px] border border-ob-saffron-border bg-ob-saffron-dim p-4"
+          layout={smoothLayout}
+          className="w-full items-center rounded-2xl border border-ob-card-border bg-ob-card p-5"
         >
-          <Text className="text-center font-body text-[13px] leading-[21px] text-ob-text">
-            Each card explains what to lean into, when to act, and why that area is being highlighted.
-          </Text>
+          <View className="w-full items-center gap-3">
+            <View className="w-full flex-row items-center justify-center gap-3">
+              <Text className="text-center font-body-medium text-[14px] text-ob-text">
+                I don’t know my exact birth time
+              </Text>
+              <Switch
+                value={unknownTime}
+                onValueChange={(value) => {
+                  setUnknownTime(value);
+                  if (value) setShowTimePicker(false);
+                  if (!value) setShowTimePicker(true);
+                }}
+                trackColor={{ false: OB.cardBorder, true: OB.saffron }}
+                thumbColor="#fff"
+              />
+            </View>
+          </View>
         </Animated.View>
       </View>
-
-      <Animated.View entering={FadeInUp.delay(800).duration(500)} className="items-center gap-3.5 p-8 pb-11">
-        <Pressable
-          onPress={continueToNextStep}
-          className="items-center rounded-full bg-ob-saffron px-8 py-4"
-          style={({ pressed }) => [
-            onboardingButtonShadow,
-            pressed && pressedButtonStyle,
-          ]}
-        >
-          <Text className="font-label text-base tracking-[0.3px] text-white">
-            Continue →
-          </Text>
-        </Pressable>
-        <Pressable onPress={continueToNextStep}>
-          <Text className="text-center font-body text-sm text-ob-muted">Skip for now</Text>
-        </Pressable>
-      </Animated.View>
-    </SafeAreaView>
+    </BirthDataScaffold>
   );
 }

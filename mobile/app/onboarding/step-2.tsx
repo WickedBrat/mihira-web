@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import {
   View,
   Pressable,
+  ScrollView,
   Animated as RNAnimated,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
@@ -12,6 +13,7 @@ import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated'
 import * as Haptics from 'expo-haptics';
 import { setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingProgress } from '@/features/onboarding/OnboardingProgress';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
@@ -22,6 +24,9 @@ const PILLS = [
   'I feel far from my roots',
   'My mind will not settle',
   'I am under pressure',
+  'I want to deepen my practice',
+  'I want to reconnect with myself',
+  'I am seeking more presence',
 ];
 
 export default function Screen2() {
@@ -59,8 +64,16 @@ export default function Screen2() {
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
       <OnboardingStarField />
+      <View className="items-center pt-3 pb-1">
+        <OnboardingProgress phase="you" />
+      </View>
 
-      <View className="flex-1 items-center gap-9 px-8 pt-8">
+      <ScrollView
+        className="flex-1"
+        contentContainerClassName="items-center gap-6 px-8 pt-8 pb-4"
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
           <Text className="text-center font-headline text-[36px] leading-[42px] tracking-[-1px] text-ob-text">
             What are you{'\n'}carrying today?
@@ -72,7 +85,7 @@ export default function Screen2() {
           {PILLS.map((pill, i) => {
             const active = selected.includes(pill);
             return (
-              <Animated.View key={pill} entering={FadeInDown.delay(i * 80 + 200).duration(400)}>
+              <Animated.View key={pill} entering={FadeInDown.delay(i * 70 + 200).duration(380)}>
                 <Pressable
                   onPress={() => toggle(pill)}
                   className={`flex-row items-center justify-center gap-2.5 rounded-[14px] border px-[22px] py-4 mb-1 ${
@@ -94,9 +107,11 @@ export default function Screen2() {
             );
           })}
         </View>
-      </View>
 
-      <Animated.View entering={FadeInUp.delay(600).duration(500)} className="items-center p-8 pb-11">
+        <View className="h-[80px]" />
+      </ScrollView>
+
+      <Animated.View entering={FadeInUp.delay(600).duration(500)} className="absolute bottom-0 left-0 right-0 items-center bg-[rgba(7,9,12,0.96)] p-8 pb-11">
         <Pressable
           onPress={proceed}
           className={`items-center rounded-full bg-ob-saffron px-8 py-4 ${

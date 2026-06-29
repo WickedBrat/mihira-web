@@ -1,8 +1,4 @@
 import { apiFetch } from '@/lib/apiFetch';
-import {
-  getCachedDailyArthReflection,
-  saveCachedDailyArthReflection,
-} from '@/lib/dailyArthReflectionStorage';
 import type { DailyArthReflection } from '@/lib/dailyArthReflectionTypes';
 import { isDailyArthReflection } from '@/lib/dailyArthReflectionTypes';
 
@@ -17,9 +13,6 @@ export async function getDailyArthReflection({
   quote,
   source,
 }: FetchReflectionInput): Promise<DailyArthReflection> {
-  const cached = await getCachedDailyArthReflection(quoteId);
-  if (cached) return cached;
-
   const response = await apiFetch('/api/wisdom/daily-arth-reflection', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -39,6 +32,5 @@ export async function getDailyArthReflection({
   if (!response.ok) throw new Error(data.error ?? `Reflection API failed with status ${response.status}`);
   if (!isDailyArthReflection(data.reflection)) throw new Error('Reflection API returned an invalid shape');
 
-  await saveCachedDailyArthReflection(quoteId, data.reflection);
   return data.reflection;
 }

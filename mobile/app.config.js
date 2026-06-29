@@ -44,6 +44,7 @@ export default {
       versionCode: 2,
       permissions: [
         'com.google.android.gms.permission.AD_ID',
+        'android.permission.POST_NOTIFICATIONS',
       ],
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon-foreground.png',
@@ -91,6 +92,13 @@ export default {
         {
           calendarPermission: 'Allow Mihira to open calendar entries for focus reminders.',
           remindersPermission: 'Allow Mihira to save your daily focus tasks as reminders.',
+        },
+      ],
+      [
+        'expo-notifications',
+        {
+          color: '#D6A84A',
+          defaultChannel: 'daily-alignment',
         },
       ],
       "expo-asset",

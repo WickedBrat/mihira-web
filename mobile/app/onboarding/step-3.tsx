@@ -8,6 +8,7 @@ import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/ui/Text';
 import { setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingProgress } from '@/features/onboarding/OnboardingProgress';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
@@ -43,6 +44,9 @@ export default function Screen3() {
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
       <OnboardingStarField />
+      <View className="items-center pt-3 pb-1">
+        <OnboardingProgress phase="you" />
+      </View>
 
       <View className="flex-1 items-center gap-8 px-8 pt-8">
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">

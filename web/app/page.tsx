@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { Charmonman } from 'next/font/google';
 import { FAQList } from '@/components/faq-list';
+import { WaitlistForm } from '@/components/waitlist-form';
 import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { WebGLShader } from '@/components/ui/web-gl-shader';
 import mihiraLogo from './logo.svg';
@@ -14,19 +15,23 @@ const charmonman = Charmonman({
 
 const configuredAppStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
 const configuredGooglePlayUrl = process.env.NEXT_PUBLIC_GOOGLE_PLAY_URL;
-const earlyAccessUrl = 'mailto:founders@getmihira.com?subject=Mihira%20early%20access';
+const foundersEmailUrl = 'mailto:founders@getmihira.com?subject=Mihira%20waitlist';
+const waitlistHref = '#waitlist';
 const hasAppStoreUrl = Boolean(configuredAppStoreUrl);
 const hasGooglePlayUrl = Boolean(configuredGooglePlayUrl);
 const hasStoreLinks = hasAppStoreUrl || hasGooglePlayUrl;
-const appStoreUrl = configuredAppStoreUrl || earlyAccessUrl;
-const googlePlayUrl = configuredGooglePlayUrl || earlyAccessUrl;
+const appStoreUrl = configuredAppStoreUrl || waitlistHref;
+const googlePlayUrl = configuredGooglePlayUrl || waitlistHref;
+const primaryStoreUrl = configuredAppStoreUrl || configuredGooglePlayUrl || waitlistHref;
 const siteUrl = 'https://getmihira.com';
 const pageTitle = 'Mihira - Scripture-Grounded Guidance and Sacred Timing App';
 const pageDescription =
   'Get Mihira, a private Vedic guidance app for Indians abroad seeking scripture-grounded guidance, sacred timing, daily alignment, and calmer decision-making.';
-const primaryCtaLabel = hasStoreLinks ? 'Download App' : 'Get Early Access';
-const primaryCtaHref = hasStoreLinks ? '#download' : earlyAccessUrl;
-const availabilityCopy = hasStoreLinks ? 'Available for iPhone and Android' : 'Private beta for iPhone and Android';
+const primaryCtaLabel = hasStoreLinks ? 'Download App' : 'Join Waitlist';
+const primaryCtaHref = hasStoreLinks ? '#download' : waitlistHref;
+const availabilityCopy = hasStoreLinks
+  ? 'Available for iPhone and Android'
+  : 'Private beta waitlist for iPhone and Android';
 const shellClass = 'mx-auto w-full max-w-[1280px] px-6 lg:px-10';
 const bandClass = 'py-20 md:py-28';
 const kickerClass =
@@ -229,19 +234,24 @@ const faqs = [
     answer:
       'Yes. Mihira is designed for real decisions and emotionally charged moments, but it is meant to sharpen your judgment rather than act as a substitute for it.',
   },
+  {
+    question: 'What happens after I join the waitlist?',
+    answer:
+      'We invite people in small batches as the iPhone and Android builds open. You will get an email when your invite is ready.',
+  },
 ];
 
 const downloadBadges = [
   {
     href: appStoreUrl,
     alt: hasAppStoreUrl ? 'Download on the App Store' : 'Request iPhone early access',
-    store: hasAppStoreUrl ? 'App Store' : 'iPhone Beta',
+    store: hasAppStoreUrl ? 'App Store' : 'iPhone Waitlist',
     icon: 'apple',
   },
   {
     href: googlePlayUrl,
     alt: hasGooglePlayUrl ? 'Get it on Google Play' : 'Request Android early access',
-    store: hasGooglePlayUrl ? 'Google Play' : 'Android Beta',
+    store: hasGooglePlayUrl ? 'Google Play' : 'Android Waitlist',
     icon: 'play',
   },
 ];
@@ -277,7 +287,7 @@ const structuredData = [
     description: pageDescription,
     offers: {
       '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
+      availability: hasStoreLinks ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
       price: '0',
       priceCurrency: 'USD',
     },
@@ -381,8 +391,8 @@ export default function HomePage() {
             <Link className={navLinkClass} href="#daily-practice">
               Method
             </Link>
-            <Link className={navLinkClass} href="#faq">
-              Company
+            <Link className={navLinkClass} href="#waitlist">
+              Waitlist
             </Link>
           </nav>
 
@@ -430,7 +440,11 @@ export default function HomePage() {
             for Indians abroad who want tradition, timing, and steadier judgment to fit modern life.
           </p>
 
-          <div className="mt-[1.625rem] flex flex-wrap justify-center gap-3 max-[760px]:flex-col" id="download" aria-label="Download Mihira">
+          <div
+            className="mt-[1.625rem] flex flex-wrap justify-center gap-3 max-[760px]:flex-col"
+            id="download"
+            aria-label={hasStoreLinks ? 'Download Mihira' : 'Join the Mihira waitlist'}
+          >
             <div className="flex flex-wrap items-center justify-center gap-3 max-[760px]:flex-col">
               {downloadBadges.map((badge) => (
                 <a
@@ -618,6 +632,51 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section
+        id="waitlist"
+        className={`${bandClass} scroll-mt-28 relative overflow-hidden bg-[linear-gradient(180deg,#10100f_0%,#151515_100%)]`}
+      >
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(255,149,0,0.12),transparent_30%),radial-gradient(circle_at_86%_24%,rgba(174,227,255,0.1),transparent_26%)]"
+          aria-hidden="true"
+        />
+        <div className={`${shellClass} relative z-10 grid grid-cols-[minmax(0,0.9fr)_minmax(320px,0.62fr)] items-center gap-12 max-lg:grid-cols-1`}>
+          <div>
+            <p className={kickerClass}>Private Beta</p>
+            <h2 className={headingClass}>
+              Join the waitlist for <MihiraText />'s first invites.
+            </h2>
+            <p className={`${bodyClass} mt-[1.375rem] max-w-[39rem]`}>
+              We are opening access in small batches for people who want scripture-grounded guidance, sacred timing,
+              and daily alignment before the public release.
+            </p>
+
+            <div className="mt-8 grid max-w-[46rem] grid-cols-3 gap-3 max-[760px]:grid-cols-1">
+              <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
+                <span className="font-sans text-[0.56rem] font-bold uppercase tracking-[0.18em] text-[#ff9500]">
+                  Batch Access
+                </span>
+                <p className="mt-2 text-sm leading-[1.55] text-white/[0.68]">Invites roll out as product capacity opens.</p>
+              </div>
+              <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
+                <span className="font-sans text-[0.56rem] font-bold uppercase tracking-[0.18em] text-[#ff9500]">
+                  Both Stores
+                </span>
+                <p className="mt-2 text-sm leading-[1.55] text-white/[0.68]">Choose iPhone, Android, or both.</p>
+              </div>
+              <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
+                <span className="font-sans text-[0.56rem] font-bold uppercase tracking-[0.18em] text-[#ff9500]">
+                  Quiet Updates
+                </span>
+                <p className="mt-2 text-sm leading-[1.55] text-white/[0.68]">Only beta access and launch notes.</p>
+              </div>
+            </div>
+          </div>
+
+          <WaitlistForm />
+        </div>
+      </section>
+
       <section id="faq" className={`${bandClass} bg-[#0e0e0e]`}>
         <div className="mx-auto w-full max-w-[920px] px-6 lg:px-10">
           <div className="mb-[3.375rem] text-center">
@@ -644,13 +703,31 @@ export default function HomePage() {
             </div>
             <div className="relative min-h-[29rem] overflow-hidden border border-zinc-800/90 bg-[#070707]/65 max-[760px]:min-h-96">
               <div className="relative z-10 flex min-h-[29rem] flex-col items-center justify-center bg-[radial-gradient(circle_at_center,rgba(181,100,252,0.1),transparent_40%),linear-gradient(180deg,rgba(5,5,5,0.36),rgba(5,5,5,0.74))] px-6 py-[4.25rem] pb-[5.25rem] max-[760px]:min-h-96">
-                <p className={`${kickerClass} text-center`}>Start With Clearer Direction</p>
+                <p className={`${kickerClass} text-center`}>
+                  {hasStoreLinks ? 'Start With Clearer Direction' : 'Private Beta Access'}
+                </p>
                 <h2 className={`${headingClass} mx-auto max-w-[14ch]`}>
-                  Download <MihiraText /> and bring more clarity to what already matters.
+                  {hasStoreLinks ? (
+                    <>
+                      Download <MihiraText /> and bring more clarity to what already matters.
+                    </>
+                  ) : (
+                    <>
+                      Join <MihiraText /> before the public release.
+                    </>
+                  )}
                 </h2>
                 <p className="mx-auto mt-5 max-w-[38rem] text-base leading-[1.7] text-white/72">
-                  Use <MihiraText /> for daily alignment, deeper questions, and better timing when the next step carries
-                  real weight.
+                  {hasStoreLinks ? (
+                    <>
+                      Use <MihiraText /> for daily alignment, deeper questions, and better timing when the next step carries
+                      real weight.
+                    </>
+                  ) : (
+                    <>
+                      Leave your email for early iPhone and Android access as the private beta opens in careful batches.
+                    </>
+                  )}
                 </p>
                 <div className="mt-8 inline-flex items-center gap-2 font-sans text-xs tracking-[0.04em] text-green-500">
                   <span className="inline-flex size-3 rounded-full bg-green-500 shadow-[0_0_0_0_rgba(34,197,94,0.55)] animate-pulse" aria-hidden="true" />
@@ -658,18 +735,21 @@ export default function HomePage() {
                 </div>
                 <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-3 max-[760px]:flex-col">
                   <LiquidButton asChild className="rounded-full border border-white/15 text-white" size="xl">
-                    <a href={appStoreUrl}>
-                      {hasAppStoreUrl ? (
+                    <a href={hasStoreLinks ? primaryStoreUrl : waitlistHref}>
+                      {hasStoreLinks ? (
                         <>
                           Download <MihiraText />
                         </>
                       ) : (
-                        'iPhone Beta'
+                        'Join Waitlist'
                       )}
                     </a>
                   </LiquidButton>
-                  <a className="inline-flex min-h-[2.625rem] items-center justify-center rounded border border-white/20 px-[1.125rem] font-sans text-[0.58rem] font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-px max-[760px]:w-full" href={googlePlayUrl}>
-                    {hasGooglePlayUrl ? 'Google Play' : 'Android Beta'}
+                  <a
+                    className="inline-flex min-h-[2.625rem] items-center justify-center rounded border border-white/20 px-[1.125rem] font-sans text-[0.58rem] font-bold uppercase tracking-[0.18em] text-white transition hover:-translate-y-px max-[760px]:w-full"
+                    href={hasStoreLinks ? googlePlayUrl : foundersEmailUrl}
+                  >
+                    {hasGooglePlayUrl ? 'Google Play' : hasStoreLinks ? 'Android Waitlist' : 'Contact Founders'}
                   </a>
                 </div>
               </div>

@@ -51,7 +51,9 @@
       "WebFetch(domain:docs.expo.dev)",
       "Read(//Users/Apple/.claude/plugins/cache/**)",
       "Read(//Users/Apple/.claude/plugins/**)",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2\\)\\)\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2\\)\\)\")",
+      "Bash(grep -i \"pricing\\\\|price\\\\|plan\\\\|free\\\\|premium\\\\|plus\\\\|\\\\$\" /Users/Apple/Desktop/mihira/web/app/page.tsx)",
+      "Bash(rm -rf ~/Library/Developer/Xcode/DerivedData/mihiraworkspace-govgrnegzzaejxbzybolyimixatr 2>/dev/null; echo \"DerivedData cleared\")"
     ]
   }
 }

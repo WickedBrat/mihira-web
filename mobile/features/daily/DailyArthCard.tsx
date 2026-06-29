@@ -14,7 +14,6 @@ import { router } from 'expo-router';
 import DailyArthBg from '../../assets/daily-arth-bg.svg';
 import ReflectIcon from '../../assets/reflect.svg';
 import { hapticLight } from '@/lib/haptics';
-import { saveCachedDailyArthReflection } from '@/lib/dailyArthReflectionStorage';
 import { useTheme } from '@/lib/theme-context';
 import { useDailyArth } from './useDailyArth';
 
@@ -36,19 +35,26 @@ export function DailyArthCard() {
       ? 'text-[18px] leading-[30px]'
       : 'text-xl leading-[32px]';
 
-  const handleReflect = async () => {
+  const handleReflect = () => {
     hapticLight();
-    if (arth?.dailyReflection && arth.id > 0) {
-      await saveCachedDailyArthReflection(arth.id, arth.dailyReflection);
+    const params: {
+      quoteId: string;
+      quote: string;
+      source: string;
+      reflection?: string;
+    } = {
+      quoteId: arth?.id ? String(arth.id) : '0',
+      quote: displayQuote,
+      source: displaySource,
+    };
+
+    if (arth?.dailyReflection) {
+      params.reflection = JSON.stringify(arth.dailyReflection);
     }
 
     router.push({
       pathname: '/daily-arth/reflect',
-      params: {
-        quoteId: arth?.id ? String(arth.id) : '0',
-        quote: displayQuote,
-        source: displaySource,
-      },
+      params,
     });
   };
 

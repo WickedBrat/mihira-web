@@ -11,7 +11,6 @@ import { ArrowLeft, CheckCircle2, Feather, Flame, Sparkles } from 'lucide-react-
 import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
 import { Text } from '@/components/ui/Text';
 import { getDailyArthReflection } from '@/lib/dailyArthReflectionClient';
-import { saveCachedDailyArthReflection } from '@/lib/dailyArthReflectionStorage';
 import { hapticLight } from '@/lib/haptics';
 import { layout } from '@/lib/theme';
 import { useTheme } from '@/lib/theme-context';
@@ -93,9 +92,6 @@ export default function DailyArthReflectScreen() {
       if (initialReflection) {
         setReflection(initialReflection);
         setIsLoading(false);
-        if (quoteId > 0) {
-          await saveCachedDailyArthReflection(quoteId, initialReflection);
-        }
         return;
       }
 

@@ -1,120 +1,130 @@
-// Screen 10: Personal Plan Reveal
-import React from 'react';
-import {
-  Pressable,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Pressable, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
-import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
-import * as Haptics from 'expo-haptics';
-import { BookOpenTextIcon, CalendarDaysIcon, CompassIcon, MessageCircleQuestionIcon } from 'lucide-react-native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 import { Text } from '@/components/ui/Text';
-import { OB, getOnboardingData } from '@/lib/onboardingStore';
-import { getPrimaryThread } from '@/features/onboarding/personalGuidance';
-import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
-import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
-import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
+import { BirthDataScaffold } from '@/features/onboarding/BirthDataScaffold';
+import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
+import { PlaceSuggestion, searchBirthPlaces } from '@/lib/vedic/geocode';
+import { LockKeyholeIcon } from 'lucide-react-native';
 
-const PLAN_ITEMS = [
-  {
-    icon: CompassIcon,
-    title: 'Morning alignment',
-    body: 'A daily read on where to place your energy first.',
-  },
-  {
-    icon: CalendarDaysIcon,
-    title: 'Sacred timing',
-    body: 'Auspicious windows for decisions, rituals, and important actions.',
-  },
-  {
-    icon: MessageCircleQuestionIcon,
-    title: 'Saarthi guidance',
-    body: 'A private place to ask what is weighing on your heart.',
-  },
-  {
-    icon: BookOpenTextIcon,
-    title: 'Scripture in context',
-    body: 'Wisdom translated into next steps you can actually use.',
-  },
-];
+export default function Screen5Place() {
+  const stored = getOnboardingData();
+  const [birthPlace, setBirthPlace] = useState(stored.birthPlace);
+  const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const skipLookupRef = useRef(false);
+  const smoothLayout = LinearTransition.duration(220);
 
-export default function Screen10() {
-  const data = getOnboardingData();
-  const name = data.userName?.split(' ')[0] || 'you';
-  const primaryThread = getPrimaryThread(data);
-  const hasBirthChart = Boolean(data.birthPlace);
+  useEffect(() => {
+    const query = birthPlace.trim();
+
+    if (skipLookupRef.current) {
+      skipLookupRef.current = false;
+      return;
+    }
+
+    if (query.length < 2) {
+      setSuggestions([]);
+      setIsSearching(false);
+      return;
+    }
+
+    let active = true;
+    setIsSearching(true);
+
+    const timeoutId = setTimeout(async () => {
+      try {
+        const nextSuggestions = await searchBirthPlaces(query);
+        if (!active) return;
+        setSuggestions(nextSuggestions);
+      } catch {
+        if (!active) return;
+        setSuggestions([]);
+      } finally {
+        if (active) setIsSearching(false);
+      }
+    }, 250);
+
+    return () => {
+      active = false;
+      clearTimeout(timeoutId);
+    };
+  }, [birthPlace]);
+
+  function proceed() {
+    const place = birthPlace.trim();
+    if (!place) return;
+    setOnboardingData({ birthPlace: place });
+    router.push('/onboarding/step-11');
+  }
+
+  function selectSuggestion(place: string) {
+    skipLookupRef.current = true;
+    setBirthPlace(place);
+    setSuggestions([]);
+  }
 
   return (
-    <SafeAreaView className="flex-1 bg-ob-bg">
-      <OnboardingDevBackButton />
-      <OnboardingStarField />
-
-      <View className="flex-1 justify-center gap-6 px-8 pt-6">
-        <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2.5">
-          <Text className="text-center font-label text-xs uppercase tracking-[3px] text-ob-saffron">
-            Your first seven days
+    <BirthDataScaffold
+      title={`Where were${'\n'}you born?`}
+      description="Your birthplace gives Mihira the sky, timezone, and coordinates needed to calculate your chart accurately."
+      ctaLabel="Continue"
+      canProceed={birthPlace.trim().length > 0}
+      onProceed={proceed}
+      footer={(
+        <View className="w-full max-w-[360px] items-center gap-2.5 rounded-xl border border-ob-card-border bg-ob-card p-4">
+          <Text className="text-sm"><LockKeyholeIcon size={20} color={OB.saffron} /></Text>
+          <Text className="text-center font-body text-xs leading-[18px] text-ob-muted">
+            Your birth details are encrypted and used only to personalize your chart. They are never shared.
           </Text>
-          <Text className="text-center font-headline text-[35px] leading-[41px] tracking-[-0.9px] text-ob-text">
-            A rhythm is ready{'\n'}for {name}.
-          </Text>
-          <Text className="text-center font-body text-sm leading-[22px] text-ob-muted">
-            Built from your question{hasBirthChart ? ', your chart,' : ''} and your context. Mihira will begin with {primaryThread}.
-          </Text>
-        </Animated.View>
-
-        <View className="gap-3">
-          {PLAN_ITEMS.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <Animated.View
-                key={item.title}
-                entering={FadeInDown.delay(180 + index * 100).duration(420)}
-                className="overflow-hidden rounded-[22px] border border-ob-card-border bg-ob-card p-4"
-              >
-                <View className="flex-row items-start gap-3.5">
-                  <View className="h-11 w-11 items-center justify-center rounded-full border border-ob-gold-border bg-ob-gold-dim">
-                    <Icon size={21} color={OB.gold} strokeWidth={1.8} />
-                  </View>
-                  <View className="flex-1 gap-1">
-                    <Text className="font-headline text-[20px] leading-6 text-ob-text">
-                      {item.title}
-                    </Text>
-                    <Text className="font-body text-[13px] leading-5 text-ob-muted">
-                      {item.body}
-                    </Text>
-                  </View>
-                </View>
-              </Animated.View>
-            );
-          })}
         </View>
-
+      )}
+    >
+      <View className="w-full items-center gap-4">
+        <Text className="text-center font-label text-[12px] uppercase tracking-[2.4px] text-ob-muted">
+          PLACE OF BIRTH
+        </Text>
         <Animated.View
-          entering={FadeInDown.delay(620).duration(420)}
-          className="rounded-[20px] border border-ob-saffron-border bg-ob-saffron-dim p-4"
+          layout={smoothLayout}
+          className="w-full rounded-2xl border border-ob-card-border bg-ob-card px-6 py-5"
         >
-          <Text className="text-center font-body text-[13px] leading-[21px] text-ob-text">
-            Next, Mihira will show the kind of daily guidance that appears on your home screen.
-          </Text>
+          <TextInput
+            className="font-body-medium text-[21px] text-ob-text"
+            value={birthPlace}
+            onChangeText={(value) => {
+              setBirthPlace(value);
+            }}
+            placeholder="Start typing your birth city…"
+            placeholderTextColor={OB.muted}
+            autoCapitalize="words"
+            autoCorrect={false}
+            autoFocus
+            returnKeyType="done"
+            onSubmitEditing={proceed}
+          />
+          {isSearching ? (
+            <View className="mt-4 items-center">
+              <ActivityIndicator color={OB.gold} />
+            </View>
+          ) : null}
+          {suggestions.length > 0 ? (
+            <View className="mt-4 gap-1">
+              {suggestions.map((suggestion, index) => (
+                <Pressable
+                  key={suggestion.id}
+                  onPress={() => selectSuggestion(suggestion.label)}
+                  className={`py-3 ${index > 0 ? 'border-t border-ob-card-border' : ''}`}
+                >
+                  <Text className="font-body text-[16px] leading-6 text-ob-text">
+                    {suggestion.label}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          ) : null}
         </Animated.View>
       </View>
-
-      <Animated.View entering={FadeInUp.delay(760).duration(500)} className="items-center p-8 pb-11">
-        <Pressable
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            router.push('/onboarding/step-9');
-          }}
-          className="items-center rounded-full bg-ob-saffron px-8 py-4"
-          style={({ pressed }) => [
-            onboardingButtonShadow,
-            pressed && pressedButtonStyle,
-          ]}
-        >
-          <Text className="font-label text-base tracking-[0.3px] text-white">Preview my day →</Text>
-        </Pressable>
-      </Animated.View>
-    </SafeAreaView>
+    </BirthDataScaffold>
   );
 }

@@ -1,162 +1,216 @@
-// Screen 11: The Sankalpa — Commitment Tier
-import React, { useState } from 'react';
+// Screen 6: Telemetric Sync — The "Wait" Ritual
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
-  Pressable,
-  ScrollView,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
-import * as Haptics from 'expo-haptics';
-import { setOnboardingData } from '@/lib/onboardingStore';
+import {
+  Canvas,
+  Circle,
+  Group,
+  Paint,
+  Path,
+  Skia,
+} from '@shopify/react-native-skia';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  Easing,
+  FadeInDown,
+} from 'react-native-reanimated';
+import { useWindowDimensions } from 'react-native';
+import { OB, getOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
+import { OnboardingProgress } from '@/features/onboarding/OnboardingProgress';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
-import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
+import { absoluteFillStyle } from '@/features/onboarding/onboardingStyles';
 
-const TIERS = [
-  {
-    id: 'seed',
-    icon: '🌱',
-    name: 'The Seed',
-    duration: '3 min',
-    desc: 'A short daily check-in to ground your day.',
-    features: ['Daily alignment window', 'Nakshatra energy snapshot'],
-  },
-  {
-    id: 'growth',
-    icon: '🌿',
-    name: 'The Growth',
-    duration: '10 min',
-    desc: 'A deeper daily ritual with wisdom and guided reflection.',
-    features: ['Everything in Seed', 'Daily wisdom reading', 'Guidance sessions'],
-    recommended: true,
-  },
-  {
-    id: 'mastery',
-    icon: '🪷',
-    name: 'The Mastery',
-    duration: '20 min',
-    desc: 'A fuller Vedic practice for people who want sustained depth.',
-    features: ['Everything in Growth', 'Gurukul lessons', 'Deeper Sacred Timing guidance'],
-  },
-] as const;
+const STEPS = [
+  'Finding lunar position...',
+  'Mapping nakshatra...',
+  'Reading timing windows...',
+  'Preparing your first rhythm...',
+];
 
-type TierId = (typeof TIERS)[number]['id'];
+export default function Screen6() {
+  const { width } = useWindowDimensions();
+  const [stepIndex, setStepIndex] = useState(0);
+  const rotation = useSharedValue(0);
+  const innerRot = useSharedValue(0);
+  const pulse    = useSharedValue(1);
 
-export default function Screen11() {
-  const [selected, setSelected] = useState<TierId>('growth');
+  const cx = width / 2;
+  const R  = cx - 48;
 
-  function proceed() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setOnboardingData({ commitmentTier: selected });
-    router.push('/onboarding/step-12');
+  useEffect(() => {
+    rotation.value = withRepeat(
+      withTiming(360, { duration: 8000, easing: Easing.linear }),
+      -1
+    );
+    innerRot.value = withRepeat(
+      withTiming(-360, { duration: 5000, easing: Easing.linear }),
+      -1
+    );
+    pulse.value = withRepeat(
+      withTiming(1.08, { duration: 1800, easing: Easing.inOut(Easing.sin) }),
+      -1,
+      true
+    );
+
+    // Advance status text one line at a time, then reveal the chart.
+    const timer = setInterval(() => {
+      setStepIndex((prev) => {
+        if (prev < STEPS.length - 1) return prev + 1;
+        clearInterval(timer);
+        setTimeout(() => router.replace('/onboarding/step-12'), 1000);
+        return prev;
+      });
+    }, 1250);
+    return () => clearInterval(timer);
+  }, []);
+
+  const dialStyle = useAnimatedStyle(() => ({ transform: [{ rotate: `${rotation.value}deg` }] }));
+  const innerStyle = useAnimatedStyle(() => ({ transform: [{ rotate: `${innerRot.value}deg` }] }));
+  const dotStyle   = useAnimatedStyle(() => ({ transform: [{ scale: pulse.value }] }));
+
+  // Build 24 tick marks on the outer ring
+  const ticks: { x1: number; y1: number; x2: number; y2: number }[] = [];
+  for (let i = 0; i < 24; i++) {
+    const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
+    const isMajor = i % 6 === 0;
+    const r1 = R - (isMajor ? 18 : 10);
+    const r2 = R + 2;
+    ticks.push({
+      x1: cx + Math.cos(angle) * r1,
+      y1: cx + Math.sin(angle) * r1,
+      x2: cx + Math.cos(angle) * r2,
+      y2: cx + Math.sin(angle) * r2,
+    });
   }
+
+  const data = getOnboardingData();
+  const name = data.userName?.split(' ')[0] || '';
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
       <OnboardingDevBackButton />
       <OnboardingStarField />
+      <View className="items-center pt-3 pb-1">
+        <OnboardingProgress phase="chart" />
+      </View>
 
-      <ScrollView
-        className="flex-1"
-        contentContainerClassName="items-center gap-7 p-8 pt-8"
-        showsVerticalScrollIndicator={false}
-      >
-        <Animated.View entering={FadeInDown.duration(500)} className="max-w-[360px] items-center gap-2.5">
-          <Text className="text-center font-headline text-[34px] leading-10 tracking-[-0.8px] text-ob-text">
-            Choose the rhythm{'\n'}you can keep.
-          </Text>
-          <Text className="text-center font-body text-[15px] leading-[23px] text-ob-muted">
-            Consistency matters more than intensity. You can change this anytime.
+      <View className="flex-1 items-center justify-center gap-4 px-8 pt-7">
+        <Animated.View entering={FadeInDown.duration(500)} className="self-stretch items-center gap-2">
+          <Text className="text-center font-headline text-[28px] tracking-[-0.6px] text-ob-text">
+            {name ? `Mapping ${name}'s chart` : 'Mapping your chart'}
           </Text>
         </Animated.View>
 
-        <View className="w-full max-w-[360px] gap-3.5">
-          {TIERS.map((tier, i) => {
-            const active = selected === tier.id;
-            return (
-              <Animated.View
-                key={tier.id}
-                entering={FadeInDown.delay(i * 100 + 200).duration(450)}
-              >
-                <Pressable
-                  onPress={() => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                    setSelected(tier.id);
-                  }}
-                  className={`overflow-hidden rounded-[18px] border p-[22px] gap-3.5 ${
-                    active
-                      ? 'border-ob-saffron-border bg-ob-saffron-dim'
-                      : 'border-ob-card-border bg-ob-card'
-                  }`}
-                >
-                  {'recommended' in tier && tier.recommended && (
-                    <View className="absolute right-0 top-0 rounded-bl-xl bg-ob-saffron px-3 py-[5px]">
-                      <Text className="font-label text-[9px] tracking-[1.5px] text-white">FOR YOUR SEASON</Text>
-                    </View>
-                  )}
+        {/* Skia Celestial Dial */}
+        <View style={{ width: width, height: width, alignSelf: 'center' }}>
+          <Canvas style={{ width, height: width }}>
+            {/* Outer ring */}
+            <Circle
+              cx={cx} cy={cx} r={R}
+              style="stroke" strokeWidth={1}
+              color="rgba(217,160,111,0.25)"
+            />
+            {/* Ticks */}
+            {ticks.map((t, i) => {
+              const path = Skia.Path.Make();
+              path.moveTo(t.x1, t.y1);
+              path.lineTo(t.x2, t.y2);
+              return (
+                <Path
+                  key={i}
+                  path={path}
+                  color={i % 6 === 0
+                    ? 'rgba(217,160,111,0.7)'
+                    : 'rgba(217,160,111,0.25)'}
+                  strokeWidth={i % 6 === 0 ? 1.5 : 0.8}
+                  style="stroke"
+                />
+              );
+            })}
+            {/* Inner ring */}
+            <Circle
+              cx={cx} cy={cx} r={R * 0.72}
+              style="stroke" strokeWidth={0.7}
+              color="rgba(224,122,95,0.18)"
+            />
+            {/* Center glow */}
+            <Circle
+              cx={cx} cy={cx} r={28}
+              color="rgba(224,122,95,0.12)"
+            />
+            <Circle
+              cx={cx} cy={cx} r={12}
+              color="rgba(224,122,95,0.35)"
+            />
+          </Canvas>
 
-                  <View className="flex-row items-center justify-between">
-                    <View className="flex-row items-center gap-3.5">
-                      <Text className="text-[28px]">{tier.icon}</Text>
-                      <View>
-                        <Text className={`font-headline text-lg ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
-                          {tier.name}
-                        </Text>
-                        <Text className="font-body text-xs text-ob-muted">{tier.duration} / day</Text>
-                      </View>
-                    </View>
-                    {active && (
-                      <Animated.View
-                        entering={ZoomIn.duration(250)}
-                        className="h-[30px] w-[30px] items-center justify-center rounded-full bg-ob-saffron"
-                      >
-                        <Text className="text-sm text-white">✦</Text>
-                      </Animated.View>
-                    )}
-                  </View>
+          {/* Rotating outer marks */}
+          <Animated.View style={[absoluteFillStyle, dialStyle]}>
+            <Canvas style={{ width, height: width }}>
+              <Circle
+                cx={cx} cy={cx + R - 6} r={5}
+                color={OB.saffron}
+                strokeWidth={4}
+              />
+              <Circle
+                cx={cx} cy={cx - R + 6} r={3}
+                color={OB.gold}
+                strokeWidth={4}
+              />
+            </Canvas>
+          </Animated.View>
 
-                  <Text className={`font-body text-sm leading-5 ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
-                    {tier.desc}
-                  </Text>
+          {/* Rotating inner marks */}
+          <Animated.View style={[absoluteFillStyle, innerStyle]}>
+            <Canvas style={{ width, height: width }}>
+              <Circle
+                cx={cx + R * 0.72 - 5} cy={cx} r={4}
+                color="rgba(224,122,95,0.7)"
+              />
+            </Canvas>
+          </Animated.View>
 
-                  {active && (
-                    <Animated.View entering={FadeInDown.duration(300)} className="gap-1.5 pt-1">
-                      {tier.features.map((f) => (
-                        <View key={f} className="flex-row items-start gap-1.5">
-                          <Text className="font-headline text-base leading-5 text-ob-gold">·</Text>
-                          <Text className="font-body text-sm leading-5 text-ob-gold">{f}</Text>
-                        </View>
-                      ))}
-                    </Animated.View>
-                  )}
-                </Pressable>
-              </Animated.View>
-            );
-          })}
+          {/* Center moon */}
+          <View className="absolute inset-0 items-center justify-center">
+            <Animated.Text className="text-[36px] text-ob-gold" style={dotStyle}>
+              ☽
+            </Animated.Text>
+          </View>
         </View>
-        <View className="h-[120px]" />
-      </ScrollView>
 
-      <Animated.View
-        entering={FadeInUp.delay(700).duration(500)}
-        className="absolute bottom-0 left-0 right-0 items-center bg-[rgba(7,9,12,0.96)] p-8 pb-11"
-      >
-        <Pressable
-          onPress={proceed}
-          className="items-center rounded-full bg-ob-saffron px-8 py-4"
-          style={({ pressed }) => [
-            onboardingButtonShadow,
-            pressed && pressedButtonStyle,
-          ]}
-          >
-            <Text className="font-label text-base tracking-[0.3px] text-white">
-              Set my daily rhythm →
+        {/* Status text */}
+        <View className="items-center gap-4 pt-2">
+          <View className="min-h-[22px] items-center justify-center">
+            <Text className="text-center font-body text-sm tracking-[0.2px] text-ob-muted">
+              {STEPS[stepIndex]}
             </Text>
-          </Pressable>
-        </Animated.View>
+          </View>
+
+          <View className="flex-row gap-1.5">
+            {STEPS.map((_, i) => (
+              <View
+                key={i}
+                className={`h-[5px] rounded-full ${
+                  i === stepIndex
+                    ? 'w-3.5 bg-ob-saffron'
+                    : i < stepIndex
+                      ? 'w-[5px] bg-ob-gold'
+                      : 'w-[5px] bg-ob-card-border'
+                }`}
+              />
+            ))}
+          </View>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

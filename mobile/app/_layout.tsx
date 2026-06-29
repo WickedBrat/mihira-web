@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Stack, SplashScreen, router, usePathname, useGlobalSearchParams, type Href } from 'expo-router';
+import * as Notifications from 'expo-notifications';
 import { SystemBars } from 'react-native-edge-to-edge';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -24,6 +25,10 @@ import { AuthProvider, useAuth, useUser } from '@/lib/auth';
 import { ThemeProvider, useTheme } from '@/lib/theme-context';
 import { getThemeColorVariables } from '@/lib/theme';
 import { getOnboardingState, setOnboardingStep } from '@/lib/onboardingStatus';
+import {
+  getNotificationResponseRoute,
+  scheduleDailyDayPreviewNotificationAsync,
+} from '@/lib/notifications';
 import { OnboardingAudioControl } from '@/features/onboarding/OnboardingAudioControl';
 import '../global.css';
 
@@ -121,6 +126,58 @@ function GuardedNavigation() {
   return null;
 }
 
+function NotificationBootstrapper() {
+  const pathname = usePathname();
+  const { isLoaded, isSignedIn, userId } = useAuth();
+  const scheduledForRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    let isActive = true;
+    const scheduleKey = isSignedIn && userId ? `user:${userId}` : 'local';
+
+    async function bootstrapNotifications() {
+      if (scheduledForRef.current === scheduleKey) return;
+
+      const onboardingState = await getOnboardingState({
+        userId: isSignedIn ? userId : null,
+      });
+      if (!isActive || !onboardingState.completed) return;
+
+      await scheduleDailyDayPreviewNotificationAsync();
+      if (isActive) scheduledForRef.current = scheduleKey;
+    }
+
+    void bootstrapNotifications().catch((error) => {
+      console.error('[notifications] bootstrap error', error);
+    });
+
+    return () => {
+      isActive = false;
+    };
+  }, [isLoaded, isSignedIn, pathname, userId]);
+
+  return null;
+}
+
+function NotificationResponseRouter() {
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
+  const handledResponseId = useRef<string | null>(null);
+
+  useEffect(() => {
+    const route = getNotificationResponseRoute(lastNotificationResponse);
+    const responseId = lastNotificationResponse?.notification.request.identifier ?? null;
+    if (!route || responseId === handledResponseId.current) return;
+
+    handledResponseId.current = responseId;
+    router.replace(route as Href);
+    Notifications.clearLastNotificationResponse();
+  }, [lastNotificationResponse]);
+
+  return null;
+}
+
 function ThemedStack() {
   const { isDark, colors } = useTheme();
 
@@ -137,18 +194,19 @@ function ThemedStack() {
         <Stack.Screen name="onboarding/step-2" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-3" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-4" options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-4-gender" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-5" options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-5-trust" options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-5-tob" options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-5-place" options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-6" options={{ gestureEnabled: false, animation: 'fade' }} />
-        <Stack.Screen name="onboarding/step-7" options={{ gestureEnabled: false, animation: 'fade' }} />
+        <Stack.Screen name="onboarding/step-6" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-7" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-8" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-9" options={{ gestureEnabled: false }} />
         <Stack.Screen name="onboarding/step-10" options={{ gestureEnabled: false }} />
-        <Stack.Screen name="onboarding/step-11" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-11" options={{ gestureEnabled: false, animation: 'fade' }} />
         <Stack.Screen name="onboarding/step-12" options={{ gestureEnabled: false, animation: 'fade' }} />
+        <Stack.Screen name="onboarding/step-13" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-14" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-15" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-16" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="onboarding/step-17" options={{ gestureEnabled: false, animation: 'fade' }} />
         <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />
         <Stack.Screen name="daily-arth/reflect" options={{ animation: 'slide_from_right' }} />
         <Stack.Screen name="sacred-day/[id]" options={{ animation: 'slide_from_right' }} />
@@ -215,6 +273,8 @@ export default function RootLayout() {
                 <AnalyticsIdentity />
                 <ScreenTracker />
                 <GuardedNavigation />
+                <NotificationBootstrapper />
+                <NotificationResponseRouter />
                 <ThemedStack />
                 <OnboardingAudioControl />
               </ToastProvider>

@@ -8,13 +8,10 @@ const REFLECTION_SYSTEM = `You are Mihira's Daily Arth reflection writer. Explai
 
 function createServerSupabaseClient() {
   const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ??
-    process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-    process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+  const key = process.env.SUPABASE_SECRET_KEY;
 
   if (!url || !key) {
-    throw new Error('Missing Supabase URL or key for Daily Arth reflection');
+    throw new Error('Missing Supabase URL or secret key for Daily Arth reflection');
   }
 
   return createClient(url, key, {
@@ -116,18 +113,22 @@ export async function handleDailyArthReflectionRequest(request: Request): Promis
       return Response.json({ error: 'AI response parse error', raw }, { status: 502 });
     }
 
-    const { error: updateError } = await client
+    const { data: updatedRow, error: updateError } = await client
       .from('spiritual_quotes')
       .update({ daily_reflection: reflection })
-      .eq('id', quoteId);
+      .eq('id', quoteId)
+      .select('daily_reflection')
+      .single();
 
-    if (updateError) {
-      console.error('[daily-arth-reflection] DB update error', updateError.message);
+    if (updateError || !isDailyArthReflection(updatedRow?.daily_reflection)) {
+      const message = updateError?.message ?? 'Daily Arth reflection was not persisted';
+      console.error('[daily-arth-reflection] DB update error', message);
+      return Response.json({ error: 'Failed to save Daily Arth reflection' }, { status: 500 });
     }
 
     return Response.json({
-      reflection,
-      source: updateError ? 'llm' : 'llm_and_database',
+      reflection: updatedRow.daily_reflection,
+      source: 'llm_and_database',
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Daily Arth reflection error';
