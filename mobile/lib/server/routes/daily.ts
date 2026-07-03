@@ -22,7 +22,7 @@ export async function handleDailyWisdomRequest(request: Request): Promise<Respon
     const { lat, lng } = await geocode(birthPlace);
     const chart = await buildBirthChart(birthDt, lat, lng);
 
-    const raw = await perplexityChat('sonar-pro', [
+    const raw = await perplexityChat('gemini-2.5-flash', [
       { role: 'system', content: DAILY_SYSTEM },
       { role: 'user', content: buildDailyPrompt(chart, { nakshatra, rashi }) },
     ]);

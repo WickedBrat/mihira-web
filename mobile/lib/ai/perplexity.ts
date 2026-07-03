@@ -1,13 +1,18 @@
 interface Message { role: string; content: string }
 
-export async function perplexityChat(model: string, messages: Message[]): Promise<string> {
-  const apiKey = process.env.PERPLEXITY_API_KEY;
-  if (!apiKey) throw new Error('PERPLEXITY_API_KEY is not set');
+const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/openai';
 
-  const res = await fetch('https://api.perplexity.ai/chat/completions', {
+function getApiKey(): string {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new Error('GEMINI_API_KEY is not set');
+  return key;
+}
+
+export async function perplexityChat(model: string, messages: Message[]): Promise<string> {
+  const res = await fetch(`${GEMINI_BASE}/chat/completions`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${getApiKey()}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ model, messages, stream: false }),
@@ -15,7 +20,7 @@ export async function perplexityChat(model: string, messages: Message[]): Promis
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`Perplexity API error ${res.status}: ${text}`);
+    throw new Error(`Gemini API error ${res.status}: ${text}`);
   }
 
   const data = await res.json();
@@ -27,19 +32,16 @@ export async function perplexityStream(
   messages: Message[],
   onChunk: (token: string) => void
 ): Promise<void> {
-  const apiKey = process.env.PERPLEXITY_API_KEY;
-  if (!apiKey) throw new Error('PERPLEXITY_API_KEY is not set');
-
-  const res = await fetch('https://api.perplexity.ai/chat/completions', {
+  const res = await fetch(`${GEMINI_BASE}/chat/completions`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${getApiKey()}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ model, messages, stream: true }),
   });
 
-  if (!res.ok || !res.body) throw new Error(`Perplexity stream error ${res.status}`);
+  if (!res.ok || !res.body) throw new Error(`Gemini stream error ${res.status}`);
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();

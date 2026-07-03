@@ -34,7 +34,7 @@ export async function handleMuhuratWisdomRequest(request: Request): Promise<Resp
       return Response.json({ error: 'Start date must be today or a future date' }, { status: 400 });
     }
 
-    const raw = await perplexityChat('sonar-pro', [
+    const raw = await perplexityChat('gemini-2.5-flash', [
       { role: 'system', content: MUHURAT_SYSTEM },
       { role: 'user', content: buildMuhuratPrompt(eventDescription, startDate, endDate) },
     ]);

@@ -93,7 +93,7 @@ export async function handleDailyArthReflectionRequest(request: Request): Promis
       return Response.json({ error: 'quote and source are required' }, { status: 400 });
     }
 
-    const raw = await perplexityChat('sonar-pro', [
+    const raw = await perplexityChat('gemini-2.5-flash', [
       { role: 'system', content: REFLECTION_SYSTEM },
       { role: 'user', content: buildReflectionPrompt(quote, source) },
     ]);

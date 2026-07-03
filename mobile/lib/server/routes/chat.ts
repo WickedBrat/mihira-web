@@ -27,7 +27,7 @@ export async function handleChatRequest(request: Request): Promise<Response> {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        await perplexityStream('sonar', messages, (token) => {
+        await perplexityStream('gemini-2.0-flash', messages, (token) => {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ token })}\n\n`));
         });
       } catch (err) {
