@@ -56,7 +56,7 @@ export default function PrivacyPage() {
           <p>
             Mihira may use service providers such as Clerk for authentication, Supabase for database and account
             data, RevenueCat, Apple App Store, and Google Play for subscriptions, PostHog or similar tools for
-            analytics, Perplexity or other AI providers for response generation, and hosting, monitoring,
+            analytics, Google Gemini or other AI providers for response generation, and hosting, monitoring,
             communications, and support providers.
           </p>
         </section>

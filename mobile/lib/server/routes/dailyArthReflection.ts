@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { parseModelJson } from '../../ai/parseModelJson';
-import { perplexityChat } from '../../ai/perplexity';
+import { geminiChat } from '../../ai/gemini';
 import type { DailyArthReflection } from '../../dailyArthReflectionTypes';
 import { isDailyArthReflection } from '../../dailyArthReflectionTypes';
 
@@ -93,7 +93,7 @@ export async function handleDailyArthReflectionRequest(request: Request): Promis
       return Response.json({ error: 'quote and source are required' }, { status: 400 });
     }
 
-    const raw = await perplexityChat('gemini-2.5-flash', [
+    const raw = await geminiChat('gemini-2.5-flash', [
       { role: 'system', content: REFLECTION_SYSTEM },
       { role: 'user', content: buildReflectionPrompt(quote, source) },
     ]);

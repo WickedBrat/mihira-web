@@ -16,7 +16,7 @@ These variables are currently referenced by the app and release config.
 
 ### Server-Side or Build-Time Variables
 
-- `PERPLEXITY_API_KEY`
+- `GEMINI_API_KEY`
 - `POSTHOG_PROJECT_TOKEN`
 - `POSTHOG_HOST`
 - `ENABLE_DEV_BUTTONS`

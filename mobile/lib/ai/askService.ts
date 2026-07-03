@@ -6,7 +6,7 @@ import type {
   ScriptureGuideResponse,
 } from '../../features/ask/types';
 import { parseModelJson } from './parseModelJson';
-import { perplexityChat } from './perplexity';
+import { geminiChat } from './gemini';
 import { buildAskComparePrompt, buildAskSynthesisPrompt, ASK_GUIDANCE_SYSTEM } from './prompts';
 import type { ModelScriptureGuidePayload } from './askValidators';
 import { validateModelScriptureGuidePayload } from './askValidators';
@@ -102,7 +102,7 @@ export async function generateScriptureGuide(
         sources: ranked,
       });
 
-  const raw = await perplexityChat('sonar-pro', [
+  const raw = await geminiChat('gemini-2.5-flash', [
     { role: 'system', content: ASK_GUIDANCE_SYSTEM },
     { role: 'user', content: prompt },
   ]);

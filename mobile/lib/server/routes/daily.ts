@@ -1,7 +1,7 @@
 import { geocode } from '../../vedic/geocode';
 import { buildBirthChart } from '../../vedic/chart';
 import { parseModelJson } from '../../ai/parseModelJson';
-import { perplexityChat } from '../../ai/perplexity';
+import { geminiChat } from '../../ai/gemini';
 import { DAILY_SYSTEM, buildDailyPrompt } from '../../ai/prompts';
 import type { DailyFocusArea } from '../../dailyAlignmentTypes';
 import type { SignName } from '../../vedic/types';
@@ -22,7 +22,7 @@ export async function handleDailyWisdomRequest(request: Request): Promise<Respon
     const { lat, lng } = await geocode(birthPlace);
     const chart = await buildBirthChart(birthDt, lat, lng);
 
-    const raw = await perplexityChat('gemini-2.5-flash', [
+    const raw = await geminiChat('gemini-2.5-flash', [
       { role: 'system', content: DAILY_SYSTEM },
       { role: 'user', content: buildDailyPrompt(chart, { nakshatra, rashi }) },
     ]);

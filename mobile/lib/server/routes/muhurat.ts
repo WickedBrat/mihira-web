@@ -1,5 +1,5 @@
 import { parseModelJson } from '../../ai/parseModelJson';
-import { perplexityChat } from '../../ai/perplexity';
+import { geminiChat } from '../../ai/gemini';
 import { MUHURAT_SYSTEM, buildMuhuratPrompt } from '../../ai/prompts';
 import type { MuhuratWindow } from '../../vedic/types';
 
@@ -34,7 +34,7 @@ export async function handleMuhuratWisdomRequest(request: Request): Promise<Resp
       return Response.json({ error: 'Start date must be today or a future date' }, { status: 400 });
     }
 
-    const raw = await perplexityChat('gemini-2.5-flash', [
+    const raw = await geminiChat('gemini-2.5-flash', [
       { role: 'system', content: MUHURAT_SYSTEM },
       { role: 'user', content: buildMuhuratPrompt(eventDescription, startDate, endDate) },
     ]);

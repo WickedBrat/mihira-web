@@ -8,7 +8,7 @@ function getApiKey(): string {
   return key;
 }
 
-export async function perplexityChat(model: string, messages: Message[]): Promise<string> {
+export async function geminiChat(model: string, messages: Message[]): Promise<string> {
   const res = await fetch(`${GEMINI_BASE}/chat/completions`, {
     method: 'POST',
     headers: {
@@ -27,7 +27,7 @@ export async function perplexityChat(model: string, messages: Message[]): Promis
   return data.choices[0].message.content as string;
 }
 
-export async function perplexityStream(
+export async function geminiStream(
   model: string,
   messages: Message[],
   onChunk: (token: string) => void

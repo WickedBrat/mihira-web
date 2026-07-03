@@ -23,7 +23,7 @@
 | Auth Storage        | `@react-native-async-storage/async-storage`            |
 | Database            | Supabase (`@supabase/supabase-js`) for profile sync    |
 | Local Storage       | `@react-native-async-storage/async-storage`            |
-| AI                  | Perplexity AI via `sonar-pro` (structured) and `sonar` (streaming) |
+| AI                  | Gemini via `gemini-2.5-flash` (structured) and `gemini-2.0-flash` (streaming) |
 | Graphics            | `react-native-svg` + `@shopify/react-native-skia`      |
 | Typography          | `Lexend` font family (6 weights, static via `expo-font`) |
 | Date Pickers        | `@react-native-community/datetimepicker` (cross-platform) |
@@ -40,7 +40,7 @@ The following env vars are required:
 ```
 EXPO_PUBLIC_SUPABASE_URL=           # Supabase project URL
 EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY= (or EXPO_PUBLIC_SUPABASE_ANON_KEY=)
-PERPLEXITY_API_KEY=                 # Used server-side only (API routes)
+GEMINI_API_KEY=                     # Used server-side only (API routes)
 ```
 
 ---
@@ -135,7 +135,7 @@ aksha/
 │   ├── dailyAlignmentStorage.ts # AsyncStorage: cache AI daily alignment (date-keyed)
 │   ├── onboardingStore.ts      # In-memory store for onboarding wizard state + nakshatra insights
 │   ├── ai/
-│   │   ├── perplexity.ts       # API wrapper: perplexityChat + perplexityStream
+│   │   ├── gemini.ts           # API wrapper: geminiChat + geminiStream
 │   │   ├── prompts.ts          # DAILY_SYSTEM, MUHURAT_SYSTEM, CHAT_SYSTEM, builder functions
 │   │   └── parseModelJson.ts   # Robust JSON extractor for AI model output
 │   └── vedic/

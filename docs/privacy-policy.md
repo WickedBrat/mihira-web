@@ -46,7 +46,7 @@ Mihira may receive information from third-party services used to operate the pro
 - Supabase for authentication, database, storage, and account-linked product data
 - RevenueCat, Apple App Store, and Google Play for subscriptions, purchases, entitlements, cancellations, and billing status
 - PostHog or similar analytics tools for product analytics and feature usage
-- Perplexity or other AI inference providers for guidance, chat, and interpretation features
+- Google Gemini or other AI inference providers for guidance, chat, and interpretation features
 - hosting, infrastructure, monitoring, email, and support providers
 
 ## How We Use Information

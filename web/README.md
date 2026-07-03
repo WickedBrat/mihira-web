@@ -28,7 +28,7 @@ These routes reuse the shared handlers in `/lib/server/routes`, so the Expo app 
 ## Local development
 
 1. Copy `.env.example` to `.env.local`
-2. Set `PERPLEXITY_API_KEY`
+2. Set `GEMINI_API_KEY`
 3. Set `EXPO_PUBLIC_SUPABASE_URL` and `SUPABASE_SECRET_KEY` for Daily Arth reflection writes and waitlist storage, or set `WAITLIST_WEBHOOK_URL` to forward waitlist signups elsewhere
 4. Run `npm install`
 5. Run `npm run dev`
@@ -36,6 +36,6 @@ These routes reuse the shared handlers in `/lib/server/routes`, so the Expo app 
 ## Production notes
 
 - Point `getmihira.com` at this app
-- Set `PERPLEXITY_API_KEY` in the deployment environment
+- Set `GEMINI_API_KEY` in the deployment environment
 - Apply the latest Supabase migrations so `public.spiritual_quotes.daily_reflection` and `public.waitlist_signups` exist, then set `EXPO_PUBLIC_SUPABASE_URL` and `SUPABASE_SECRET_KEY` for Daily Arth reflection writes and waitlist submissions
 - If you later move the shared server logic, keep the `/v1/api/*` contract stable

@@ -1,4 +1,4 @@
-import { perplexityStream } from '../../ai/perplexity';
+import { geminiStream } from '../../ai/gemini';
 import { CHAT_SYSTEM, GUIDE_SYSTEM_PROMPTS } from '../../ai/prompts';
 
 interface HistoryMessage {
@@ -27,7 +27,7 @@ export async function handleChatRequest(request: Request): Promise<Response> {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        await perplexityStream('gemini-2.0-flash', messages, (token) => {
+        await geminiStream('gemini-2.0-flash', messages, (token) => {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ token })}\n\n`));
         });
       } catch (err) {
