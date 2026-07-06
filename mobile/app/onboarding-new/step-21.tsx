@@ -32,7 +32,8 @@ export default function OnboardingNewS21() {
           </Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(200).duration(500)} className="w-full max-w-[340px] flex-row gap-0.5">
+        <Animated.View entering={FadeInDown.delay(200).duration(500)} style={{ width: '100%', maxWidth: 340 }}>
+          <View className="flex-row gap-0.5">
           <View className="flex-1 gap-3.5 rounded-l-2xl rounded-r border border-obn-gold-border-soft bg-obn-gold-dim px-4 py-5">
             <Text className="font-manrope-bold text-[9px] uppercase tracking-[2px] text-obn-gold">Page one</Text>
             <View className="gap-2.5">
@@ -63,6 +64,7 @@ export default function OnboardingNewS21() {
               ))}
             </View>
             <Text className="mt-auto font-serif-regular-italic text-[13px] text-obn-muted-dim">tomorrow, after your window</Text>
+          </View>
           </View>
         </Animated.View>
 

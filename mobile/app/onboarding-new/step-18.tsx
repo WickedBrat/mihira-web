@@ -36,7 +36,8 @@ export default function OnboardingNewS18() {
           </Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInDown.delay(300).duration(500)} className="flex-row justify-center gap-2.5">
+        <Animated.View entering={FadeInDown.delay(300).duration(500)}>
+          <View className="w-full flex-row flex-wrap justify-center gap-2">
           {VOWS.map((v) => (
             <Pressable
               key={v.id}
@@ -44,15 +45,16 @@ export default function OnboardingNewS18() {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 setVowId(v.id);
               }}
-              className={`rounded-full border px-5 py-3 ${
+              className={`rounded-full border px-3.5 py-2.5 ${
                 vowId === v.id ? 'border-obn-gold-border bg-obn-gold-dim' : 'border-obn-card-border bg-obn-card'
               }`}
             >
-              <Text className={`font-manrope-semibold text-[14px] ${vowId === v.id ? 'text-obn-text' : 'text-obn-muted'}`}>
+              <Text className={`font-manrope-semibold text-[13px] ${vowId === v.id ? 'text-obn-text' : 'text-obn-muted'}`}>
                 {v.short} · {v.min} min
               </Text>
             </Pressable>
           ))}
+          </View>
         </Animated.View>
 
         <Text className="max-w-[300px] text-center font-manrope text-[13px] leading-[20px] text-obn-muted-dim">
