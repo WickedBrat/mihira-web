@@ -70,10 +70,12 @@ export default function Screen1() {
         </Animated.View>
 
         <Animated.View entering={FadeIn.delay(900).duration(800)} className="mt-3 items-center gap-2.5">
-          <Text className="text-center font-headline text-[22px] tracking-[-0.4px] text-ob-text">
-            The universe is always moving.
+          <Text className="text-center font-headline text-[22px] leading-[28px] tracking-[-0.4px] text-ob-text">
+            You already know something is out of rhythm.
           </Text>
-          <Text className="text-center font-body text-base text-ob-muted">Find your rhythm within it.</Text>
+          <Text className="text-center font-headline text-[22px] leading-[28px] tracking-[-0.4px] text-ob-gold">
+            You wouldn't be here otherwise.
+          </Text>
         </Animated.View>
       </View>
 
@@ -91,7 +93,7 @@ export default function Screen1() {
             ]}
           >
             <Text className="text-center font-label text-base tracking-[0.3px] text-white">
-              Begin my alignment →
+              Show me →
             </Text>
           </Pressable>
           <Text className="px-4 text-center font-body text-xs leading-[18px] text-ob-muted">

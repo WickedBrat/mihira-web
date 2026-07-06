@@ -171,12 +171,18 @@ export default function Screen8() {
         </ScrollView>
 
         <Animated.View entering={FadeInUp.delay(520).duration(500)} className="absolute bottom-0 left-0 right-0 items-center bg-[rgba(7,9,12,0.96)] p-8 pb-11">
+          {answered ? (
+            <Text className="mb-4 max-w-[320px] text-center font-body text-[12px] leading-[18px] text-ob-muted">
+              This used only your words. Give it your birth rhythm, and the same question gets a sharper answer.
+            </Text>
+          ) : null}
+
           <Pressable
             disabled={!question.trim() || loading}
             onPress={() => {
               if (answered) {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                router.push('/onboarding/step-6');
+                router.push('/onboarding/step-5b');
                 return;
               }
               void handleSubmit();
@@ -190,7 +196,7 @@ export default function Screen8() {
             ]}
           >
             <Text className="font-label text-base tracking-[0.3px] text-white">
-              {answered ? 'Make this more personal →' : 'Ask Saarthi →'}
+              {answered ? 'Give it my birth rhythm →' : 'Ask Saarthi →'}
             </Text>
           </Pressable>
 

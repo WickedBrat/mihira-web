@@ -13,9 +13,20 @@ import {
   GoogleSans_700Bold,
 } from '@expo-google-fonts/google-sans';
 import {
+  CormorantGaramond_400Regular,
+  CormorantGaramond_500Medium,
   CormorantGaramond_600SemiBold,
   CormorantGaramond_700Bold,
+  CormorantGaramond_400Regular_Italic,
+  CormorantGaramond_500Medium_Italic,
+  CormorantGaramond_600SemiBold_Italic,
 } from '@expo-google-fonts/cormorant-garamond';
+import {
+  Manrope_400Regular,
+  Manrope_500Medium,
+  Manrope_600SemiBold,
+  Manrope_700Bold,
+} from '@expo-google-fonts/manrope';
 import { PostHogProvider } from 'posthog-react-native';
 import { vars } from 'nativewind';
 import { ToastProvider } from '@/components/ui/ToastProvider';
@@ -244,8 +255,17 @@ export default function RootLayout() {
     GoogleSans_500Medium,
     GoogleSans_600SemiBold,
     GoogleSans_700Bold,
+    CormorantGaramond_400Regular,
+    CormorantGaramond_500Medium,
     CormorantGaramond_600SemiBold,
     CormorantGaramond_700Bold,
+    CormorantGaramond_400Regular_Italic,
+    CormorantGaramond_500Medium_Italic,
+    CormorantGaramond_600SemiBold_Italic,
+    Manrope_400Regular,
+    Manrope_500Medium,
+    Manrope_600SemiBold,
+    Manrope_700Bold,
   });
 
   useEffect(() => {

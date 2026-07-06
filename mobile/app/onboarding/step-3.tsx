@@ -1,9 +1,9 @@
-// Screen 3: Life Context
+// Screen 3: Where It Lives
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeInUp, FadeIn, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { Text } from '@/components/ui/Text';
 import { setOnboardingData } from '@/lib/onboardingStore';
@@ -23,6 +23,20 @@ const CONTEXTS = [
   'I am not sure',
 ];
 
+const NOT_SURE = 'I am not sure';
+
+function buildContextLine(selected: string[]): string {
+  if (selected.length === 0) {
+    return "Choose where it shows up. There's a right window for what you're carrying — Mihira can find it.";
+  }
+  const words = selected.filter((c) => c !== NOT_SURE).map((c) => c.toLowerCase());
+  if (words.length === 0) {
+    return "There's a right window for what you're carrying. We'll need your birth rhythm to find it.";
+  }
+  const phrase = words.length > 1 ? `${words[0]} and ${words[1]}` : words[0];
+  return `There's a right window for what you're carrying in ${phrase}. We'll need your birth rhythm to find it.`;
+}
+
 export default function Screen3() {
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -39,6 +53,8 @@ export default function Screen3() {
     setOnboardingData({ guidanceContext: selected });
     router.push('/onboarding/step-4');
   }
+
+  const contextLine = buildContextLine(selected);
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
@@ -58,14 +74,18 @@ export default function Screen3() {
           </Text>
         </Animated.View>
 
-        <View className="w-full max-w-[360px] flex-row flex-wrap justify-center gap-3">
+        <View className="w-full max-w-[360px] flex-row flex-wrap justify-between gap-y-3">
           {CONTEXTS.map((item, index) => {
             const active = selected.includes(item);
             return (
-              <Animated.View key={item} entering={FadeInDown.delay(index * 70 + 180).duration(400)}>
+              <Animated.View
+                key={item}
+                entering={FadeInDown.delay(index * 70 + 180).duration(400)}
+                className="w-[48%]"
+              >
                 <Pressable
                   onPress={() => toggle(item)}
-                  className={`flex-row items-center gap-2 rounded-full border px-4 py-3 ${
+                  className={`flex-row items-center justify-center gap-2 rounded-full border px-4 py-3 ${
                     active
                       ? 'border-ob-saffron-border bg-ob-saffron-dim'
                       : 'border-ob-card-border bg-ob-card'
@@ -76,7 +96,10 @@ export default function Screen3() {
                       ✦
                     </Animated.Text>
                   ) : null}
-                  <Text className={`font-body-medium text-[14px] ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
+                  <Text
+                    numberOfLines={2}
+                    className={`text-center font-body-medium text-[13px] ${active ? 'text-ob-text' : 'text-ob-muted'}`}
+                  >
                     {item}
                   </Text>
                 </Pressable>
@@ -85,16 +108,17 @@ export default function Screen3() {
           })}
         </View>
 
-        {selected.length > 0 ? (
-          <Animated.View
-            entering={FadeInDown.duration(300)}
-            className="w-full max-w-[360px] rounded-[20px] border border-ob-gold-border bg-ob-gold-dim p-4"
-          >
-            <Text className="text-center font-body text-[13px] leading-[21px] text-ob-gold">
-              Noted. Saarthi will respond to where life is actually pressing.
-            </Text>
-          </Animated.View>
-        ) : null}
+        <Animated.View
+          entering={FadeIn.duration(400)}
+          className="w-full max-w-[360px] gap-2 rounded-[20px] border border-ob-gold-border bg-ob-gold-dim p-4"
+        >
+          <Text className="font-label text-[10px] uppercase tracking-[2px] text-ob-gold">
+            Sacred timing · for later
+          </Text>
+          <Text className="font-body text-[14px] leading-[21px] text-ob-text">
+            {contextLine}
+          </Text>
+        </Animated.View>
       </View>
 
       <Animated.View entering={FadeInUp.delay(620).duration(500)} className="items-center p-8 pb-11">
