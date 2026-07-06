@@ -68,6 +68,9 @@ export default function Screen4() {
             <Text className="text-center font-body text-[15px] leading-[23px] text-ob-muted">
               A first name or nickname is enough.
             </Text>
+            <Text className="max-w-[300px] text-center font-body text-[13px] leading-[20px] text-ob-muted">
+              Sages rarely used a person's given name — they used the name of what the person was becoming. We'll start with what you're called now.
+            </Text>
           </Animated.View>
 
           <Animated.View entering={FadeInDown.delay(300).duration(500)} className="w-full max-w-[360px] items-center gap-4">
