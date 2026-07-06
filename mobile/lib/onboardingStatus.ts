@@ -155,7 +155,7 @@ export async function setOnboardingCompleted(
     try {
       await upsertRemoteOnboardingState(options.userId, {
         onboarding_completed: false,
-        onboarding_step: '/onboarding',
+        onboarding_step: '/onboarding-new',
       });
     } catch (error) {
       console.error('[onboardingStatus] remote completion clear error', error);

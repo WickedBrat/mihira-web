@@ -37,6 +37,7 @@ import { clearAskState } from '@/lib/askStorage';
 import { clearNaradState } from '@/lib/naradStorage';
 import { clearOnboardingCompleted } from '@/lib/onboardingStatus';
 import { resetOnboardingData } from '@/lib/onboardingStore';
+import { resetOnboardingNewData } from '@/lib/onboardingNewStore';
 
 const ENABLE_DEV_BUTTONS = Constants.expoConfig?.extra?.enableDevButtons === true;
 
@@ -130,7 +131,8 @@ export default function ProfileScreen() {
               onPress={async () => {
                 await clearOnboardingCompleted({ userId: signedIn ? userId : null });
                 resetOnboardingData();
-                router.push('/onboarding');
+                resetOnboardingNewData();
+                router.push('/onboarding-new');
               }}
               variant="secondary"
               fullWidth

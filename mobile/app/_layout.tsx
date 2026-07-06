@@ -129,7 +129,7 @@ function GuardedNavigation() {
     if (!onboardingState.completed && !isOnboardingRoute) {
       const nextStep = onboardingState.step?.startsWith('/onboarding')
         ? onboardingState.step
-        : '/onboarding';
+        : '/onboarding-new';
       router.replace(nextStep as Href);
     }
   }, [isLoaded, isSignedIn, onboardingState, pathname, userId]);
