@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Stack, SplashScreen, router, usePathname, useGlobalSearchParams, type Href } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import { SystemBars } from 'react-native-edge-to-edge';
@@ -294,7 +294,7 @@ export default function RootLayout() {
                 <ScreenTracker />
                 <GuardedNavigation />
                 <NotificationBootstrapper />
-                <NotificationResponseRouter />
+                {Platform.OS !== 'web' && <NotificationResponseRouter />}
                 <ThemedStack />
                 <OnboardingAudioControl />
               </ToastProvider>
