@@ -2,6 +2,56 @@
 // Module-level store for the onboarding-new (hook-model redesign) flow.
 // Kept fully separate from lib/onboardingStore.ts so the two flows never interfere.
 
+import { getSupabaseClient } from '@/lib/supabase';
+import { USER_DETAILS_TABLE, USER_DETAILS_USER_ID_COLUMN } from '@/lib/userDetails';
+import { NAKSHATRA_INSIGHTS } from '@/lib/onboardingStore';
+import type { SignName } from '@/lib/vedic/types';
+
+export const RASHI_SANSKRIT: Record<SignName, string> = {
+  Aries: 'Mesha',
+  Taurus: 'Vrishabha',
+  Gemini: 'Mithuna',
+  Cancer: 'Karka',
+  Leo: 'Simha',
+  Virgo: 'Kanya',
+  Libra: 'Tula',
+  Scorpio: 'Vrishchika',
+  Sagittarius: 'Dhanu',
+  Capricorn: 'Makara',
+  Aquarius: 'Kumbha',
+  Pisces: 'Meena',
+};
+
+export interface ChartResult {
+  nakshatra: string;
+  rashi: SignName;
+  rashiSanskrit: string;
+  moonHouse: number | null;
+  insight: string;
+}
+
+const FALLBACK_CHART: ChartResult = {
+  nakshatra: 'Uttara Phalguni',
+  rashi: 'Leo',
+  rashiSanskrit: 'Simha',
+  moonHouse: 9,
+  insight: NAKSHATRA_INSIGHTS['Uttara Phalguni'] ?? 'Turn loyalty inward.',
+};
+
+export function buildChartResult(nakshatra: string, rashi: SignName, moonHouse: number | null): ChartResult {
+  return {
+    nakshatra,
+    rashi,
+    rashiSanskrit: RASHI_SANSKRIT[rashi] ?? rashi,
+    moonHouse,
+    insight: NAKSHATRA_INSIGHTS[nakshatra] ?? FALLBACK_CHART.insight,
+  };
+}
+
+export function getFallbackChart(): ChartResult {
+  return FALLBACK_CHART;
+}
+
 export interface Ache {
   id: 'burnout' | 'direction' | 'restless' | 'reconnect';
   label: string;
@@ -73,6 +123,7 @@ export interface OnboardingNewData {
   alignMode: 'suggested' | 'fresh';
   alignMinutes: number;
   reservedPages: number;
+  chart: ChartResult | null;
 }
 
 const DEFAULT: OnboardingNewData = {
@@ -90,6 +141,7 @@ const DEFAULT: OnboardingNewData = {
   alignMode: 'suggested',
   alignMinutes: 374,
   reservedPages: 20,
+  chart: null,
 };
 
 let _data: OnboardingNewData = { ...DEFAULT };
@@ -144,4 +196,39 @@ export function getFirstSelectedAche(data: OnboardingNewData): Ache {
 
 export function getVow(id: Vow['id']): Vow {
   return VOWS.find((v) => v.id === id) ?? VOWS[1];
+}
+
+// ─── Persistence — writes into the existing user_details.onboarding_data jsonb column ──
+// No schema changes: this reuses the same table/column the legacy onboarding flow
+// (lib/onboardingStatus.ts) already writes to, just with onboarding-new's own data shape.
+
+function serializeOnboardingNewData(data: OnboardingNewData) {
+  return {
+    flow: 'onboarding-new',
+    aches: data.aches,
+    contexts: data.contexts,
+    firstQuestion: data.firstQuestion,
+    vow: data.vow,
+    alignMode: data.alignMode,
+    alignMinutes: data.alignMinutes,
+    chart: data.chart,
+  };
+}
+
+export async function saveOnboardingNewCompletion(userId: string, data: OnboardingNewData): Promise<void> {
+  const client = getSupabaseClient();
+  const { error } = await client
+    .from(USER_DETAILS_TABLE)
+    .upsert(
+      {
+        user_id: userId,
+        onboarding_completed: true,
+        onboarding_step: 'completed',
+        onboarding_data: serializeOnboardingNewData(data),
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: USER_DETAILS_USER_ID_COLUMN }
+    );
+
+  if (error) throw error;
 }

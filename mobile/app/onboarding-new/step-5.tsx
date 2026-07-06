@@ -1,5 +1,5 @@
 // S5: First Whisper — Ask Saarthi
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { router } from 'expo-router';
@@ -7,9 +7,47 @@ import Animated, { FadeIn, FadeInDown, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { getQuestionPrompts, getScriptureGuidance } from '@/features/onboarding/personalGuidance';
 import type { OnboardingData } from '@/lib/onboardingStore';
+import type { ScriptureGuideResponse } from '@/features/ask/types';
+import { apiFetch } from '@/lib/apiFetch';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { ACHES, CONTEXTS, getOnboardingNewData, setOnboardingNewData } from '@/lib/onboardingNewStore';
+
+interface DisplayGuidance {
+  hearing: string;
+  anchor: string;
+  reference: string;
+  action: string;
+}
+
+async function fetchRealGuidance(question: string, userName: string): Promise<DisplayGuidance> {
+  const response = await apiFetch('/api/ask', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: question,
+      mode: 'quick',
+      userContext: {
+        userName: userName || 'Seeker',
+        interactionCount: 0,
+        lastMode: 'quick',
+        lastTopic: null,
+        lastQuestion: null,
+      },
+    }),
+  });
+
+  const data = (await response.json()) as ScriptureGuideResponse & { error?: string };
+  if (!response.ok || data.error) throw new Error(data.error ?? `Ask API failed with status ${response.status}`);
+
+  const topSource = data.sources[0];
+  return {
+    hearing: data.answer.summary,
+    anchor: topSource?.translation ?? data.interpretation.synthesis,
+    reference: topSource?.citation_label ?? '',
+    action: data.answer.practical_guidance,
+  };
+}
 
 function toLegacyShim(name: string, aches: string[], contexts: string[], question: string): OnboardingData {
   return {
@@ -34,8 +72,7 @@ export default function OnboardingNewS5() {
   const [question, setQuestion] = useState(stored.firstQuestion);
   const [answered, setAnswered] = useState(Boolean(stored.firstQuestion));
   const [loading, setLoading] = useState(false);
-
-  const guidance = getScriptureGuidance(shim, question);
+  const [guidance, setGuidance] = useState<DisplayGuidance | null>(null);
 
   async function handleSubmit() {
     const q = question.trim();
@@ -43,11 +80,28 @@ export default function OnboardingNewS5() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setLoading(true);
     setOnboardingNewData({ firstQuestion: q });
-    await new Promise((resolve) => setTimeout(resolve, 850));
+
+    try {
+      const real = await fetchRealGuidance(q, stored.name);
+      setGuidance(real);
+    } catch (err) {
+      console.error('[onboarding-new] /api/ask failed, using local fallback', err);
+      const local = getScriptureGuidance(shim, q);
+      setGuidance({ hearing: local.hearing, anchor: local.anchor, reference: local.reference, action: local.action });
+    }
+
     setLoading(false);
     setAnswered(true);
     void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   }
+
+  useEffect(() => {
+    if (answered && !guidance && question.trim()) {
+      const local = getScriptureGuidance(shim, question.trim());
+      setGuidance({ hearing: local.hearing, anchor: local.anchor, reference: local.reference, action: local.action });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function proceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -118,7 +172,7 @@ export default function OnboardingNewS5() {
             </View>
           ) : null}
 
-          {answered ? (
+          {answered && guidance ? (
             <Animated.View entering={FadeIn.duration(500)} className="gap-0 rounded-[22px] border border-obn-gold-border-soft bg-obn-gold-dim px-[22px] py-5">
               <View className="gap-1.5 border-b border-obn-gold-border-soft pb-4">
                 <Text className="font-manrope-bold text-[10px] uppercase tracking-[2.5px] text-obn-gold">What I'm hearing</Text>

@@ -1,25 +1,68 @@
 // S22: Save Your Rhythm
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { router } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { useSignIn } from '@/features/auth/useSignIn';
+import { useAuth } from '@/lib/auth';
+import { useProfile } from '@/features/profile/useProfile';
+import { formatBirthDateTime, mergeDateAndTime } from '@/features/profile/utils';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { obnButtonShadow, obnPressedStyle } from '@/features/onboarding-new/styles';
-import { getFirstSelectedAche, getOnboardingNewData, getVow } from '@/lib/onboardingNewStore';
+import { getFirstSelectedAche, getOnboardingNewData, getVow, saveOnboardingNewCompletion } from '@/lib/onboardingNewStore';
 
 export default function OnboardingNewS22() {
   const stored = getOnboardingNewData();
   const ache = getFirstSelectedAche(stored);
   const vow = getVow(stored.vow);
   const name = stored.name || 'friend';
+  const { isLoaded, isSignedIn, userId } = useAuth();
+  const { saveField } = useProfile();
+  const [pendingCompletion, setPendingCompletion] = useState(false);
+  const [isCompleting, setIsCompleting] = useState(false);
+
+  const persistAndEnter = useCallback(async () => {
+    if (isCompleting) return;
+    setIsCompleting(true);
+
+    const latest = getOnboardingNewData();
+    const birthDateTime = !latest.unknownBirthTime
+      ? formatBirthDateTime(mergeDateAndTime(latest.birthDate, latest.birthTime))
+      : '';
+
+    if (isSignedIn) {
+      await Promise.all([
+        latest.name ? saveField('name', latest.name).catch(() => {}) : Promise.resolve(),
+        latest.gender ? saveField('gender', latest.gender).catch(() => {}) : Promise.resolve(),
+        birthDateTime ? saveField('birth_dt', birthDateTime).catch(() => {}) : Promise.resolve(),
+        latest.birthPlace ? saveField('birth_place', latest.birthPlace).catch(() => {}) : Promise.resolve(),
+      ]);
+
+      if (userId) {
+        await saveOnboardingNewCompletion(userId, latest).catch((err) => {
+          console.error('[onboarding-new] save completion failed', err);
+        });
+      }
+    }
+
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    router.replace('/(tabs)');
+  }, [isCompleting, isSignedIn, saveField, userId]);
 
   const { signInWithGoogle, signInWithApple, isLoading, loadingProvider } = useSignIn(() => {
-    router.replace('/(tabs)');
+    setPendingCompletion(true);
   });
+
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn || !pendingCompletion) return;
+    setPendingCompletion(false);
+    void persistAndEnter();
+  }, [isLoaded, isSignedIn, pendingCompletion, persistAndEnter]);
+
+  const isBusy = isLoading || pendingCompletion || isCompleting;
 
   const saveCallback = `You came in carrying ${ache.noun}, ${name}. You just wrote page one and made a vow to ${vow.name.replace('The ', 'the ')}. Don't let that reset.`;
 
@@ -43,12 +86,12 @@ export default function OnboardingNewS22() {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               void signInWithApple();
             }}
-            disabled={isLoading}
-            className={`flex-row items-center justify-center gap-2.5 rounded-full bg-obn-text-soft px-6 py-4 ${isLoading ? 'opacity-60' : ''}`}
+            disabled={isBusy}
+            className={`flex-row items-center justify-center gap-2.5 rounded-full bg-obn-text-soft px-6 py-4 ${isBusy ? 'opacity-60' : ''}`}
             style={({ pressed }) => [obnButtonShadow, pressed && obnPressedStyle]}
           >
             <Text className="font-manrope-bold text-[15px] text-obn-ink">
-              {loadingProvider === 'apple' ? 'Connecting…' : 'Continue with Apple'}
+              {loadingProvider === 'apple' ? 'Connecting…' : isCompleting ? 'Saving…' : 'Continue with Apple'}
             </Text>
           </Pressable>
           <Pressable
@@ -56,17 +99,17 @@ export default function OnboardingNewS22() {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               void signInWithGoogle();
             }}
-            disabled={isLoading}
-            className={`flex-row items-center justify-center gap-2.5 rounded-full border border-obn-card-border bg-obn-card px-6 py-4 ${isLoading ? 'opacity-60' : ''}`}
+            disabled={isBusy}
+            className={`flex-row items-center justify-center gap-2.5 rounded-full border border-obn-card-border bg-obn-card px-6 py-4 ${isBusy ? 'opacity-60' : ''}`}
           >
             <Text className="font-manrope-bold text-[15px] text-obn-text-soft">
-              {loadingProvider === 'google' ? 'Connecting…' : 'Continue with Google'}
+              {loadingProvider === 'google' ? 'Connecting…' : isCompleting ? 'Saving…' : 'Continue with Google'}
             </Text>
           </Pressable>
         </View>
 
         <View className="items-center gap-1.5">
-          <Pressable onPress={skip}>
+          <Pressable onPress={skip} disabled={isBusy}>
             <Text className="text-center font-manrope text-[13px] text-obn-muted underline">
               Don't save — start fresh each time
             </Text>

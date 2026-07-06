@@ -7,16 +7,32 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton } from '@/features/onboarding-new/PrimaryButton';
-import { getOnboardingNewData } from '@/lib/onboardingNewStore';
+import { getFallbackChart, getOnboardingNewData } from '@/lib/onboardingNewStore';
 
-const LEDGER = [
-  { label: 'Rashi', value: 'Simha' },
-  { label: 'Moon', value: 'Ninth house' },
-  { label: 'This season', value: 'Turn loyalty inward' },
-];
+function ordinal(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return `${n}${s[(v - 20) % 10] || s[v] || s[0]}`;
+}
+
+function shortSeasonLabel(insight: string): string {
+  return insight.split('.')[0].trim();
+}
 
 export default function OnboardingNewS13() {
-  const name = getOnboardingNewData().name || 'Friend';
+  const stored = getOnboardingNewData();
+  const name = stored.name || 'Friend';
+  const chart = stored.chart ?? getFallbackChart();
+
+  const nakshatraWords = chart.nakshatra.split(' ');
+  const nakshatraLead = nakshatraWords.slice(0, -1).join(' ');
+  const nakshatraLast = nakshatraWords[nakshatraWords.length - 1];
+
+  const ledger = [
+    { label: 'Rashi', value: chart.rashiSanskrit },
+    { label: 'Moon', value: chart.moonHouse ? `${ordinal(chart.moonHouse)} house` : 'Being mapped' },
+    { label: 'This season', value: shortSeasonLabel(chart.insight) },
+  ];
 
   function proceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -31,15 +47,14 @@ export default function OnboardingNewS13() {
             {name} · recorded at birth
           </Text>
           <Text className="text-center font-serif-medium text-[46px] leading-[50px] text-obn-text">
-            Uttara{'\n'}
-            <Text className="font-serif-medium-italic text-obn-gold">Phalguni</Text>
+            {nakshatraLead ? `${nakshatraLead}\n` : ''}
+            <Text className="font-serif-medium-italic text-obn-gold">{nakshatraLast}</Text>
           </Text>
-          <Text className="font-serif-regular-italic text-[16px] text-obn-muted">the star of steady generosity</Text>
         </Animated.View>
 
         <Animated.View entering={FadeIn.delay(500).duration(600)} className="w-full max-w-[300px]">
-          {LEDGER.map((row, i) => (
-            <View key={row.label} className={`flex-row items-baseline justify-between border-t border-obn-gold-border-soft py-[11px] ${i === LEDGER.length - 1 ? 'border-b' : ''}`}>
+          {ledger.map((row, i) => (
+            <View key={row.label} className={`flex-row items-baseline justify-between border-t border-obn-gold-border-soft py-[11px] ${i === ledger.length - 1 ? 'border-b' : ''}`}>
               <Text className="font-manrope-bold text-[10px] uppercase tracking-[2px] text-obn-muted-dim">{row.label}</Text>
               <Text className="font-serif-medium text-[18px] text-obn-text">{row.value}</Text>
             </View>

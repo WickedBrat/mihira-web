@@ -7,7 +7,7 @@ import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
-import { getFirstSelectedAche, getOnboardingNewData, getVow } from '@/lib/onboardingNewStore';
+import { getFallbackChart, getFirstSelectedAche, getOnboardingNewData, getVow } from '@/lib/onboardingNewStore';
 
 const PAGE_NUMBERS = Array.from({ length: 19 }, (_, i) => i + 3);
 
@@ -16,6 +16,7 @@ export default function OnboardingNewS21() {
   const name = stored.name || 'friend';
   const ache = getFirstSelectedAche(stored);
   const vow = getVow(stored.vow);
+  const chart = stored.chart ?? getFallbackChart();
 
   function proceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -47,7 +48,7 @@ export default function OnboardingNewS21() {
               </View>
               <View>
                 <Text className="font-manrope-bold text-[10px] tracking-[1.5px] text-obn-muted-dim">BORN UNDER</Text>
-                <Text className="font-serif-medium text-[17px] text-obn-text">Uttara Phalguni</Text>
+                <Text className="font-serif-medium text-[17px] text-obn-text">{chart.nakshatra}</Text>
               </View>
               <View>
                 <Text className="font-manrope-bold text-[10px] tracking-[1.5px] text-obn-muted-dim">VOW</Text>

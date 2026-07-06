@@ -1,5 +1,5 @@
 // S17: Today, Unfinished
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { router } from 'expo-router';
@@ -9,10 +9,51 @@ import * as Haptics from 'expo-haptics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { getOnboardingNewData } from '@/lib/onboardingNewStore';
+import { formatBirthDateTime, mergeDateAndTime } from '@/features/profile/utils';
+import { deriveMoonProfile } from '@/lib/vedic/moonProfile';
+import { apiFetch } from '@/lib/apiFetch';
+import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
+import { useDailyArth } from '@/features/daily/useDailyArth';
+
+async function fetchFocusAreas(): Promise<DailyFocusArea[]> {
+  const stored = getOnboardingNewData();
+  if (!stored.birthPlace.trim()) return [];
+
+  const birthDt = formatBirthDateTime(mergeDateAndTime(stored.birthDate, stored.birthTime));
+  const moon = deriveMoonProfile(stored.birthDate, stored.birthTime, stored.unknownBirthTime);
+
+  const response = await apiFetch('/api/wisdom/daily', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      birthDt,
+      birthPlace: stored.birthPlace,
+      nakshatra: moon?.nakshatra,
+      rashi: moon?.rashi,
+    }),
+  });
+  const data = await response.json();
+  if (!response.ok || data.error) throw new Error(data.error ?? 'Daily API failed');
+  return Array.isArray(data.focusAreas) ? data.focusAreas : [];
+}
 
 export default function OnboardingNewS17() {
   const name = getOnboardingNewData().name || 'friend';
   const [reflectOpen, setReflectOpen] = useState(false);
+  const [focusAreas, setFocusAreas] = useState<DailyFocusArea[] | null>(null);
+  const { arth, isLoading: arthLoading } = useDailyArth();
+
+  useEffect(() => {
+    fetchFocusAreas()
+      .then(setFocusAreas)
+      .catch((err) => {
+        console.error('[onboarding-new] daily alignment fetch failed', err);
+        setFocusAreas([]);
+      });
+  }, []);
+
+  const primaryArea = focusAreas?.[0];
+  const lockedArea = focusAreas?.[1];
 
   function proceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -32,13 +73,14 @@ export default function OnboardingNewS17() {
         <View className="w-full max-w-[340px] gap-3.5">
           <Animated.View entering={FadeInDown.delay(150).duration(400)} className="gap-2 rounded-[22px] border border-obn-gold-border-soft bg-obn-card px-5 py-4">
             <View className="flex-row items-baseline justify-between gap-2.5">
-              <Text className="font-manrope-bold text-[11px] uppercase tracking-[2px] text-obn-gold">Partnership</Text>
-              <Text className="font-manrope text-[12px] text-obn-muted-dim">8:00 – 10:00 AM</Text>
+              <Text className="font-manrope-bold text-[11px] uppercase tracking-[2px] text-obn-gold">
+                {primaryArea?.area ?? 'Focus'}
+              </Text>
+              <Text className="font-manrope text-[12px] text-obn-muted-dim">{primaryArea?.timeRange ?? '8:00 – 10:00 AM'}</Text>
             </View>
             <Text className="font-manrope text-[14px] leading-[21px] text-obn-text-soft">
-              Say the difficult thing gently — the window favors honesty held with care.
+              {primaryArea?.suggestion ?? (focusAreas === null ? 'Reading your rhythm…' : 'Say the difficult thing gently — the window favors honesty held with care.')}
             </Text>
-            <Text className="font-manrope text-[12px] text-obn-muted-dim">Bhagavad Gita 2.47</Text>
           </Animated.View>
 
           <Animated.View entering={FadeInDown.delay(280).duration(400)} className="gap-2 rounded-[22px] border border-obn-gold-border-soft bg-obn-card px-5 py-4">
@@ -47,9 +89,9 @@ export default function OnboardingNewS17() {
               <Text className="font-manrope text-[12px] text-obn-muted-dim">free, every day</Text>
             </View>
             <Text className="font-serif-regular-italic text-[17px] leading-[24px] text-obn-text">
-              "Let a person lift themselves by their own self; let them not lower themselves."
+              {arthLoading ? '…' : (arth?.quote ?? '"Let a person lift themselves by their own self; let them not lower themselves."')}
             </Text>
-            <Text className="font-manrope text-[12px] text-obn-muted-dim">Bhagavad Gita 6.5</Text>
+            <Text className="font-manrope text-[12px] text-obn-muted-dim">{arth?.source ?? 'Bhagavad Gita 6.5'}</Text>
 
             {!reflectOpen ? (
               <Pressable
@@ -66,13 +108,13 @@ export default function OnboardingNewS17() {
                 <View className="gap-0.5">
                   <Text className="font-manrope-bold text-[10px] uppercase tracking-[2px] text-obn-gold">Meaning</Text>
                   <Text className="font-manrope text-[13px] leading-[20px] text-obn-text-soft">
-                    The self is the only instrument you fully hold. Raising it is nobody else's job.
+                    {arth?.dailyReflection?.summary ?? 'The self is the only instrument you fully hold. Raising it is nobody else\'s job.'}
                   </Text>
                 </View>
                 <View className="gap-0.5">
                   <Text className="font-manrope-bold text-[10px] uppercase tracking-[2px] text-obn-gold">One step</Text>
                   <Text className="font-manrope text-[13px] leading-[20px] text-obn-text-soft">
-                    Name one habit that lowers you. Skip it once today, deliberately.
+                    {arth?.dailyReflection?.dailyPractice?.[0] ?? 'Name one habit that lowers you. Skip it once today, deliberately.'}
                   </Text>
                 </View>
               </Animated.View>
@@ -82,13 +124,14 @@ export default function OnboardingNewS17() {
           <Animated.View entering={FadeInDown.delay(400).duration(400)} className="overflow-hidden rounded-[22px]">
             <View className="gap-2 border border-obn-gold-border-soft bg-obn-card px-5 py-4">
               <View className="flex-row items-baseline justify-between gap-2.5">
-                <Text className="font-manrope-bold text-[11px] uppercase tracking-[2px] text-obn-gold">Rest &amp; recovery</Text>
-                <Text className="font-manrope text-[12px] text-obn-muted-dim">9:00 – 10:00 PM</Text>
+                <Text className="font-manrope-bold text-[11px] uppercase tracking-[2px] text-obn-gold">
+                  {lockedArea?.area ?? 'Rest & recovery'}
+                </Text>
+                <Text className="font-manrope text-[12px] text-obn-muted-dim">{lockedArea?.timeRange ?? '9:00 – 10:00 PM'}</Text>
               </View>
               <Text className="font-manrope text-[14px] leading-[21px] text-obn-text-soft">
-                Close the day without a screen — let the mind settle like water.
+                {lockedArea?.suggestion ?? 'Close the day without a screen — let the mind settle like water.'}
               </Text>
-              <Text className="font-manrope text-[12px] text-obn-muted-dim">Katha Upanishad 1.3.13</Text>
             </View>
             <BlurView intensity={30} tint="dark" className="absolute inset-0 items-center justify-center px-6">
               <Text className="text-center font-manrope-semibold text-[14px] leading-[21px] text-obn-text">

@@ -14,7 +14,29 @@ import Animated, {
 } from 'react-native-reanimated';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
-import { MAPPING_CRUMBS } from '@/lib/onboardingNewStore';
+import { MAPPING_CRUMBS, buildChartResult, getOnboardingNewData, setOnboardingNewData } from '@/lib/onboardingNewStore';
+import { formatBirthDateTime, mergeDateAndTime } from '@/features/profile/utils';
+import { geocode } from '@/lib/vedic/geocode';
+import { buildBirthChart } from '@/lib/vedic/chart';
+
+const MIN_RITUAL_MS = MAPPING_CRUMBS.length * 2800 + 400;
+
+async function computeRealChart(): Promise<void> {
+  const stored = getOnboardingNewData();
+  if (!stored.birthPlace.trim()) return;
+
+  try {
+    const { lat, lng } = await geocode(stored.birthPlace);
+    const birthDt = formatBirthDateTime(mergeDateAndTime(stored.birthDate, stored.birthTime));
+    const chart = await buildBirthChart(birthDt, lat, lng);
+    const moon = chart.planets.find((p) => p.name === 'Moon');
+    setOnboardingNewData({
+      chart: buildChartResult(chart.nakshatra, moon?.sign ?? chart.lagna, moon?.house ?? null),
+    });
+  } catch (err) {
+    console.error('[onboarding-new] chart computation failed, using representative chart', err);
+  }
+}
 
 const DIAL_SIZE = 260;
 
@@ -73,10 +95,16 @@ export default function OnboardingNewS12() {
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      router.replace('/onboarding-new/step-13');
-    }, MAPPING_CRUMBS.length * 2800 + 400);
-    return () => clearTimeout(timeout);
+    let cancelled = false;
+    const minDelay = new Promise<void>((resolve) => setTimeout(resolve, MIN_RITUAL_MS));
+
+    Promise.all([computeRealChart(), minDelay]).then(() => {
+      if (!cancelled) router.replace('/onboarding-new/step-13');
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (

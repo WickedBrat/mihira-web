@@ -42,7 +42,10 @@ async function requestNotificationPermission() {
   return nextPermission.granted;
 }
 
-export async function scheduleDailyDayPreviewNotificationAsync(): Promise<NotificationScheduleResult> {
+export async function scheduleDailyDayPreviewNotificationAsync(
+  hour: number = DAILY_DAY_PREVIEW_HOUR,
+  minute: number = DAILY_DAY_PREVIEW_MINUTE
+): Promise<NotificationScheduleResult> {
   if (Platform.OS === 'web') {
     return { status: 'skipped', reason: 'web' };
   }
@@ -68,8 +71,8 @@ export async function scheduleDailyDayPreviewNotificationAsync(): Promise<Notifi
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      hour: DAILY_DAY_PREVIEW_HOUR,
-      minute: DAILY_DAY_PREVIEW_MINUTE,
+      hour,
+      minute,
       channelId: DAILY_DAY_PREVIEW_CHANNEL_ID,
     },
   });

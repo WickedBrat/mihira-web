@@ -8,6 +8,7 @@ import * as Haptics from 'expo-haptics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { formatMinutesAsClock, getOnboardingNewData, setOnboardingNewData } from '@/lib/onboardingNewStore';
+import { scheduleDailyDayPreviewNotificationAsync } from '@/lib/notifications';
 
 export default function OnboardingNewS20() {
   const stored = getOnboardingNewData();
@@ -29,6 +30,15 @@ export default function OnboardingNewS20() {
   function proceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOnboardingNewData({ alignMinutes, alignMode });
+
+    if (alignMode === 'suggested') {
+      const hour = Math.floor(alignMinutes / 60);
+      const minute = alignMinutes % 60;
+      void scheduleDailyDayPreviewNotificationAsync(hour, minute).catch((err) => {
+        console.error('[onboarding-new] notification scheduling failed', err);
+      });
+    }
+
     router.push('/onboarding-new/step-21');
   }
 
