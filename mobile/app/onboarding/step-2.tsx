@@ -1,15 +1,14 @@
-// Screen 2: The Modern Mirror — Pain Point Intake
-import React, { useState, useRef } from 'react';
+// Screen 2: Naming the Ache
+import React, { useState } from 'react';
 import {
   View,
   Pressable,
   ScrollView,
-  Animated as RNAnimated,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import Animated, { FadeInDown, FadeInUp, ZoomIn } from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeInUp, FadeIn, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { setOnboardingData } from '@/lib/onboardingStore';
 import { OnboardingDevBackButton } from '@/features/onboarding/OnboardingDevBackButton';
@@ -17,48 +16,44 @@ import { OnboardingProgress } from '@/features/onboarding/OnboardingProgress';
 import { OnboardingStarField } from '@/features/onboarding/OnboardingStarField';
 import { onboardingButtonShadow, pressedButtonStyle } from '@/features/onboarding/onboardingStyles';
 
-const PILLS = [
-  'I am overthinking a decision',
-  'I feel burned out',
-  'I am looking for direction',
-  'I feel far from my roots',
-  'My mind will not settle',
-  'I am under pressure',
-  'I want to deepen my practice',
-  'I want to reconnect with myself',
-  'I am seeking more presence',
+interface Ache {
+  id: string;
+  label: string;
+  ack: string;
+}
+
+const ACHES: Ache[] = [
+  { id: 'burnout', label: 'Burned out', ack: 'That takes more out of you than people know.' },
+  { id: 'direction', label: 'Seeking direction', ack: "Not knowing which way to face is its own kind of tired." },
+  { id: 'restless', label: "Mind won't settle", ack: "A mind that won't settle is asking for rhythm, not more effort." },
+  { id: 'reconnect', label: 'Want to reconnect with myself', ack: "You can't be far from something that lives in you." },
 ];
 
+const DEFAULT_ACK = 'Take your time. Nothing here is graded.';
+
 export default function Screen2() {
-  const [selected, setSelected]     = useState<string[]>([]);
-  const [toastVisible, setToast]    = useState(false);
-  const toastOpacity                = useRef(new RNAnimated.Value(0)).current;
+  const [selected, setSelected] = useState<string[]>([]);
+  const [lastAche, setLastAche] = useState<string | null>(null);
 
-  function toggle(item: string) {
+  function toggle(id: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const isFirst = selected.length === 0;
     setSelected((prev) =>
-      prev.includes(item) ? prev.filter((p) => p !== item) : [...prev, item]
+      prev.includes(id) ? prev.filter((value) => value !== id) : [...prev, id]
     );
-    if (isFirst && !selected.includes(item)) showToast();
-  }
-
-  function showToast() {
-    if (toastVisible) return;
-    setToast(true);
-    RNAnimated.sequence([
-      RNAnimated.timing(toastOpacity, { toValue: 1, duration: 300, useNativeDriver: true }),
-      RNAnimated.delay(2800),
-      RNAnimated.timing(toastOpacity, { toValue: 0, duration: 400, useNativeDriver: true }),
-    ]).start(() => setToast(false));
+    setLastAche(id);
   }
 
   function proceed() {
     if (selected.length === 0) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setOnboardingData({ painPoints: selected });
+    const labels = ACHES.filter((a) => selected.includes(a.id)).map((a) => a.label);
+    setOnboardingData({ painPoints: labels });
     router.push('/onboarding/step-3');
   }
+
+  const ackText = selected.length === 0
+    ? DEFAULT_ACK
+    : ACHES.find((a) => a.id === lastAche)?.ack ?? DEFAULT_ACK;
 
   return (
     <SafeAreaView className="flex-1 bg-ob-bg">
@@ -82,12 +77,12 @@ export default function Screen2() {
         </Animated.View>
 
         <View className="w-full max-w-[360px] gap-3">
-          {PILLS.map((pill, i) => {
-            const active = selected.includes(pill);
+          {ACHES.map((ache, i) => {
+            const active = selected.includes(ache.id);
             return (
-              <Animated.View key={pill} entering={FadeInDown.delay(i * 70 + 200).duration(380)}>
+              <Animated.View key={ache.id} entering={FadeInDown.delay(i * 70 + 200).duration(380)}>
                 <Pressable
-                  onPress={() => toggle(pill)}
+                  onPress={() => toggle(ache.id)}
                   className={`flex-row items-center justify-center gap-2.5 rounded-[14px] border px-[22px] py-4 mb-1 ${
                     active
                       ? 'border-ob-saffron-border bg-ob-saffron-dim'
@@ -100,13 +95,24 @@ export default function Screen2() {
                     </Animated.Text>
                   )}
                   <Text className={`text-center font-body-medium text-[15px] ${active ? 'text-ob-text' : 'text-ob-muted'}`}>
-                    {pill}
+                    {ache.label}
                   </Text>
                 </Pressable>
               </Animated.View>
             );
           })}
         </View>
+
+        <Animated.View
+          key={lastAche ?? 'default'}
+          entering={FadeIn.duration(400)}
+          className="w-full max-w-[360px] items-center gap-2 px-4"
+        >
+          <View className="h-px w-[30px] bg-ob-gold" />
+          <Text className="text-center font-headline text-[19px] leading-[26px] text-ob-text">
+            {ackText}
+          </Text>
+        </Animated.View>
 
         <View className="h-[80px]" />
       </ScrollView>
@@ -125,18 +131,6 @@ export default function Screen2() {
           <Text className="font-label text-base tracking-[0.3px] text-white">Continue →</Text>
         </Pressable>
       </Animated.View>
-
-      {/* Validation toast */}
-      {toastVisible && (
-        <RNAnimated.View
-          className="absolute bottom-[120px] mb-6 left-6 right-6 rounded-[14px] border border-ob-gold-border bg-[rgba(217,160,111,0.15)] p-4"
-          style={{ opacity: toastOpacity }}
-        >
-          <Text className="text-center font-body text-sm leading-5 text-ob-gold">
-            ✦ Noted. We’ll shape your guidance around what you’re carrying.
-          </Text>
-        </RNAnimated.View>
-      )}
     </SafeAreaView>
   );
 }
