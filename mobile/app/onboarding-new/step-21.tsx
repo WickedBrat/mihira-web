@@ -69,9 +69,11 @@ export default function OnboardingNewS21() {
           </View>
         </Animated.View>
 
-        <Animated.Text entering={FadeInDown.delay(350).duration(500)} className="text-center font-manrope text-[14px] leading-[21px] text-obn-muted">
-          This is page one. <Text className="font-manrope-bold text-obn-gold">{PAGE_NUMBERS.length + 1} pages</Text> are already reserved for the rhythm you just chose.
-        </Animated.Text>
+        <Animated.View entering={FadeInDown.delay(350).duration(500)}>
+          <Text className="text-center font-manrope text-[14px] leading-[21px] text-obn-muted">
+            This is page one. <Text className="font-manrope-bold text-obn-gold">{PAGE_NUMBERS.length + 1} pages</Text> are already reserved for the rhythm you just chose.
+          </Text>
+        </Animated.View>
 
         <View className="w-full max-w-[320px] flex-row flex-wrap justify-center gap-1.5">
           {PAGE_NUMBERS.map((p) => (

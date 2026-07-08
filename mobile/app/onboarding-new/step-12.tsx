@@ -119,13 +119,11 @@ export default function OnboardingNewS12() {
 
         <View className="min-h-[90px] max-w-[300px] items-center gap-3">
           <ScreenLabel>Mapping your rhythm</ScreenLabel>
-          <Animated.Text
-            key={crumbIndex}
-            entering={FadeIn.duration(500)}
-            className="text-center font-serif-medium-italic text-[21px] leading-[30px] text-obn-text-soft"
-          >
-            {MAPPING_CRUMBS[crumbIndex]}
-          </Animated.Text>
+          <Animated.View key={crumbIndex} entering={FadeIn.duration(500)}>
+            <Text className="text-center font-serif-medium-italic text-[21px] leading-[30px] text-obn-text-soft">
+              {MAPPING_CRUMBS[crumbIndex]}
+            </Text>
+          </Animated.View>
         </View>
       </View>
 

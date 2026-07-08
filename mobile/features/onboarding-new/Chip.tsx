@@ -24,9 +24,9 @@ export function Chip({ label, active, onPress, shape = 'pill', showCheck = true,
       } ${active ? 'border-obn-gold-border bg-obn-gold-dim' : 'border-obn-card-border bg-obn-card'}`}
     >
       {active && showCheck ? (
-        <Animated.Text entering={ZoomIn.duration(180)} className="text-[11px] text-obn-gold">
-          ✦
-        </Animated.Text>
+        <Animated.View entering={ZoomIn.duration(180)}>
+          <Text className="text-[11px] text-obn-gold">✦</Text>
+        </Animated.View>
       ) : null}
       <Text
         numberOfLines={2}

@@ -76,9 +76,11 @@ export default function OnboardingNewS22() {
       <View className="flex-1 items-center justify-center gap-8 px-8">
         <ScreenLabel>Save your rhythm</ScreenLabel>
 
-        <Animated.Text entering={FadeInDown.duration(500)} className="text-center font-serif-medium text-[30px] leading-[39px] text-obn-text">
-          {saveCallback}
-        </Animated.Text>
+        <Animated.View entering={FadeInDown.duration(500)}>
+          <Text className="text-center font-serif-medium text-[30px] leading-[39px] text-obn-text">
+            {saveCallback}
+          </Text>
+        </Animated.View>
 
         <View className="w-full max-w-[340px] gap-3">
           <Pressable

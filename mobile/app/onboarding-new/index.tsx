@@ -57,12 +57,11 @@ export default function OnboardingNewS1() {
           <Text className="font-serif-semibold text-[44px] text-obn-gold">म</Text>
         </View>
 
-        <Animated.Text
-          entering={FadeIn.delay(300).duration(700)}
-          className="font-manrope-bold text-[12px] uppercase tracking-[6px] text-obn-gold"
-        >
-          Mihira
-        </Animated.Text>
+        <Animated.View entering={FadeIn.delay(300).duration(700)}>
+          <Text className="font-manrope-bold text-[12px] uppercase tracking-[6px] text-obn-gold">
+            Mihira
+          </Text>
+        </Animated.View>
 
         <Animated.View entering={FadeIn.delay(600).duration(800)}>
           <Text className="text-center font-serif-medium text-[34px] leading-[42px] text-obn-text">

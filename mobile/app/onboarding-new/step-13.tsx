@@ -61,9 +61,11 @@ export default function OnboardingNewS13() {
           ))}
         </Animated.View>
 
-        <Animated.Text entering={FadeIn.delay(750).duration(600)} className="text-center font-serif-regular-italic text-[17px] leading-[24px] text-obn-gold">
-          This is the first page of your book.{'\n'}There will be more.
-        </Animated.Text>
+        <Animated.View entering={FadeIn.delay(750).duration(600)}>
+          <Text className="text-center font-serif-regular-italic text-[17px] leading-[24px] text-obn-gold">
+            This is the first page of your book.{'\n'}There will be more.
+          </Text>
+        </Animated.View>
       </View>
 
       <Animated.View entering={FadeInUp.delay(500).duration(500)} className="items-center px-8 pb-11">

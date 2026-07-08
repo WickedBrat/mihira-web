@@ -66,9 +66,11 @@ export default function OnboardingNewS16() {
           </Text>
         </Animated.View>
 
-        <Animated.Text entering={FadeInDown.delay(400).duration(500)} className="font-serif-regular-italic text-[18px] text-obn-gold">
-          Yours for today is already written, {name}.
-        </Animated.Text>
+        <Animated.View entering={FadeInDown.delay(400).duration(500)}>
+          <Text className="font-serif-regular-italic text-[18px] text-obn-gold">
+            Yours for today is already written, {name}.
+          </Text>
+        </Animated.View>
       </View>
 
       <Animated.View entering={FadeInUp.delay(500).duration(500)} className="items-center px-8 pb-11">
