@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdminClient } from '@/lib/supabase-admin';
 
 export const runtime = 'nodejs';
 
@@ -18,18 +18,6 @@ type WaitlistSignup = {
 
 function readString(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
-}
-
-function getSupabaseConfig() {
-  const url =
-    process.env.SUPABASE_URL ??
-    process.env.NEXT_PUBLIC_SUPABASE_URL ??
-    process.env.EXPO_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SECRET_KEY;
-
-  if (!url || !key) return null;
-
-  return { url, key };
 }
 
 async function forwardToWebhook(signup: WaitlistSignup) {
@@ -96,10 +84,10 @@ export async function POST(request: Request): Promise<Response> {
     updated_at: new Date().toISOString(),
   };
 
-  const supabaseConfig = getSupabaseConfig();
+  const client = getSupabaseAdminClient();
   const hasWebhook = Boolean(process.env.WAITLIST_WEBHOOK_URL);
 
-  if (!supabaseConfig && !hasWebhook) {
+  if (!client && !hasWebhook) {
     return Response.json(
       { error: 'The waitlist is not configured yet. Please email founders@getmihira.com.' },
       { status: 503 },
@@ -108,15 +96,7 @@ export async function POST(request: Request): Promise<Response> {
 
   let saved = false;
 
-  if (supabaseConfig) {
-    const client = createClient(supabaseConfig.url, supabaseConfig.key, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false,
-      },
-    });
-
+  if (client) {
     const { error } = await client
       .from('waitlist_signups')
       .upsert(signup, { onConflict: 'email' });

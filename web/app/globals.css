@@ -266,38 +266,9 @@ img {
   text-align: center;
 }
 
-h1,
-h2,
-h3 {
-  margin: 0;
-  font-family: var(--font-display), serif;
-  font-weight: 600;
-}
-
 .scroll-item-bullet {
   display: flex;
   align-items: center;
-}
-
-h1 {
-  max-width: 15ch;
-  margin: 0 auto;
-  font-size: clamp(2.95rem, 5.25vw, 4.8rem);
-  line-height: 0.94;
-  letter-spacing: 0;
-  text-wrap: balance;
-}
-
-h2 {
-  font-size: clamp(2.45rem, 4.8vw, 4rem);
-  line-height: 1.04;
-  letter-spacing: 0;
-  text-wrap: balance;
-}
-
-h3 {
-  font-size: 1.52rem;
-  line-height: 1.05;
 }
 
 .hero-copy {
@@ -1288,14 +1259,6 @@ h3 {
 
   .hero-section__inner {
     padding: 8vh 24px 10vh;
-  }
-
-  h1 {
-    font-size: clamp(2.7rem, 13vw, 4rem);
-  }
-
-  h2 {
-    font-size: clamp(2.25rem, 12vw, 3rem);
   }
 
   .hero-actions,
