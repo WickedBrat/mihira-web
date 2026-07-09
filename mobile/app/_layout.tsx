@@ -127,7 +127,7 @@ function GuardedNavigation() {
     }
 
     if (!onboardingState.completed && !isOnboardingRoute) {
-      const nextStep = onboardingState.step?.startsWith('/onboarding')
+      const nextStep = onboardingState.step?.startsWith('/onboarding-new')
         ? onboardingState.step
         : '/onboarding-new';
       router.replace(nextStep as Href);

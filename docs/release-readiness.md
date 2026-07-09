@@ -128,7 +128,7 @@ Recommended action:
 
 Current state:
 
-- `mobile/.env.example` now includes Clerk, Supabase, RevenueCat, PostHog, and Perplexity placeholders
+- `mobile/.env.example` now includes Clerk, Supabase, RevenueCat, PostHog, and Gemini placeholders
 - `docs/env-setup.md` now documents dev, preview, and production expectations
 - the release path has moved away from Stripe and toward RevenueCat
 - actual production secrets and callback URLs are still not visible in this repo, which is expected but still blocking launch
@@ -140,7 +140,7 @@ Why this matters:
 
 Recommended action:
 
-- provision production Clerk, Supabase, RevenueCat, PostHog, and Perplexity credentials
+- provision production Clerk, Supabase, RevenueCat, PostHog, and Gemini credentials
 - finalize production URLs and callbacks
 - verify that preview and production builds consume the right environment values
 
@@ -149,7 +149,7 @@ Recommended action:
 Current state:
 
 - the app includes Expo server API routes under `mobile/app/api/`
-- AI-backed flows depend on those routes to call Perplexity using the server-side `PERPLEXITY_API_KEY`
+- AI-backed flows depend on those routes to call Gemini using the server-side `GEMINI_API_KEY`
 - the repo also includes Supabase migrations under `supabase/migrations/`
 - the current mobile route resolution is still development-oriented in places and does not show a finalized production API host strategy
 
@@ -163,7 +163,7 @@ Recommended action:
 
 - choose the production home for the API routes
 - define a production API base URL strategy for mobile builds
-- deploy the server runtime and provision `PERPLEXITY_API_KEY`
+- deploy the server runtime and provision `GEMINI_API_KEY`
 - apply Supabase migrations in the target environment
 
 ## 7. Android Permissions Look Safer Now, but Should Still Be Kept Lean
@@ -333,7 +333,7 @@ If the team wants the fastest path to a real release, do these next:
 1. configure RevenueCat and store products end to end
 2. choose and deploy the production host for Expo API routes
 3. leave notifications out of the v1 promise unless they are implemented
-4. set production env values and callbacks for Clerk, Supabase, RevenueCat, PostHog, and Perplexity
+4. set production env values and callbacks for Clerk, Supabase, RevenueCat, PostHog, and Gemini
 5. publish legal URLs and prepare store submission assets
 6. run real-device QA on preview builds
 7. verify account deletion and data cleanup behavior
