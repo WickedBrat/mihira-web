@@ -41,6 +41,9 @@ export function SiteNav() {
           <Link className={navLinkClass} href="/#plans">
             Plans
           </Link>
+          <Link className={navLinkClass} href="/blog">
+            Blog
+          </Link>
         </div>
 
         <Link

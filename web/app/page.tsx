@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FAQList } from '@/components/faq-list';
 import { WaitlistInlineForm } from '@/components/waitlist-inline-form';
 import { MarkGlyph, MihiraText, SiteNav } from '@/components/site-nav';
@@ -34,6 +35,7 @@ const practiceCards = [
     body: 'Duty, grief, ambition, relationships. Get scripture-backed guidance with sources cited and one clear practice for today.',
     img: '/product-screenshots/scripture-guidance.png',
     alt: 'Mihira scripture guidance screen preview',
+    href: '/ask-mihira',
   },
   {
     kicker: 'Daily Alignment',
@@ -41,6 +43,7 @@ const practiceCards = [
     body: 'A personalized morning reading that helps you decide where to place your energy before the day decides for you.',
     img: '/product-screenshots/daily-alignment.png',
     alt: 'Mihira daily alignment screen preview',
+    href: '/daily-alignment',
   },
   {
     kicker: 'Sacred Timing',
@@ -48,6 +51,7 @@ const practiceCards = [
     body: 'Describe what you’re planning and scan a date range for the most supportive muhurat windows — with the reasoning shown.',
     img: '/product-screenshots/sacred-timing.png',
     alt: 'Mihira sacred timing screen preview',
+    href: '/muhurat-finder',
   },
 ];
 
@@ -397,6 +401,12 @@ export default async function HomePage() {
                     {card.title}
                   </h3>
                   <p className="text-sm leading-[1.65] text-[#F2EAD9]/65">{card.body}</p>
+                  <Link
+                    className="mt-1 font-sans text-[13px] font-semibold text-[#E8A33D] hover:text-[#F0B454]"
+                    href={card.href}
+                  >
+                    Learn more →
+                  </Link>
                 </div>
                 <div className="mt-auto px-[26px]">
                   <div className="overflow-hidden rounded-t-[22px] border border-b-0 border-[#E8A33D]/20 shadow-[0_-12px_40px_rgba(0,0,0,0.35)]">

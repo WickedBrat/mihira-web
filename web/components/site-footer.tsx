@@ -10,7 +10,13 @@ export function SiteFooter() {
       <span className="text-center text-[13px] text-[#F2EAD9]/45">
         Scripture-grounded guidance. Not professional, medical, or financial advice.
       </span>
-      <div className="flex gap-6 font-sans text-[13px]">
+      <div className="flex flex-wrap justify-center gap-6 font-sans text-[13px]">
+        <Link className="text-[#F2EAD9]/70 transition hover:text-[#E8A33D]" href="/blog">
+          Blog
+        </Link>
+        <Link className="text-[#F2EAD9]/70 transition hover:text-[#E8A33D]" href="/about">
+          About
+        </Link>
         <Link className="text-[#F2EAD9]/70 transition hover:text-[#E8A33D]" href="/privacy">
           Privacy
         </Link>
