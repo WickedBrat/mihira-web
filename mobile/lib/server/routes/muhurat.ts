@@ -1,6 +1,7 @@
 import { parseModelJson } from '../../ai/parseModelJson';
 import { geminiChat } from '../../ai/gemini';
 import { MUHURAT_SYSTEM, buildMuhuratPrompt } from '../../ai/prompts';
+import { serverErrorResponse } from '../errorResponse';
 import type { MuhuratWindow } from '../../vedic/types';
 
 export async function handleMuhuratWisdomRequest(request: Request): Promise<Response> {
@@ -67,8 +68,6 @@ export async function handleMuhuratWisdomRequest(request: Request): Promise<Resp
       warnings: parsed.warnings ?? 'None',
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    console.error('[muhurat]', message);
-    return Response.json({ error: message }, { status: 500 });
+    return serverErrorResponse('muhurat', err, 500);
   }
 }

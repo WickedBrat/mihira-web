@@ -31,7 +31,8 @@ export async function handleChatRequest(request: Request): Promise<Response> {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ token })}\n\n`));
         });
       } catch (err) {
-        const msg = err instanceof Error ? err.message : 'stream error';
+        console.error('[chat]', err);
+        const msg = 'Something went wrong. Please try again later.';
         controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: msg })}\n\n`));
       } finally {
         controller.enqueue(encoder.encode('data: [DONE]\n\n'));

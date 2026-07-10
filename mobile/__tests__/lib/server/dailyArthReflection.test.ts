@@ -91,7 +91,11 @@ describe('handleDailyArthReflectionRequest', () => {
     const payload = await response.json();
 
     expect(response.status).toBe(502);
-    expect(payload.error).toBe('Missing Supabase URL or secret key for Daily Arth reflection');
+    expect(payload.error).toBe('Something went wrong. Please try again later.');
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      '[daily-arth-reflection]',
+      expect.objectContaining({ message: 'Missing Supabase URL or secret key for Daily Arth reflection' }),
+    );
     expect(mockCreateClient).not.toHaveBeenCalled();
     expect(mockGeminiChat).not.toHaveBeenCalled();
   });

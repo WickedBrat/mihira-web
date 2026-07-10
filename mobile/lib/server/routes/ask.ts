@@ -1,4 +1,5 @@
 import { generateScriptureGuide } from '../../ai/askService';
+import { serverErrorResponse } from '../errorResponse';
 import type { AskHistoryTurn, AskResponseMode, AskContextV2 } from '../../../features/ask/types';
 
 function isMode(value: unknown): value is AskResponseMode {
@@ -35,8 +36,6 @@ export async function handleAskRequest(request: Request): Promise<Response> {
 
     return Response.json(response);
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Ask route error';
-    console.error('[ask]', message);
-    return Response.json({ error: message }, { status: 502 });
+    return serverErrorResponse('ask', err);
   }
 }

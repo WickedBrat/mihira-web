@@ -181,7 +181,6 @@ export function useAskState() {
       await saveAskHistory(nextHistory);
     } catch (err) {
       console.error('[ask] sendMessage error:', err);
-      const message = err instanceof Error ? err.message : 'Connection error';
       const errorMessage: AskChatItem = {
         id: `ask-ai-error-${Date.now()}`,
         kind: 'assistant_response',
@@ -194,7 +193,7 @@ export function useAskState() {
           answer: {
             title: 'Something Went Wrong',
             summary: 'Mihira could not complete this request.',
-            practical_guidance: `Please try again in a moment. Details: ${message}`,
+            practical_guidance: 'Something went wrong. Please try again later.',
           },
           sources: [],
           interpretation: {

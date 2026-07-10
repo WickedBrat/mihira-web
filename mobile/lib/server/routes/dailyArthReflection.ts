@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { parseModelJson } from '../../ai/parseModelJson';
 import { geminiChat } from '../../ai/gemini';
+import { serverErrorResponse } from '../errorResponse';
 import type { DailyArthReflection } from '../../dailyArthReflectionTypes';
 import { isDailyArthReflection } from '../../dailyArthReflectionTypes';
 
@@ -131,8 +132,6 @@ export async function handleDailyArthReflectionRequest(request: Request): Promis
       source: 'llm_and_database',
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Daily Arth reflection error';
-    console.error('[daily-arth-reflection]', message);
-    return Response.json({ error: message }, { status: 502 });
+    return serverErrorResponse('daily-arth-reflection', err);
   }
 }

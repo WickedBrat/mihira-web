@@ -3,6 +3,7 @@ import { buildBirthChart } from '../../vedic/chart';
 import { parseModelJson } from '../../ai/parseModelJson';
 import { geminiChat } from '../../ai/gemini';
 import { DAILY_SYSTEM, buildDailyPrompt } from '../../ai/prompts';
+import { serverErrorResponse } from '../errorResponse';
 import type { DailyFocusArea } from '../../dailyAlignmentTypes';
 import type { SignName } from '../../vedic/types';
 
@@ -39,8 +40,6 @@ export async function handleDailyWisdomRequest(request: Request): Promise<Respon
       focusAreas: Array.isArray(parsed.focusAreas) ? parsed.focusAreas : [],
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    console.error('[daily]', message);
-    return Response.json({ error: message }, { status: 500 });
+    return serverErrorResponse('daily', err, 500);
   }
 }
