@@ -18,10 +18,14 @@ export function WaitlistInlineForm({
   source,
   successMessage = "You're on the list. Invites go out in small, careful batches.",
   align = 'left',
+  platform = 'android',
+  buttonLabel = 'Join the Android waitlist',
 }: {
   source: string;
   successMessage?: string;
   align?: 'left' | 'center';
+  platform?: string;
+  buttonLabel?: string;
 }) {
   const emailId = useId();
   const [email, setEmail] = useState('');
@@ -42,7 +46,7 @@ export function WaitlistInlineForm({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, platform: 'both', source, website }),
+        body: JSON.stringify({ email, platform, source, website }),
       });
 
       const payload = await response.json().catch(() => null);
@@ -109,7 +113,7 @@ export function WaitlistInlineForm({
           disabled={isSubmitting}
           type="submit"
         >
-          {isSubmitting ? 'Joining…' : 'Join the waitlist'}
+          {isSubmitting ? 'Joining…' : buttonLabel}
         </button>
       </div>
       {submitState === 'error' && errorMessage ? (

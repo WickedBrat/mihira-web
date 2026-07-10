@@ -38,7 +38,7 @@ const googleSans = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://getmihira.com'),
+  metadataBase: new URL('https://www.getmihira.com'),
   title: {
     default: 'Mihira',
     template: '%s | Mihira',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Mihira',
     description: 'Scripture-grounded guidance and sacred timing for the decisions that matter most.',
-    url: 'https://getmihira.com',
+    url: 'https://www.getmihira.com',
     siteName: 'Mihira',
     type: 'website',
   },

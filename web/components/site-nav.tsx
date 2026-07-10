@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Charmonman } from 'next/font/google';
 import mihiraLogo from '@/app/logo.svg';
@@ -9,13 +10,14 @@ const charmonman = Charmonman({
 });
 
 const navLinkClass = 'text-[#F2EAD9]/70 transition hover:text-[#E8A33D]';
+const navAppStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
 
 export function MihiraText() {
   return <span className={charmonman.className}>Mihira</span>;
 }
 
 export function MarkGlyph({ size = 26 }: { size?: number }) {
-  return <img src={mihiraLogo.src} width={size} height={size} alt="" aria-hidden="true" />;
+  return <Image src={mihiraLogo} width={size} height={size} alt="" aria-hidden="true" unoptimized />;
 }
 
 export function SiteNav() {
@@ -43,10 +45,12 @@ export function SiteNav() {
 
         <Link
           className="rounded-full bg-[#E8A33D] px-5 py-2.5 font-sans text-sm font-bold text-[#1A130A] transition hover:-translate-y-px hover:bg-[#F0B454] md:px-6"
-          href="/#waitlist"
+          href={navAppStoreUrl || '/#waitlist'}
         >
-          <span className="md:hidden">Join</span>
-          <span className="hidden md:inline">Join the waitlist</span>
+          <span className="md:hidden">{navAppStoreUrl ? 'Get the app' : 'Join'}</span>
+          <span className="hidden md:inline">
+            {navAppStoreUrl ? 'Get the app — App Store' : 'Join the waitlist'}
+          </span>
         </Link>
       </nav>
     </div>

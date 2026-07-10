@@ -1,0 +1,35 @@
+# Mihira
+
+> Mihira is a scripture-grounded Vedic guidance and sacred-timing app for iPhone (Android in progress). It brings the Upanishads, Puranas, the epics, Vedic teaching, and the saints' commentary to real decisions — duty, relationships, ambition, and grief — with citations, not generic horoscope content.
+
+Mihira is not an astrology entertainment app and does not provide medical, financial, or professional advice. It is designed to sharpen a user's own judgment, not replace it.
+
+## Core features
+
+- **Ask Mihira** — scripture-grounded guidance for life questions, with sources cited and one clear practice suggested per answer.
+- **Daily Alignment** — a short personalized daily reading to help decide where to place attention before the day does.
+- **Sacred Timing (Muhurat Finder)** — scans a date range for supportive timing windows for a stated plan, with the reasoning shown.
+- **Gurukul** — guided learning and practice content drawn from Vedic teaching.
+
+## Audience
+
+Built especially for people living far from the temples, elders, and family who traditionally provide this kind of guidance — including the global Indian diaspora navigating career, relationships, and grief without that support nearby.
+
+## Privacy
+
+Mihira does not sell personal data. Birth details, spiritual preferences, and user-submitted questions are treated as sensitive product data used only to operate and improve the product.
+
+## Pages
+
+- Homepage: https://www.getmihira.com/
+- Blog: https://www.getmihira.com/blog
+- Muhurat Finder: https://www.getmihira.com/muhurat-finder
+- Daily Alignment: https://www.getmihira.com/daily-alignment
+- Ask Mihira: https://www.getmihira.com/ask-mihira
+- About: https://www.getmihira.com/about
+- Privacy Policy: https://www.getmihira.com/privacy
+- Terms: https://www.getmihira.com/terms
+
+## Contact
+
+founders@getmihira.com

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { FAQList } from '@/components/faq-list';
 import { WaitlistInlineForm } from '@/components/waitlist-inline-form';
 import { MarkGlyph, MihiraText, SiteNav } from '@/components/site-nav';
@@ -12,7 +13,7 @@ const hasAppStoreUrl = Boolean(configuredAppStoreUrl);
 const hasGooglePlayUrl = Boolean(configuredGooglePlayUrl);
 const appStoreUrl = configuredAppStoreUrl || waitlistHref;
 const googlePlayUrl = configuredGooglePlayUrl || waitlistHref;
-const siteUrl = 'https://getmihira.com';
+const siteUrl = 'https://www.getmihira.com';
 const pageTitle = 'Mihira — Scripture-Grounded Vedic Guidance and Sacred Timing App';
 const pageDescription =
   'Mihira brings the full breadth of Vedic wisdom to the real decisions of life: duty, relationships, ambition, and grief. Scripture-grounded answers, auspicious timing, and a daily practice — private, practical, and free to start.';
@@ -121,9 +122,9 @@ const faqs = [
       'Yes. Mihira is designed for real decisions and emotionally charged moments, but it is meant to sharpen your judgment rather than act as a substitute for it.',
   },
   {
-    question: 'What happens after I join the waitlist?',
+    question: 'Is Mihira available yet?',
     answer:
-      'We invite people in small batches as the iPhone and Android builds open. You will get an email when your invite is ready.',
+      'Yes — Mihira is live now on the App Store for iPhone. The Android app is coming soon; join the waitlist and we will email you when your invite is ready.',
   },
 ];
 
@@ -224,7 +225,9 @@ function structuredData() {
       '@type': 'SoftwareApplication',
       name: 'Mihira',
       applicationCategory: 'LifestyleApplication',
-      operatingSystem: 'iOS, Android',
+      operatingSystem: [hasAppStoreUrl ? 'iOS' : null, hasGooglePlayUrl ? 'Android' : null]
+        .filter(Boolean)
+        .join(', ') || 'iOS, Android',
       url: siteUrl,
       description: structuredDataDescription,
       offers: {
@@ -318,6 +321,17 @@ export default async function HomePage() {
             </div>
 
             <div className="flex flex-col gap-3.5">
+              <div className="flex flex-wrap items-center gap-3.5">
+                <a
+                  className="flex items-center gap-2 rounded-full bg-[#E8A33D] px-7 py-[15px] font-sans text-[15px] font-bold text-[#1A130A] transition hover:bg-[#F0B454]"
+                  href={hasAppStoreUrl ? appStoreUrl : waitlistHref}
+                >
+                  {hasAppStoreUrl ? 'Download on the App Store' : 'App Store — coming soon'}
+                </a>
+                <span className="font-sans text-[13px] text-[#F2EAD9]/55">
+                  Android coming soon — join the waitlist below
+                </span>
+              </div>
               <WaitlistInlineForm source="landing_page_hero" />
               <div className="flex flex-wrap items-center gap-4 font-sans text-[13px] text-[#F2EAD9]/55">
                 <span className="flex items-center gap-1.5">
@@ -330,7 +344,7 @@ export default async function HomePage() {
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#E8A33D]" />
-                  Coming to iPhone &amp; Android
+                  Live on iPhone
                 </span>
               </div>
             </div>
@@ -342,10 +356,14 @@ export default async function HomePage() {
               aria-hidden="true"
             />
             <div className="relative w-[300px] rotate-[1.5deg] overflow-hidden rounded-[44px] border border-[#E8A33D]/30 shadow-[0_40px_90px_rgba(0,0,0,0.6),0_0_0_8px_rgba(20,15,9,0.9)]">
-              <img
-                alt="Mihira Daily Alignment screen"
+              <Image
+                alt="Mihira Daily Alignment screen showing a personalized morning reading"
                 className="block h-auto w-full"
                 src="/product-screenshots/daily-alignment.png"
+                width={1179}
+                height={2556}
+                sizes="300px"
+                priority
               />
             </div>
           </div>
@@ -382,7 +400,15 @@ export default async function HomePage() {
                 </div>
                 <div className="mt-auto px-[26px]">
                   <div className="overflow-hidden rounded-t-[22px] border border-b-0 border-[#E8A33D]/20 shadow-[0_-12px_40px_rgba(0,0,0,0.35)]">
-                    <img alt={card.alt} src={card.img} className="-mb-[38%] block w-full" />
+                    <Image
+                      alt={card.alt}
+                      src={card.img}
+                      className="-mb-[38%] block w-full"
+                      width={1179}
+                      height={2556}
+                      sizes="(min-width: 1024px) 33vw, 90vw"
+                      loading="lazy"
+                    />
                   </div>
                 </div>
               </div>
@@ -529,10 +555,10 @@ export default async function HomePage() {
             <MarkGlyph size={26} />
           </span>
           <h2 className={`${headingClass} text-[clamp(2.4rem,5vw,3.25rem)]`}>
-            Join <MihiraText /> before the public release.
+            <MihiraText /> is live on iPhone. Android is next.
           </h2>
           <p className="max-w-[460px] text-base leading-[1.7] text-[#F2EAD9]/65">
-            Early access opens in small batches for iPhone and Android. {finalCtaWaitlistCopy}
+            Download Mihira on the App Store today. Android access opens in small batches — {finalCtaWaitlistCopy}
           </p>
 
           <WaitlistInlineForm source="landing_page_footer" align="center" />
