@@ -203,14 +203,18 @@ export function getVow(id: Vow['id']): Vow {
 // (lib/onboardingStatus.ts) already writes to, just with onboarding-new's own data shape.
 
 function serializeOnboardingNewData(data: OnboardingNewData) {
+  const vow = getVow(data.vow);
   return {
     flow: 'onboarding-new',
     aches: data.aches,
     contexts: data.contexts,
     firstQuestion: data.firstQuestion,
     vow: data.vow,
+    vowName: vow.name,
+    vowDays: vow.min,
     alignMode: data.alignMode,
     alignMinutes: data.alignMinutes,
+    alignmentTimeLabel: formatMinutesAsClock(data.alignMinutes),
     chart: data.chart,
   };
 }
