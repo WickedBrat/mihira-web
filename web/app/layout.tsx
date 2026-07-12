@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond } from 'next/font/google';
 import localFont from 'next/font/local';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
+
+const GA_MEASUREMENT_ID = 'G-BDDT7G1Z9C';
 
 const display = Cormorant_Garamond({
   subsets: ['latin'],
@@ -48,12 +51,12 @@ export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
   icons: {
     icon: [
-      {
-        url: '/icon.jpg',
-        type: 'image/jpeg',
-      },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: ['/icon.jpg'],
+    shortcut: ['/favicon.ico'],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   openGraph: {
     title: 'Mihira',
@@ -80,6 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <Analytics />
+        <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
       </body>
     </html>
   );
