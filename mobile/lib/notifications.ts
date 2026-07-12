@@ -34,7 +34,9 @@ async function ensureAndroidNotificationChannel() {
   });
 }
 
-async function requestNotificationPermission() {
+export async function requestNotificationPermissionAsync(): Promise<boolean> {
+  if (Platform.OS === 'web') return false;
+
   const currentPermission = await Notifications.getPermissionsAsync();
   if (currentPermission.granted) return true;
 
@@ -52,7 +54,7 @@ export async function scheduleDailyDayPreviewNotificationAsync(
 
   await ensureAndroidNotificationChannel();
 
-  const hasPermission = await requestNotificationPermission();
+  const hasPermission = await requestNotificationPermissionAsync();
   if (!hasPermission) {
     return { status: 'skipped', reason: 'permission-denied' };
   }

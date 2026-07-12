@@ -36,6 +36,7 @@ import { AuthProvider, useAuth, useUser } from '@/lib/auth';
 import { ThemeProvider, useTheme } from '@/lib/theme-context';
 import { getThemeColorVariables } from '@/lib/theme';
 import { getOnboardingState, setOnboardingStep } from '@/lib/onboardingStatus';
+import { getSavedAlignmentPreference } from '@/lib/onboardingNewStore';
 import {
   getNotificationResponseRoute,
   scheduleDailyDayPreviewNotificationAsync,
@@ -156,7 +157,14 @@ function NotificationBootstrapper() {
       });
       if (!isActive || !onboardingState.completed) return;
 
-      await scheduleDailyDayPreviewNotificationAsync();
+      const preference = isSignedIn && userId ? await getSavedAlignmentPreference(userId) : null;
+      if (preference?.alignMode === 'suggested') {
+        const hour = Math.floor(preference.alignMinutes / 60);
+        const minute = preference.alignMinutes % 60;
+        await scheduleDailyDayPreviewNotificationAsync(hour, minute);
+      } else {
+        await scheduleDailyDayPreviewNotificationAsync();
+      }
       if (isActive) scheduledForRef.current = scheduleKey;
     }
 

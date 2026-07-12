@@ -7,12 +7,14 @@ import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
-import { buildTimingHeadline, getOnboardingNewData } from '@/lib/onboardingNewStore';
+import { buildTimingActionLine, buildTimingHeadline, getOnboardingNewData } from '@/lib/onboardingNewStore';
 
 const TAGS = ['Events', 'Travel', 'Ceremonies', 'Big decisions'];
 
 export default function OnboardingNewS14() {
-  const timingHeadline = buildTimingHeadline(getOnboardingNewData().contexts);
+  const stored = getOnboardingNewData();
+  const timingHeadline = buildTimingHeadline(stored);
+  const timingActionLine = buildTimingActionLine(stored);
 
   function proceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -26,7 +28,7 @@ export default function OnboardingNewS14() {
           <ScreenLabel>Sacred timing</ScreenLabel>
           <Text className="text-center font-serif-medium text-[30px] leading-[37px] text-obn-text">{timingHeadline}</Text>
           <Text className="text-center font-manrope text-[14px] leading-[21px] text-obn-muted">
-            Here's Sacred Timing — the window for your next move.
+            Here's the window for your next move.
           </Text>
         </Animated.View>
 
@@ -36,7 +38,7 @@ export default function OnboardingNewS14() {
           <Text className="font-manrope text-[13px] text-obn-muted">until 12:15 PM · Mercury steadies speech</Text>
           <View className="my-1 h-px w-9 bg-obn-gold-border" />
           <Text className="text-center font-manrope text-[14px] leading-[21px] text-obn-text-soft">
-            Favorable for the conversation you've been postponing — or the decision you keep deferring.
+            {timingActionLine}
           </Text>
         </Animated.View>
 

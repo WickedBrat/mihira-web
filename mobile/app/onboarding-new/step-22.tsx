@@ -64,12 +64,7 @@ export default function OnboardingNewS22() {
 
   const isBusy = isLoading || pendingCompletion || isCompleting;
 
-  const saveCallback = `You came in carrying ${ache.noun}, ${name}. You just wrote page one and made a vow to ${vow.name.replace('The ', 'the ')}. Don't let that reset.`;
-
-  function skip() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.replace('/(tabs)');
-  }
+  const saveCallback = `You came in carrying ${ache.noun}, ${name}. You just began chapter one and made a vow to ${vow.name.replace('The ', 'the ')}. Start saving these results.`;
 
   return (
     <OnboardingNewScreen>
@@ -108,17 +103,6 @@ export default function OnboardingNewS22() {
               {loadingProvider === 'google' ? 'Connecting…' : isCompleting ? 'Saving…' : 'Continue with Google'}
             </Text>
           </Pressable>
-        </View>
-
-        <View className="items-center gap-1.5">
-          <Pressable onPress={skip} disabled={isBusy}>
-            <Text className="text-center font-manrope text-[13px] text-obn-muted underline">
-              Don't save — start fresh each time
-            </Text>
-          </Pressable>
-          <Text className="text-center font-manrope text-[12px] text-obn-muted-dim">
-            Your page and vow won't be kept on this device.
-          </Text>
         </View>
       </View>
 

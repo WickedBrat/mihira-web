@@ -1,4 +1,4 @@
-// S16: Daily Alignment, Named
+// S16: Daily Quote, Named
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { Text } from '@/components/ui/Text';
@@ -57,12 +57,12 @@ export default function OnboardingNewS16() {
         </Animated.View>
 
         <Animated.View entering={FadeInDown.delay(200).duration(500)} className="max-w-[300px] items-center gap-3.5">
-          <ScreenLabel>Daily alignment</ScreenLabel>
+          <ScreenLabel>Daily quote</ScreenLabel>
           <Text className="text-center font-serif-medium text-[36px] leading-[43px] text-obn-text">
-            One card, every morning.
+            One verse, every morning.
           </Text>
           <Text className="text-center font-manrope text-[14px] leading-[22px] text-obn-muted">
-            Daily Alignment is the ritual itself — a grounded reading and one verse, timed to your window. Not a feed. One card.
+            A single line of scripture, timed to your window — tap Reflect to see what it means and how to carry it into today. Not a feed. One verse.
           </Text>
         </Animated.View>
 
@@ -74,7 +74,7 @@ export default function OnboardingNewS16() {
       </View>
 
       <Animated.View entering={FadeInUp.delay(500).duration(500)} className="items-center px-8 pb-11">
-        <PrimaryButton label="See today →" onPress={proceed} />
+        <PrimaryButton label="See today's verse →" onPress={proceed} />
       </Animated.View>
     </OnboardingNewScreen>
   );

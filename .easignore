@@ -1,0 +1,11 @@
+.git/
+.claude/
+node_modules/
+android/
+ios/
+.expo/
+coverage/
+builds/
+.next/
+.DS_Store
+*.log

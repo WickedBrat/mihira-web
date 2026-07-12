@@ -15,6 +15,7 @@ import * as Haptics from 'expo-haptics';
 import { analytics } from '@/lib/analytics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton } from '@/features/onboarding-new/PrimaryButton';
+import MihiraLogo from '@/assets/logo.svg';
 
 export default function OnboardingNewS1() {
   const glow = useSharedValue(0.18);
@@ -54,12 +55,18 @@ export default function OnboardingNewS1() {
               },
             ]}
           />
-          <Text className="font-serif-semibold text-[44px] text-obn-gold">म</Text>
+          <MihiraLogo width={52} height={52} accessibilityLabel="Mihira logo" />
         </View>
 
         <Animated.View entering={FadeIn.delay(300).duration(700)}>
           <Text className="font-manrope-bold text-[12px] uppercase tracking-[6px] text-obn-gold">
             Mihira
+          </Text>
+        </Animated.View>
+
+        <Animated.View entering={FadeIn.delay(450).duration(700)}>
+          <Text className="text-center font-serif-medium-italic text-[18px] leading-[26px] text-obn-gold">
+            The universe is in motion, are you in sync?
           </Text>
         </Animated.View>
 

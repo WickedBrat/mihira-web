@@ -160,24 +160,61 @@ export function resetOnboardingNewData(): void {
 
 // ─── Shared derived-copy helpers (ported 1:1 from the HTML mock's DCLogic) ────
 
+function joinWithAnd(items: string[]): string {
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
 export function buildContextLine(selectedContextIds: string[]): string {
   const selectedLabels = CONTEXTS.filter((c) => selectedContextIds.includes(c.id)).map((c) => c.label);
   if (selectedLabels.length === 0) {
-    return "Choose where it shows up. There's a right window for what you're carrying — Mihira can find it.";
+    return "Choose where it's showing up. Once we know, Mihira can tell you exactly when the day is on your side — not a generic slot.";
   }
   const words = selectedLabels.filter((label) => label !== 'Not sure').map((label) => label.toLowerCase());
   if (words.length === 0) {
-    return "There's a right window for what you're carrying. We'll need your birth rhythm to find it.";
+    return "Even without a name for it yet, there's still a right window for what you're carrying. We'll need your birth rhythm to find it.";
   }
-  const phrase = words.length > 1 ? `${words[0]} and ${words[1]}` : words[0];
-  return `There's a right window for what you're carrying in ${phrase}. We'll need your birth rhythm to find it.`;
+  const phrase = joinWithAnd(words);
+  const isPlural = words.length > 1;
+  const verbPhrase = isPlural ? 'each have their own timing' : 'has its own timing';
+  const easesPhrase = isPlural ? 'they ease' : 'it eases';
+  return `You're not imagining it — ${phrase} ${verbPhrase}. We'll need your birth rhythm to find the moment ${easesPhrase}.`;
 }
 
-export function buildTimingHeadline(selectedContextIds: string[]): string {
-  const selectedLabels = CONTEXTS.filter((c) => selectedContextIds.includes(c.id)).map((c) => c.label);
-  const words = selectedLabels.filter((label) => label !== 'Not sure').map((label) => label.toLowerCase());
-  const ctxWord = words[0] || 'your days';
-  return `You told Mihira it lives in ${ctxWord}.`;
+const CONTEXT_ACTION_NOUN: Record<Context['id'], string> = {
+  work: 'decision',
+  family: 'conversation',
+  relationship: 'conversation',
+  spiritual: 'practice',
+  identity: 'reflection',
+  money: 'decision',
+  health: 'check-in',
+  notsure: 'move',
+};
+
+function stripLeadingArticle(noun: string): string {
+  return noun.replace(/^(a|an)\s+/i, '');
+}
+
+function getFirstNamedContext(data: OnboardingNewData): Context | null {
+  return CONTEXTS.find((c) => data.contexts.includes(c.id) && c.id !== 'notsure') ?? null;
+}
+
+export function buildTimingHeadline(data: OnboardingNewData): string {
+  const ache = getFirstSelectedAche(data);
+  const context = getFirstNamedContext(data);
+  const contextWord = context?.label.toLowerCase() ?? 'your days';
+  return `For your ${stripLeadingArticle(ache.noun)}, living in ${contextWord} — here's Sacred Timing.`;
+}
+
+export function buildTimingActionLine(data: OnboardingNewData): string {
+  const context = getFirstNamedContext(data);
+  if (!context) {
+    return "Favorable for the conversation you've been postponing — or the decision you keep deferring.";
+  }
+  const actionNoun = CONTEXT_ACTION_NOUN[context.id];
+  return `Favorable for the ${actionNoun} you've been putting off — the one about ${context.label.toLowerCase()}.`;
 }
 
 export function formatMinutesAsClock(mins: number): string {
@@ -235,4 +272,22 @@ export async function saveOnboardingNewCompletion(userId: string, data: Onboardi
     );
 
   if (error) throw error;
+}
+
+export type SavedAlignmentPreference = { alignMode: 'suggested' | 'fresh'; alignMinutes: number };
+
+export async function getSavedAlignmentPreference(userId: string): Promise<SavedAlignmentPreference | null> {
+  const client = getSupabaseClient();
+  const { data, error } = await client
+    .from(USER_DETAILS_TABLE)
+    .select('onboarding_data')
+    .eq(USER_DETAILS_USER_ID_COLUMN, userId)
+    .maybeSingle();
+
+  if (error || !data?.onboarding_data) return null;
+
+  const { alignMode, alignMinutes } = data.onboarding_data as { alignMode?: unknown; alignMinutes?: unknown };
+  if ((alignMode !== 'suggested' && alignMode !== 'fresh') || typeof alignMinutes !== 'number') return null;
+
+  return { alignMode, alignMinutes };
 }

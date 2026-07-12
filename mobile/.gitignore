@@ -5,3 +5,11 @@
 builds/
 expo-env.d.ts
 # @end expo-cli
+
+node_modules/
+android/
+ios/
+.expo/
+coverage/
+.DS_Store
+*.log

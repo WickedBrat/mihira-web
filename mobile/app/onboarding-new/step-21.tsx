@@ -9,7 +9,7 @@ import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { getFallbackChart, getFirstSelectedAche, getOnboardingNewData, getVow } from '@/lib/onboardingNewStore';
 
-const PAGE_NUMBERS = Array.from({ length: 19 }, (_, i) => i + 3);
+const RESERVED_CHAPTER_SLOTS = Array.from({ length: 19 });
 
 export default function OnboardingNewS21() {
   const stored = getOnboardingNewData();
@@ -29,14 +29,14 @@ export default function OnboardingNewS21() {
         <Animated.View entering={FadeInDown.duration(500)} className="items-center gap-2">
           <ScreenLabel>The Book of You</ScreenLabel>
           <Text className="text-center font-serif-medium text-[30px] leading-[37px] text-obn-text">
-            Page one is already written.
+            Chapter one is already written.
           </Text>
         </Animated.View>
 
         <Animated.View entering={FadeInDown.delay(200).duration(500)} style={{ width: '100%', maxWidth: 340 }}>
           <View className="flex-row gap-0.5">
           <View className="flex-1 gap-3.5 rounded-l-2xl rounded-r border border-obn-gold-border-soft bg-obn-gold-dim px-4 py-5">
-            <Text className="font-manrope-bold text-[9px] uppercase tracking-[2px] text-obn-gold">Page one</Text>
+            <Text className="font-manrope-bold text-[9px] uppercase tracking-[2px] text-obn-gold">Chapter one</Text>
             <View className="gap-2.5">
               <View>
                 <Text className="font-manrope-bold text-[10px] tracking-[1.5px] text-obn-muted-dim">NAME</Text>
@@ -58,7 +58,7 @@ export default function OnboardingNewS21() {
           </View>
 
           <View className="flex-1 gap-3.5 rounded-r-2xl rounded-l border border-obn-card-border bg-obn-card px-4 py-5">
-            <Text className="font-manrope-bold text-[9px] uppercase tracking-[2px] text-obn-muted-dim">Page two — reserved</Text>
+            <Text className="font-manrope-bold text-[9px] uppercase tracking-[2px] text-obn-muted-dim">Chapter two — reserved</Text>
             <View className="gap-3">
               {Array.from({ length: 7 }).map((_, i) => (
                 <View key={i} className="h-px bg-white/10" />
@@ -71,15 +71,13 @@ export default function OnboardingNewS21() {
 
         <Animated.View entering={FadeInDown.delay(350).duration(500)}>
           <Text className="text-center font-manrope text-[14px] leading-[21px] text-obn-muted">
-            This is page one. <Text className="font-manrope-bold text-obn-gold">{PAGE_NUMBERS.length + 1} pages</Text> are already reserved for the rhythm you just chose.
+            This is chapter one. <Text className="font-manrope-bold text-obn-gold">Many more chapters</Text> are already reserved for the rhythm you just chose.
           </Text>
         </Animated.View>
 
         <View className="w-full max-w-[320px] flex-row flex-wrap justify-center gap-1.5">
-          {PAGE_NUMBERS.map((p) => (
-            <View key={p} className="h-8 w-[26px] items-center justify-center rounded border border-obn-card-border">
-              <Text className="font-manrope text-[10px] text-obn-muted-dim">{p}</Text>
-            </View>
+          {RESERVED_CHAPTER_SLOTS.map((_, i) => (
+            <View key={i} className="h-8 w-[26px] items-center justify-center rounded border border-obn-card-border" />
           ))}
         </View>
       </View>

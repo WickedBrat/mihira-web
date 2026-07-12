@@ -3,6 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { router } from 'expo-router';
+import { Clock, Moon, ShieldCheck } from 'lucide-react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
@@ -10,9 +11,9 @@ import { PrimaryButton, ScreenLabel, SecondaryLink } from '@/features/onboarding
 import { NeutralCard } from '@/features/onboarding-new/GoldCard';
 
 const BENEFITS = [
-  { title: 'Timing windows', body: 'Know when the day favors the thing you’re planning.' },
-  { title: 'Daily rhythm', body: 'Guidance tuned to your chart, not a generic calendar.' },
-  { title: 'Private by design', body: 'Encrypted, used only for your chart, never shared.' },
+  { title: 'Timing windows', body: 'Know when the day favors the thing you’re planning.', Icon: Clock },
+  { title: 'Daily rhythm', body: 'Guidance tuned to your chart, not a generic calendar.', Icon: Moon },
+  { title: 'Private by design', body: 'Encrypted, used only for your chart, never shared.', Icon: ShieldCheck },
 ];
 
 export default function OnboardingNewS8() {
@@ -43,8 +44,15 @@ export default function OnboardingNewS8() {
           {BENEFITS.map((b, i) => (
             <Animated.View key={b.title} entering={FadeInDown.delay(i * 90 + 200).duration(400)}>
               <NeutralCard>
-                <Text className="font-manrope-bold text-[14px] text-obn-text">{b.title}</Text>
-                <Text className="font-manrope text-[13px] leading-[20px] text-obn-muted">{b.body}</Text>
+                <View className="flex-row items-start gap-3">
+                  <View className="h-9 w-9 items-center justify-center rounded-full border border-obn-gold-border">
+                    <b.Icon size={16} color="#E8A33D" strokeWidth={1.8} />
+                  </View>
+                  <View className="flex-1 gap-1">
+                    <Text className="font-manrope-bold text-[14px] text-obn-text">{b.title}</Text>
+                    <Text className="font-manrope text-[13px] leading-[20px] text-obn-muted">{b.body}</Text>
+                  </View>
+                </View>
               </NeutralCard>
             </Animated.View>
           ))}

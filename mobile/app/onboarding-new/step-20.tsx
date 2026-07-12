@@ -8,7 +8,7 @@ import * as Haptics from 'expo-haptics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { formatMinutesAsClock, getOnboardingNewData, setOnboardingNewData } from '@/lib/onboardingNewStore';
-import { scheduleDailyDayPreviewNotificationAsync } from '@/lib/notifications';
+import { requestNotificationPermissionAsync, scheduleDailyDayPreviewNotificationAsync } from '@/lib/notifications';
 
 export default function OnboardingNewS20() {
   const stored = getOnboardingNewData();
@@ -19,7 +19,7 @@ export default function OnboardingNewS20() {
   const notifLine =
     (alignMode === 'fresh' ? "Today's window opens at " : 'Your window opens at ') +
     formatMinutesAsClock(alignMinutes) +
-    ' — Mercury favors the conversation you\'ve been postponing.';
+    ' — time to see today\'s 3 focus moves, each one tap from a reminder.';
 
   function adjust(delta: number) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -27,9 +27,13 @@ export default function OnboardingNewS20() {
     setAlignMode('suggested');
   }
 
-  function proceed() {
+  async function proceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOnboardingNewData({ alignMinutes, alignMode });
+
+    await requestNotificationPermissionAsync().catch((err) => {
+      console.error('[onboarding-new] notification permission request failed', err);
+    });
 
     if (alignMode === 'suggested') {
       const hour = Math.floor(alignMinutes / 60);
@@ -51,7 +55,7 @@ export default function OnboardingNewS20() {
             Your alignment window isn't arbitrary.
           </Text>
           <Text className="text-center font-manrope text-[14px] leading-[21px] text-obn-muted">
-            It's calculated from your chart — this one feels right for you.
+            It's calculated from your chart — this is when we'll nudge you to come see today's 3 clearest moves.
           </Text>
         </Animated.View>
 
@@ -102,7 +106,10 @@ export default function OnboardingNewS20() {
         </Animated.View>
       </View>
 
-      <Animated.View entering={FadeInUp.delay(500).duration(500)} className="items-center px-8 pb-11">
+      <Animated.View entering={FadeInUp.delay(500).duration(500)} className="items-center gap-3 px-8 pb-11">
+        <Text className="text-center font-manrope text-[12px] text-obn-muted-dim">
+          You'll be asked to allow notifications next — that's how Mihira reaches you at the right moment.
+        </Text>
         <PrimaryButton label="Set my window →" onPress={proceed} />
       </Animated.View>
     </OnboardingNewScreen>

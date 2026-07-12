@@ -20,7 +20,7 @@ export default {
   expo: {
     name: 'Mihira',
     slug: 'mihira',
-    version: '1.0.0',
+    version: '1.0.2',
     scheme: 'mihira',
     userInterfaceStyle: 'dark',
     icon: './assets/icon.png',

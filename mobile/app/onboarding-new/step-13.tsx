@@ -43,12 +43,15 @@ export default function OnboardingNewS13() {
     <OnboardingNewScreen glow="top" glowIntensity={0.16}>
       <View className="flex-1 items-center justify-center gap-8 px-8">
         <Animated.View entering={FadeIn.delay(150).duration(600)} className="items-center gap-3.5">
-          <Text className="font-manrope-bold text-[10px] uppercase tracking-[4px] text-obn-gold">
+          <Text className="text-center font-manrope-bold text-[10px] uppercase tracking-[4px] text-obn-gold">
             {name} · recorded at birth
           </Text>
           <Text className="text-center font-serif-medium text-[46px] leading-[50px] text-obn-text">
             {nakshatraLead ? `${nakshatraLead}\n` : ''}
             <Text className="font-serif-medium-italic text-obn-gold">{nakshatraLast}</Text>
+          </Text>
+          <Text className="text-center font-manrope-bold text-[10px] uppercase tracking-[3px] text-obn-muted-dim">
+            Nakshatra
           </Text>
         </Animated.View>
 
@@ -59,6 +62,12 @@ export default function OnboardingNewS13() {
               <Text className="font-serif-medium text-[18px] text-obn-text">{row.value}</Text>
             </View>
           ))}
+        </Animated.View>
+
+        <Animated.View entering={FadeIn.delay(650).duration(600)} className="max-w-[300px]">
+          <Text className="text-center font-manrope text-[14px] leading-[21px] text-obn-muted">
+            {chart.insight}
+          </Text>
         </Animated.View>
 
         <Animated.View entering={FadeIn.delay(750).duration(600)}>

@@ -29,15 +29,7 @@ export default function OnboardingNewS18() {
         </Animated.View>
 
         <Animated.View entering={FadeInDown.delay(150).duration(500)}>
-          <Text className="text-center font-serif-medium text-[32px] leading-[46px] text-obn-text">
-            I, <Text className="font-serif-medium-italic text-obn-gold">{name}</Text>, will keep{' '}
-            <Text className="font-serif-medium-italic text-obn-gold">{vow.name}</Text> — {vow.min} minutes a day — for my
-            first <Text className="font-serif-medium-italic text-obn-gold">21 days</Text>.
-          </Text>
-        </Animated.View>
-
-        <Animated.View entering={FadeInDown.delay(300).duration(500)}>
-          <View className="w-full flex-row flex-wrap justify-center gap-2">
+          <View className="w-full flex-row justify-center gap-2">
           {VOWS.map((v) => (
             <Pressable
               key={v.id}
@@ -55,6 +47,14 @@ export default function OnboardingNewS18() {
             </Pressable>
           ))}
           </View>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(300).duration(500)}>
+          <Text className="text-center font-serif-medium text-[32px] leading-[46px] text-obn-text">
+            I, <Text className="font-serif-medium-italic text-obn-gold">{name}</Text>, will keep{' '}
+            <Text className="font-serif-medium-italic text-obn-gold">{vow.name}</Text> — {vow.min} minutes a day — for my
+            first <Text className="font-serif-medium-italic text-obn-gold">21 days</Text>.
+          </Text>
         </Animated.View>
 
         <Text className="max-w-[300px] text-center font-manrope text-[13px] leading-[20px] text-obn-muted-dim">
