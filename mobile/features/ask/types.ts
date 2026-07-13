@@ -78,6 +78,13 @@ export interface AskHistoryTurn {
   sourceIds: string[];
 }
 
+export interface AskQueryLogEntry {
+  question: string;
+  topic: AskTopic;
+  mode: AskResponseMode;
+  timestamp: string;
+}
+
 export interface AskSavedPassage {
   source: ScriptureSource;
   savedAt: string;
