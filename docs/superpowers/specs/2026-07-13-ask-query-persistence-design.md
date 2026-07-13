@@ -1,7 +1,14 @@
 # Ask Query Persistence — Design
 
 **Date:** 2026-07-13
-**Status:** Approved
+**Status:** Approved (revised — moved to server-side sync)
+
+**Revision note (2026-07-13):** The original design synced queries directly from the
+client (mirroring `user_narad_context`). Revised to sync from the `/api/ask` server
+route instead, so future changes to the logging logic ship via a server deploy and
+don't require a new app store release. This requires the server to authenticate the
+caller, which is a new capability — no existing server route in this codebase verifies
+who's calling it today.
 
 ## Problem
 
@@ -62,46 +69,116 @@ The array is unbounded — every query a user has ever asked stays in the row
 indefinitely. No pruning/capping (unlike the 80/8-item caps used for local
 AsyncStorage caches).
 
+## Auth: how the server learns who's calling
+
+The client already holds a Supabase session (`getSupabaseClient().auth.getSession()`).
+Before calling `/api/ask`, `useAskState.ts` attaches the session's access token as a
+bearer header:
+
+```ts
+const { data: { session } } = await getSupabaseClient().auth.getSession();
+const response = await apiFetch('/api/ask', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+  },
+  body: JSON.stringify({ message: trimmed, mode, history, userContext: askContextRef.current }),
+});
+```
+
+This is the only client-side change this feature requires — a one-time addition of an
+auth header, not ongoing logic that will need future app updates.
+
+Server-side, this reuses the existing privileged-client pattern already in the codebase
+(`createServerSupabaseClient()` in `lib/server/routes/dailyArthReflection.ts:10`, which
+authenticates with `SUPABASE_SECRET_KEY` — no new secret to add). A new helper
+`lib/server/auth.ts` verifies the token against that same client and returns the
+verified user id:
+
+```ts
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+
+function createServerSupabaseClient(): SupabaseClient {
+  const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
+  if (!url || !key) {
+    throw new Error('Missing Supabase URL or secret key');
+  }
+  return createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
+}
+
+export async function getAuthenticatedSupabaseClient(
+  request: Request,
+): Promise<{ userId: string; supabase: SupabaseClient } | null> {
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.match(/^Bearer (.+)$/)?.[1];
+  if (!token) return null;
+
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data.user) return null;
+
+  return { userId: data.user.id, supabase };
+}
+```
+
+`auth.getUser(token)` validates the token against Supabase's auth server regardless of
+which key created the client, so a single secret-key client both verifies the caller and
+performs the write. This write **bypasses RLS** (service-role key) — that's fine here
+because the server itself verified the token and only ever writes to the row matching
+the *verified* `data.user.id`, never a client-supplied id. The RLS policy on
+`user_ask_queries` stays in place as defense-in-depth for any future direct client
+access, but this route doesn't rely on it.
+
 ## Sync mechanism
 
-**Client read-modify-write**, not an atomic SQL append. On each successful `sendMessage`
-call in `useAskState.ts`:
+**Read-modify-write**, not an atomic SQL append — performed server-side in
+`handleAskRequest` (`lib/server/routes/ask.ts`), **fire-and-forget**: kicked off after
+`generateScriptureGuide` succeeds but not awaited before the response is returned, so it
+adds zero latency to the Guidance response:
 
 1. Select the current `queries` array for the user's row (empty array if no row yet).
 2. Append the new `AskQueryLogEntry`.
 3. Upsert the full array back with `updated_at = now()`.
 
-This mirrors the simplicity of the existing `askStorage.ts` functions. It accepts a
-known race: if the same user sends two messages at nearly the same instant from two
-different devices/sessions, one write could overwrite the other and drop an entry. This
-is acceptable for the current single-active-session usage pattern of the app.
+This accepts the same known race as the original design: two near-simultaneous requests
+from the same user could overwrite each other and drop an entry. It also accepts a
+second, deliberate trade-off: if `/api/ask` runs on a platform that tears down the
+request process immediately after the response is sent, an in-flight un-awaited write
+could occasionally be dropped. Chosen anyway to keep the Guidance response fast.
 
 ## Integration point
 
-New function `syncAskQueryToSupabase(entry: AskQueryLogEntry, userId: string): Promise<void>`
-added to `lib/askStorage.ts`, following the exact conventions already in that file:
-wrapped in try/catch, errors logged via `console.error` and swallowed — never throws,
-never blocks the caller.
+New function `logAskQuery(supabase: SupabaseClient, userId: string, entry: AskQueryLogEntry): Promise<void>`
+in a new `lib/server/askQueryLog.ts`, wrapped in try/catch — errors are logged via
+`console.error` and swallowed, never thrown, so a logging failure never fails the
+`/api/ask` response itself.
 
-In `features/ask/useAskState.ts`, inside `sendMessage`'s success path — right after the
-existing `saveAskHistory(nextHistory)` call — fire:
+In `handleAskRequest`, after `generateScriptureGuide` succeeds:
 
 ```ts
-if (user?.id) {
-  syncAskQueryToSupabase(
-    { question: trimmed, topic: parsed.topic, mode, timestamp: new Date().toISOString() },
-    user.id,
-  ).catch(() => {});
-}
+getAuthenticatedSupabaseClient(request)
+  .then((auth) => {
+    if (!auth) return;
+    return logAskQuery(
+      auth.supabase,
+      auth.userId,
+      { question: body.message, topic: response.topic, mode: body.mode, timestamp: new Date().toISOString() },
+    );
+  })
+  .catch(() => {});
+
+return Response.json(response);
 ```
 
-Un-awaited, identical to how `useNaradState.ts` fires `syncNaradContextToSupabase(...)`.
-This keeps the sync entirely off the critical path of message send — no added latency,
-no new failure mode visible to the user. If `user` is not signed in, nothing is synced
-(local AsyncStorage history still works as today).
+If the `Authorization` header is missing or invalid, `auth` is `null` and nothing is
+logged — the Guidance response itself is never blocked or degraded by an auth failure.
 
-The error path of `sendMessage` (failed `/api/ask` call) does **not** sync — only
-questions that received a successful response are logged.
+The error path of `handleAskRequest` (failed `generateScriptureGuide` call) does **not**
+log — only questions that received a successful response are recorded.
 
 ## Out of scope
 
@@ -109,5 +186,5 @@ questions that received a successful response are logged.
 - No backfill of previously-asked questions already sitting in AsyncStorage.
 - No migration to a normalized one-row-per-query table — explicitly deferred; flagged
   as a future consideration if the unbounded array becomes a scale problem.
-- No changes to the `/api/ask` server route — the sync is entirely client-side, same as
-  `user_narad_context`.
+- No reuse of `getAuthenticatedSupabaseClient` by other routes yet — built narrowly for
+  this feature; other routes can adopt it later if they need server-side auth too.
