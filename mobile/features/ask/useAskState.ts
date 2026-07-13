@@ -126,7 +126,14 @@ export function useAskState() {
         conversation_length: nextAllMessages.length,
       });
 
-      const { data: { session } } = await getSupabaseClient().auth.getSession();
+      // Best-effort token fetch for server-side query logging only — must never
+      // block or fail the core Guidance request if getSession() rejects.
+      let session: { access_token?: string } | null = null;
+      try {
+        ({ data: { session } } = await getSupabaseClient().auth.getSession());
+      } catch {
+        session = null;
+      }
 
       const response = await apiFetch('/api/ask', {
         method: 'POST',

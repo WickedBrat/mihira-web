@@ -10,11 +10,18 @@ jest.mock('@/lib/server/askQueryLog', () => ({
   logAskQuery: jest.fn(),
 }));
 
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: jest.fn(),
+}));
+
 import { generateScriptureGuide } from '@/lib/ai/askService';
 import { getAuthenticatedSupabaseClient } from '@/lib/server/auth';
 import { logAskQuery } from '@/lib/server/askQueryLog';
 import { handleAskRequest } from '@/lib/server/routes/ask';
+import { createClient } from '@supabase/supabase-js';
 import type { ScriptureGuideResponse } from '@/features/ask/types';
+
+const mockCreateClient = createClient as jest.MockedFunction<typeof createClient>;
 
 const mockResponse: ScriptureGuideResponse = {
   mode: 'quick',
@@ -91,5 +98,64 @@ describe('handleAskRequest query logging', () => {
 
     expect(response.status).toBe(200);
     expect(payload).toEqual(mockResponse);
+  });
+});
+
+// Everything above mocks '@/lib/server/auth' and '@/lib/server/askQueryLog' at the
+// module boundary, so the real wiring between getAuthenticatedSupabaseClient and
+// logAskQuery is never exercised together. This block runs the REAL auth module and
+// the REAL logger, with only the underlying SupabaseClient (via '@supabase/supabase-js'
+// createClient) mocked out — the same pattern used in auth.test.ts and
+// dailyArthReflection.test.ts.
+describe('handleAskRequest end-to-end auth -> log wiring (integration)', () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (generateScriptureGuide as jest.Mock).mockResolvedValue(mockResponse);
+    process.env.EXPO_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
+    process.env.SUPABASE_SECRET_KEY = 'secret-key';
+  });
+
+  afterEach(() => {
+    process.env = { ...originalEnv };
+  });
+
+  it('flows the real auth verification result into the real logger write', async () => {
+    const actualAuth = jest.requireActual('@/lib/server/auth') as typeof import('@/lib/server/auth');
+    const actualLog = jest.requireActual('@/lib/server/askQueryLog') as typeof import('@/lib/server/askQueryLog');
+    (getAuthenticatedSupabaseClient as jest.Mock).mockImplementation(actualAuth.getAuthenticatedSupabaseClient);
+    (logAskQuery as jest.Mock).mockImplementation(actualLog.logAskQuery);
+
+    const mockGetUser = jest.fn().mockResolvedValue({ data: { user: { id: 'user_123' } }, error: null });
+    const maybeSingle = jest.fn().mockResolvedValue({ data: null, error: null });
+    const eq = jest.fn(() => ({ maybeSingle }));
+    const select = jest.fn(() => ({ eq }));
+    const upsert = jest.fn().mockResolvedValue({ data: null, error: null });
+    const from = jest.fn(() => ({ select, upsert }));
+    const mockSupabaseClient = { auth: { getUser: mockGetUser }, from };
+    mockCreateClient.mockReturnValueOnce(mockSupabaseClient as never);
+
+    const response = await handleAskRequest(requestFor('What is dharma?', { authorization: 'Bearer good-token' }));
+    await flush();
+
+    expect(response.status).toBe(200);
+    expect(mockGetUser).toHaveBeenCalledWith('good-token');
+    expect(from).toHaveBeenCalledWith('user_ask_queries');
+    expect(select).toHaveBeenCalledWith('queries');
+    expect(upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        user_id: 'user_123',
+        queries: expect.arrayContaining([
+          expect.objectContaining({
+            question: 'What is dharma?',
+            topic: 'career_dharma',
+            mode: 'quick',
+          }),
+        ]),
+        updated_at: expect.any(String),
+      }),
+      { onConflict: 'user_id' },
+    );
   });
 });

@@ -120,4 +120,37 @@ describe('useAskState bearer token attachment', () => {
     const [, options] = (apiFetch as jest.Mock).mock.calls[0];
     expect(options.headers).not.toHaveProperty('Authorization');
   });
+
+  it('still sends the request without an Authorization header when getSession rejects', async () => {
+    (getSupabaseClient as jest.Mock).mockReturnValue({
+      auth: {
+        getSession: jest.fn().mockRejectedValue(new Error('network down')),
+      },
+    });
+
+    const { result } = renderHook(() => useAskState());
+    await waitFor(() => expect(result.current.isContextLoaded).toBe(true));
+
+    await act(async () => {
+      await result.current.sendMessage('What is dharma?');
+    });
+
+    expect(apiFetch).toHaveBeenCalledWith(
+      '/api/ask',
+      expect.objectContaining({
+        headers: expect.not.objectContaining({ Authorization: expect.anything() }),
+      }),
+    );
+    const [, options] = (apiFetch as jest.Mock).mock.calls[0];
+    expect(options.headers).not.toHaveProperty('Authorization');
+
+    // Confirms the getSession() rejection was swallowed rather than sending
+    // sendMessage down the catch-block error path.
+    expect(result.current.messages.at(-1)).toEqual(
+      expect.objectContaining({
+        kind: 'assistant_response',
+        response: mockResponse,
+      }),
+    );
+  });
 });
