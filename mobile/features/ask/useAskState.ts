@@ -10,6 +10,7 @@ import type {
   ScriptureSource,
 } from '@/features/ask/types';
 import { apiFetch } from '@/lib/apiFetch';
+import { getSupabaseClient } from '@/lib/supabase';
 import { analytics } from '@/lib/analytics';
 import {
   DEFAULT_ASK_CONTEXT,
@@ -125,9 +126,14 @@ export function useAskState() {
         conversation_length: nextAllMessages.length,
       });
 
+      const { data: { session } } = await getSupabaseClient().auth.getSession();
+
       const response = await apiFetch('/api/ask', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({
           message: trimmed,
           mode,
