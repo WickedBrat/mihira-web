@@ -1,5 +1,7 @@
 import { generateScriptureGuide } from '../../ai/askService';
 import { serverErrorResponse } from '../errorResponse';
+import { getAuthenticatedSupabaseClient } from '../auth';
+import { logAskQuery } from '../askQueryLog';
 import type { AskHistoryTurn, AskResponseMode, AskContextV2 } from '../../../features/ask/types';
 
 function isMode(value: unknown): value is AskResponseMode {
@@ -33,6 +35,18 @@ export async function handleAskRequest(request: Request): Promise<Response> {
       userContext: body.userContext,
       history: body.history,
     });
+
+    getAuthenticatedSupabaseClient(request)
+      .then((auth) => {
+        if (!auth) return;
+        return logAskQuery(auth.supabase, auth.userId, {
+          question: body.message as string,
+          topic: response.topic,
+          mode: body.mode as AskResponseMode,
+          timestamp: new Date().toISOString(),
+        });
+      })
+      .catch(() => {});
 
     return Response.json(response);
   } catch (err) {
