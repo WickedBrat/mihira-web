@@ -2,7 +2,9 @@ export type BlogContentBlock =
   | { type: 'p'; text: string }
   | { type: 'h2'; text: string }
   | { type: 'quote'; text: string; attribution?: string }
-  | { type: 'list'; items: string[] };
+  | { type: 'list'; items: string[] }
+  | { type: 'callout'; title: string; text: string }
+  | { type: 'table'; columns: string[]; rows: string[][]; caption?: string };
 
 export type RelatedFeature = { href: string; label: string };
 
@@ -20,6 +22,586 @@ export type BlogPost = {
 };
 
 export const blogPosts: BlogPost[] = [
+  {
+    "slug": "diwali-2026-lakshmi-puja-muhurat-usa",
+    "title": "Diwali 2026: Lakshmi Puja Muhurat for 12 US Cities",
+    "seoTitle": "Diwali 2026 Lakshmi Puja Muhurat in the USA, by City",
+    "description": "Lakshmi Puja is on Sunday, November 8, 2026. Here is the auspicious window for 12 US cities, worked out from each city's own sunset rather than converted from India time.",
+    "kicker": "Diwali 2026",
+    "publishedAt": "2026-10-07",
+    "readTime": "4 min read",
+    "excerpt": "Every year someone converts the muhurat from India and the family ends up planning a 7:24 a.m. puja. Here is the actual Lakshmi Puja window for your city.",
+    "relatedFeatures": [
+      {
+        "href": "/blog/diwali-2026-dates-usa",
+        "label": "All five days of Diwali 2026 in the US"
+      },
+      {
+        "href": "/muhurat-finder",
+        "label": "Plan another date with the Muhurat Finder"
+      },
+      {
+        "href": "/ask-mihira",
+        "label": "Ask Mihira about the puja itself"
+      }
+    ],
+    "content": [
+      {
+        "type": "callout",
+        "title": "The short answer",
+        "text": "In the US, Diwali's Lakshmi Puja is on Sunday, November 8, 2026. In most American cities the best window opens about 20 minutes after sunset and lasts a little under two hours. Find your city below."
+      },
+      {
+        "type": "p",
+        "text": "It happens every year in the family WhatsApp group. Someone forwards the muhurat from India, someone converts it from IST, and the puja ends up planned for 7:24 in the morning. The Lakshmi Puja window isn't a clock time you can carry from one country to another. It's built from your own sunset, so it has to be worked out for the place you live."
+      },
+      {
+        "type": "h2",
+        "text": "How the window is worked out"
+      },
+      {
+        "type": "p",
+        "text": "The traditional Lakshmi Puja muhurat is the stretch of evening where three things overlap:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Amavasya: the new-moon tithi that makes it Diwali night. In 2026 it runs from 12:59 AM Eastern on November 8 to 2:02 AM Eastern on November 9 (9:59 PM to 11:02 PM Pacific), so it covers the evening of the 8th everywhere in the continental US.",
+          "Pradosh Kaal: the first part of the night, starting at your local sunset.",
+          "Vrishabha (Taurus) lagna: a fixed sign on the eastern horizon, chosen so that the Lakshmi you welcome stays. In November it rises soon after sunset and lasts just under two hours."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Sunset and the rising of Vrishabha both depend on exactly where you are on the map. That's why Boston and Atlanta, which are both on Eastern time, get windows that start more than an hour apart."
+      },
+      {
+        "type": "h2",
+        "text": "Lakshmi Puja muhurat, Sunday, November 8, 2026"
+      },
+      {
+        "type": "table",
+        "columns": [
+          "City",
+          "Sunset",
+          "Lakshmi Puja muhurat",
+          "Pradosh Kaal"
+        ],
+        "rows": [
+          [
+            "Bay Area (San Jose)",
+            "5:02 PM",
+            "5:21 – 7:12 PM",
+            "5:02 – 7:46 PM"
+          ],
+          [
+            "Los Angeles",
+            "4:53 PM",
+            "5:14 – 7:06 PM",
+            "4:53 – 7:35 PM"
+          ],
+          [
+            "Seattle",
+            "4:41 PM",
+            "4:56 – 6:38 PM",
+            "4:41 – 7:34 PM"
+          ],
+          [
+            "Phoenix",
+            "5:30 PM",
+            "5:50 – 7:43 PM",
+            "5:30 – 8:11 PM"
+          ],
+          [
+            "Dallas",
+            "5:30 PM",
+            "5:51 – 7:44 PM",
+            "5:30 – 8:10 PM"
+          ],
+          [
+            "Houston",
+            "5:29 PM",
+            "5:51 – 7:46 PM",
+            "5:29 – 8:07 PM"
+          ],
+          [
+            "Austin",
+            "5:38 PM",
+            "5:59 – 7:54 PM",
+            "5:38 – 8:16 PM"
+          ],
+          [
+            "Chicago",
+            "4:36 PM",
+            "4:54 – 6:41 PM",
+            "4:36 – 7:23 PM"
+          ],
+          [
+            "Atlanta",
+            "5:39 PM",
+            "5:59 – 7:52 PM",
+            "5:39 – 8:20 PM"
+          ],
+          [
+            "Washington, DC",
+            "5:00 PM",
+            "5:19 – 7:08 PM",
+            "5:00 – 7:45 PM"
+          ],
+          [
+            "New York / New Jersey",
+            "4:46 PM",
+            "5:04 – 6:53 PM",
+            "4:46 – 7:32 PM"
+          ],
+          [
+            "Boston",
+            "4:29 PM",
+            "4:46 – 6:33 PM",
+            "4:29 – 7:16 PM"
+          ]
+        ],
+        "caption": "All times are local standard time (daylight saving ends November 1). Computed for each city center with the Lahiri ayanamsha. New York / New Jersey uses central New Jersey (Edison). Expect a minute or two of difference across a metro area."
+      },
+      {
+        "type": "h2",
+        "text": "If your city isn't on the list"
+      },
+      {
+        "type": "p",
+        "text": "Use the closest city on the list and leave ten minutes of slack at each end. Within one metro area the times shift by a minute or two. Across a state they can shift by ten minutes or more."
+      },
+      {
+        "type": "h2",
+        "text": "Three mistakes to avoid"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Converting India's muhurat. 5:54 PM in New Delhi is 7:24 AM in New York, which is nowhere near your sunset, and sunset is what the window is built around.",
+          "Copying India's clock time. Delhi's window is 5:54–7:50 PM. If you used those same hours in Boston, about two-thirds of your puja would fall after Boston's window closes at 6:33.",
+          "Worrying about the exact minute. The tradition treats all of Pradosh Kaal as the right part of the evening for Lakshmi Puja, and the Vrishabha window is the best part of it. If your family can't sit down until 7:00 PM in New Jersey, you are still inside Pradosh Kaal."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "The rest of the week"
+      },
+      {
+        "type": "p",
+        "text": "Dhanteras is Friday, November 6. In 2026, two of the five Diwali days fall on a different date in America than in India. The whole week, with a Dhanteras table by city, is in our companion piece, The Five Days of Diwali 2026, on American Time."
+      }
+    ]
+  },
+  {
+    "slug": "diwali-2026-dates-usa",
+    "title": "The Five Days of Diwali 2026, on American Time",
+    "seoTitle": "Diwali 2026 Dates in the USA: All Five Days",
+    "description": "Dhanteras, Choti Diwali, Lakshmi Puja, Govardhan Puja and Bhai Dooj 2026 for the US, plus the Dhanteras window by city, and why two of the days come earlier here than in India.",
+    "kicker": "Diwali 2026",
+    "publishedAt": "2026-10-07",
+    "readTime": "4 min read",
+    "excerpt": "Indian calendars will tell you Govardhan Puja is Tuesday and Bhai Dooj is Wednesday. In the US, both are a day earlier. Here is the whole week, and the reason.",
+    "relatedFeatures": [
+      {
+        "href": "/blog/diwali-2026-lakshmi-puja-muhurat-usa",
+        "label": "Lakshmi Puja muhurat by US city"
+      },
+      {
+        "href": "/muhurat-finder",
+        "label": "Find a muhurat with the Muhurat Finder"
+      },
+      {
+        "href": "/daily-alignment",
+        "label": "Start a Daily Alignment reading"
+      }
+    ],
+    "content": [
+      {
+        "type": "callout",
+        "title": "At a glance",
+        "text": "Dhanteras: Fri, Nov 6. Choti Diwali: Sat, Nov 7. Lakshmi Puja: Sun, Nov 8. Govardhan Puja: Mon, Nov 9. Bhai Dooj: Tue, Nov 10. In India, Govardhan Puja and Bhai Dooj each fall one day later."
+      },
+      {
+        "type": "p",
+        "text": "Hindu festivals aren't tied to calendar dates. They're tied to tithis, the lunar days. A tithi begins and ends at the same instant everywhere on earth, but that instant lands at a different hour in each place. A festival goes to whichever local day has the right tithi at the right moment. For some festivals that moment is sunrise, for some it's the afternoon, and for Diwali it's the evening. Move twelve time zones west and that moment can land on a different calendar day."
+      },
+      {
+        "type": "h2",
+        "text": "The week, day by day"
+      },
+      {
+        "type": "table",
+        "columns": [
+          "Festival",
+          "Date in the US",
+          "What decides the day"
+        ],
+        "rows": [
+          [
+            "Dhanteras",
+            "Friday, Nov 6",
+            "Trayodashi during the evening"
+          ],
+          [
+            "Choti Diwali (Naraka Chaturdashi)",
+            "Saturday, Nov 7",
+            "Chaturdashi before sunrise"
+          ],
+          [
+            "Lakshmi Puja (Diwali)",
+            "Sunday, Nov 8",
+            "Amavasya during Pradosh Kaal"
+          ],
+          [
+            "Govardhan Puja / Annakut",
+            "Monday, Nov 9",
+            "Pratipada at sunrise"
+          ],
+          [
+            "Bhai Dooj",
+            "Tuesday, Nov 10",
+            "Dwitiya in the afternoon"
+          ]
+        ],
+        "caption": "These dates hold in every continental US time zone. In India, Govardhan Puja is Tuesday, November 10 and Bhai Dooj is Wednesday, November 11."
+      },
+      {
+        "type": "h2",
+        "text": "Why two days come earlier here"
+      },
+      {
+        "type": "p",
+        "text": "The new moon arrives at 2:02 AM Eastern on Monday, November 9, which is 12:32 PM in India. In New Jersey, Monday's sunrise already falls in Pratipada, the first day of the new lunar month, so Govardhan Puja is on Monday. In Delhi, Monday's sunrise is still in Amavasya. Pratipada doesn't start there until lunchtime, so India marks Govardhan Puja on Tuesday."
+      },
+      {
+        "type": "p",
+        "text": "Bhai Dooj moves by a day for the same reason. Dwitiya covers Tuesday afternoon everywhere in the US. In India it begins at 2:01 PM on Tuesday, so the first afternoon it fully covers is Wednesday's."
+      },
+      {
+        "type": "p",
+        "text": "Neither date is more correct than the other. Each one is right for the sky over the place where it's observed. A sister in Houston can mark Bhai Dooj on her Tuesday and still call her brother in Pune on his Wednesday."
+      },
+      {
+        "type": "h2",
+        "text": "Dhanteras: the puja window and the purchase"
+      },
+      {
+        "type": "p",
+        "text": "The Dhanteras puja works the same way as Lakshmi Puja: Trayodashi in the evening, ideally while the fixed Vrishabha lagna is rising. For the customary purchase of gold, silver or a new vessel, most families count the whole of Trayodashi as good. In 2026 that runs from 12:01 AM Eastern on Friday, November 6 to 12:19 AM Eastern on Saturday, November 7 (9:01 PM Thursday to 9:19 PM Friday, Pacific)."
+      },
+      {
+        "type": "table",
+        "columns": [
+          "City",
+          "Dhanteras puja, Friday, Nov 6"
+        ],
+        "rows": [
+          [
+            "Bay Area (San Jose)",
+            "5:29 – 7:20 PM"
+          ],
+          [
+            "Los Angeles",
+            "5:22 – 7:14 PM"
+          ],
+          [
+            "Seattle",
+            "5:04 – 6:46 PM"
+          ],
+          [
+            "Phoenix",
+            "5:58 – 7:51 PM"
+          ],
+          [
+            "Dallas",
+            "5:59 – 7:52 PM"
+          ],
+          [
+            "Houston",
+            "5:59 – 7:54 PM"
+          ],
+          [
+            "Austin",
+            "6:07 – 8:02 PM"
+          ],
+          [
+            "Chicago",
+            "5:02 – 6:49 PM"
+          ],
+          [
+            "Atlanta",
+            "6:07 – 8:00 PM"
+          ],
+          [
+            "Washington, DC",
+            "5:27 – 7:16 PM"
+          ],
+          [
+            "New York / New Jersey",
+            "5:12 – 7:01 PM"
+          ],
+          [
+            "Boston",
+            "4:54 – 6:41 PM"
+          ]
+        ],
+        "caption": "Local standard time. Window = Pradosh Kaal while Vrishabha lagna rises, during Trayodashi. Lahiri ayanamsha, computed for each city center."
+      },
+      {
+        "type": "h2",
+        "text": "One more date to remember"
+      },
+      {
+        "type": "p",
+        "text": "Dev Uthani Ekadashi falls on Friday, November 20 in the US. It traditionally ends Chaturmas and reopens the season for weddings and griha pravesh, so if you're closing on a house this fall, that's the date your planning starts from."
+      }
+    ]
+  },
+  {
+    "slug": "india-panchang-wrong-time-usa",
+    "title": "Why the Panchang From India Gives You the Wrong Time in America",
+    "seoTitle": "Why an Indian Panchang Is Wrong for the USA",
+    "description": "Tithis, Rahu Kaal and muhurats are built from local sunrise and sunset. Here is why converting from IST fails, with real numbers from Diwali 2026.",
+    "kicker": "Sacred Timing",
+    "publishedAt": "2026-10-07",
+    "readTime": "5 min read",
+    "excerpt": "A panchang describes the sky over one particular place. If you convert it to another time zone, you get the right sky at the wrong hours. Here is what carries over to the US and what doesn't.",
+    "relatedFeatures": [
+      {
+        "href": "/muhurat-finder",
+        "label": "Try the Muhurat Finder"
+      },
+      {
+        "href": "/blog/diwali-2026-lakshmi-puja-muhurat-usa",
+        "label": "See Diwali 2026 timings by US city"
+      },
+      {
+        "href": "/ask-mihira",
+        "label": "Ask Mihira a timing question"
+      }
+    ],
+    "content": [
+      {
+        "type": "callout",
+        "title": "In one line",
+        "text": "A panchang describes the sky over one particular place. Converted to another time zone, it gives you the right sky at the wrong hours."
+      },
+      {
+        "type": "p",
+        "text": "Most Indian families in the US get their timings in one of three ways: a wall calendar printed in India, an image forwarded on WhatsApp, or a website that quietly defaults to New Delhi. All three look authoritative, and all three are worked out for someone else's sunrise."
+      },
+      {
+        "type": "h2",
+        "text": "Two kinds of numbers in a panchang"
+      },
+      {
+        "type": "p",
+        "text": "The five limbs of the panchang (tithi, vara, nakshatra, yoga and karana) look like calendar entries, but they are measurements of the sky. They come in two kinds:"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Moments that are the same everywhere. A tithi changes when the moon moves another 12 degrees ahead of the sun. That happens at the same instant all over the world: 2:02 AM in New York is 12:32 PM in Delhi. Converting these times between time zones is fine.",
+          "Windows tied to your own horizon. Sunrise, sunset, Rahu Kaal, Abhijit, Choghadiya, Pradosh Kaal and the rising lagna are all local. Converting them from IST gives you nonsense, and using India's clock times as they are gives you an answer that is close but wrong."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Almost every real decision needs both kinds. The tithi tells you which lunar day it is. Your own sunrise tells you which of your calendar days that tithi belongs to, and your own horizon tells you which hours inside it are good."
+      },
+      {
+        "type": "h2",
+        "text": "Three ways it goes wrong"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Converting from IST. Delhi's Lakshmi Puja window on November 8, 2026 is 5:54–7:50 PM. Converted to Eastern time, that becomes 7:24–9:20 in the morning, nowhere near the sunset the window is built around.",
+          "Copying India's clock time. Use 5:54–7:50 PM as-is in Boston and about two-thirds of that time falls after Boston's actual window closes at 6:33 PM.",
+          "Getting the wrong day. Some festivals go to the day that has the right tithi at sunrise or in the afternoon. In 2026 that puts Govardhan Puja and Bhai Dooj a day earlier in the US than in India, and a calendar printed in India will show you the Indian dates."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Rahu Kaal: one rule, four answers"
+      },
+      {
+        "type": "p",
+        "text": "Rahu Kaal is one-eighth of the daylight hours, and the weekday decides which eighth. On Sunday it's the last eighth before sunset. On Sunday, November 8 that is 3:30–4:46 PM in New Jersey, 3:13–4:29 PM in Boston and 4:17–5:38 PM in Austin. In Delhi it's 4:09–5:31 PM. The rule is the same everywhere, yet the answers differ, and you can't get one from another by changing the time zone."
+      },
+      {
+        "type": "table",
+        "columns": [
+          "Place",
+          "Sunrise",
+          "Rahu Kaal, Sun Nov 8"
+        ],
+        "rows": [
+          [
+            "New Jersey (Edison)",
+            "6:35 AM",
+            "3:30 – 4:46 PM"
+          ],
+          [
+            "Boston",
+            "6:26 AM",
+            "3:13 – 4:29 PM"
+          ],
+          [
+            "Austin",
+            "6:50 AM",
+            "4:17 – 5:38 PM"
+          ],
+          [
+            "New Delhi",
+            "6:38 AM",
+            "4:09 – 5:31 PM"
+          ]
+        ],
+        "caption": "Local time in each place."
+      },
+      {
+        "type": "h2",
+        "text": "What to do instead"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Take tithi start and end times from any reliable source and convert them to your time zone. That part carries over.",
+          "Work out anything tied to sunrise or sunset for your own city, or use a source that does it for your city.",
+          "When the date of a festival matters, check the date where you live instead of assuming it matches India's.",
+          "Leave five to ten minutes of slack at both ends of a window. The tradition cares about the window, not the exact second."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The people and tools that used to answer \"when?\" for your family, the pandit and the panchang on the wall, were set up for a different horizon. The tradition still applies after you move. The arithmetic just has to be redone for the place you live now."
+      }
+    ]
+  },
+  {
+    "slug": "griha-pravesh-muhurat-usa",
+    "title": "Griha Pravesh in America: Fitting a Muhurat Around Your Closing Date",
+    "seoTitle": "Griha Pravesh Muhurat in the USA: A Practical Guide",
+    "description": "In the US, a lender sets your closing date, not a panchang. Here is how families separate the closing from the griha pravesh, what the tradition looks for in a date, and the 2026 window to aim for.",
+    "kicker": "Sacred Timing",
+    "publishedAt": "2026-10-07",
+    "readTime": "5 min read",
+    "excerpt": "In India you find the muhurat first and plan around it. In America the lender, the title company and the seller's moving truck pick the date for you. Here is how to keep both.",
+    "relatedFeatures": [
+      {
+        "href": "/muhurat-finder",
+        "label": "Scan your dates with the Muhurat Finder"
+      },
+      {
+        "href": "/ask-mihira",
+        "label": "Ask Mihira about griha pravesh rituals"
+      },
+      {
+        "href": "/blog/diwali-2026-dates-usa",
+        "label": "Diwali 2026 dates in the US"
+      }
+    ],
+    "content": [
+      {
+        "type": "callout",
+        "title": "The key idea",
+        "text": "You don't have to move in on closing day. Closing transfers the deed, and griha pravesh is the household's first ceremonial entry. The two can be days or weeks apart, and in most American purchases they should be."
+      },
+      {
+        "type": "p",
+        "text": "In India the order is simple: find the muhurat first, then plan everything around it. In America it runs the other way. The lender, the title company and the seller's moving truck set your closing date, usually a weekday picked for paperwork reasons. Plenty of families assume that settles it, but it doesn't have to."
+      },
+      {
+        "type": "h2",
+        "text": "Keep getting the keys separate from the ceremony"
+      },
+      {
+        "type": "p",
+        "text": "Traditionally, griha pravesh marks the household's first formal entry into the home, the moment it starts being lived in. Collecting the keys, getting the floors redone and letting the painters in are not that entry. Many families do something small at closing, such as a diya or a coconut at the threshold, then hold the full griha pravesh on the muhurat and move in properly afterwards. Customs vary by family and region. If yours says not to sleep in the house before the ceremony, plan your lease overlap with that in mind."
+      },
+      {
+        "type": "h2",
+        "text": "What the tradition looks for in a date"
+      },
+      {
+        "type": "list",
+        "items": [
+          "The right season: outside Chaturmas, Kharmas and Adhik Maas.",
+          "A supportive tithi. The Rikta tithis (Chaturthi, Navami and Chaturdashi) and Amavasya are generally avoided.",
+          "A steady nakshatra such as Rohini, Mrigashira, Uttara Phalguni, Uttara Ashadha, Uttara Bhadrapada, Chitra, Anuradha or Revati.",
+          "A good weekday. Tuesday is the one most commonly avoided.",
+          "A good lagna at the moment you cross the threshold, ideally a fixed sign. It's the same make-it-stay logic as the Diwali puja."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The first four narrow the calendar down to a handful of days each month. The last one depends on your own city, so it has to be worked out locally."
+      },
+      {
+        "type": "h2",
+        "text": "The 2026 window, if you're closing before year-end"
+      },
+      {
+        "type": "p",
+        "text": "Chaturmas, the four months when the tradition avoids starting new households, ends on Dev Uthani Ekadashi. In the US that falls on Friday, November 20, 2026. The main griha pravesh window runs from then until Kharmas begins, when the Sun enters Sagittarius around December 15–16. Kharmas ends at Makar Sankranti on January 14, 2027."
+      },
+      {
+        "type": "table",
+        "columns": [
+          "Period",
+          "2026–27 dates (US)",
+          "Griha pravesh?"
+        ],
+        "rows": [
+          [
+            "Chaturmas",
+            "Ends Fri, Nov 20",
+            "Avoid until it ends"
+          ],
+          [
+            "Main season",
+            "Nov 21 – mid-Dec",
+            "Yes, the best window this year"
+          ],
+          [
+            "Kharmas",
+            "~Dec 16 – Jan 14",
+            "Avoid"
+          ],
+          [
+            "After Makar Sankranti",
+            "From Jan 15, 2027",
+            "Yes, the season reopens"
+          ]
+        ],
+        "caption": "Specific good days inside a season still depend on tithi, nakshatra and your local lagna."
+      },
+      {
+        "type": "p",
+        "text": "In practice: if you close in October or early November, you can hold the griha pravesh in late November without paying two rents for long. If you close in mid-December, you're probably looking at mid-January, so it's worth negotiating a later possession date or a short rent-back with the seller rather than rushing the ceremony."
+      },
+      {
+        "type": "h2",
+        "text": "Practical details nobody tells you"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Havan and smoke detectors. A havan in a tightly sealed new home will set off every alarm in the house. Open the windows, keep the fire small and use a proper havan kund on tile or stone. Don't disable the detectors.",
+          "Boiling the milk. An electric or induction cooktop is slower than gas, so start it early enough that the milk boils over inside the window.",
+          "HOA and condo rules. Some restrict open flames on balconies and in common areas. Check before you plan anything outside.",
+          "Booking the priest. He may be an hour's drive away, or joining by video. November weekends fill up fast at temples, so book as soon as you have a date.",
+          "A weekday muhurat. Many families take a half day off work. A 30-minute core ceremony inside the window, with guests arriving afterwards, keeps what matters in the tradition."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tell Mihira's Muhurat Finder what you're planning and which dates you can actually manage, and it will rank the windows and explain its reasoning, so you aren't left picking from a forwarded list with no explanation."
+      }
+    ]
+  },
   {
     slug: 'what-is-a-muhurat',
     title: 'What Is a Muhurat, and Why Timing Still Matters',
@@ -297,6 +879,10 @@ export const blogPosts: BlogPost[] = [
     ],
   },
 ];
+
+export function getSortedBlogPosts() {
+  return [...blogPosts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+}
 
 export function getBlogPost(slug: string) {
   return blogPosts.find((post) => post.slug === slug);

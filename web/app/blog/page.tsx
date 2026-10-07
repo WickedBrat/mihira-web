@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SiteNav } from '@/components/site-nav';
 import { SiteFooter } from '@/components/site-footer';
-import { blogPosts } from '@/lib/blog-posts';
+import { getSortedBlogPosts } from '@/lib/blog-posts';
 
 export const metadata: Metadata = {
   title: 'Blog',
   description:
-    'Scripture-grounded essays on sacred timing, decision-making, dharma, and grief — for life lived far from the temples and elders that traditionally guided it.',
+    'Muhurat timings computed for US cities, and scripture-grounded essays on dharma and grief — for Indian families in America who can\'t just call home.',
   alternates: {
     canonical: '/blog',
   },
@@ -21,15 +21,15 @@ export default function BlogIndexPage() {
       <div className="mx-auto w-full max-w-[960px] px-6 pb-24 pt-14 md:pt-20">
         <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#E8A33D]">The Mihira Blog</span>
         <h1 className="mt-3 max-w-[18ch] [font-family:var(--font-display)] text-[clamp(2.2rem,4.6vw,3rem)] font-medium leading-[1.12] text-[#F7F1E3]">
-          Scripture-grounded writing on timing, duty, and distance.
+          Sacred timing for where you actually live.
         </h1>
         <p className="mt-4 max-w-[560px] text-[15px] leading-[1.7] text-[#F2EAD9]/60">
-          Essays on sacred timing, decision-making, and grief — for anyone navigating them without a temple,
-          priest, or family astrologer nearby.
+          Muhurat timings worked out for American cities, and scripture-grounded essays on duty and grief — for
+          Indian families in the US navigating them without a pandit or a grandmother down the street.
         </p>
 
         <div className="mt-14 grid grid-cols-2 gap-7 max-lg:grid-cols-1">
-          {blogPosts.map((post) => (
+          {getSortedBlogPosts().map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}

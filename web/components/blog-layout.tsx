@@ -64,6 +64,65 @@ export function BlogContent({ blocks }: { blocks: BlogContentBlock[] }) {
           );
         }
 
+        if (block.type === 'callout') {
+          return (
+            <aside
+              key={index}
+              className="rounded-2xl border border-[#E8A33D]/25 bg-[#261C10]/50 px-6 py-5"
+            >
+              <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-[#E8A33D]">
+                {block.title}
+              </span>
+              <p className="mt-2 text-[16px] leading-[1.7] text-[#F2EAD9]/85">{block.text}</p>
+            </aside>
+          );
+        }
+
+        if (block.type === 'table') {
+          return (
+            <figure key={index} className="my-2">
+              <div className="overflow-x-auto rounded-2xl border border-[#E8A33D]/[0.16]">
+                <table className="w-full min-w-[520px] border-collapse text-left font-sans text-[14px]">
+                  <thead>
+                    <tr className="bg-[#261C10]/70">
+                      {block.columns.map((column) => (
+                        <th
+                          key={column}
+                          scope="col"
+                          className="px-4 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[#E8A33D]"
+                        >
+                          {column}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {block.rows.map((row) => (
+                      <tr key={row.join('|')} className="border-t border-[#E8A33D]/[0.1]">
+                        {row.map((cell, cellIndex) => (
+                          <td
+                            key={cellIndex}
+                            className={
+                              cellIndex === 0
+                                ? 'px-4 py-3 font-semibold text-[#F7F1E3]'
+                                : 'whitespace-nowrap px-4 py-3 text-[#F2EAD9]/75'
+                            }
+                          >
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {block.caption ? (
+                <figcaption className="mt-3 text-[13px] leading-[1.6] text-[#F2EAD9]/45">{block.caption}</figcaption>
+              ) : null}
+            </figure>
+          );
+        }
+
         if (block.type === 'list') {
           return (
             <ul key={index} className="flex flex-col gap-2.5 pl-5 text-[16px] leading-[1.75] text-[#F2EAD9]/70">

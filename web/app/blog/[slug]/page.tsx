@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BlogContent, BlogLayout } from '@/components/blog-layout';
-import { blogPosts, getBlogPost } from '@/lib/blog-posts';
+import { blogPosts, getBlogPost, getSortedBlogPosts } from '@/lib/blog-posts';
 
 const siteUrl = 'https://www.getmihira.com';
 
@@ -47,7 +47,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = getBlogPost(slug);
   if (!post) notFound();
 
-  const otherPosts = blogPosts.filter((candidate) => candidate.slug !== post.slug).slice(0, 3);
+  const otherPosts = getSortedBlogPosts().filter((candidate) => candidate.slug !== post.slug).slice(0, 3);
 
   const articleSchema = {
     '@context': 'https://schema.org',
