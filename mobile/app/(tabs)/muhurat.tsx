@@ -61,7 +61,7 @@ export default function MuhuratScreen() {
   const [activeDateField, setActiveDateField] = useState<DateField>('start');
   const [isIosDateSheetOpen, setIsIosDateSheetOpen] = useState(false);
   const [iosPickerValue, setIosPickerValue] = useState(today);
-  const { rankedWindows, recommendation, confidence, suggestion, reasoning, warnings, festivalNote, isLoading, error } = useMuhurat(request);
+  const { rankedWindows, recommendation, confidence, suggestion, reasoning, warnings, festivalNote, location, isLoading, error } = useMuhurat(request);
 
   const { colors } = useTheme();
 
@@ -233,6 +233,7 @@ export default function MuhuratScreen() {
           reasoning={reasoning}
           warnings={warnings}
           festivalNote={festivalNote}
+          locationLabel={location?.label ?? null}
           rankedWindows={rankedWindows}
           isLoading={isLoading}
           error={error}

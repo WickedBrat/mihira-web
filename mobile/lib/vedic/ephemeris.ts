@@ -102,9 +102,11 @@ export function ascendantTropical(jde: number, lat: number, lng: number): number
   const RAMC = toRad(lst);
   const eps = toRad(23.439291111 - 0.013004167 * T);
   const latRad = toRad(lat);
+  // Meeus: tan(asc) = cos(RAMC) / −(sin ε · tan φ + cos ε · sin RAMC).
+  // (The previous sign arrangement returned the descendant — 180° off.)
   const asc = toDeg(Math.atan2(
-    -Math.cos(RAMC),
-    Math.sin(eps) * Math.tan(latRad) + Math.cos(eps) * Math.sin(RAMC)
+    Math.cos(RAMC),
+    -(Math.sin(eps) * Math.tan(latRad) + Math.cos(eps) * Math.sin(RAMC))
   ));
   return norm360(asc);
 }

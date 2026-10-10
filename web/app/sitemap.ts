@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { blogPosts } from '@/lib/blog-posts';
+import { DIWALI_CITIES } from '@/lib/diwali';
 
 const siteUrl = 'https://www.getmihira.com';
 
@@ -11,6 +12,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 1,
     },
+    { url: `${siteUrl}/diwali`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/diwali/calendar`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+    ...DIWALI_CITIES.map((c) => ({
+      url: `${siteUrl}/diwali/${c.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    })),
     {
       url: `${siteUrl}/muhurat-finder`,
       lastModified: new Date(),

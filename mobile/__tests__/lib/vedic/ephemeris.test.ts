@@ -54,4 +54,12 @@ describe('ascendantTropical', () => {
     expect(asc).toBeGreaterThanOrEqual(0);
     expect(asc).toBeLessThan(360);
   });
+
+  it('rises in the east: ~40 min before sunset in Mumbai the ascendant is opposite the Sun', () => {
+    // 2000-01-01 12:00 UT = 17:30 IST; Sun (~280°) is low in the west,
+    // so the ascendant must be near 280 − 180 ≈ 90–100°, not near the Sun.
+    const asc = ascendantTropical(J2000, 19.076, 72.877);
+    expect(asc).toBeGreaterThan(80);
+    expect(asc).toBeLessThan(110);
+  });
 });

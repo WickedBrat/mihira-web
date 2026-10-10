@@ -36,3 +36,10 @@ Fall back to Grep/Glob/Read **only** when the graph doesn't cover what you need.
 2. Use `detect_changes` for code review.
 3. Use `get_affected_flows` to understand impact.
 4. Use `query_graph` pattern="tests_for" to check coverage.
+
+## Imported Claude Cowork project instructions
+
+This folder contains all the files related to the project Mihira. 
+- mobile folder contains the expo app
+- web folder contains  the website/landing page to sell the app
+- Rest there are files like documentations for the project, screenshots etc

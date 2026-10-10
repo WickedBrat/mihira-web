@@ -3,9 +3,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FAQList } from '@/components/faq-list';
 import { WaitlistInlineForm } from '@/components/waitlist-inline-form';
-import { MarkGlyph, MihiraText, SiteNav } from '@/components/site-nav';
+import { SiteNav } from '@/components/site-nav';
 import { SiteFooter } from '@/components/site-footer';
 import { getSupabaseAdminClient } from '@/lib/supabase-admin';
+import { DIWALI_CITIES, DIWALI_DATE_LABEL, lakshmiPujaFor } from '@/lib/diwali';
 
 const configuredAppStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
 const configuredGooglePlayUrl = process.env.NEXT_PUBLIC_GOOGLE_PLAY_URL;
@@ -20,67 +21,67 @@ const pageDescription =
   'Mihira brings the full breadth of Vedic wisdom to the real decisions of life: duty, relationships, ambition, and grief. Scripture-grounded answers, auspicious timing, and a daily practice — private, practical, and free to start.';
 
 const shellClass = 'mx-auto w-full max-w-[1160px] px-6 lg:px-12';
-const bandClass = 'py-[72px] md:py-[104px]';
-const kickerClass = 'font-sans text-[11px] font-bold uppercase tracking-[0.22em] text-[#E8A33D]';
+const sectionClass = 'border-t border-[#F2EAD9]/[0.08] py-20 md:py-28';
 const headingClass =
-  '[font-family:var(--font-display)] text-[clamp(2.2rem,4.4vw,2.75rem)] font-medium leading-[1.12] text-[#F7F1E3] text-balance';
-const bodyMutedClass = 'text-[15px] leading-[1.7] text-[#F2EAD9]/60';
+  'font-serif text-[clamp(2rem,3.6vw,2.75rem)] leading-[1.15] text-[#F7F1E3] text-balance';
+const bodyMutedClass = 'text-[17px] leading-[1.65] text-[#F2EAD9]/65';
+const primaryButtonClass =
+  'inline-flex items-center rounded-md bg-[#E8A33D] px-6 py-3.5 text-[16px] font-semibold text-[#1A130A] transition-colors hover:bg-[#F0B454] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8A33D]';
 
 const structuredDataDescription = pageDescription;
 
-const practiceCards = [
+// Spread east to west so the drift in the window is visible at a glance.
+const timingCitySlugs = ['edison-nj', 'chicago-il', 'dallas-tx', 'denver-co', 'seattle-wa', 'san-jose-ca'];
+
+const features = [
   {
-    kicker: 'Ask Mihira',
-    title: 'Bring a life question',
-    body: 'Duty, grief, ambition, relationships. Get scripture-backed guidance with sources cited and one clear practice for today.',
-    img: '/product-screenshots/scripture-guidance.png',
-    alt: 'Mihira scripture guidance screen preview',
-    href: '/ask-mihira',
-  },
-  {
-    kicker: 'Daily Alignment',
-    title: 'Start the day with direction',
-    body: 'A personalized morning reading that helps you decide where to place your energy before the day decides for you.',
-    img: '/product-screenshots/daily-alignment.png',
-    alt: 'Mihira daily alignment screen preview',
-    href: '/daily-alignment',
-  },
-  {
-    kicker: 'Sacred Timing',
-    title: 'Choose better windows',
-    body: 'Describe what you’re planning and scan a date range for the most supportive muhurat windows — with the reasoning shown.',
+    title: 'Sacred Timing',
+    body: 'Tell it what you’re planning, a griha pravesh, a naming, a purchase, and it scans a date range for the best muhurat at your address, with the reasoning shown.',
     img: '/product-screenshots/sacred-timing.png',
-    alt: 'Mihira sacred timing screen preview',
+    alt: 'Mihira Sacred Timing screen listing muhurat windows',
     href: '/muhurat-finder',
+    linkLabel: 'How Sacred Timing works',
+  },
+  {
+    title: 'Ask Mihira',
+    body: 'Bring the questions that have no date: duty, grief, ambition, family. Answers cite the texts they draw on and end with one thing to do today.',
+    img: '/product-screenshots/scripture-guidance.png',
+    alt: 'Mihira answer to a life question, with scripture citations',
+    href: '/ask-mihira',
+    linkLabel: 'See an example answer',
+  },
+  {
+    title: 'Daily Alignment',
+    body: 'A two-minute morning reading, built from your birth details, on where to put your energy before the day decides for you.',
+    img: '/product-screenshots/daily-alignment.png',
+    alt: 'Mihira Daily Alignment morning reading',
+    href: '/daily-alignment',
+    linkLabel: 'Read about Daily Alignment',
   },
 ];
 
 const pillars = [
   {
-    num: 'I',
-    title: 'Grounded in more than the Gita',
-    body: 'Upanishads, Puranas, the epics, Vedic teaching, and the saints’ commentary — the full canon, with citations you can check.',
+    title: 'More than the Gita',
+    body: 'The Upanishads, Puranas, both epics and the saints’ commentary, cited so you can check the source yourself.',
   },
   {
-    num: 'II',
     title: 'Practical, not mystical',
-    body: 'No vague cosmic reassurance. Every answer ends in something usable: a clearer judgment, a better window, a next step.',
+    body: 'No vague cosmic reassurance. Each answer ends in a clearer judgment, a better window, or a next step.',
   },
   {
-    num: 'III',
-    title: 'Built for life far from home',
-    body: 'For the diaspora navigating ambition and grief without family, temples, or elders nearby. Continuity without an astrologer on call.',
+    title: 'For life far from home',
+    body: 'Written for families who don’t have a temple, a pandit, or an elder down the road to ask.',
   },
   {
-    num: 'IV',
-    title: 'Private and judgment-free',
-    body: 'Your questions, birth details, and preferences are treated as sensitive data. No community feed, no selling data, no judgment.',
+    title: 'Private by default',
+    body: 'Your questions and birth details are treated as sensitive data. No community feed, and we never sell data.',
   },
 ];
 
 const quotes = [
   {
-    text: 'I asked about leaving a job my parents were proud of. It didn’t tell me what to do — it gave me a steadier way to decide.',
+    text: 'I asked about leaving a job my parents were proud of. It didn’t tell me what to do. It gave me a steadier way to decide.',
     name: 'Ananya R.',
     role: 'Product manager, Toronto',
   },
@@ -97,11 +98,11 @@ const quotes = [
 ];
 
 const planRows = [
-  { feature: 'Ask Mihira — scripture-grounded guidance', free: 'A few questions / week', plus: 'Unlimited' },
-  { feature: 'Daily Alignment reading', free: 'Included', plus: 'Included' },
   { feature: 'Sacred Timing (Muhurat Finder)', free: 'Limited scans', plus: 'Unlimited scans' },
-  { feature: 'Gurukul — guided learning & practice', free: 'Previews', plus: 'Full library' },
-  { feature: 'Personalization from your birth details', free: 'Basic', plus: 'Deep' },
+  { feature: 'Ask Mihira', free: 'A few questions a week', plus: 'Unlimited' },
+  { feature: 'Daily Alignment reading', free: 'Included', plus: 'Included' },
+  { feature: 'Gurukul guided learning', free: 'Previews', plus: 'Full library' },
+  { feature: 'Personalized from your birth details', free: 'Basic', plus: 'Deep' },
 ];
 
 const faqs = [
@@ -256,17 +257,6 @@ function structuredData() {
   ];
 }
 
-function renderMihiraText(text: string) {
-  const parts = text.split('Mihira');
-
-  return parts.map((part, index) => (
-    <span key={`${part}-${index}`}>
-      {part}
-      {index < parts.length - 1 ? <MihiraText /> : null}
-    </span>
-  ));
-}
-
 async function getWaitlistCount() {
   const client = getSupabaseAdminClient();
   if (!client) return null;
@@ -282,11 +272,13 @@ async function getWaitlistCount() {
 
 export default async function HomePage() {
   const waitlistCount = await getWaitlistCount();
-  const waitlistCountLabel = waitlistCount !== null ? waitlistCount.toLocaleString('en-US') : null;
-  const heroWaitlistCopy = waitlistCountLabel ? `${waitlistCountLabel} on the waitlist` : 'Growing waitlist';
-  const finalCtaWaitlistCopy = waitlistCountLabel
-    ? `${waitlistCountLabel} are already waiting.`
-    : 'People are already on the list.';
+  const waitlistNote =
+    waitlistCount !== null ? `${waitlistCount.toLocaleString('en-US')} people are on the Android waitlist.` : null;
+
+  const timingRows = timingCitySlugs
+    .map((slug) => DIWALI_CITIES.find((c) => c.slug === slug))
+    .filter((c): c is (typeof DIWALI_CITIES)[number] => Boolean(c))
+    .map((c) => ({ city: c, t: lakshmiPujaFor(c.lat, c.lng) }));
 
   return (
     <main className="bg-[#0F0C08] text-[#F2EAD9]">
@@ -300,160 +292,151 @@ export default async function HomePage() {
       <SiteNav />
 
       {/* Hero */}
-      <header className="relative overflow-hidden px-6 pb-16 pt-16 md:px-12 md:pb-24 md:pt-[88px]">
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_70%_20%,rgba(120,72,20,0.35),transparent_70%),radial-gradient(ellipse_50%_60%_at_20%_80%,rgba(70,42,14,0.3),transparent_70%)]"
-          aria-hidden="true"
-        />
-        <div className="relative mx-auto grid max-w-[1160px] grid-cols-[1.15fr_0.85fr] items-center gap-12 lg:gap-[72px] max-lg:grid-cols-1">
-          <div className="flex flex-col gap-7">
-            <div className="flex items-center gap-2.5">
-              <span className="h-px w-6 bg-[#E8A33D]" />
-              <span className={kickerClass}>Scripture-grounded · Private · Practical</span>
-            </div>
+      <header className={`${shellClass} grid items-center gap-14 pb-20 pt-16 md:pb-28 md:pt-24 lg:grid-cols-[1.2fr_0.8fr]`}>
+        <div className="flex flex-col gap-8">
+          <h1 className="max-w-[14ch] font-serif text-[clamp(2.75rem,6vw,4.5rem)] leading-[1.04] tracking-[-0.01em] text-[#F7F1E3]">
+            Guidance for the decisions you don’t want answered lightly.
+          </h1>
+          <p className="max-w-[34rem] text-[19px] leading-[1.6] text-[#F2EAD9]/75">
+            Muhurat computed for your own city, not for India, and answers drawn from the scriptures for the
+            questions that have no date. For duty, family, ambition and grief.
+          </p>
 
-            <div className="flex flex-col gap-6">
-              <h1 className="max-w-[15ch] text-balance [font-family:var(--font-display)] text-[clamp(2.6rem,5.6vw,4rem)] font-medium leading-[1.08] tracking-tight text-[#F7F1E3]">
-                Guidance for the decisions{' '}
-                <em className="not-italic text-[#E8A33D] italic">you don’t want answered lightly.</em>
-              </h1>
-              <p className="max-w-[520px] text-lg leading-[1.65] text-[#F2EAD9]/75">
-                Scripture-grounded answers, auspicious timing, and a daily practice — a private{' '}
-                <MihiraText /> companion for duty, relationships, ambition, and grief. Not astrology
-                entertainment.
-              </p>
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+              <a className={primaryButtonClass} href={hasAppStoreUrl ? appStoreUrl : waitlistHref}>
+                {hasAppStoreUrl ? 'Download for iPhone' : 'Join the waitlist'}
+              </a>
+              <span className="text-[15px] text-[#F2EAD9]/55">Free to start</span>
             </div>
-
-            <div className="flex flex-col gap-3.5">
-              <div className="flex flex-wrap items-center gap-3.5">
-                <a
-                  className="flex items-center gap-2 rounded-full bg-[#E8A33D] px-7 py-[15px] font-sans text-[15px] font-bold text-[#1A130A] transition hover:bg-[#F0B454]"
-                  href={hasAppStoreUrl ? appStoreUrl : waitlistHref}
-                >
-                  {hasAppStoreUrl ? 'Download on the App Store' : 'App Store — coming soon'}
-                </a>
-                <span className="font-sans text-[13px] text-[#F2EAD9]/55">
-                  Android coming soon — join the waitlist below
-                </span>
-              </div>
-              <WaitlistInlineForm source="landing_page_hero" />
-              <div className="flex flex-wrap items-center gap-4 font-sans text-[13px] text-[#F2EAD9]/55">
-                <span className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#E8A33D]" />
-                  {heroWaitlistCopy}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#E8A33D]" />
-                  Free to start
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#E8A33D]" />
-                  Live on iPhone
-                </span>
-              </div>
+            <div className="flex max-w-[480px] flex-col gap-2.5 border-t border-[#F2EAD9]/[0.08] pt-5">
+              <p className="text-[15px] text-[#F2EAD9]/60">On Android? We’ll email you when it’s ready.</p>
+              <WaitlistInlineForm source="landing_page_hero" buttonLabel="Notify me" />
             </div>
           </div>
+        </div>
 
-          <div className="relative flex justify-center">
-            <div
-              className="pointer-events-none absolute -inset-10 bg-[radial-gradient(ellipse_60%_55%_at_50%_45%,rgba(232,163,61,0.14),transparent_70%)]"
-              aria-hidden="true"
+        <div className="flex justify-center lg:justify-end">
+          <div className="w-[280px] overflow-hidden rounded-[40px] border border-[#F2EAD9]/[0.14] bg-[#17120B] p-2">
+            <Image
+              alt="Mihira Sacred Timing screen listing muhurat windows"
+              className="block h-auto w-full rounded-[32px]"
+              src="/product-screenshots/sacred-timing.png"
+              width={1179}
+              height={2556}
+              sizes="280px"
+              priority
             />
-            <div className="relative w-[300px] rotate-[1.5deg] overflow-hidden rounded-[44px] border border-[#E8A33D]/30 shadow-[0_40px_90px_rgba(0,0,0,0.6),0_0_0_8px_rgba(20,15,9,0.9)]">
-              <Image
-                alt="Mihira Daily Alignment screen showing a personalized morning reading"
-                className="block h-auto w-full"
-                src="/product-screenshots/daily-alignment.png"
-                width={1179}
-                height={2556}
-                sizes="300px"
-                priority
-              />
-            </div>
           </div>
         </div>
       </header>
 
-      {/* The practice */}
-      <section id="practice" className={`${bandClass} scroll-mt-28 border-t border-[#E8A33D]/10`}>
-        <div className={`${shellClass} flex flex-col gap-16`}>
-          <div className="flex flex-wrap items-end justify-between gap-10">
-            <div className="flex max-w-[560px] flex-col gap-4">
-              <span className={kickerClass}>The practice</span>
-              <h2 className={headingClass}>One private rhythm: ask, align, and time what matters.</h2>
-            </div>
-            <p className={`${bodyMutedClass} max-w-[340px]`}>
-              Not a horoscope feed. Not one-shot Q&amp;A. A daily practice built around three moments.
+      {/* Timing is local */}
+      <section className={`${sectionClass} bg-[#14100A]`}>
+        <div className={`${shellClass} grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20`}>
+          <div className="flex flex-col gap-6">
+            <h2 className={headingClass}>One Diwali. A different window in every city.</h2>
+            <p className={bodyMutedClass}>
+              Lakshmi Puja begins after your local sunset, so the right window moves with you. A time printed for
+              Delhi doesn’t hold in Dallas. These are computed for {DIWALI_DATE_LABEL}.
             </p>
+            <dl className="border-l-2 border-[#E8A33D] pl-5">
+              <dt className="font-serif text-[22px] text-[#F7F1E3]">
+                Muhurat <span lang="sa" className="text-[#E8A33D]">मुहूर्त</span>
+              </dt>
+              <dd className="mt-1 text-[15px] leading-relaxed text-[#F2EAD9]/60">
+                A window of time suited to a particular act, worked out from the sun, the moon and where you stand.
+              </dd>
+            </dl>
+            <Link
+              className="self-start text-[16px] font-semibold text-[#E8A33D] underline decoration-[#E8A33D]/40 underline-offset-[6px] transition-colors hover:decoration-[#E8A33D]"
+              href="/diwali"
+            >
+              Find the window for your city
+            </Link>
           </div>
 
-          <div className="grid grid-cols-3 gap-7 max-lg:grid-cols-1">
-            {practiceCards.map((card) => (
-              <div
-                key={card.title}
-                className="flex flex-col overflow-hidden rounded-3xl border border-[#E8A33D]/[0.14] bg-[linear-gradient(180deg,rgba(38,28,16,0.6),rgba(24,18,11,0.6))]"
-              >
-                <div className="flex flex-col gap-2 px-[26px] pb-5 pt-[22px]">
-                  <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-[#E8A33D]">
-                    {card.kicker}
-                  </span>
-                  <h3 className="[font-family:var(--font-display)] text-[26px] font-semibold text-[#F7F1E3]">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm leading-[1.65] text-[#F2EAD9]/65">{card.body}</p>
-                  <Link
-                    className="mt-1 font-sans text-[13px] font-semibold text-[#E8A33D] hover:text-[#F0B454]"
-                    href={card.href}
-                  >
-                    Learn more →
-                  </Link>
+          <table className="w-full border-collapse self-start text-left">
+            <caption className="sr-only">Lakshmi Puja window by US city, {DIWALI_DATE_LABEL}</caption>
+            <thead>
+              <tr className="text-[14px] text-[#F2EAD9]/45">
+                <th scope="col" className="pb-3 font-medium">City</th>
+                <th scope="col" className="pb-3 font-medium">Lakshmi Puja</th>
+                <th scope="col" className="hidden pb-3 text-right font-medium sm:table-cell">Sunset</th>
+              </tr>
+            </thead>
+            <tbody>
+              {timingRows.map(({ city, t }) => (
+                <tr key={city.slug} className="border-t border-[#F2EAD9]/[0.1]">
+                  <th scope="row" className="py-4 pr-4 align-baseline text-[16px] font-medium text-[#F2EAD9]/85">
+                    <Link className="transition-colors hover:text-[#E8A33D]" href={`/diwali/${city.slug}`}>
+                      {city.name}
+                    </Link>
+                  </th>
+                  <td className="py-4 pr-4 align-baseline font-serif text-[clamp(1.35rem,2.6vw,2rem)] tabular-nums leading-none text-[#F7F1E3]">
+                    {t.pujaStart}
+                    <span className="text-[#F2EAD9]/35"> to </span>
+                    {t.pujaEnd}
+                    <span className="ml-2 font-sans text-[13px] text-[#F2EAD9]/40">{t.tzAbbr}</span>
+                  </td>
+                  <td className="hidden py-4 text-right align-baseline text-[15px] tabular-nums text-[#F2EAD9]/50 sm:table-cell">
+                    {t.sunset}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* What's in the app */}
+      <section id="practice" className={`${sectionClass} scroll-mt-20`}>
+        <div className={`${shellClass} flex flex-col gap-16`}>
+          <h2 className={`${headingClass} max-w-[22ch]`}>Three things you’ll open it for.</h2>
+
+          <div className="grid gap-x-10 gap-y-16 md:grid-cols-3">
+            {features.map((feature) => (
+              <article key={feature.title} className="flex flex-col gap-5">
+                <div className="h-[340px] overflow-hidden rounded-t-[28px] border border-b-0 border-[#F2EAD9]/[0.12] bg-[#17120B] px-2 pt-2">
+                  <Image
+                    alt={feature.alt}
+                    src={feature.img}
+                    className="block w-full rounded-t-[22px]"
+                    width={1179}
+                    height={2556}
+                    sizes="(min-width: 768px) 30vw, 90vw"
+                    loading="lazy"
+                  />
                 </div>
-                <div className="mt-auto px-[26px]">
-                  <div className="overflow-hidden rounded-t-[22px] border border-b-0 border-[#E8A33D]/20 shadow-[0_-12px_40px_rgba(0,0,0,0.35)]">
-                    <Image
-                      alt={card.alt}
-                      src={card.img}
-                      className="-mb-[38%] block w-full"
-                      width={1179}
-                      height={2556}
-                      sizes="(min-width: 1024px) 33vw, 90vw"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-              </div>
+                <h3 className="font-serif text-[26px] leading-tight text-[#F7F1E3]">{feature.title}</h3>
+                <p className="text-[16px] leading-[1.65] text-[#F2EAD9]/65">{feature.body}</p>
+                <Link
+                  className="mt-auto self-start text-[15px] font-semibold text-[#E8A33D] underline decoration-[#E8A33D]/40 underline-offset-[5px] transition-colors hover:decoration-[#E8A33D]"
+                  href={feature.href}
+                >
+                  {feature.linkLabel}
+                </Link>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
       {/* Why Mihira */}
-      <section
-        id="why"
-        className={`${bandClass} scroll-mt-28 border-t border-[#E8A33D]/10 bg-[linear-gradient(180deg,#14100A,#0F0C08)]`}
-      >
-        <div className={`${shellClass} grid grid-cols-[0.9fr_1.1fr] items-start gap-20 max-lg:grid-cols-1`}>
-          <div className="sticky top-24 flex flex-col gap-4.5 max-lg:static">
-            <span className={kickerClass}>Why Mihira</span>
-            <h2 className={headingClass}>Not another &quot;Ask Krishna&quot; chatbot.</h2>
+      <section id="why" className={`${sectionClass} scroll-mt-20`}>
+        <div className={`${shellClass} grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20`}>
+          <div className="flex flex-col gap-5">
+            <h2 className={headingClass}>Not another “Ask Krishna” chatbot.</h2>
             <p className={bodyMutedClass}>
-              Gita-only apps give you a verse and leave. <MihiraText /> is built as an ongoing practice, with
-              the depth and privacy that real questions deserve.
+              Gita-only apps hand you a verse and leave. Mihira is meant to be used over years, with the depth and
+              privacy real questions need.
             </p>
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-x-10 gap-y-10 sm:grid-cols-2">
             {pillars.map((pillar) => (
-              <div
-                key={pillar.num}
-                className="grid grid-cols-[56px_1fr] items-start gap-6 border-b border-[#E8A33D]/[0.12] py-[30px]"
-              >
-                <span className="[font-family:var(--font-display)] text-3xl font-medium leading-none text-[#E8A33D]">
-                  {pillar.num}
-                </span>
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-[19px] font-bold text-[#F7F1E3]">{pillar.title}</h3>
-                  <p className="text-[15px] leading-[1.7] text-[#F2EAD9]/60">{pillar.body}</p>
-                </div>
+              <div key={pillar.title} className="flex flex-col gap-2 border-t border-[#F2EAD9]/[0.12] pt-5">
+                <h3 className="text-[18px] font-semibold text-[#F7F1E3]">{pillar.title}</h3>
+                <p className="text-[16px] leading-[1.65] text-[#F2EAD9]/60">{pillar.body}</p>
               </div>
             ))}
           </div>
@@ -461,136 +444,93 @@ export default async function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className={`${bandClass} border-t border-[#E8A33D]/10`}>
-        <div className={`${shellClass} flex flex-col gap-14`}>
-          <div className="flex flex-col items-center gap-3.5 text-center">
-            <span className={kickerClass}>From the private beta</span>
-            <h2 className={`${headingClass} max-w-[640px]`}>
-              What early users bring to <MihiraText /> — and what they take away.
-            </h2>
-          </div>
-          <div className="grid grid-cols-3 gap-7 max-lg:grid-cols-1">
-            {quotes.map((quote) => (
-              <figure
-                key={quote.name}
-                className="flex flex-col gap-5 rounded-3xl border border-[#E8A33D]/[0.14] bg-[#261C10]/40 px-[30px] py-8"
-              >
-                <span className="[font-family:var(--font-display)] text-4xl leading-[0.6] text-[#E8A33D]">&ldquo;</span>
-                <blockquote className="[font-family:var(--font-display)] text-[21px] italic leading-[1.45] text-[#F2EAD9]">
-                  {quote.text}
-                </blockquote>
-                <figcaption className="mt-auto flex flex-col gap-0.5">
-                  <span className="text-sm font-bold text-[#F7F1E3]">{quote.name}</span>
-                  <span className="text-[13px] text-[#F2EAD9]/50">{quote.role}</span>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+      <section className={`${sectionClass} bg-[#14100A]`}>
+        <div className={`${shellClass} grid gap-12 md:grid-cols-3`}>
+          {quotes.map((quote) => (
+            <figure key={quote.name} className="flex flex-col gap-5">
+              <blockquote className="font-serif text-[22px] italic leading-[1.45] text-[#F2EAD9]">
+                “{quote.text}”
+              </blockquote>
+              <figcaption className="mt-auto text-[15px] text-[#F2EAD9]/50">
+                <span className="font-semibold text-[#F2EAD9]/85">{quote.name}</span>, {quote.role}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 
       {/* Plans */}
-      <section
-        id="plans"
-        className={`${bandClass} scroll-mt-28 border-t border-[#E8A33D]/10 bg-[linear-gradient(180deg,#14100A,#0F0C08)]`}
-      >
-        <div className={`${shellClass.replace('max-w-[1160px]', 'max-w-[880px]')} flex flex-col gap-14`}>
-          <div className="flex flex-col items-center gap-3.5 text-center">
-            <span className={kickerClass}>Plans</span>
-            <h2 className={headingClass}>Start free. Deepen when you’re ready.</h2>
-            <p className="text-[15px] text-[#F2EAD9]/60">
-              Pricing announced at launch. Waitlist members get early-bird terms.
-            </p>
+      <section id="plans" className={`${sectionClass} scroll-mt-20`}>
+        <div className="mx-auto flex w-full max-w-[880px] flex-col gap-10 px-6">
+          <div className="flex flex-col gap-4">
+            <h2 className={headingClass}>Start free. Go deeper when you’re ready.</h2>
+            <p className={bodyMutedClass}>Pricing is announced at launch. Waitlist members get early-bird terms.</p>
           </div>
 
-          <div className="overflow-hidden rounded-3xl border border-[#E8A33D]/[0.16]">
-            <div className="grid grid-cols-[1.4fr_1fr_1fr] border-b border-[#E8A33D]/[0.16] bg-[#261C10]/55">
-              <div className="px-[30px] py-[22px] font-sans text-[13px] font-bold uppercase tracking-[0.14em] text-[#F2EAD9]/50">
-                What you get
-              </div>
-              <div className="px-5 py-[22px] text-center [font-family:var(--font-display)] text-2xl font-semibold text-[#F2EAD9]">
-                Free
-              </div>
-              <div className="bg-[#E8A33D]/[0.07] px-5 py-[22px] text-center [font-family:var(--font-display)] text-2xl font-semibold text-[#E8A33D]">
-                Plus
-              </div>
-            </div>
-            {planRows.map((row) => (
-              <div
-                key={row.feature}
-                className="grid grid-cols-[1.4fr_1fr_1fr] items-center border-b border-[#E8A33D]/[0.09] last:border-b-0"
-              >
-                <div className="px-[30px] py-5 text-[15px] font-semibold text-[#F2EAD9]">{row.feature}</div>
-                <div className="px-5 py-5 text-center text-sm text-[#F2EAD9]/60">{row.free}</div>
-                <div className="bg-[#E8A33D]/[0.07] px-5 py-5 text-center text-sm font-semibold text-[#F0B454]">
-                  {row.plus}
-                </div>
-              </div>
-            ))}
-          </div>
+          <table className="w-full border-collapse text-left">
+            <thead>
+              <tr className="border-b border-[#F2EAD9]/[0.16]">
+                <th scope="col" className="py-4 pr-4 text-[14px] font-medium text-[#F2EAD9]/45">
+                  <span className="sr-only">Feature</span>
+                </th>
+                <th scope="col" className="w-[28%] py-4 pr-4 font-serif text-[24px] font-normal text-[#F2EAD9]">
+                  Free
+                </th>
+                <th scope="col" className="w-[28%] py-4 font-serif text-[24px] font-normal text-[#E8A33D]">
+                  Plus
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {planRows.map((row) => (
+                <tr key={row.feature} className="border-b border-[#F2EAD9]/[0.08]">
+                  <th scope="row" className="py-5 pr-4 text-[16px] font-medium text-[#F2EAD9]">
+                    {row.feature}
+                  </th>
+                  <td className="py-5 pr-4 text-[15px] text-[#F2EAD9]/60">{row.free}</td>
+                  <td className="py-5 text-[15px] font-semibold text-[#F0B454]">{row.plus}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
       {/* FAQ */}
-      <section id="faq" className={`${bandClass} border-t border-[#E8A33D]/10`}>
-        <div className="mx-auto w-full max-w-[920px] px-6 lg:px-10">
-          <div className="mb-14 text-center">
-            <span className={kickerClass}>Questions</span>
-            <h2 className={`${headingClass} mt-4`}>
-              Questions people ask before they trust <MihiraText />.
-            </h2>
-          </div>
-
-          <FAQList
-            faqs={faqs.map((faq) => ({
-              ...faq,
-              questionContent: renderMihiraText(faq.question),
-              answer: renderMihiraText(faq.answer),
-            }))}
-          />
+      <section id="faq" className={sectionClass}>
+        <div className="mx-auto grid w-full max-w-[1160px] gap-12 px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 lg:px-12">
+          <h2 className={headingClass}>Before you trust it with a real question.</h2>
+          <FAQList faqs={faqs} />
         </div>
       </section>
 
       {/* Final CTA */}
-      <section
-        id="waitlist"
-        className="relative scroll-mt-28 overflow-hidden border-t border-[#E8A33D]/10 px-6 py-[100px] md:px-12 md:py-[120px]"
-      >
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_65%_at_50%_100%,rgba(120,72,20,0.4),transparent_75%)]"
-          aria-hidden="true"
-        />
-        <div className="relative mx-auto flex max-w-[640px] flex-col items-center gap-7 text-center">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#E8A33D]">
-            <MarkGlyph size={26} />
-          </span>
-          <h2 className={`${headingClass} text-[clamp(2.4rem,5vw,3.25rem)]`}>
-            <MihiraText /> is live on iPhone. Android is next.
-          </h2>
-          <p className="max-w-[460px] text-base leading-[1.7] text-[#F2EAD9]/65">
-            Download Mihira on the App Store today. Android access opens in small batches — {finalCtaWaitlistCopy}
-          </p>
-
-          <WaitlistInlineForm source="landing_page_footer" align="center" />
-
-          <div className="flex gap-3">
-            <a
-              className="flex items-center gap-2 rounded-full border border-[#F2EAD9]/20 px-[18px] py-2 font-sans text-[13px] font-semibold text-[#F2EAD9]/70 transition hover:text-[#E8A33D]"
-              href={hasAppStoreUrl ? appStoreUrl : waitlistHref}
-            >
-              App Store — {hasAppStoreUrl ? 'download' : 'coming soon'}
-            </a>
-            <a
-              className="flex items-center gap-2 rounded-full border border-[#F2EAD9]/20 px-[18px] py-2 font-sans text-[13px] font-semibold text-[#F2EAD9]/70 transition hover:text-[#E8A33D]"
-              href={hasGooglePlayUrl ? googlePlayUrl : waitlistHref}
-            >
-              ▶ Google Play — {hasGooglePlayUrl ? 'download' : 'coming soon'}
-            </a>
+      <section id="waitlist" className={`${sectionClass} scroll-mt-20 bg-[#14100A]`}>
+        <div className={`${shellClass} grid grid-cols-1 items-end gap-10 lg:grid-cols-2`}>
+          <div className="flex flex-col gap-5">
+            <h2 className="font-serif text-[clamp(2.25rem,4.4vw,3.25rem)] leading-[1.08] text-[#F7F1E3]">
+              Live on iPhone. Android is next.
+            </h2>
+            <p className={`${bodyMutedClass} max-w-[30rem]`}>
+              Android opens to the waitlist in small batches.{waitlistNote ? ` ${waitlistNote}` : ''}
+            </p>
+          </div>
+          <div className="flex flex-col gap-5">
+            {hasAppStoreUrl ? (
+              <a className={`${primaryButtonClass} self-start`} href={appStoreUrl}>
+                Download for iPhone
+              </a>
+            ) : null}
+            <WaitlistInlineForm source="landing_page_footer" buttonLabel="Join the Android waitlist" />
+            {hasGooglePlayUrl ? (
+              <a className="self-start text-[15px] text-[#F2EAD9]/60 underline underline-offset-4" href={googlePlayUrl}>
+                Get it on Google Play
+              </a>
+            ) : null}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
       <SiteFooter />
     </main>
   );

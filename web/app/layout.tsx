@@ -1,42 +1,26 @@
 import type { Metadata, Viewport } from 'next';
-import { Cormorant_Garamond } from 'next/font/google';
-import localFont from 'next/font/local';
+import { Mukta, Tiro_Devanagari_Sanskrit } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 const GA_MEASUREMENT_ID = 'G-BDDT7G1Z9C';
 
-const display = Cormorant_Garamond({
-  subsets: ['latin'],
+// Display: a Latin face drawn to sit beside Devanagari, so Sanskrit terms
+// (मुहूर्त, पञ्चाङ्ग) set in the same voice as the English around them.
+const display = Tiro_Devanagari_Sanskrit({
+  subsets: ['latin', 'devanagari'],
+  weight: '400',
+  style: ['normal', 'italic'],
   variable: '--font-display',
-  weight: ['500', '600', '700'],
+  display: 'swap',
 });
 
-const googleSans = localFont({
-  src: [
-    {
-      path: '../public/fonts/google-sans/GoogleSans_400Regular.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/google-sans/GoogleSans_500Medium.ttf',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/google-sans/GoogleSans_600SemiBold.ttf',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: '../public/fonts/google-sans/GoogleSans_700Bold.ttf',
-      weight: '700',
-      style: 'normal',
-    },
-  ],
-  variable: '--font-google-sans',
+// Body and UI: humanist sans with native Devanagari support.
+const body = Mukta({
+  subsets: ['latin', 'devanagari'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-body',
   display: 'swap',
 });
 
@@ -79,7 +63,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${googleSans.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
         {children}
         <Analytics />

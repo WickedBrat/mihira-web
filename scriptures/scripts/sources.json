@@ -1,0 +1,175 @@
+{
+  "_readme": "Config for fetch_sources.py. Only sources confirmed public-domain in /Users/Apple/Desktop/Nous/projects/mihira/research/public-domain-source-texts.md are listed. sacred-texts.com is deliberately excluded — its robots.txt explicitly disallows ClaudeBot. GRETIL (Sanskrit) and archive.org (English translations) have no such restriction and archive.org's whole mission is bulk reuse of public-domain texts. Entries marked 'verified' have a confirmed working URL/identifier; entries marked 'todo' need identifier lookup via find_archive_identifier.py before use — do not guess identifiers, a wrong one will silently fetch the wrong book.",
+
+  "texts": [
+    {
+      "slug": "bhagavad-gita",
+      "name": "Bhagavad Gita",
+      "sanskrit": [
+        {
+          "status": "todo",
+          "note": "GRETIL lists Bhagavadgita under the Mahabharata section (#BhG on gretil.html). Confirm exact plaintext URL under gretil/corpustei/transformations/plaintext/ before fetching — pattern is sa_{slug}.txt but the Gita's specific slug wasn't confirmed this session."
+        }
+      ],
+      "english": [
+        {
+          "status": "verified",
+          "translator": "Annie Besant & Bhagavan Das",
+          "year": 1905,
+          "archive_identifier": "bhagavadgitaorlo00besa",
+          "notes": "Includes Devanagari + free translation + word-by-word gloss. Raw OCR (djvu) — expect scanning artifacts needing cleanup. Both translators long deceased; public domain."
+        }
+      ]
+    },
+    {
+      "slug": "rig-veda",
+      "name": "Rig Veda",
+      "sanskrit": [
+        {"status": "todo", "note": "GRETIL Samhita section — confirm exact file slug(s), Rigveda is large and may be split across multiple files/mandalas."}
+      ],
+      "english": [
+        {"status": "verified", "translator": "Ralph T. H. Griffith", "year": 1889, "archive_identifier": "hymnsrigveda00grifgoog", "notes": "Vol. 1 (Google Books scan). Confirm this covers which mandalas before assuming completeness."},
+        {"status": "verified", "translator": "Ralph T. H. Griffith", "year": 1897, "archive_identifier": "hymnsrigveda02grifgoog", "notes": "Vol. 2 (Digital Library of India scan, dli.2015.47262 is an alternate copy of the same vol.)."}
+      ]
+    },
+    {
+      "slug": "mahabharata",
+      "name": "Mahabharata (incl. Bhagavad Gita as Book VI)",
+      "sanskrit": [
+        {"status": "todo", "note": "GRETIL #MBh section — Mahabharata sanskrit corpus is split by parva; will need multiple files."}
+      ],
+      "english": [
+        {"status": "verified", "translator": "Kisari Mohan Ganguli", "year": "1883-1896", "archive_identifier": "the-mahabharata-by-kisari-mohan-ganguli", "notes": "Single combined ebook per search results — verify it's actually the full 18-parva text and not an abridgement before treating as complete."}
+      ]
+    },
+    {
+      "slug": "manusmriti",
+      "name": "Manusmriti",
+      "sanskrit": [
+        {"status": "todo", "note": "GRETIL Dharmashastra section — confirm slug."}
+      ],
+      "english": [
+        {"status": "verified", "translator": "Georg Bühler", "year": 1886, "archive_identifier": "lawsofmanu00bh", "notes": "Sacred Books of the East vol. 25."}
+      ]
+    },
+    {
+      "slug": "devi-bhagavatam",
+      "name": "Devi Bhagavatam",
+      "sanskrit": [
+        {"status": "todo", "note": "GRETIL Purana section — confirm slug."}
+      ],
+      "english": [
+        {"status": "verified", "translator": "Swami Vijnanananda", "year": "1921-22", "archive_identifier": "the-srimad-devi-bhagawatam-swami-vijnanananda", "notes": "Sacred Books of the Hindus series."}
+      ]
+    },
+    {
+      "slug": "vishnu-purana",
+      "name": "Vishnu Purana",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Purana section — confirm slug."}],
+      "english": [
+        {"status": "verified", "translator": "Horace Hayman Wilson", "year": 1840, "archive_identifier": "TheVishnuPuranaVolI", "notes": "Vol. I only — Wilson's translation runs multiple volumes; check archive.org for Vol. II+ (search 'Vishnu Purana Wilson vol' — dli.ministry.24500 and in.ernet.dli.2015.283854 are alternate/other-volume copies of the same edition) before treating this single identifier as the complete text."}
+      ]
+    },
+    {
+      "slug": "ramayana",
+      "name": "Ramayana (Valmiki)",
+      "sanskrit": [{"status": "todo", "note": "GRETIL #Ram section — split by kanda."}],
+      "english": [
+        {"status": "verified", "translator": "Ralph T. H. Griffith", "year": "1870-1874", "archive_identifier": "ramayanofvlm00valmrich", "notes": "Verse translation. Check whether this identifier covers all 7 kandas or just one volume — Griffith's original was published across 5 volumes; in.ernet.dli.2015.529050 (Vol.1) and dli.bengal.10689.15922 (Vol.2) are alternates/other volumes worth cross-checking for completeness."}
+      ]
+    },
+    {
+      "slug": "bhagavata-purana",
+      "name": "Bhagavata Purana (Srimad Bhagavatam)",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Purana section."}],
+      "english": [
+        {"status": "verified", "translator": "Manmatha Nath Dutt", "year": 1896, "archive_identifier": "in.ernet.dli.2015.272582", "notes": "744 pages, Digital Library of India scan."}
+      ]
+    },
+    {
+      "slug": "markandeya-purana",
+      "name": "Markandeya Purana",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Purana section."}],
+      "english": [
+        {"status": "verified", "translator": "Frederick Eden Pargiter", "year": 1904, "archive_identifier": "the-markandeya-purana", "notes": "Cleaner-looking identifier than the DLI copies (in.ernet.dli.2015.196011 / .188841 / .48873 are alternates/other volumes) — verify completeness on the details page before relying on it as the single source."}
+      ]
+    },
+    {
+      "slug": "agni-purana",
+      "name": "Agni Purana",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Purana section."}],
+      "english": [
+        {"status": "verified", "translator": "Manmatha Nath Dutt", "year": 1903, "archive_identifier": "in.ernet.dli.2015.279469", "notes": "Vol. I of IV."},
+        {"status": "verified", "translator": "Manmatha Nath Dutt", "year": 1904, "archive_identifier": "in.ernet.dli.2015.189131", "notes": "Vol. II of IV."},
+        {"status": "verified", "translator": "Manmatha Nath Dutt", "year": 1904, "archive_identifier": "in.ernet.dli.2015.33601", "notes": "Vol. III of IV."},
+        {"status": "verified", "translator": "Manmatha Nath Dutt", "year": 1904, "archive_identifier": "in.ernet.dli.2015.33602", "notes": "Vol. IV of IV — all 4 volumes needed for completeness."}
+      ]
+    },
+    {
+      "slug": "garuda-purana",
+      "name": "Garuda Purana",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Purana section."}],
+      "english": [
+        {"status": "verified", "translator": "Ernest Wood & S. V. Subrahmanyam", "year": 1911, "archive_identifier": "the-garuda-purana-ernest-wood-s.-v.-subrahmanyam", "notes": "Confirmed match to sacred-texts.com's listed edition. Alternate copy: in.ernet.dli.2015.45762."}
+      ]
+    },
+    {
+      "slug": "matsya-purana",
+      "name": "Matsya Purana",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Purana section."}],
+      "english": [
+        {"status": "verified", "translator": "A Taluqdar of Oudh", "year": 1916, "archive_identifier": "in.ernet.dli.2015.274264", "notes": "Chapters 1-128 only — check in.ernet.dli.2015.274261 (1917) for the remaining chapters, this Purana runs 176 chapters total."}
+      ]
+    },
+    {
+      "slug": "arthashastra",
+      "name": "Arthashastra",
+      "sanskrit": [{"status": "todo", "note": "GRETIL — confirm slug."}],
+      "english": [
+        {"status": "verified", "translator": "R. Shamasastry", "year": 1915, "archive_identifier": "kautilyasarthash00sham", "notes": "Clean, dedicated identifier (not a generic DLI scan) — likely best quality of the several copies found."}
+      ]
+    },
+    {
+      "slug": "upanishads",
+      "name": "Principal Upanishads",
+      "sanskrit": [{"status": "verified-listing-only", "note": "GRETIL Upanisad section lists ~18 individual files (Aitareya, Brihadaranyaka, Chandogya, Isha, Katha, Kausitaki, Kena, Maha-Narayana, Maitrayaniya, Mandukya x2, Mundaka, Prasna, Svetasvatara x2, Taittiriya) each with its own plaintext download link — confirm each slug individually rather than guessing a pattern."}],
+      "english": [
+        {"status": "verified", "translator": "Max Müller", "year": 1879, "archive_identifier": "wg901", "notes": "SBE vol. 1, Part 1: Chandogya, Talavakara/Kena, Aitareya-Aranyaka, Kaushitaki-Brahmana, Vajasaneyi-Samhita Upanishads."},
+        {"status": "verified", "translator": "Max Müller", "year": 1884, "archive_identifier": "wg915", "notes": "SBE vol. 15, Part 2: Katha, Mundaka, Taittiriyaka, Brihadaranyaka, Svetasvatara, Prasna, Maitrayana-Brahmana Upanishads."}
+      ]
+    },
+    {
+      "slug": "sama-veda",
+      "name": "Sama Veda",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Samhita section — confirm slug."}],
+      "english": [
+        {"status": "verified", "translator": "Ralph T. H. Griffith", "year": 1895, "archive_identifier": "in.ernet.dli.2015.180573", "notes": "Digital Library of India scan — expect Indic-library OCR quality, may need more cleanup than Google Books scans."}
+      ]
+    },
+    {
+      "slug": "shukla-yajurveda",
+      "name": "Shukla Yajurveda (White Yajurveda, Vajasaneyi Samhita)",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Samhita section — confirm slug."}],
+      "english": [
+        {"status": "verified", "translator": "Ralph T. H. Griffith", "year": 1899, "archive_identifier": "in.ernet.dli.2015.126078", "notes": "2nd edition, 'The Texts of the White Yajurveda'."}
+      ]
+    },
+    {
+      "slug": "krishna-yajurveda",
+      "name": "Krishna Yajurveda (Black Yajurveda, Taittiriya Samhita)",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Samhita section — confirm slug."}],
+      "english": [
+        {"status": "verified", "translator": "Arthur Berriedale Keith", "year": 1914, "archive_identifier": "vedablackyajuss02keitgoog", "notes": "'The Veda of the Black Yajus School: Entitled Taittiriya Sanhita', Harvard Oriental Series vol. 18. Confirmed exact match on title/translator/year/series."}
+      ]
+    },
+    {
+      "slug": "atharvaveda",
+      "name": "Atharvaveda",
+      "sanskrit": [{"status": "todo", "note": "GRETIL Samhita section — confirm slug."}],
+      "english": [
+        {"status": "verified", "translator": "Ralph T. H. Griffith", "year": "1895-1896", "archive_identifier": "dli.bengal.10689.23045", "notes": "Vol. 1. Alternate copy: dli.ernet.16975. Confirm volume completeness (Griffith's Atharvaveda was 2 vols)."},
+        {"status": "todo", "note": "Alternate translator: Maurice Bloomfield, SBE vol. 42 (1897) — different translation from Griffith's, selected hymns only (not unabridged). Archive.org identifier not confirmed this session."}
+      ]
+    }
+  ]
+}
