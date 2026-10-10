@@ -4,7 +4,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted-foreground: var(--muted-foreground);
-  --font-sans: var(--font-google-sans);
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
 }
 
 @utility transform-style-3d {
@@ -50,13 +51,19 @@ body {
     radial-gradient(circle at top right, rgba(255, 149, 0, 0.1), transparent 24%),
     linear-gradient(180deg, #0e0e0e 0%, #0e0e0e 100%);
   color: var(--text);
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   text-rendering: optimizeLegibility;
+  /* Tiro ships one weight; never fake a bold or italic. */
+  font-synthesis: none;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* Layered so Tailwind utilities on links (colour, underline) win. */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 button,
@@ -141,7 +148,8 @@ img {
 .header-cta,
 .site-footer__links a,
 .legal-back {
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-size: 0.86rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -256,7 +264,8 @@ img {
 .section-kicker {
   margin: 0 0 16px;
   color: var(--accent);
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-size: 0.58rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -310,7 +319,8 @@ img {
   background: var(--button-bg);
   color: var(--button-text);
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -564,7 +574,8 @@ img {
 .product-preview-card__copy p {
   margin: 0 0 10px;
   color: var(--accent);
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-size: 0.56rem;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -752,7 +763,8 @@ img {
 .quote-panel__overlay p {
   margin: 14px 0 0;
   color: var(--accent);
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-size: 0.56rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -767,7 +779,8 @@ img {
   color: rgba(255, 149, 0, 0.34);
   font-size: 2.15rem;
   font-style: normal;
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-weight: 600;
   letter-spacing: 0.08em;
   line-height: 1;
@@ -864,9 +877,15 @@ img {
 
 .faq-item__trigger span:first-child {
   margin-top: 0;
-  font-size: 1.12rem;
-  font-weight: 650;
-  line-height: 1.2;
+  font-family: var(--font-display), serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.faq-item__trigger:focus-visible {
+  outline: 2px solid #E8A33D;
+  outline-offset: 4px;
 }
 
 .faq-item__icon {
@@ -902,7 +921,9 @@ img {
 }
 
 .faq-item p {
-  max-width: 48rem;
+  max-width: 38rem;
+  color: rgba(242, 234, 217, 0.68);
+  line-height: 1.65;
   margin: 0;
   padding: 0 0 24px;
 }
@@ -988,7 +1009,8 @@ img {
   gap: 0.5rem;
   margin: 2rem 0 0;
   color: #22c55e;
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
 }
@@ -1020,7 +1042,8 @@ img {
   min-height: 42px;
   padding: 0 18px;
   border: 1px solid transparent;
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -1055,7 +1078,8 @@ img {
 .site-footer__brand p {
   margin: 10px 0 0;
   color: var(--accent);
-  font-family: var(--font-google-sans), sans-serif;
+  font-family: var(--font-body), sans-serif;
+  font-size: 17px;
   font-size: 0.52rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;

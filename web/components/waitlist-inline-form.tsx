@@ -67,7 +67,7 @@ export function WaitlistInlineForm({
   if (submitState === 'success') {
     return (
       <div
-        className={`flex items-center gap-3 rounded-full border border-[#E8A33D]/35 bg-[#E8A33D]/10 px-6 py-[15px] ${
+        className={`flex items-center gap-3 rounded-md border border-[#E8A33D]/35 bg-[#E8A33D]/10 px-5 py-3.5 ${
           align === 'center' ? 'mx-auto max-w-[480px]' : 'max-w-[480px]'
         }`}
       >
@@ -79,17 +79,17 @@ export function WaitlistInlineForm({
 
   return (
     <form
-      className={`flex flex-col gap-2 ${align === 'center' ? 'mx-auto max-w-[480px]' : 'max-w-[480px]'}`}
+      className={`flex flex-col gap-2 ${align === 'center' ? 'mx-auto max-w-[480px]' : 'max-w-[480px]'} w-full`}
       onSubmit={handleSubmit}
     >
-      <div className="flex w-full gap-2.5">
+      <div className="flex w-full flex-col gap-2.5 min-[420px]:flex-row">
         <label className="sr-only" htmlFor={emailId}>
           Email address
         </label>
         <input
           id={emailId}
           autoComplete="email"
-          className="min-w-0 flex-1 rounded-full border border-[#F2EAD9]/[0.18] bg-[#F2EAD9]/[0.06] px-[22px] py-[15px] font-sans text-[15px] text-[#F2EAD9] outline-none transition placeholder:text-[#F2EAD9]/35 focus:border-[#E8A33D]"
+          className="min-w-0 flex-1 rounded-md border border-[#F2EAD9]/[0.18] bg-[#F2EAD9]/[0.04] px-4 py-3 text-[16px] text-[#F2EAD9] outline-none transition-colors placeholder:text-[#F2EAD9]/35 focus:border-[#E8A33D] focus-visible:ring-2 focus-visible:ring-[#E8A33D]/40"
           disabled={isSubmitting}
           name="email"
           placeholder="you@example.com"
@@ -109,7 +109,7 @@ export function WaitlistInlineForm({
           onChange={(event) => setWebsite(event.target.value)}
         />
         <button
-          className="whitespace-nowrap rounded-full bg-[#E8A33D] px-7 py-[15px] font-sans text-[15px] font-bold text-[#1A130A] transition hover:bg-[#F0B454] disabled:cursor-not-allowed disabled:opacity-70"
+          className="whitespace-nowrap rounded-md border border-[#E8A33D]/60 px-5 py-3 text-[15px] font-semibold text-[#E8A33D] transition-colors hover:bg-[#E8A33D]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8A33D] disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isSubmitting}
           type="submit"
         >

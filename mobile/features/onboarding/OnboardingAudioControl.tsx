@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 import { Volume2, VolumeX } from 'lucide-react-native';
 import { OB } from '@/lib/onboardingStore';
 
-const ASTRAL_MUSIC = require('../../assets/onboarding-astral.wav');
+const ASTRAL_MUSIC = require('../../assets/onboarding-astral.mp3');
 const MUSIC_VOLUME = 1;
 
 export function OnboardingAudioControl() {

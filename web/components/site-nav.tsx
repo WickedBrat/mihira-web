@@ -9,9 +9,11 @@ const charmonman = Charmonman({
   display: 'swap',
 });
 
-const navLinkClass = 'text-[#F2EAD9]/70 transition hover:text-[#E8A33D]';
+const navLinkClass =
+  'text-[#F2EAD9]/70 transition-colors hover:text-[#F2EAD9] focus-visible:text-[#F2EAD9] focus-visible:outline-none focus-visible:underline underline-offset-[6px] decoration-[#E8A33D]';
 const navAppStoreUrl = process.env.NEXT_PUBLIC_APP_STORE_URL;
 
+/** The wordmark. Use for the logo only, not inside running text. */
 export function MihiraText() {
   return <span className={charmonman.className}>Mihira</span>;
 }
@@ -22,21 +24,19 @@ export function MarkGlyph({ size = 26 }: { size?: number }) {
 
 export function SiteNav() {
   return (
-    <div className="sticky top-3 z-50 px-4 md:top-5 md:px-6">
-      <nav className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 rounded-full border border-[#E8A33D]/[0.14] bg-[#17130B]/90 py-2 pl-5 pr-2 shadow-[0_20px_48px_rgba(0,0,0,0.45)] backdrop-blur-xl md:gap-8 md:pr-3">
-        <Link className="flex items-center gap-2.5" href="/">
-          <MarkGlyph />
-          <span className="[font-family:var(--font-display)] text-lg font-semibold leading-none text-[#F2EAD9] md:text-[22px]">
-            <MihiraText />
-          </span>
+    <div className="sticky top-0 z-50 border-b border-[#F2EAD9]/[0.08] bg-[#0F0C08]/92 backdrop-blur-md">
+      <nav className="mx-auto flex h-16 w-full max-w-[1160px] items-center justify-between gap-6 px-6 lg:px-12">
+        <Link className="flex items-center gap-2.5 text-[22px] leading-none text-[#F2EAD9]" href="/">
+          <MarkGlyph size={24} />
+          <MihiraText />
         </Link>
 
-        <div className="hidden items-center gap-8 font-sans text-sm font-medium md:flex">
-          <Link className={navLinkClass} href="/#practice">
-            The practice
+        <div className="hidden items-center gap-8 text-[15px] md:flex">
+          <Link className={navLinkClass} href="/muhurat-finder">
+            Sacred Timing
           </Link>
-          <Link className={navLinkClass} href="/#why">
-            Why Mihira
+          <Link className={navLinkClass} href="/ask-mihira">
+            Ask Mihira
           </Link>
           <Link className={navLinkClass} href="/#plans">
             Plans
@@ -47,13 +47,10 @@ export function SiteNav() {
         </div>
 
         <Link
-          className="rounded-full bg-[#E8A33D] px-5 py-2.5 font-sans text-sm font-bold text-[#1A130A] transition hover:-translate-y-px hover:bg-[#F0B454] md:px-6"
+          className="rounded-md bg-[#E8A33D] px-4 py-2 text-[15px] font-semibold text-[#1A130A] transition-colors hover:bg-[#F0B454] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8A33D]"
           href={navAppStoreUrl || '/#waitlist'}
         >
-          <span className="md:hidden">{navAppStoreUrl ? 'Get the app' : 'Join'}</span>
-          <span className="hidden md:inline">
-            {navAppStoreUrl ? 'Get the app — App Store' : 'Join the waitlist'}
-          </span>
+          {navAppStoreUrl ? 'Get the app' : 'Join the waitlist'}
         </Link>
       </nav>
     </div>
