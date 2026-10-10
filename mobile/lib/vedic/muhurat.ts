@@ -1,6 +1,6 @@
 // lib/vedic/muhurat.ts
 import type { ChaughadiyaQuality, MuhuratWindow } from './types';
-import { sunTropicalLongitude } from './ephemeris';
+import { sunTropicalLongitude, moonTropicalLongitude, norm360 } from './ephemeris';
 import { toJDE } from './ayanamsha';
 
 export const CHAUGHADIYA_SEQ: ChaughadiyaQuality[] =
@@ -23,7 +23,7 @@ export function getChaughadiya(
   return { quality, isAuspicious: AUSPICIOUS.includes(quality) };
 }
 
-function sunriseSunset(date: Date, lat: number, lng: number): { sunrise: Date; sunset: Date } {
+export function sunriseSunset(date: Date, lat: number, lng: number): { sunrise: Date; sunset: Date } {
   const year = date.getUTCFullYear();
   const month = date.getUTCMonth() + 1;
   const day = date.getUTCDate();
@@ -35,7 +35,10 @@ function sunriseSunset(date: Date, lat: number, lng: number): { sunrise: Date; s
   const declination = Math.asin(Math.sin(eps) * Math.sin(sunLng * Math.PI / 180));
   const latRad = lat * Math.PI / 180;
 
-  const cosH = -Math.tan(latRad) * Math.tan(declination);
+  // Standard sunrise/sunset: upper limb on the horizon with refraction (h0 = -0.833°)
+  const h0 = -0.833 * Math.PI / 180;
+  const cosH = (Math.sin(h0) - Math.sin(latRad) * Math.sin(declination)) /
+    (Math.cos(latRad) * Math.cos(declination));
   const H = Math.acos(Math.max(-1, Math.min(1, cosH))) * 180 / Math.PI;
 
   const L = (280.46646 + 36000.76983 * T) * Math.PI / 180;
@@ -128,4 +131,29 @@ export function getMuhuratWindowsForRange(
   }
 
   return windows.sort((left, right) => left.start.localeCompare(right.start));
+}
+
+export const TITHI_NAMES = [
+  'Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami',
+  'Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi',
+];
+
+/** Julian Ephemeris Day for a JS Date (ΔT ≈ 69s included). */
+export function dateToJDE(date: Date): number {
+  return date.getTime() / 86400000 + 2440587.5 + 69 / 86400;
+}
+
+/**
+ * Tithi in force at a given instant. Ayanamsha cancels out (Moon − Sun), so
+ * tropical longitudes are fine. Moon model is ~1°, so a tithi boundary can be
+ * off by up to ~2h — good enough to label a day, not to time a tithi change.
+ */
+export function getTithiAt(date: Date): { index: number; paksha: 'Shukla' | 'Krishna'; name: string } {
+  const jde = dateToJDE(date);
+  const elong = norm360(moonTropicalLongitude(jde) - sunTropicalLongitude(jde));
+  const index = Math.floor(elong / 12); // 0–29
+  const paksha = index < 15 ? 'Shukla' : 'Krishna';
+  const n = index % 15;
+  const name = n === 14 ? (paksha === 'Shukla' ? 'Purnima' : 'Amavasya') : TITHI_NAMES[n];
+  return { index, paksha, name };
 }

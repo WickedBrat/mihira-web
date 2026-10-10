@@ -17,6 +17,7 @@ interface Props {
   reasoning: string | null;
   warnings: string | null;
   festivalNote: string | null;
+  locationLabel?: string | null;
   rankedWindows: MuhuratWindow[];
   isLoading: boolean;
   error: string | null;
@@ -37,6 +38,7 @@ export function MuhuratCard({
   reasoning,
   warnings,
   festivalNote,
+  locationLabel,
   rankedWindows,
   isLoading,
   error,
@@ -86,6 +88,12 @@ export function MuhuratCard({
           <Text className="font-label text-[11px] uppercase tracking-[1.2px] text-on-surface-variant">Confidence: {confidence}</Text>
         )}
       </View>
+
+      {locationLabel ? (
+        <Text className="font-label text-[10px] tracking-[1px] text-on-surface-variant">
+          COMPUTED FOR {locationLabel.toUpperCase()} · LOCAL SUNRISE & SUNSET
+        </Text>
+      ) : null}
 
       {festivalNote && (
         <View className="flex-row items-start gap-2 rounded-[10px] border px-3.5 py-2.5" style={{ borderColor: `${colors.secondaryFixed}45`, backgroundColor: `${colors.secondaryFixed}10` }}>

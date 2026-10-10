@@ -17,6 +17,7 @@ interface MuhuratState {
   reasoning: string | null;
   warnings: string | null;
   festivalNote: string | null;
+  location: { label: string | null; timeZone: string; source: string } | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -25,7 +26,7 @@ export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
   const [state, setState] = useState<MuhuratState>({
     rankedWindows: [], recommendation: null, confidence: null,
     suggestion: null, reasoning: null, warnings: null, festivalNote: null,
-    isLoading: false, error: null,
+    location: null, isLoading: false, error: null,
   });
 
   useEffect(() => {
@@ -40,6 +41,9 @@ export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
         eventDescription: request.eventDescription,
         startDate: request.startDate,
         endDate: request.endDate,
+        // Lets the server compute for the user's own zone; coordinates come
+        // from IP geolocation server-side when the app doesn't send them.
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       }),
     })
       .then(async (response) => {
@@ -72,6 +76,7 @@ export function useMuhurat(request: MuhuratRequest | null): MuhuratState {
             reasoning: data.reasoning,
             warnings: data.warnings ?? null,
             festivalNote: data.festivalNote ?? null,
+            location: data.location ?? null,
             isLoading: false,
             error: null,
           });

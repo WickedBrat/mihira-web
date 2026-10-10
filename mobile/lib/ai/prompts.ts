@@ -440,3 +440,64 @@ COMPARISON REQUIREMENTS
 - Show where the texts place emphasis differently without claiming contradiction unless the sources actually conflict.
 - Keep the final guidance usable, not academic.`;
 }
+
+// ─── Muhurat ranking (location-computed windows) ────────────────────────────
+// The windows are computed in code from the user's own sunrise/sunset. The
+// model only ranks and explains them — it must never invent or shift a time.
+
+export interface MuhuratCandidate {
+  id: number;
+  local: string;     // e.g. "Sun, Nov 8, 6:12 PM – 7:41 PM"
+  date: string;      // local YYYY-MM-DD
+  quality: string;
+  baseScore: number;
+}
+
+export interface MuhuratDayContext {
+  date: string;
+  weekday: string;
+  tithi: string;     // tithi at local sunrise (approximate)
+  sunrise: string;
+  sunset: string;
+}
+
+export const MUHURAT_RANK_SYSTEM = `You are a careful Jyotish advisor helping a Hindu living outside India choose a time for an important event. You are given auspicious windows that have ALREADY been computed for the user's exact location (Chaughadiya and Abhijit periods from their local sunrise and sunset), plus the tithi for each day.
+
+Rules:
+- Choose ONLY from the candidate ids provided. Never invent, shift or round a time.
+- Score 1–10. Start from baseScore and adjust for: fit between the event and the day (e.g. Dhanteras for buying gold/metals, Diwali Amavasya evening for Lakshmi puja, Akshaya Tritiya / Vijaya Dashami / Gudi Padwa for new beginnings or property); favourable tithis (Shukla Dwitiya, Tritiya, Panchami, Saptami, Dashami, Ekadashi, Trayodashi, Purnima) +1 to +2; Amavasya and Krishna Chaturdashi −2 for new beginnings (but not for Lakshmi puja or shraddha); Rikta tithis (Chaturthi, Navami, Chaturdashi) −1 for new ventures.
+- Prefer practical windows: daylight for ceremonies and purchases, unless the rite is traditionally evening (Lakshmi puja, Diya lighting).
+- If a major festival falls in the range and fits the intention, mention it in festivalNote. Only name a festival if the tithi listed for that day is consistent with it.
+- Write for someone with a US work calendar: plain language, no fear-mongering, no guarantees.
+- Times in your prose must be copied exactly from the candidate "local" strings.`;
+
+export function buildMuhuratRankPrompt(
+  eventDescription: string,
+  locationLabel: string | null,
+  timeZone: string,
+  days: MuhuratDayContext[],
+  candidates: MuhuratCandidate[]
+): string {
+  const dayLines = days.map((d) => `${d.date} (${d.weekday}) — tithi at sunrise: ${d.tithi}; sunrise ${d.sunrise}, sunset ${d.sunset}`).join('\n');
+  const candLines = candidates.map((c) => `${c.id} | ${c.local} | ${c.quality} | base ${c.baseScore}`).join('\n');
+  return `Event intention: ${eventDescription}
+Location: ${locationLabel ?? 'user location'} (time zone ${timeZone})
+
+DAYS:
+${dayLines}
+
+CANDIDATE WINDOWS (id | local time | quality | base score):
+${candLines}
+
+Return ONLY this JSON:
+{
+  "recommendation": "Yes" | "No" | "Wait",
+  "confidence": "High" | "Medium" | "Low",
+  "suggestion": "<2–3 sentences naming the best window by its exact local time and why>",
+  "reasoning": "<2 sentences: tithi, weekday, Chaughadiya/Abhijit quality>",
+  "warnings": "<specific cautions, or 'None'>",
+  "festivalNote": "<festival in range that fits the intention, or null>",
+  "ranked": [ { "id": <candidate id>, "score": <1–10> } ]
+}
+Return up to 10 entries in "ranked", best first.`;
+}
