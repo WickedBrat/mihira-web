@@ -12,8 +12,6 @@ dist/
 mobile/dist/
 web-build/
 mobile/web-build/
-expo-env.d.ts
-mobile/expo-env.d.ts
 web/.next/
 
 # Native
