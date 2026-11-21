@@ -6,8 +6,9 @@ import type {
   ScriptureGuideResponse,
 } from '../../features/ask/types';
 import { parseModelJson } from './parseModelJson';
-import { geminiChat } from './gemini';
-import { buildAskComparePrompt, buildAskSynthesisPrompt, ASK_GUIDANCE_SYSTEM } from './prompts';
+import { claudeChat } from './claude';
+import { ASK_GUIDANCE_SYSTEM, buildAskPrompt, buildAskSchema } from './prompts';
+import { getScriptureModeConfig } from './scriptureModes';
 import type { ModelScriptureGuidePayload } from './askValidators';
 import { validateModelScriptureGuidePayload } from './askValidators';
 import { rankScriptureCandidates } from './scriptureRanking';
@@ -65,6 +66,42 @@ function buildEmptyRetrievalResponse(mode: AskResponseMode, topic: AskTopic): Sc
   };
 }
 
+const clean = (value: unknown): string | undefined =>
+  typeof value === 'string' && value.trim() ? value.trim() : undefined;
+
+/**
+ * The schema returns null for optional fields; the app expects them absent.
+ * Over-long lists are trimmed rather than failing the whole answer.
+ */
+function normalizeModelPayload(
+  payload: ModelScriptureGuidePayload,
+  maxSources: number,
+  maxFollowUps: number,
+): ModelScriptureGuidePayload {
+  const seen = new Set<string>();
+  const sourceReasons = (Array.isArray(payload.source_reasons) ? payload.source_reasons : [])
+    .filter((entry) => entry && !seen.has(entry.source_id) && seen.add(entry.source_id))
+    .slice(0, maxSources);
+  const strings = (list: unknown) =>
+    (Array.isArray(list) ? list : []).map(clean).filter((item): item is string => Boolean(item));
+
+  return {
+    ...payload,
+    answer: {
+      title: clean(payload.answer?.title),
+      summary: clean(payload.answer?.summary) ?? '',
+      practical_guidance: clean(payload.answer?.practical_guidance) ?? '',
+    },
+    source_reasons: sourceReasons,
+    interpretation: {
+      synthesis: clean(payload.interpretation?.synthesis) ?? '',
+      alternate_view: clean(payload.interpretation?.alternate_view),
+    },
+    action_steps: strings(payload.action_steps),
+    follow_up_prompts: strings(payload.follow_up_prompts).slice(0, maxFollowUps),
+  };
+}
+
 export async function generateScriptureGuide(
   payload: AskRequestPayload,
 ): Promise<ScriptureGuideResponse> {
@@ -85,49 +122,47 @@ export async function generateScriptureGuide(
     return buildEmptyRetrievalResponse(mode, classification.primary_topic);
   }
 
-  const prompt = mode === 'compare'
-    ? buildAskComparePrompt({
-        question: payload.message,
-        topic: classification.primary_topic,
-        userContext,
-        history,
-        sources: ranked,
-      })
-    : buildAskSynthesisPrompt({
-        question: payload.message,
-        mode,
-        topic: classification.primary_topic,
-        userContext,
-        history,
-        sources: ranked,
-      });
+  const config = getScriptureModeConfig(mode);
+  const prompt = buildAskPrompt({
+    question: payload.message,
+    mode,
+    classification,
+    userContext,
+    history,
+    sources: ranked,
+    config,
+  });
 
-  const raw = await geminiChat('gemini-2.5-flash', [
+  const raw = await claudeChat([
     { role: 'system', content: ASK_GUIDANCE_SYSTEM },
     { role: 'user', content: prompt },
-  ]);
+  ], {
+    schema: buildAskSchema(ranked.map((source) => source.id), config.includeAlternateView),
+    effort: mode === 'quick' ? 'low' : 'medium',
+  });
 
-  const modelPayload = parseModelJson<ModelScriptureGuidePayload>(raw, [
-    'answer',
-    'source_reasons',
-    'interpretation',
-    'action_steps',
-    'follow_up_prompts',
-  ]);
+  const modelPayload = normalizeModelPayload(
+    parseModelJson<ModelScriptureGuidePayload>(raw, [
+      'answer',
+      'source_reasons',
+      'interpretation',
+      'action_steps',
+      'follow_up_prompts',
+    ]),
+    config.finalSourceCount,
+    config.followUpPromptCount,
+  );
 
   validateModelScriptureGuidePayload(modelPayload, ranked, mode);
 
-  const reasonsById = new Map(
-    modelPayload.source_reasons.map((entry) => [entry.source_id, entry.relevance_reason]),
-  );
-
-  const sources = ranked
-    .filter((source) => reasonsById.has(source.id))
-    .map((source) => toScriptureSource(
-      source,
-      reasonsById.get(source.id) ?? 'Selected for thematic relevance.',
-      source.confidence,
-    ));
+  // Keep the model's order: it lists the passages that matter most first.
+  const rankedById = new Map(ranked.map((source) => [source.id, source]));
+  const sources = modelPayload.source_reasons.flatMap((entry) => {
+    const source = rankedById.get(entry.source_id);
+    return source
+      ? [toScriptureSource(source, clean(entry.relevance_reason) ?? 'Selected for thematic relevance.', source.confidence)]
+      : [];
+  });
 
   return {
     mode,

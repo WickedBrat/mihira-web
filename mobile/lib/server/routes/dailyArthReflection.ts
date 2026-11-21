@@ -1,11 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 import { parseModelJson } from '../../ai/parseModelJson';
-import { geminiChat } from '../../ai/gemini';
+import { claudeChat } from '../../ai/claude';
+import { REFLECTION_SCHEMA, REFLECTION_SYSTEM, buildReflectionPrompt } from '../../ai/prompts';
 import { serverErrorResponse } from '../errorResponse';
 import type { DailyArthReflection } from '../../dailyArthReflectionTypes';
 import { isDailyArthReflection } from '../../dailyArthReflectionTypes';
-
-const REFLECTION_SYSTEM = `You are Mihira's Daily Arth reflection writer. Explain Hindu and Indic wisdom quotes with warmth, practical clarity, and no fortune-telling. Respond ONLY in valid JSON. No markdown fences, no commentary, no text outside the JSON object.`;
 
 function createServerSupabaseClient() {
   const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -22,30 +21,6 @@ function createServerSupabaseClient() {
       detectSessionInUrl: false,
     },
   });
-}
-
-function buildReflectionPrompt(quote: string, source: string) {
-  return `Quote: "${quote}"
-Source: ${source}
-
-Create a practical reflection for someone using this quote in daily life.
-
-Return ONLY this JSON shape:
-{
-  "summary": "<one short sentence that captures the core teaching>",
-  "explanation": "<one detailed paragraph, 4-6 sentences, explaining the quote in plain language and connecting it to daily choices>",
-  "dailyPractice": [
-    "<specific action for today>",
-    "<specific action for today>",
-    "<specific action for today>"
-  ],
-  "reflectionPrompts": [
-    "<journaling or contemplation question>",
-    "<journaling or contemplation question>",
-    "<journaling or contemplation question>"
-  ],
-  "mantra": "<short first-person sentence the user can carry through the day>"
-}`;
 }
 
 function normalizeReflection(value: DailyArthReflection): DailyArthReflection {
@@ -94,10 +69,10 @@ export async function handleDailyArthReflectionRequest(request: Request): Promis
       return Response.json({ error: 'quote and source are required' }, { status: 400 });
     }
 
-    const raw = await geminiChat('gemini-2.5-flash', [
+    const raw = await claudeChat([
       { role: 'system', content: REFLECTION_SYSTEM },
       { role: 'user', content: buildReflectionPrompt(quote, source) },
-    ]);
+    ], { schema: REFLECTION_SCHEMA, effort: 'medium' });
 
     let reflection: DailyArthReflection;
     try {

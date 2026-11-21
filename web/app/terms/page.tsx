@@ -6,7 +6,7 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <LegalLayout eyebrow="Terms and Conditions" title="Rules for using Mihira" updated="July 10, 2026">
+    <LegalLayout eyebrow="Terms and Conditions" title="Rules for using Mihira" updated="November 21, 2026">
       <LegalSection number="01" heading="Acceptance">
         <p>
           These Terms govern access to and use of Mihira, including the Mihira mobile app, website, support
@@ -122,7 +122,7 @@ export default function TermsPage() {
       <LegalSection number="11" heading="Third-party services">
         <p>
           Mihira relies on third-party services including Supabase for authentication and data storage,
-          RevenueCat, Apple App Store, and Google Play for subscriptions and payments, Google Gemini for
+          RevenueCat, Apple App Store, and Google Play for subscriptions and payments, Anthropic (Claude) for
           AI-generated responses, PostHog for analytics, and other hosting, support, and infrastructure
           providers. Third-party services may have their own terms and privacy practices, and Mihira is not
           responsible for services it does not control.

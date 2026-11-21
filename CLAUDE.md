@@ -20,7 +20,7 @@ npx expo run:android    # Native Android build
 | Auth | Supabase Auth (`@supabase/supabase-js`) |
 | DB | Supabase (`getSupabaseClient()`) |
 | Storage | AsyncStorage (chat, profile, daily cache) |
-| AI | Gemini `gemini-2.5-flash` (structured) / `gemini-2.0-flash` (SSE streaming) |
+| AI | Claude via `@anthropic-ai/sdk` (`lib/ai/claude.ts`; JSON schema outputs, SSE streaming) |
 | Animations | `moti` + `react-native-reanimated` |
 | Payments | Stripe (`@stripe/stripe-react-native`) |
 
@@ -29,7 +29,7 @@ npx expo run:android    # Native Android build
 ```
 EXPO_PUBLIC_SUPABASE_URL=
 EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-GEMINI_API_KEY=   # server-side only (app/api/ routes)
+ANTHROPIC_API_KEY=   # server-side only (app/api/ routes and web /v1/api/*)
 ```
 
 ## Architecture

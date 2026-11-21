@@ -2,16 +2,16 @@ jest.mock('@supabase/supabase-js', () => ({
   createClient: jest.fn(),
 }));
 
-jest.mock('@/lib/ai/gemini', () => ({
-  geminiChat: jest.fn(),
+jest.mock('@/lib/ai/claude', () => ({
+  claudeChat: jest.fn(),
 }));
 
 import { createClient } from '@supabase/supabase-js';
-import { geminiChat } from '@/lib/ai/gemini';
+import { claudeChat } from '@/lib/ai/claude';
 import { handleDailyArthReflectionRequest } from '@/lib/server/routes/dailyArthReflection';
 
 const mockCreateClient = createClient as jest.MockedFunction<typeof createClient>;
-const mockGeminiChat = geminiChat as jest.MockedFunction<typeof geminiChat>;
+const mockClaudeChat = claudeChat as jest.MockedFunction<typeof claudeChat>;
 
 const reflection = {
   summary: 'Act without clinging.',
@@ -81,7 +81,7 @@ describe('handleDailyArthReflectionRequest', () => {
 
     expect(response.status).toBe(200);
     expect(payload).toEqual({ reflection, source: 'database' });
-    expect(mockGeminiChat).not.toHaveBeenCalled();
+    expect(mockClaudeChat).not.toHaveBeenCalled();
   });
 
   it('fails before calling Supabase when the secret key is missing', async () => {
@@ -97,7 +97,7 @@ describe('handleDailyArthReflectionRequest', () => {
       expect.objectContaining({ message: 'Missing Supabase URL or secret key for Daily Arth reflection' }),
     );
     expect(mockCreateClient).not.toHaveBeenCalled();
-    expect(mockGeminiChat).not.toHaveBeenCalled();
+    expect(mockClaudeChat).not.toHaveBeenCalled();
   });
 
   it('generates and persists the reflection before returning it', async () => {
@@ -118,7 +118,7 @@ describe('handleDailyArthReflectionRequest', () => {
       .mockReturnValueOnce(select)
       .mockReturnValueOnce(update);
     mockCreateClient.mockReturnValueOnce({ from } as never);
-    mockGeminiChat.mockResolvedValueOnce(JSON.stringify(reflection));
+    mockClaudeChat.mockResolvedValueOnce(JSON.stringify(reflection));
 
     const response = await handleDailyArthReflectionRequest(requestForQuote());
     const payload = await response.json();
@@ -146,7 +146,7 @@ describe('handleDailyArthReflectionRequest', () => {
       .mockReturnValueOnce(select)
       .mockReturnValueOnce(update);
     mockCreateClient.mockReturnValueOnce({ from } as never);
-    mockGeminiChat.mockResolvedValueOnce(JSON.stringify(reflection));
+    mockClaudeChat.mockResolvedValueOnce(JSON.stringify(reflection));
 
     const response = await handleDailyArthReflectionRequest(requestForQuote());
     const payload = await response.json();

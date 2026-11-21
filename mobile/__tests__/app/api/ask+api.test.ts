@@ -1,11 +1,11 @@
-jest.mock('@/lib/ai/gemini', () => ({
-  geminiChat: jest.fn(),
+jest.mock('@/lib/ai/claude', () => ({
+  claudeChat: jest.fn(),
 }));
 
 import { POST } from '@/app/api/ask+api';
-import { geminiChat } from '@/lib/ai/gemini';
+import { claudeChat } from '@/lib/ai/claude';
 
-const mockGeminiChat = geminiChat as jest.MockedFunction<typeof geminiChat>;
+const mockClaudeChat = claudeChat as jest.MockedFunction<typeof claudeChat>;
 
 describe('/api/ask', () => {
   let consoleErrorSpy: jest.SpyInstance;
@@ -20,7 +20,7 @@ describe('/api/ask', () => {
   });
 
   it('returns a scripture-grounded response for quick mode', async () => {
-    mockGeminiChat.mockResolvedValueOnce(JSON.stringify({
+    mockClaudeChat.mockResolvedValueOnce(JSON.stringify({
       answer: {
         title: 'Act Without Clinging',
         summary: 'You do not need to wait for certainty before doing what is right.',
@@ -65,7 +65,7 @@ describe('/api/ask', () => {
     const payload = await response.json();
     expect(response.status).toBe(200);
     expect(payload.safety.has_boundary).toBe(true);
-    expect(mockGeminiChat).not.toHaveBeenCalled();
+    expect(mockClaudeChat).not.toHaveBeenCalled();
   });
 
   it('returns a fallback response when retrieval is empty', async () => {
@@ -84,7 +84,7 @@ describe('/api/ask', () => {
   });
 
   it('returns 502 on malformed model output', async () => {
-    mockGeminiChat.mockResolvedValueOnce('not json');
+    mockClaudeChat.mockResolvedValueOnce('not json');
 
     const response = await POST(new Request('http://localhost/api/ask', {
       method: 'POST',

@@ -1,80 +1,53 @@
 import { parseModelJson } from '../../ai/parseModelJson';
-import { geminiChat } from '../../ai/gemini';
+import { claudeChat } from '../../ai/claude';
 import {
   MUHURAT_SYSTEM,
+  MUHURAT_SCHEMA,
+  MUHURAT_ESTIMATE_WARNING,
   buildMuhuratPrompt,
   MUHURAT_RANK_SYSTEM,
+  MUHURAT_RANK_SCHEMA,
   buildMuhuratRankPrompt,
   type MuhuratCandidate,
   type MuhuratDayContext,
 } from '../../ai/prompts';
 import { serverErrorResponse } from '../errorResponse';
+import { resolveLocation, type LocationHints, type RequestLocation } from '../location';
 import { getMuhuratWindowsForRange, getTithiAt, sunriseSunset } from '../../vedic/muhurat';
 import type { MuhuratWindow } from '../../vedic/types';
 
-const MAX_LOCAL_RANGE_DAYS = 31;
+export { resolveLocation };
+export type MuhuratLocation = RequestLocation;
 
-export interface MuhuratLocation {
-  lat: number;
-  lng: number;
-  timeZone: string;
-  label: string | null;
-  source: 'client' | 'ip';
-}
+/** Ranges up to this length send every auspicious window to the model. */
+const FULL_DETAIL_RANGE_DAYS = 31;
+/** Longest range computed locally; longer requests are clamped (and the user told). */
+const MAX_LOCAL_RANGE_DAYS = 120;
 
-interface MuhuratBody {
+interface MuhuratBody extends LocationHints {
   eventDescription: string;
   startDate: string;
   endDate: string;
-  lat?: number;
-  lng?: number;
-  timeZone?: string;
-  locationLabel?: string;
 }
 
-function isValidTimeZone(tz: string | null | undefined): tz is string {
-  if (!tz) return false;
-  try {
-    new Intl.DateTimeFormat('en-US', { timeZone: tz });
-    return true;
-  } catch {
-    return false;
-  }
+interface RankPayload extends Record<string, unknown> {
+  recommendation: string;
+  confidence?: string;
+  suggestion: string;
+  technicalBasis: string;
+  warnings?: string;
+  festivalNote?: string | null;
+  ranked?: { id: number; score: number }[];
 }
 
-function isValidCoord(lat: unknown, lng: unknown): boolean {
-  return typeof lat === 'number' && typeof lng === 'number' &&
-    Number.isFinite(lat) && Number.isFinite(lng) &&
-    Math.abs(lat) <= 66 && Math.abs(lng) <= 180; // beyond ~66° there may be no sunrise
-}
-
-/**
- * Where to compute for. Prefer coordinates the app sends; otherwise fall back
- * to Vercel's IP geolocation headers so existing app builds (which send no
- * location) still get times for where the user actually is, not India.
- */
-export function resolveLocation(body: MuhuratBody, headers: Headers): MuhuratLocation | null {
-  if (isValidCoord(body.lat, body.lng)) {
-    const tz = isValidTimeZone(body.timeZone) ? body.timeZone : (headers.get('x-vercel-ip-timezone') ?? 'UTC');
-    return {
-      lat: body.lat as number,
-      lng: body.lng as number,
-      timeZone: isValidTimeZone(tz) ? tz : 'UTC',
-      label: body.locationLabel?.slice(0, 120) ?? null,
-      source: 'client',
-    };
-  }
-
-  const ipLat = parseFloat(headers.get('x-vercel-ip-latitude') ?? '');
-  const ipLng = parseFloat(headers.get('x-vercel-ip-longitude') ?? '');
-  const ipTz = headers.get('x-vercel-ip-timezone');
-  if (isValidCoord(ipLat, ipLng) && isValidTimeZone(ipTz)) {
-    const city = headers.get('x-vercel-ip-city');
-    const region = headers.get('x-vercel-ip-country-region');
-    const label = city ? [decodeURIComponent(city), region].filter(Boolean).join(', ') : null;
-    return { lat: ipLat, lng: ipLng, timeZone: ipTz, label, source: 'ip' };
-  }
-  return null;
+interface EstimatePayload extends Record<string, unknown> {
+  recommendation: string;
+  confidence?: string;
+  suggestion: string;
+  technicalBasis: string;
+  warnings?: string;
+  festivalNote?: string | null;
+  rankedWindows?: Omit<MuhuratWindow, 'isAuspicious'>[];
 }
 
 function localLabel(iso: string, timeZone: string): string {
@@ -87,6 +60,11 @@ function localDateKey(date: Date, timeZone: string): string {
   return date.toLocaleDateString('en-CA', { timeZone }); // YYYY-MM-DD
 }
 
+function joinWarnings(...parts: (string | null | undefined)[]): string {
+  const real = parts.filter((p): p is string => Boolean(p && p.trim() && p.trim() !== 'None'));
+  return real.length ? real.join(' ') : 'None';
+}
+
 const QUALITY_BASE: Record<string, number> = { Amrit: 8, Abhijit: 8, Shubh: 7, Labh: 7, Char: 5 };
 
 function baseScore(w: MuhuratWindow): number {
@@ -96,10 +74,26 @@ function baseScore(w: MuhuratWindow): number {
   return (key ? QUALITY_BASE[key] : 4) + night;
 }
 
-async function computeLocal(body: MuhuratBody, start: Date, end: Date, loc: MuhuratLocation) {
+/** For long ranges, keep only each day's strongest windows so the prompt stays small. */
+function capPerDay(windows: MuhuratWindow[], perDay: number, timeZone: string): MuhuratWindow[] {
+  const byDay = new Map<string, MuhuratWindow[]>();
+  for (const w of windows) {
+    const key = localDateKey(new Date(w.start), timeZone);
+    byDay.set(key, [...(byDay.get(key) ?? []), w]);
+  }
+  return [...byDay.values()]
+    .flatMap((day) => [...day].sort((a, b) => baseScore(b) - baseScore(a) || a.start.localeCompare(b.start)).slice(0, perDay))
+    .sort((a, b) => a.start.localeCompare(b.start));
+}
+
+async function computeLocal(body: MuhuratBody, start: Date, end: Date, loc: RequestLocation, clampNote: string | null) {
   const now = Date.now();
-  const all = getMuhuratWindowsForRange(start, end, loc.lat, loc.lng, body.eventDescription)
+  const rangeDays = (end.getTime() - start.getTime()) / 86400000;
+  let all = getMuhuratWindowsForRange(start, end, loc.lat, loc.lng, body.eventDescription)
     .filter((w) => w.isAuspicious && new Date(w.end).getTime() > now);
+  if (rangeDays > FULL_DETAIL_RANGE_DAYS) {
+    all = capPerDay(all, rangeDays > 62 ? 2 : 3, loc.timeZone);
+  }
 
   // Day context: tithi at local sunrise for each date in range
   const days: MuhuratDayContext[] = [];
@@ -147,14 +141,11 @@ async function computeLocal(body: MuhuratBody, start: Date, end: Date, loc: Muhu
 
   if (candidates.length) {
     try {
-      const raw = await geminiChat('gemini-2.5-flash', [
+      const raw = await claudeChat([
         { role: 'system', content: MUHURAT_RANK_SYSTEM },
-        { role: 'user', content: buildMuhuratRankPrompt(body.eventDescription, loc.label, loc.timeZone, days, candidates) },
-      ]);
-      const parsed = parseModelJson(raw, ['recommendation', 'suggestion', 'reasoning']) as {
-        recommendation: string; confidence?: string; suggestion: string; reasoning: string;
-        warnings?: string; festivalNote?: string | null; ranked?: { id: number; score: number }[];
-      };
+        { role: 'user', content: buildMuhuratRankPrompt(body.eventDescription, loc.label, loc.timeZone, days, candidates, clampNote ?? undefined) },
+      ], { schema: MUHURAT_RANK_SCHEMA });
+      const parsed = parseModelJson<RankPayload>(raw, ['recommendation', 'suggestion', 'technicalBasis']);
       const seen = new Set<number>();
       const picked = (parsed.ranked ?? [])
         .filter((r) => Number.isInteger(r.id) && all[r.id] && !seen.has(r.id) && seen.add(r.id))
@@ -166,7 +157,7 @@ async function computeLocal(body: MuhuratBody, start: Date, end: Date, loc: Muhu
         recommendation: parsed.recommendation,
         confidence: parsed.confidence ?? 'Medium',
         suggestion: parsed.suggestion,
-        reasoning: parsed.reasoning,
+        reasoning: parsed.technicalBasis,
         warnings: parsed.warnings ?? 'None',
         festivalNote: parsed.festivalNote ?? null,
       };
@@ -178,6 +169,7 @@ async function computeLocal(body: MuhuratBody, start: Date, end: Date, loc: Muhu
   return Response.json({
     rankedWindows,
     ...narrative,
+    warnings: joinWarnings(clampNote, narrative.warnings),
     location: { label: loc.label, timeZone: loc.timeZone, source: loc.source },
     computedLocally: true,
   });
@@ -196,7 +188,7 @@ export async function handleMuhuratWisdomRequest(request: Request): Promise<Resp
     }
 
     const start = new Date(startDate);
-    const end = new Date(endDate);
+    let end = new Date(endDate);
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
       return Response.json({ error: 'Invalid date range' }, { status: 400 });
     }
@@ -211,34 +203,30 @@ export async function handleMuhuratWisdomRequest(request: Request): Promise<Resp
     }
 
     const loc = resolveLocation(body, request.headers);
-    const rangeDays = (end.getTime() - start.getTime()) / 86400000;
-    if (loc && rangeDays <= MAX_LOCAL_RANGE_DAYS) {
-      return await computeLocal(body, start, end, loc);
+    if (loc) {
+      let clampNote: string | null = null;
+      if ((end.getTime() - start.getTime()) / 86400000 > MAX_LOCAL_RANGE_DAYS) {
+        end = new Date(start.getTime() + MAX_LOCAL_RANGE_DAYS * 86400000);
+        clampNote = `Only the first ${MAX_LOCAL_RANGE_DAYS} days of your range were searched, through ${end.toLocaleDateString('en-US', { timeZone: loc.timeZone, month: 'long', day: 'numeric', year: 'numeric' })}.`;
+      }
+      return await computeLocal(body, start, end, loc, clampNote);
     }
 
-    // Legacy path: no location available (or very long range). Model-estimated, IST-based.
-    const raw = await geminiChat('gemini-2.5-flash', [
+    // No location at all (e.g. local dev without IP headers): model-estimated, IST-based.
+    const raw = await claudeChat([
       { role: 'system', content: MUHURAT_SYSTEM },
       { role: 'user', content: buildMuhuratPrompt(eventDescription, startDate, endDate) },
-    ]);
+    ], { schema: MUHURAT_SCHEMA });
 
-    let parsed: {
-      recommendation: string;
-      confidence: string;
-      suggestion: string;
-      reasoning: string;
-      warnings: string;
-      festivalNote?: string | null;
-      rankedWindows?: MuhuratWindow[];
-    };
+    let parsed: EstimatePayload;
     try {
-      parsed = parseModelJson(raw, ['recommendation', 'suggestion', 'reasoning']);
+      parsed = parseModelJson<EstimatePayload>(raw, ['recommendation', 'suggestion', 'technicalBasis']);
     } catch {
       return Response.json({ error: 'AI response parse error' }, { status: 502 });
     }
 
-    const rankedWindows = (parsed.rankedWindows ?? [])
-      .filter((window) => window.isAuspicious)
+    const rankedWindows: MuhuratWindow[] = (parsed.rankedWindows ?? [])
+      .map((window) => ({ ...window, isAuspicious: true }))
       .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
       .slice(0, 10);
 
@@ -247,8 +235,8 @@ export async function handleMuhuratWisdomRequest(request: Request): Promise<Resp
       recommendation: parsed.recommendation,
       confidence: parsed.confidence ?? 'Medium',
       suggestion: parsed.suggestion,
-      reasoning: parsed.reasoning,
-      warnings: parsed.warnings ?? 'None',
+      reasoning: parsed.technicalBasis,
+      warnings: joinWarnings(MUHURAT_ESTIMATE_WARNING, parsed.warnings),
       festivalNote: parsed.festivalNote ?? null,
       computedLocally: false,
     });
