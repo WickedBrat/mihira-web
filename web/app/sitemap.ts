@@ -14,6 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     { url: `${siteUrl}/diwali`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/diwali/calendar`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${siteUrl}/lakshmi-puja`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${siteUrl}/gita`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     ...DIWALI_CITIES.map((c) => ({
       url: `${siteUrl}/diwali/${c.slug}`,
       lastModified: new Date(),

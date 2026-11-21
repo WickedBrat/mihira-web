@@ -17,7 +17,7 @@ from pathlib import Path
 
 import os
 
-_BASE = Path(os.environ.get("MIHIRA_SCRIPTURES_BASE", "/Users/Apple/Desktop/mihira/scriptures"))
+_BASE = Path(os.environ.get("MIHIRA_SCRIPTURES_BASE", "/Users/Apple/Desktop/projects/mihira/scriptures"))
 RAW = _BASE / "raw" / "gpu.txt"
 OUT_DIR = _BASE / "garuda-purana"
 

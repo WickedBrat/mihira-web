@@ -6,7 +6,7 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <LegalLayout eyebrow="Privacy Policy" title="How Mihira handles your data" updated="July 10, 2026">
+    <LegalLayout eyebrow="Privacy Policy" title="How Mihira handles your data" updated="November 21, 2026">
       <LegalSection number="01" heading="Overview">
         <p>
           Mihira is a scripture-grounded Vedic guidance and sacred-timing app. It includes Daily Alignment
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
         <p>
           Mihira uses Supabase for authentication, database, and account storage, RevenueCat together with the
           Apple App Store and Google Play for subscription billing and entitlement management, PostHog for
-          product analytics, Google Gemini for AI-generated responses, and hosting, monitoring, communications,
+          product analytics, Anthropic (Claude) for AI-generated responses, and hosting, monitoring, communications,
           and support providers.
         </p>
       </LegalSection>
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
       <LegalSection number="05" heading="AI and guidance">
         <p>
           User prompts, relevant profile context, and app-generated context may be processed by Mihira systems
-          and AI providers such as Google Gemini to generate spiritual guidance, interpretations, timing
+          and AI providers such as Anthropic (Claude) to generate spiritual guidance, interpretations, timing
           suggestions, and chat responses. Guide personas such as Krishna, Shiva, Ganesha, and Lakshmi are
           AI-generated, scripture-informed creative interpretations — they are not literal religious channeling
           and are not affiliated with any temple, clergy, or institution.

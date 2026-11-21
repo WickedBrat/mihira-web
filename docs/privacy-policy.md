@@ -1,6 +1,6 @@
 # Mihira Privacy Policy
 
-Last updated: April 28, 2026
+Last updated: November 21, 2026
 
 This Privacy Policy explains how Mihira collects, uses, stores, and shares information when users access the Mihira mobile app, website, support channels, and related services.
 
@@ -46,7 +46,7 @@ Mihira may receive information from third-party services used to operate the pro
 - Supabase for authentication, database, storage, and account-linked product data
 - RevenueCat, Apple App Store, and Google Play for subscriptions, purchases, entitlements, cancellations, and billing status
 - PostHog or similar analytics tools for product analytics and feature usage
-- Google Gemini or other AI inference providers for guidance, chat, and interpretation features
+- Anthropic (Claude) or other AI inference providers for guidance, chat, and interpretation features
 - hosting, infrastructure, monitoring, email, and support providers
 
 ## How We Use Information

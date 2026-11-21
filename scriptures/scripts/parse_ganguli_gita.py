@@ -18,7 +18,7 @@ import os
 import re
 from pathlib import Path
 
-_BASE = Path(os.environ.get("MIHIRA_SCRIPTURES_BASE", "/Users/Apple/Desktop/mihira/scriptures"))
+_BASE = Path(os.environ.get("MIHIRA_SCRIPTURES_BASE", "/Users/Apple/Desktop/projects/mihira/scriptures"))
 RAW = _BASE / "raw" / "mahatxt_extracted" / "maha06.txt"
 OUT_DIR = _BASE / "bhagavad-gita" / "ganguli"
 

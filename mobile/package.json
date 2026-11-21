@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.137.0",
     "@expo-google-fonts/cormorant-garamond": "^0.4.1",
     "@expo-google-fonts/google-sans": "^0.4.0",
     "@expo-google-fonts/manrope": "^0.4.2",

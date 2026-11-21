@@ -16,7 +16,7 @@ These variables are currently referenced by the app and release config.
 
 ### Server-Side or Build-Time Variables
 
-- `GEMINI_API_KEY`
+- `ANTHROPIC_API_KEY`
 - `POSTHOG_PROJECT_TOKEN`
 - `POSTHOG_HOST`
 - `ENABLE_DEV_BUTTONS`
@@ -61,13 +61,13 @@ Recommended defaults:
 
 ## Expo and EAS Notes
 
-The mobile app includes [eas.json](/Users/Apple/Desktop/mihira/mobile/eas.json) with:
+The mobile app includes [eas.json](/Users/Apple/Desktop/projects/mihira/mobile/eas.json) with:
 
 - `development` profile for dev client builds
 - `preview` profile for internal distribution
 - `production` profile with auto-increment enabled
 
-The active Expo config is [app.config.js](/Users/Apple/Desktop/mihira/mobile/app.config.js). Keep production identifiers and build behavior there.
+The active Expo config is [app.config.js](/Users/Apple/Desktop/projects/mihira/mobile/app.config.js). Keep production identifiers and build behavior there.
 
 ## Current Identifiers
 
