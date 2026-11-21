@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { router } from 'expo-router';
-import { BlurView } from 'expo-blur';
+import { AppBlurView } from '@/components/ui/AppBlurView';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
@@ -133,11 +133,11 @@ export default function OnboardingNewS17() {
                 {lockedArea?.suggestion ?? 'Close the day without a screen — let the mind settle like water.'}
               </Text>
             </View>
-            <BlurView intensity={30} tint="dark" className="absolute inset-0 items-center justify-center px-6">
+            <AppBlurView intensity={30} tint="dark" className="absolute inset-0 items-center justify-center px-6">
               <Text className="text-center font-manrope-semibold text-[14px] leading-[21px] text-obn-text">
                 One more layer of today is ready — it opens the moment your vow is set.
               </Text>
-            </BlurView>
+            </AppBlurView>
           </Animated.View>
         </View>
       </View>
