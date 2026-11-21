@@ -8,7 +8,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "0.137.0",
     "@supabase/supabase-js": "2.101.0"
   },
   "devDependencies": {

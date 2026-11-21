@@ -8,7 +8,7 @@ import {
   ImageBackground,
   StyleSheet,
 } from 'react-native';
-import * as Calendar from 'expo-calendar';
+import * as Calendar from 'expo-calendar/legacy';
 import { AlarmClockPlus } from 'lucide-react-native';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/ToastProvider';

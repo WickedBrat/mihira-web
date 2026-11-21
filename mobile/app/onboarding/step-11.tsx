@@ -121,9 +121,10 @@ export default function Screen6() {
             />
             {/* Ticks */}
             {ticks.map((t, i) => {
-              const path = Skia.Path.Make();
-              path.moveTo(t.x1, t.y1);
-              path.lineTo(t.x2, t.y2);
+              const path = Skia.PathBuilder.Make()
+                .moveTo(t.x1, t.y1)
+                .lineTo(t.x2, t.y2)
+                .detach();
               return (
                 <Path
                   key={i}

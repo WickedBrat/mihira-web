@@ -488,11 +488,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(22,18,28,0.14)',
   },
   cardHighlight: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     opacity: 0.8,
   },
   cardInnerBorder: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     margin: 1,
     borderRadius: 31,
     borderWidth: 1,

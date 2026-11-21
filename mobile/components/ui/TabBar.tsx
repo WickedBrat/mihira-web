@@ -5,7 +5,7 @@ import {
   type LayoutChangeEvent,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import type { BottomTabBarProps } from 'expo-router/tabs';
 import { AppBlurView } from '@/components/ui/AppBlurView';
 import { DailyIcon } from '@/components/ui/DailyIcon';
 import { GuidanceIcon } from '@/components/ui/GuidanceIcon';
@@ -94,7 +94,7 @@ const TAB_CONFIG: Record<TabName, TabConfig> = {
   },
 };
 
-export function TabBar({ state, navigation }: BottomTabBarProps) {
+export function TabBar({ state, emitter, navigateToTab }: BottomTabBarProps) {
   const [barWidth, setBarWidth] = useState(0);
   const selectorX = useSharedValue(0);
   const { colors, isDark } = useTheme();
@@ -169,17 +169,17 @@ export function TabBar({ state, navigation }: BottomTabBarProps) {
                 accessibilityRole="button"
                 accessibilityState={{ selected: isFocused }}
                 key={route.key}
-                onLongPress={() => navigation.emit({ type: 'tabLongPress', target: route.key })}
+                onLongPress={() => emitter.emit({ type: 'tabLongPress', target: route.key })}
                 onPress={() => {
                   hapticLight();
-                  const event = navigation.emit({
+                  const event = emitter.emit({
                     canPreventDefault: true,
                     target: route.key,
                     type: 'tabPress',
                   });
 
                   if (!isFocused && !event.defaultPrevented) {
-                    navigation.navigate(route.name);
+                    navigateToTab(route.key);
                   }
                 }}
                 className="z-[1] min-h-[58px] min-w-0 flex-1 items-center justify-center"

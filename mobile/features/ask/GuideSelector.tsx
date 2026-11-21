@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
-import type { ViewToken } from 'react-native';
+import type { ListViewToken } from 'react-native';
 import Animated, {
   FadeInDown,
   useSharedValue,
@@ -124,9 +124,9 @@ export function GuideSelector({ onCommit }: GuideSelectorProps) {
 
   const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 60 });
   const onViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    ({ viewableItems }: { viewableItems: ListViewToken[] }) => {
       const visible = viewableItems.filter(v => v.isViewable);
-      if (visible.length > 0 && visible[0].index !== null) {
+      if (visible.length > 0 && visible[0].index != null) {
         const newIdx = visible[0].index;
         if (newIdx !== activeIndexRef.current) {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

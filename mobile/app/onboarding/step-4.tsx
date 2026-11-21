@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View, Text, Pressable,
-  TextInput, KeyboardAvoidingView, Platform,
+  TextInput, KeyboardAvoidingView, Platform, type TextInputInstance,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -21,7 +21,7 @@ export default function Screen4() {
     const storedName = getOnboardingData().userName;
     return storedName || user?.fullName || user?.firstName || '';
   });
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInputInstance>(null);
   const hasSeededNameRef = useRef(Boolean(name.trim()));
   const hasEditedNameRef = useRef(false);
   const authName = user?.fullName || user?.firstName || '';

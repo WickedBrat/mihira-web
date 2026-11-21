@@ -9,7 +9,6 @@ import {
 } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 import * as Linking from 'expo-linking';
-import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import { getSupabaseClient } from '@/lib/supabase';
 
 type EmailAddress = {
@@ -94,8 +93,22 @@ function mapSupabaseUser(user: User | null): AppAuthUser | null {
   };
 }
 
+// Same parsing as expo-auth-session's getQueryParams, which SDK 58 no longer exports.
+function getQueryParams(input: string): { errorCode: string | null; params: Record<string, string> } {
+  const url = new URL(input, 'https://phony.example');
+  const errorCode = url.searchParams.get('errorCode');
+  url.searchParams.delete('errorCode');
+  const params: Record<string, string> = Object.fromEntries(url.searchParams);
+  if (url.hash) {
+    new URLSearchParams(url.hash.replace(/^#/, '')).forEach((value, key) => {
+      params[key] = value;
+    });
+  }
+  return { errorCode, params };
+}
+
 export async function createSupabaseSessionFromUrl(url: string) {
-  const { params, errorCode } = QueryParams.getQueryParams(url);
+  const { params, errorCode } = getQueryParams(url);
 
   if (errorCode) throw new Error(errorCode);
   if (params.error_description) throw new Error(params.error_description);

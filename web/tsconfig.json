@@ -26,9 +26,6 @@
       "@supabase/*": [
         "./node_modules/@supabase/*"
       ],
-      "@anthropic-ai/*": [
-        "./node_modules/@anthropic-ai/*"
-      ],
       "@core/*": [
         "../core/*"
       ],

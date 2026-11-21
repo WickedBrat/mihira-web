@@ -1,6 +1,6 @@
 // S4: The Name They'll Use For You
 import React, { useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, TextInput, View, type TextInputInstance } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
@@ -14,7 +14,7 @@ export default function OnboardingNewS4() {
   const { user } = useUser();
   const stored = getOnboardingNewData();
   const [name, setName] = useState(() => stored.name || user?.fullName || user?.firstName || '');
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInputInstance>(null);
   const canProceed = Boolean(name.trim());
 
   function proceed() {

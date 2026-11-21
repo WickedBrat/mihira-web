@@ -20,7 +20,7 @@ npx expo run:android    # Native Android build
 | Auth | Supabase Auth (`@supabase/supabase-js`) |
 | DB | Supabase (`getSupabaseClient()`) |
 | Storage | AsyncStorage (chat, profile, daily cache) |
-| AI | Claude via `@anthropic-ai/sdk` (`core/ai/claude.ts`; JSON schema outputs, SSE streaming) |
+| AI | Claude Messages API over `fetch` (`core/ai/claude.ts`, no SDK; JSON schema outputs, SSE streaming) |
 | Animations | `moti` + `react-native-reanimated` |
 | Payments | Stripe (`@stripe/stripe-react-native`) |
 

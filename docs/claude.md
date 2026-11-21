@@ -23,7 +23,7 @@
 | Auth Storage        | `@react-native-async-storage/async-storage`            |
 | Database            | Supabase (`@supabase/supabase-js`) for profile sync    |
 | Local Storage       | `@react-native-async-storage/async-storage`            |
-| AI                  | Claude via `@anthropic-ai/sdk` (JSON schema outputs, streaming) |
+| AI                  | Claude Messages API over `fetch` (JSON schema outputs, streaming) |
 | Graphics            | `react-native-svg` + `@shopify/react-native-skia`      |
 | Typography          | `Lexend` font family (6 weights, static via `expo-font`) |
 | Date Pickers        | `@react-native-community/datetimepicker` (cross-platform) |

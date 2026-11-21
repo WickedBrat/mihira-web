@@ -176,7 +176,7 @@ export default function AskScreen() {
               />
             );
           }}
-          ListEmptyComponent={!isTyping ? <EmptyAskState onSelectPrompt={setInputText} /> : null}
+          ListEmptyComponent={!isTyping ? <EmptyAskState onSelectPrompt={setInputText} /> : undefined}
           ListHeaderComponent={(
             <SafeAreaView edges={['top']} className="relative mb-5">
               {hasMoreMessages ? (
@@ -230,7 +230,7 @@ export default function AskScreen() {
               )}
             </SafeAreaView>
           )}
-          ListFooterComponent={isTyping ? <TypingIndicator /> : null}
+          ListFooterComponent={isTyping ? <TypingIndicator /> : undefined}
         />
 
         <ChatInput

@@ -18,7 +18,7 @@ export function TimelineItem({ entry, index, isLast = false }: TimelineItemProps
     <MotiView
       from={{ opacity: 0, translateX: -20 }}
       animate={{ opacity: 1, translateX: 0 }}
-      transition={{ type: 'spring', delay: index * 120, damping: 18 }}
+      transition={{ delay: index * 120, damping: 18 }}
       className="flex-row items-stretch gap-4"
     >
       <View className="w-12 items-center">
