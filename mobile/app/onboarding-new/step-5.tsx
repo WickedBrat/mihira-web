@@ -7,7 +7,7 @@ import Animated, { FadeIn, FadeInDown, ZoomIn } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { getQuestionPrompts, getScriptureGuidance } from '@/features/onboarding/personalGuidance';
 import type { OnboardingData } from '@/lib/onboardingStore';
-import type { ScriptureGuideResponse } from '@/features/ask/types';
+import type { ScriptureGuideResponse } from '@core/types/ask';
 import { apiFetch } from '@/lib/apiFetch';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';

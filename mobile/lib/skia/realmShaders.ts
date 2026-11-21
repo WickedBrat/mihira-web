@@ -3,7 +3,7 @@
 // Uniforms: iResolution (float2), iTime (float), progress (float 0→1).
 // progress drives the reveal: 0 = transparent, 1 = full deity backdrop.
 
-import type { DeityName, RealmPhase } from '@/features/ask/types';
+import type { DeityName, RealmPhase } from '@core/types/ask';
 
 export const SHADERS: Record<DeityName | 'idle' | 'journeying', string> = {
   // Ambient default: soft purple/saffron drift

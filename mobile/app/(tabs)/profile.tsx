@@ -32,7 +32,7 @@ import { router } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import { analytics } from '@/lib/analytics';
 import { posthog } from '@/lib/posthog';
-import { deriveMoonProfileFromBirthDt } from '@/lib/vedic/moonProfile';
+import { deriveMoonProfileFromBirthDt } from '@core/vedic/moonProfile';
 import { clearAskState } from '@/lib/askStorage';
 import { clearNaradState } from '@/lib/naradStorage';
 import { clearOnboardingCompleted } from '@/lib/onboardingStatus';

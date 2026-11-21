@@ -16,8 +16,8 @@ import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { MAPPING_CRUMBS, buildChartResult, getOnboardingNewData, setOnboardingNewData } from '@/lib/onboardingNewStore';
 import { formatBirthDateTime, mergeDateAndTime } from '@/features/profile/utils';
-import { geocode } from '@/lib/vedic/geocode';
-import { buildBirthChart } from '@/lib/vedic/chart';
+import { geocode } from '@core/vedic/geocode';
+import { buildBirthChart } from '@core/vedic/chart';
 
 const MIN_RITUAL_MS = MAPPING_CRUMBS.length * 2800 + 400;
 

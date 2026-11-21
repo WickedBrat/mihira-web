@@ -6,7 +6,7 @@ import { Text } from '@/components/ui/Text';
 import type { ProfileData } from '@/features/profile/useProfile';
 import { PROFILE_FIELDS } from '@/features/profile/constants';
 import { useTheme } from '@/lib/theme-context';
-import type { MoonProfile } from '@/lib/vedic/moonProfile';
+import type { MoonProfile } from '@core/vedic/moonProfile';
 
 interface ProfileFieldsProps {
   profile: Pick<ProfileData, 'name' | 'birth_dt' | 'birth_place'>;

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { DailyAlignmentPayload } from '@/lib/dailyAlignmentTypes';
+import type { DailyAlignmentPayload } from '@core/types/dailyAlignment';
 
 interface CachedDailyAlignment extends DailyAlignmentPayload {
   dateKey: string;

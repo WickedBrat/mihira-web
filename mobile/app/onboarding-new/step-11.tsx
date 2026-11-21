@@ -5,7 +5,7 @@ import { Text } from '@/components/ui/Text';
 import { router } from 'expo-router';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { PlaceSuggestion, searchBirthPlaces } from '@/lib/vedic/geocode';
+import { PlaceSuggestion, searchBirthPlaces } from '@core/vedic/geocode';
 import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { getOnboardingNewData, setOnboardingNewData } from '@/lib/onboardingNewStore';

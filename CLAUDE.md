@@ -20,7 +20,7 @@ npx expo run:android    # Native Android build
 | Auth | Supabase Auth (`@supabase/supabase-js`) |
 | DB | Supabase (`getSupabaseClient()`) |
 | Storage | AsyncStorage (chat, profile, daily cache) |
-| AI | Claude via `@anthropic-ai/sdk` (`lib/ai/claude.ts`; JSON schema outputs, SSE streaming) |
+| AI | Claude via `@anthropic-ai/sdk` (`core/ai/claude.ts`; JSON schema outputs, SSE streaming) |
 | Animations | `moti` + `react-native-reanimated` |
 | Payments | Stripe (`@stripe/stripe-react-native`) |
 
@@ -40,7 +40,8 @@ app/onboarding/     # 12 sequential locked onboarding screens
 app/api/            # Expo Server API routes (SSE chat, daily alignment, muhurat)
 features/           # ask, auth, billing, chat, daily, gurukul, horoscope, muhurat, onboarding, profile
 components/ui/      # Design system: GlowCard, GlassCard, TabBar, BottomSheet, SacredButton
-lib/                # ai/, vedic/, theme.ts, typography.ts, supabase.ts, usage.ts
+lib/                # theme.ts, typography.ts, supabase.ts, usage.ts
+../core/            # ai/, vedic/, server/, scriptures/, types/ (shared with web, imported as @core/*)
 ```
 
 ## Key Gotchas

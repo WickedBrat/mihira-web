@@ -40,7 +40,7 @@ import {
   setOnboardingData,
 } from '@/lib/onboardingStore';
 import { getPrimaryThread } from '@/features/onboarding/personalGuidance';
-import { deriveMoonProfile } from '@/lib/vedic/moonProfile';
+import { deriveMoonProfile } from '@core/vedic/moonProfile';
 import { LucideIcon, ZodiacAries, ZodiacTaurus, ZodiacGemini, ZodiacCancer, ZodiacLeo, ZodiacVirgo, ZodiacLibra, ZodiacScorpio, ZodiacSagittarius, ZodiacCapricorn, ZodiacAquarius, ZodiacPisces } from 'lucide-react-native';
 
 const BRONZE = '#8F6237';

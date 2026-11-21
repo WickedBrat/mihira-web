@@ -5,8 +5,8 @@ import {
 import { Text } from '@/components/ui/Text';
 import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
 import { FocusAreaCard } from './FocusAreaCard';
-import type { BirthChart } from '@/lib/vedic/types';
-import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
+import type { BirthChart } from '@core/vedic/types';
+import type { DailyFocusArea } from '@core/types/dailyAlignment';
 
 interface Props {
   chart: BirthChart | null;

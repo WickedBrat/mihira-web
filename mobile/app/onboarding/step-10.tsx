@@ -5,7 +5,7 @@ import Animated, { LinearTransition } from 'react-native-reanimated';
 import { Text } from '@/components/ui/Text';
 import { BirthDataScaffold } from '@/features/onboarding/BirthDataScaffold';
 import { OB, getOnboardingData, setOnboardingData } from '@/lib/onboardingStore';
-import { PlaceSuggestion, searchBirthPlaces } from '@/lib/vedic/geocode';
+import { PlaceSuggestion, searchBirthPlaces } from '@core/vedic/geocode';
 import { LockKeyholeIcon } from 'lucide-react-native';
 
 export default function Screen5Place() {

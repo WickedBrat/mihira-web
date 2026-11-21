@@ -1,6 +1,6 @@
 import { apiFetch } from '@/lib/apiFetch';
-import type { DailyArthReflection } from '@/lib/dailyArthReflectionTypes';
-import { isDailyArthReflection } from '@/lib/dailyArthReflectionTypes';
+import type { DailyArthReflection } from '@core/types/dailyArthReflection';
+import { isDailyArthReflection } from '@core/types/dailyArthReflection';
 
 interface FetchReflectionInput {
   quoteId: number;

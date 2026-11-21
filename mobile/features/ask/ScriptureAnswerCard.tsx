@@ -13,7 +13,7 @@ import Animated, {
 import { Text } from '@/components/ui/Text';
 import { FollowUpActions } from '@/features/ask/FollowUpActions';
 import { SourceCard } from '@/features/ask/SourceCard';
-import type { ScriptureGuideResponse, ScriptureSource } from '@/features/ask/types';
+import type { ScriptureGuideResponse, ScriptureSource } from '@core/types/ask';
 
 const SECTION_LAYOUT_TRANSITION = LinearTransition
   .duration(220)

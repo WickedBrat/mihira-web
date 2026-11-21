@@ -9,11 +9,7 @@ const nextConfig: NextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias ?? {}),
-      '@/features': path.join(__dirname, '../mobile/features'),
-      '@/lib/ai': path.join(__dirname, '../mobile/lib/ai'),
-      '@/lib/dailyAlignmentTypes': path.join(__dirname, '../mobile/lib/dailyAlignmentTypes.ts'),
-      '@/lib/dailyArthReflectionTypes': path.join(__dirname, '../mobile/lib/dailyArthReflectionTypes.ts'),
-      '@/lib/vedic': path.join(__dirname, '../mobile/lib/vedic'),
+      '@core': path.join(__dirname, '../core'),
     };
 
     config.resolve.modules = [

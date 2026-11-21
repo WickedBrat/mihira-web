@@ -14,8 +14,8 @@ import { getDailyArthReflection } from '@/lib/dailyArthReflectionClient';
 import { hapticLight } from '@/lib/haptics';
 import { layout } from '@/lib/theme';
 import { useTheme } from '@/lib/theme-context';
-import type { DailyArthReflection } from '@/lib/dailyArthReflectionTypes';
-import { isDailyArthReflection } from '@/lib/dailyArthReflectionTypes';
+import type { DailyArthReflection } from '@core/types/dailyArthReflection';
+import { isDailyArthReflection } from '@core/types/dailyArthReflection';
 
 const fallbackQuote = '"You have a right to your actions, but never to their fruits."';
 const fallbackSource = 'Bhagavad Gita';

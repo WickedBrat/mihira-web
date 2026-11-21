@@ -1,4 +1,4 @@
-import { handleDailyArthReflectionRequest } from '@/lib/server/routes/dailyArthReflection';
+import { handleDailyArthReflectionRequest } from '@core/server/routes/dailyArthReflection';
 
 export async function POST(request: Request): Promise<Response> {
   return handleDailyArthReflectionRequest(request);

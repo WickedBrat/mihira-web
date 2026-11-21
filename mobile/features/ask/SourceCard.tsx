@@ -7,7 +7,7 @@ import Animated, {
   LinearTransition,
 } from 'react-native-reanimated';
 import { Text } from '@/components/ui/Text';
-import type { ScriptureSource } from '@/features/ask/types';
+import type { ScriptureSource } from '@core/types/ask';
 import { SavedPassageButton } from '@/features/ask/SavedPassageButton';
 import { analytics } from '@/lib/analytics';
 import { getSanskritDisplayText } from '@/lib/sanskrit';

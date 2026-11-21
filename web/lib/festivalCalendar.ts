@@ -1,8 +1,8 @@
 // lib/festivalCalendar.ts — per-city iCalendar feed. Subscribers' calendars
 // re-fetch the same URL, so adding festivals here updates everyone.
 import tzlookup from 'tz-lookup';
-import { getVrishabhaPradoshWindow, makarSankrantiInstant } from '@/lib/vedic/lakshmiPuja';
-import { sunriseSunset } from '@/lib/vedic/muhurat';
+import { getVrishabhaPradoshWindow, makarSankrantiInstant } from '@core/vedic/lakshmiPuja';
+import { sunriseSunset } from '@core/vedic/muhurat';
 import type { DiwaliCity } from '@/lib/diwali';
 import { cityLabel } from '@/lib/diwali';
 

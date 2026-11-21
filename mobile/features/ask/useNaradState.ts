@@ -2,8 +2,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth, useUser } from '@/lib/auth';
 import { apiFetch } from '@/lib/apiFetch';
-import type { Message } from '@/features/ask/types';
-import type { NaradContext, NaradResponse } from './types';
+import type { Message } from '@core/types/ask';
+import type { NaradContext, NaradResponse } from '@core/types/ask';
 import {
   DEFAULT_NARAD_CONTEXT,
   loadNaradContext,

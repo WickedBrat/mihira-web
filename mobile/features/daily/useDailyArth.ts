@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getSupabaseClient } from '@/lib/supabase';
 import { withTimeout } from '@/lib/withTimeout';
-import type { DailyArthReflection } from '@/lib/dailyArthReflectionTypes';
-import { isDailyArthReflection } from '@/lib/dailyArthReflectionTypes';
+import type { DailyArthReflection } from '@core/types/dailyArthReflection';
+import { isDailyArthReflection } from '@core/types/dailyArthReflection';
 
 const SUPABASE_TIMEOUT_MS = 15000;
 

@@ -1,6 +1,6 @@
 // features/muhurat/useMuhurat.ts
 import { useState, useEffect } from 'react';
-import type { MuhuratWindow } from '@/lib/vedic/types';
+import type { MuhuratWindow } from '@core/vedic/types';
 import { apiFetch } from '@/lib/apiFetch';
 
 export interface MuhuratRequest {

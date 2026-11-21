@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { AmbientBlob } from '@/components/ui/AmbientBlob';
-import type { DeityName, RealmPhase } from '@/features/ask/types';
+import type { DeityName, RealmPhase } from '@core/types/ask';
 import { SHADERS, getShaderKey } from '@/lib/skia/realmShaders';
 
 // Lazily require Skia to avoid crashing on devices where the native

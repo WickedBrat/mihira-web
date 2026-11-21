@@ -15,7 +15,7 @@ import { useToast } from '@/components/ui/ToastProvider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { VedicReasoningAccordion } from './VedicReasoningAccordion';
 import { useTheme } from '@/lib/theme-context';
-import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
+import type { DailyFocusArea } from '@core/types/dailyAlignment';
 import { getDailyPredictionImage } from './dailyPredictionImages';
 
 interface Props {

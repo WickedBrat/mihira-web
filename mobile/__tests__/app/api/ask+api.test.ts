@@ -1,9 +1,9 @@
-jest.mock('@/lib/ai/claude', () => ({
+jest.mock('@core/ai/claude', () => ({
   claudeChat: jest.fn(),
 }));
 
 import { POST } from '@/app/api/ask+api';
-import { claudeChat } from '@/lib/ai/claude';
+import { claudeChat } from '@core/ai/claude';
 
 const mockClaudeChat = claudeChat as jest.MockedFunction<typeof claudeChat>;
 

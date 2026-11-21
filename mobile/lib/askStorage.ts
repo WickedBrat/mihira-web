@@ -5,7 +5,7 @@ import type {
   AskHistoryTurn,
   AskResponseMode,
   AskSavedPassage,
-} from '@/features/ask/types';
+} from '@core/types/ask';
 
 const ASK_CONTEXT_KEY = 'ask_v2_context';
 const ASK_MESSAGES_KEY = 'ask_v2_messages';

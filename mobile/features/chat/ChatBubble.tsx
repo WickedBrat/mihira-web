@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Text } from '@/components/ui/Text';
-import type { Message, ShlokaData } from '@/features/ask/types';
+import type { Message, ShlokaData } from '@core/types/ask';
 
 interface ChatBubbleProps {
   message: Message;

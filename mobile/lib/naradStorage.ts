@@ -2,8 +2,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getSupabaseClient } from '@/lib/supabase';
 import { USER_DETAILS_USER_ID_COLUMN } from '@/lib/userDetails';
-import type { NaradContext, NaradHistoryEntry } from '@/features/ask/types';
-import type { Message } from '@/features/ask/types';
+import type { NaradContext, NaradHistoryEntry } from '@core/types/ask';
+import type { Message } from '@core/types/ask';
 
 const CONTEXT_KEY = 'narad_context';
 const HISTORY_KEY = 'narad_history';

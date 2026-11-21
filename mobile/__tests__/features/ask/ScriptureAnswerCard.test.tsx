@@ -9,7 +9,7 @@ jest.mock('@/lib/analytics', () => ({
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react-native';
 import { ScriptureAnswerCard } from '@/features/ask/ScriptureAnswerCard';
-import type { ScriptureGuideResponse } from '@/features/ask/types';
+import type { ScriptureGuideResponse } from '@core/types/ask';
 
 const response: ScriptureGuideResponse = {
   mode: 'quick',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/components/ui/Text';
-import type { AskResponseMode } from '@/features/ask/types';
+import type { AskResponseMode } from '@core/types/ask';
 
 const MODE_CONTENT: Record<AskResponseMode, { label: string; description: string }> = {
   quick: {

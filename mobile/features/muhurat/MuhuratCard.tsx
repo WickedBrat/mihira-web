@@ -7,7 +7,7 @@ import { ConstellationLoader } from '@/components/ui/ConstellationLoader';
 import { Text } from '@/components/ui/Text';
 import { VedicReasoningAccordion } from '@/features/horoscope/VedicReasoningAccordion';
 import { useTheme } from '@/lib/theme-context';
-import type { MuhuratWindow } from '@/lib/vedic/types';
+import type { MuhuratWindow } from '@core/vedic/types';
 
 interface Props {
   hasRequested: boolean;

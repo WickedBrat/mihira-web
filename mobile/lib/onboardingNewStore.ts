@@ -5,7 +5,7 @@
 import { getSupabaseClient } from '@/lib/supabase';
 import { USER_DETAILS_TABLE, USER_DETAILS_USER_ID_COLUMN } from '@/lib/userDetails';
 import { NAKSHATRA_INSIGHTS } from '@/lib/onboardingStore';
-import type { SignName } from '@/lib/vedic/types';
+import type { SignName } from '@core/vedic/types';
 
 export const RASHI_SANSKRIT: Record<SignName, string> = {
   Aries: 'Mesha',

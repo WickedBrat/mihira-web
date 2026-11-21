@@ -8,7 +8,7 @@ import type {
   AskTopic,
   ScriptureGuideResponse,
   ScriptureSource,
-} from '@/features/ask/types';
+} from '@core/types/ask';
 import { apiFetch } from '@/lib/apiFetch';
 import { getSupabaseClient } from '@/lib/supabase';
 import { analytics } from '@/lib/analytics';

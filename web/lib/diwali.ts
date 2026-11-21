@@ -1,8 +1,8 @@
 // lib/diwali.ts — Diwali 2026 Lakshmi Puja timings for US cities, computed
-// from the same engine as the app (mobile/lib/vedic). Nothing is hard-coded
+// from the same engine as the app (core/vedic). Nothing is hard-coded
 // except city coordinates.
 import tzlookup from 'tz-lookup';
-import { getLakshmiPujaMuhurat } from '@/lib/vedic/lakshmiPuja';
+import { getLakshmiPujaMuhurat } from '@core/vedic/lakshmiPuja';
 
 export const DIWALI_2026 = { y: 2026, m: 10, d: 8 } as const; // month is 0-based
 export const DIWALI_DATE_LABEL = 'Sunday, November 8, 2026';

@@ -10,9 +10,9 @@ import { OnboardingNewScreen } from '@/features/onboarding-new/Screen';
 import { PrimaryButton, ScreenLabel } from '@/features/onboarding-new/PrimaryButton';
 import { getOnboardingNewData } from '@/lib/onboardingNewStore';
 import { formatBirthDateTime, mergeDateAndTime } from '@/features/profile/utils';
-import { deriveMoonProfile } from '@/lib/vedic/moonProfile';
+import { deriveMoonProfile } from '@core/vedic/moonProfile';
 import { apiFetch } from '@/lib/apiFetch';
-import type { DailyFocusArea } from '@/lib/dailyAlignmentTypes';
+import type { DailyFocusArea } from '@core/types/dailyAlignment';
 import { useDailyArth } from '@/features/daily/useDailyArth';
 
 async function fetchFocusAreas(): Promise<DailyFocusArea[]> {

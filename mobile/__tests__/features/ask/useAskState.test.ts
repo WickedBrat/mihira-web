@@ -1,5 +1,5 @@
 import { renderHook, act, waitFor } from '@testing-library/react-native';
-import type { ScriptureGuideResponse } from '@/features/ask/types';
+import type { ScriptureGuideResponse } from '@core/types/ask';
 
 jest.mock('@/lib/auth', () => ({
   useUser: jest.fn(),
