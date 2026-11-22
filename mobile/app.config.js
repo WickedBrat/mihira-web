@@ -36,6 +36,8 @@ export default {
     },
     ios: {
       bundleIdentifier: 'com.mihira.app',
+      // Set APPLE_TEAM_ID in .env.local (gitignored) so prebuild keeps the signing team.
+      appleTeamId: readConfigValue(process.env.APPLE_TEAM_ID),
       buildNumber: '1',
       supportsTablet: false,
     },

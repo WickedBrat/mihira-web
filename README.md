@@ -25,9 +25,23 @@ The mobile app is Expo SDK 58 (React Native 0.88) and runs as a development buil
 ```bash
 cd mobile
 npm ci
-cp .env.example .env.local   # then fill in the values
-npx expo install --check     # should print "Dependencies are up to date"
+cp .env.example .env.local   # then fill in the values, including APPLE_TEAM_ID (your Apple signing team ID)
 ```
+
+Dependencies are deliberately held to versions published before 31 October 2026, and the lockfiles in `mobile/`, `web/` and `core/` were generated that way. Always install from the lockfile with `npm ci`. To add or change a dependency, keep the same cutoff:
+
+```bash
+npm install <package> --before=2026-10-31
+```
+
+To regenerate a lockfile from scratch:
+
+```bash
+rm -rf node_modules package-lock.json
+npm install --before=2026-10-31
+```
+
+`npx expo install --check` reports some Expo SDK 58 packages as outdated. Those newer patch releases came out after the cutoff; the pinned versions match what the installed `expo` (58.0.21) expects.
 
 If Metro later reports missing `.ttf` files or missing `dist/` files in a package, `node_modules` is corrupted. Reinstall cleanly with `rm -rf node_modules && npm ci`.
 
